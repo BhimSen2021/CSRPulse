@@ -27,4 +27,12 @@
     <Folder Include="Areas\Admin\Views\Shared\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Plan\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Plan\Index.cshtml" />
+    <None Include="Areas\Admin\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Admin\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+
 </Project>
