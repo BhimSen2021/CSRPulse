@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController<AccountController>
     {
-        [Route("signup")]
-        public IActionResult Signup()
+        [Route("User-Signup")]
+        public IActionResult UserSignup()
         {
             return View();
         }

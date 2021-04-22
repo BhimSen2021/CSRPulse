@@ -33,6 +33,7 @@
     <None Include="Areas\Admin\Views\Plan\Index.cshtml" />
     <None Include="Areas\Admin\Views\_ViewImports.cshtml" />
     <None Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\js\site.js" />
   </ItemGroup>
 
 </Project>
