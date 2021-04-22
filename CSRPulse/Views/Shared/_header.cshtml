@@ -1,0 +1,99 @@
+﻿
+<header>
+    @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="https://www.salesforce.com/content/dam/sfdc-docs/www/logos/logo-salesforce.svg" asp-append-version="true" />
+
+                CSR Pulse
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav">
+                    <partial name="_LoginInfo" />
+                </ul>
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="Plan" asp-action="Index">Plan</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>*@
+
+
+    <section id="top">
+        <div class="row bg-light">
+            <div class="col-xl-11 col-lg-11 col-md-11 col-sm-12 m-auto">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 ml-auto">
+                        <div class="top_li">                           
+                                <ul>
+                                    <partial name="_LoginInfo" />
+                                </ul>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <section id="nav">
+        <div class="col-xl-11 col-lg-11 col-md-11 col-sm-12 m-auto">
+            <div class="row">
+                <div class="col-sm-12">
+                    <nav class="navbar navbar-expand-md navbar-dark">
+                        <!-- Brand -->
+                        <a class="navbar-brand pr-5" asp-area="" asp-controller="Home" asp-action="Index">
+                            CSR<span class="text-primary pl-1">PULSE</span>
+                        </a>
+
+                        <!-- Toggler/collapsibe Button -->
+                        <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse"
+                                data-target="#collapsibleNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <!-- Navbar links -->
+                        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Resources</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Support</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Company</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Plan" asp-action="Index">Plan</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="btn btn-success" href="#">TRY FOR FREE</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</header>

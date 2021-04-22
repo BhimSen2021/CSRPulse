@@ -1,0 +1,91 @@
+﻿@model CSRPulse.Model.Customer
+
+@{
+    ViewData["Title"] = "Customer Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col text-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row columns-wrapper">
+                <div class="col text-left col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                </div>
+                <div class="col text-left col-xs-12 col-sm-12 col-md-10 col-lg-10">
+
+                </div>
+            </div>
+        </div>
+        <div class="col text-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row columns-wrapper">
+                <div class="col text-left col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                    <div class="columns-wrapper mt-4 mt-xs-0 mb-lg-0">
+                        <div class="form-section col text-left col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="">
+                                <div class="text-center pt-4 pb-2">
+                                    <h6>Sign up now to start your free sales trial.</h6>
+                                </div>
+                                <div id="form-container">
+                                    @{await Html.RenderPartialAsync("_Registration", Model);}                         
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col text-left col-xs-12 col-sm-12 col-md-12 col-lg-3">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-full {
+        width: 100%;
+    }
+
+    .regbutton {
+        display: inline-block;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .text-dark-gray, .text-night {
+        color: #181818;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .h3lg {
+        font-weight: 400;
+        font-size: 30px !important;
+        line-height: 36px !important;
+    }
+
+    .columns-wrapper {
+        position: relative;
+    }
+
+    .container-fluid {
+        background-image: url(images/background-path.jpg);
+        background-size: cover;
+    }
+
+    .form-section {
+        background-color: #f6fafd;
+    }
+
+    .form-control {
+        height: calc(1em + .75rem + 2px) !important;
+    }
+
+    .custom-select {
+        height: calc(1em + .75rem + 2px) !important;
+        padding: inherit;
+    }
+</style>
+
