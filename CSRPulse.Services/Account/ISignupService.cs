@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSRPulse.Services.Account
+namespace CSRPulse.Services
 {
-    partial interface ISignupService
+    public interface ISignupService
     {
         Task<int> CreateUserAsync(User user);
         Task<int> CreateCustomerAsync(Customer user);

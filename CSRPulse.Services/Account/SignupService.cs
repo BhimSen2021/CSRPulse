@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSRPulse.Services.Account
+namespace CSRPulse.Services
 {
     public class SignupService : BaseService, ISignupService
     {
@@ -17,8 +17,9 @@ namespace CSRPulse.Services.Account
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
-        }
-        public async Task<int> CreateCustomerAsync(Customer user)
+        }      
+
+        public async Task<int> CreateUserAsync(User user)
         {
             try
             {
@@ -29,10 +30,9 @@ namespace CSRPulse.Services.Account
             {
                 throw;
             }
-           
         }
 
-        public Task<int> CreateUserAsync(User user)
+        public Task<int> CreateCustomerAsync(Customer user)
         {
             throw new NotImplementedException();
         }

@@ -29,6 +29,7 @@ namespace CSRPulse
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>();
             services.AddScoped<IPlanService, PlanService>();
+            services.AddScoped<ISignupService, SignupService>();
             services.AddSession(option =>
                 {
                     option.IdleTimeout = TimeSpan.FromMinutes(30);
