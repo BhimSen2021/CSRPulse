@@ -39,11 +39,15 @@ namespace CSRPulse.Services
                     var getData = genericRepo.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
                     if (getData != null)
                     {
+                        getData.Number++;
+                        genericRepo.Update(getData);
+
                         return GenerateCode(getData);
                     }
                 }
                 else
                 {
+
                     var dtoNumber = _mapper.Map<DTOModel.StartingNumber>(startingNumber);
                     genericRepo.Insert(dtoNumber);
                     return GenerateCode(dtoNumber);
@@ -62,7 +66,7 @@ namespace CSRPulse.Services
         {
             string NewCode = string.Empty;
             if (startingNumber != null)
-                NewCode = startingNumber.Prefix + '-' + startingNumber.Number;
+                NewCode = startingNumber.Prefix  + startingNumber.Number;
 
             return NewCode;
 

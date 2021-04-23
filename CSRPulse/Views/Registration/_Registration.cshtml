@@ -85,7 +85,7 @@
 
         <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <input type="checkbox" asp-for="IsAgree" />
-            <label for="IsAgree">I agree to the Master Subscription Agreement</label>
+            <label for="IsAgree">I agree to the Master Subscription Agreement</label><br />
             <span asp-validation-for="IsAgree" class="text-danger"></span>
         </div>
     </div>
@@ -111,6 +111,7 @@
 
 <script>
     function onSuccess(data) {
+        alert('A')
         $("#form-container").html(data.htmlData);
     }
 </script>

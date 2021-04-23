@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CSRPulse.Services;
+using CSRPulse.Services.IServices;
 using System;
 
 namespace CSRPulse
@@ -25,11 +26,16 @@ namespace CSRPulse
         {
             //services.AddDbContext<CSRPulseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), mig => mig.MigrationsAssembly("CSRPulse.Data")));
             services.AddControllersWithViews();
+
+            #region Register component for DI
             services.AddAutoMapper(typeof(AutoMapperServices));
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>();
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<ISignupService, SignupService>();
+            services.AddScoped<IRegistrationService, RegistrationService>();
+            #endregion
+
             services.AddSession(option =>
                 {
                     option.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -38,7 +44,7 @@ namespace CSRPulse
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation().AddViewOptions(option =>
             {
-                option.HtmlHelperOptions.ClientValidationEnabled = true;
+                option.HtmlHelperOptions.ClientValidationEnabled = false;
             });
 #endif
 

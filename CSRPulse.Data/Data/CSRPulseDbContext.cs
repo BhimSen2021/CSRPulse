@@ -19,6 +19,7 @@ namespace CSRPulse.Data.Data
             : base(options)
         {
         }
+
         public static string CustomeConnectionString
         {
             get; set;
@@ -35,20 +36,56 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+        public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<StartingNumber> StartingNumber { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
-        public virtual DbSet<Customer> Customer { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.Property(e => e.Address).HasMaxLength(200);
+
+                entity.Property(e => e.City).HasMaxLength(50);
+
+                entity.Property(e => e.Country).HasMaxLength(50);
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.CustomerCode)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.CustomerName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.DataBaseName)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PostalCode).HasMaxLength(30);
+
+                entity.Property(e => e.Telephone).HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Website).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Plan>(entity =>
             {
-                entity.Property(e => e.PlanID).HasColumnName("PlanID");
-
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn)
@@ -66,8 +103,6 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.ProductID).HasColumnName("ProductID");
-
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn)
@@ -85,10 +120,27 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.YearlyPrice).HasColumnType("money");
             });
 
+            modelBuilder.Entity<StartingNumber>(entity =>
+            {
+                entity.HasKey(e => e.StartNumberID);
+
+                entity.Property(e => e.ColumnName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Prefix)
+                    .IsRequired()
+                    .HasMaxLength(7);
+
+                entity.Property(e => e.TableName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.UserID).HasColumnName("UserID");
-
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn)
@@ -98,8 +150,7 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.EmailID)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("EmailID");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.FullName)
                     .IsRequired()
@@ -126,8 +177,6 @@ namespace CSRPulse.Data.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserTypeID).HasColumnName("UserTypeID");
-
                 entity.HasOne(d => d.UserType)
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.UserTypeID)
@@ -137,8 +186,6 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<UserType>(entity =>
             {
-                entity.Property(e => e.UserTypeID).HasColumnName("UserTypeID");
-
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn)

@@ -15,6 +15,8 @@ namespace CSRPulse.Services
             CreateMap<PlanModel, DTOModel.Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
             CreateMap<UserModel, DTOModel.User>();
+            CreateMap<Customer, DTOModel.Customer>();
+            CreateMap<StartingNumber, DTOModel.StartingNumber>();
         }
     }
 }

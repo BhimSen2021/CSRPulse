@@ -34,7 +34,7 @@ namespace CSRPulse.Model
         public string Website { get; set; }
         public string DataBaseName { get; set; }
 
-        [Required(ErrorMessage ="Please ")]
+        [Required(ErrorMessage ="Please select term & condition")]
         public bool IsAgree { get; set; }
 
     }

@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+
+    var message = TempData["Message"] == null ? "" : TempData["Message"].ToString();
+    var messageError = TempData["Error"] == null ? "" : TempData["Error"].ToString();
+
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +14,35 @@
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true">
+
+
+    <script type="text/javascript">
+    function commonMessage(msgType, msg) {
+
+    if (msgType != "success") {
+    var str = '@HtmlEncoder.Encode(@messageError)';
+    str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+    $.bootstrapGrowl("<i class='mdi-android-debug-bridge' aria-hidden='true'></i> " + msg + "", {
+    type: 'warning',
+    align: 'center',
+    width: 'auto',
+    allow_dismiss: true,
+    delay: 50000
+    });
+    }
+    if (msgType == "success") {
+
+    $.bootstrapGrowl("<i class='mdi-checkbox-marked-circle-outline' aria-hidden='true'></i> " + msg, {
+    type: 'success',
+    align: 'center',
+    width: 'auto',
+    allow_dismiss: true,
+    delay: 20000
+    });
+    }
+    }
+
+    </script>
 </head>
 <body>
     <partial name="_header" />

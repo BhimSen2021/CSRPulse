@@ -9,10 +9,10 @@ namespace CSRPulse.Model
     {
         public bool IsDeleted { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
         public int CreatedBy { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; } 
         public int? UpdatedBy { get; set; }
     }
 }
