@@ -19,6 +19,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[CustomerLicenseActivation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerPayment]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Plan]",
          "ObjectType": 0
       },

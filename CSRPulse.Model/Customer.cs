@@ -37,5 +37,8 @@ namespace CSRPulse.Model
         [Required(ErrorMessage ="Please select term & condition")]
         public bool IsAgree { get; set; }
 
+        public CustomerPayment CustomerPayment { get; set; }
+        public CustomerLicenseActivation CustomerLicense { get; set; }
+
     }
 }

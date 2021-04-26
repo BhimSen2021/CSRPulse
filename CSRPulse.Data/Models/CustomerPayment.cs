@@ -6,22 +6,20 @@ using System.Collections.Generic;
 
 namespace CSRPulse.Data.Models
 {
-    public partial class Plan
+    public partial class CustomerPayment
     {
-        public Plan()
-        {
-            CustomerLicenseActivation = new HashSet<CustomerLicenseActivation>();
-        }
-
-        public int PlanID { get; set; }
-        public string PlanName { get; set; }
-        public string PlanDetail { get; set; }
+        public int PaymentID { get; set; }
+        public int CustomerID { get; set; }
+        public decimal AmountPaid { get; set; }
+        public int PaymentMode { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public bool IsSuccess { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
-        public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

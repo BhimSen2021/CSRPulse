@@ -210,7 +210,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().Add(entity);
-                _dbContext.SaveChanges();
+             //   _dbContext.SaveChanges();
                 int ret = 0;
                 PropertyInfo key = typeof(TEntity).GetProperties().FirstOrDefault(p => p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
 
@@ -243,7 +243,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 await _dbContext.Set<TEntity>().AddAsync(entity);
-                await _dbContext.SaveChangesAsync();
+             //   await _dbContext.SaveChangesAsync();
                 int ret = 0;
                 PropertyInfo key = typeof(TEntity).GetProperties().FirstOrDefault(p => p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
 
@@ -277,7 +277,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().AddRange(entityList);
-                _dbContext.SaveChanges();
+             //   _dbContext.SaveChanges();
                 flag = true;
             }
             catch (Exception)
@@ -296,7 +296,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 await _dbContext.Set<TEntity>().AddRangeAsync(entityList);
-                await _dbContext.SaveChangesAsync();
+               // await _dbContext.SaveChangesAsync();
                 flag = true;
             }
             catch (Exception)
@@ -315,7 +315,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
-                _dbContext.SaveChanges();
+          //      _dbContext.SaveChanges();
                 flag = true;
             }
             catch (Exception)
@@ -333,8 +333,8 @@ namespace CSRPulse.Data.Repositories
             }
             try
             {
-                _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
-                await _dbContext.SaveChangesAsync();
+               _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
+           //     await _dbContext.SaveChangesAsync();
                 flag = true;
             }
             catch (Exception)
@@ -347,25 +347,25 @@ namespace CSRPulse.Data.Repositories
         {
             TEntity entityToDelete = _dbContext.Set<TEntity>().Find(id);
             Delete(entityToDelete);
-            _dbContext.SaveChanges();
+           // _dbContext.SaveChanges();
         }
         public async Task DeleteAsync<TEntity>(object id) where TEntity : class
         {
             TEntity entityToDelete = await _dbContext.Set<TEntity>().FindAsync(id);
             await DeleteAsync(entityToDelete);
-            await _dbContext.SaveChangesAsync();
+         //   await _dbContext.SaveChangesAsync();
         }
         public virtual void Delete<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
         {
             var query = _dbContext.Set<TEntity>().Where(filter);
             _dbContext.Set<TEntity>().RemoveRange(query);
-            _dbContext.SaveChanges();
+          //  _dbContext.SaveChanges();
         }
         public async Task DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
         {
             var query = _dbContext.Set<TEntity>().Where(filter);
             _dbContext.Set<TEntity>().RemoveRange(query);
-            await _dbContext.SaveChangesAsync();
+         //   await _dbContext.SaveChangesAsync();
         }
         public virtual void Delete<TEntity>(TEntity entityToDelete) where TEntity : class
         {
@@ -376,7 +376,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().Remove(entityToDelete);
-                _dbContext.SaveChanges();
+              //  _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -401,7 +401,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().Remove(entityToDelete);
-                await _dbContext.SaveChangesAsync();
+              //  await _dbContext.SaveChangesAsync();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -426,7 +426,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-                _dbContext.SaveChanges();
+              //  _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -451,7 +451,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
+             //   await _dbContext.SaveChangesAsync();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -530,6 +530,29 @@ namespace CSRPulse.Data.Repositories
         public Task<IQueryable<TEntity>> GetIQueryableAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "") where TEntity : class
         {
             throw new NotImplementedException();
+        }
+
+
+        public bool SaveChanges()
+        {
+            bool returnValue = true;
+            using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbContext.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    //Log Exception Handling message                      
+                    returnValue = false;
+                    dbContextTransaction.Rollback();
+                    throw ex;
+                }
+            }
+
+            return returnValue;
         }
 
     }

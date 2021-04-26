@@ -48,5 +48,7 @@ namespace CSRPulse.Data.Repositories
         //IEnumerable<T> ExecWithStoreProcedure<T>(string query, params object[] parameters);
         //void ExecuteWithStoreProcedure(string query, params object[] parameters);
         //DataTable GetTablesSchema(string sTableName);
+
+        bool SaveChanges();
     }
 }

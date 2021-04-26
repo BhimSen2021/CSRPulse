@@ -19,7 +19,6 @@ namespace CSRPulse.Data.Data
             : base(options)
         {
         }
-
         public static string CustomeConnectionString
         {
             get; set;
@@ -37,6 +36,8 @@ namespace CSRPulse.Data.Data
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
+        public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
@@ -49,6 +50,8 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<Customer>(entity =>
             {
+              //  entity.HasIndex(e => e.CustomerCode, "IX_Customer").IsUnique();
+
                 entity.Property(e => e.Address).HasMaxLength(200);
 
                 entity.Property(e => e.City).HasMaxLength(50);
@@ -82,6 +85,54 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.Website).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<CustomerLicenseActivation>(entity =>
+            {
+                entity.HasKey(e => e.LicenceActID);
+
+                entity.Property(e => e.ActivationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastActivationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.CustomerLicenseActivation)
+                    .HasForeignKey(d => d.CustomerID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CustomerLicenseActivation_Customer");
+
+                entity.HasOne(d => d.Plan)
+                    .WithMany(p => p.CustomerLicenseActivation)
+                    .HasForeignKey(d => d.PlanID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CustomerLicenseActivation_Plan");
+            });
+
+            modelBuilder.Entity<CustomerPayment>(entity =>
+            {
+                entity.HasKey(e => e.PaymentID);
+
+                entity.Property(e => e.AmountPaid).HasColumnType("money");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PaymentDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.CustomerPayment)
+                    .HasForeignKey(d => d.CustomerID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CustomerPayment_CustomerPayment");
             });
 
             modelBuilder.Entity<Plan>(entity =>

@@ -2,7 +2,7 @@
 @model CSRPulse.Model.Customer
     <form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="PaymentOption" data-ajax-success="paymentSuccess">
 
-        <input type="hidden" asp-for="CustomerCode" />
+        <input type="hidden" asp-for="CustomerId" />
         <div class="row">
             <div class="regbutton col col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <button type="submit" name="ButtonType" value="payment" class="btn btn-md btn-primary btn-full">PAYMENT</button>
@@ -18,8 +18,7 @@
         <script type="text/javascript">
             function paymentSuccess(data) {
                 debugger;
-                if (data.success == 1) {
-                    alert('B');
+                if (data.success == 1) {              
                     commonMessage("success", "Welcome to CSR Pulse.");
 
                 }

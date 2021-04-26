@@ -44,10 +44,10 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     customer.CreatedBy = 1;
-                    string customerCode = await registrationService.CustomerRegistrationAsync(customer);
-                    if (!string.IsNullOrEmpty(customerCode))
+                    int customerID = await registrationService.CustomerRegistrationAsync(customer);
+                    if (customerID > 0)
                     {
-                        customer.CustomerCode = customerCode;
+                        customer.CustomerId = customerID;
                         return Json(new { htmlData = ConvertViewToString("_PaymentOption", customer, true) });
                     }
                 }
@@ -68,7 +68,31 @@ namespace CSRPulse.Controllers
 
                 if (ButtonType == "free")
                 {
-                    return Json(new { success=1 });
+                    customer.CustomerPayment = new Model.CustomerPayment
+                    {
+                        CustomerID = customer.CustomerId,
+                        AmountPaid = 0,
+                        IsSuccess = true,
+                        PaymentDate = DateTime.Now,
+                        PaymentMode = 1,
+                        CreatedBy = 1
+
+                    };
+
+                    customer.CustomerLicense = new Model.CustomerLicenseActivation
+                    {
+
+                        ActivationCount = 1,
+                        ActivationDate = DateTime.Now,
+                        LastActivationDate = DateTime.Now.AddMonths(1),
+                        CustomerID = customer.CustomerId,
+                        PlanID = 1,
+                        CreatedBy = 1
+                    };
+
+                    var res = await registrationService.CustomerPaymentAsync(customer);
+
+                    return Json(new { success = 1 });
                 }
                 return new ContentResult();
             }

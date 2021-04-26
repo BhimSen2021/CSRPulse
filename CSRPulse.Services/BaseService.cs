@@ -13,9 +13,11 @@ namespace CSRPulse.Services
     public class BaseService
     {
         private readonly IMapper _mapper;
-        public BaseService(IMapper mapper)
+        internal readonly IGenericRepository _genRepo=null;
+        public BaseService(IMapper mapper, IGenericRepository genRepo=null)
         {
             _mapper = mapper;
+            _genRepo = genRepo;
         }
         /// <summary>
         /// This function is will refresh dbcontext class after database has been changed to switch new database
@@ -33,14 +35,14 @@ namespace CSRPulse.Services
         {
             try
             {
-                IGenericRepository genericRepo = new GenericRepository();
-                if (genericRepo.Exists<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName))
+               // IGenericRepository genericRepo = new GenericRepository();
+                if (_genRepo.Exists<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName))
                 {
-                    var getData = genericRepo.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
+                    var getData = _genRepo.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
                     if (getData != null)
                     {
                         getData.Number++;
-                        genericRepo.Update(getData);
+                        _genRepo.Update(getData);
 
                         return GenerateCode(getData);
                     }
@@ -49,7 +51,7 @@ namespace CSRPulse.Services
                 {
 
                     var dtoNumber = _mapper.Map<DTOModel.StartingNumber>(startingNumber);
-                    genericRepo.Insert(dtoNumber);
+                    _genRepo.Insert(dtoNumber);
                     return GenerateCode(dtoNumber);
                 }
                 return string.Empty;
@@ -66,7 +68,7 @@ namespace CSRPulse.Services
         {
             string NewCode = string.Empty;
             if (startingNumber != null)
-                NewCode = startingNumber.Prefix  + startingNumber.Number;
+                NewCode = startingNumber.Prefix +"-" + startingNumber.Number;
 
             return NewCode;
 
