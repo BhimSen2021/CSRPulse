@@ -354,3 +354,10 @@ div.checkbox.switcher label, div.radio.switcher label {
   div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
     left: 50%;
   }
+
+.log_bg {
+    background: url(../images/login_bg.png);
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}

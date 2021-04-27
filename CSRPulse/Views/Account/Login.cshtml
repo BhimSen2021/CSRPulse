@@ -1,64 +1,76 @@
 ﻿@model CSRPulse.Model.SingIn
-
 @{
-    Layout = null;
+
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
-    <environment include="Development">
-        <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet"
-              href="http://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/twitter-bootstrap/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute"
-              integrity=""
-              crossorigin="anonymous">
-    </environment>
-</head>
-<body>
-    <div class="container">
-        <h4 class="display-4">CSR Pulse</h4>
-        <hr />
+
+
+<div class="container-fluid">
+    <section id="login">
         <div class="row">
-            <div class="col-md-4">
-                <form method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="UserName" class="control-label"></label>
-                        <input asp-for="UserName" class="form-control" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 bg-light">
+                <div class="row mt-5">
+                    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto">
+                        <h4 class="text-center mt-5 mb-4">CSR<span class="text-primary pl-1">PULSE</span></h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <form asp-action="Login" asp-controller="Account" method="post">
+                                    <div class="form-group">
+                                        <label for="UserName">Username:</label>
+                                        <input type="email" asp-for="UserName" class="form-control" placeholder="Enter email" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>                                       
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Password">Password:</label>                                
+                                        <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block mb-2">Log In</button>
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">  
+                                            <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <a asp-action="ForgotPassword" asp-controller="Account">Forgot Your Password?</a>
+                                        <a class="float-right" href="#">Use Custom Domain</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto text-center">
+                                <span>Not a customer?</span>
+                                <a  asp-action="Signup" class="btn btn-outline-primary">Try for free</a>
+                            </div>
+
+                        </div>
+
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="row pos">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 m-auto text-center">
+                        <p style="font-size: 13px;">© 2021 salesforce.com, inc. All rights reserved. | <a href="#"> Privacy</a></p>
                     </div>
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Login" class="btn btn-primary" />
-                    </div>
-                </form>
-                <div>
-                    <p><a asp-action="ForgotPassword" asp-controller="Account">Forgot password?</a></p>
-                    <p>Click <a asp-action="Index" asp-controller="Home">here</a> to Home</p>
                 </div>
             </div>
-            <div class="col-md-8">
-                <img class="img-fluid" src="~/images/Account/login.png" />
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 log_bg d--n">
+                <h3 class="mt-4" style="font-weight: 100;">Sell, market, and service with the world's #1 <br>CRM.</h3>
+                <div class="row">
+                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
+                        <p class="text-justify" style="font-size: 18px;font-weight: 100;">
+                            Welcome to the Salesforce Customer Success Platform. Our new Lightning Platform gives you the fastest, most complete way
+                            to put your customers at the center of everything you do.
+                        </p>
+                        <a href="#" class="btn btn-primary">WATCH DEMOS</a>
+                        <a href="#" class="btn btn-light ml-4">FREE TRIAL</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+</div>
 
-</body>
-</html>
+
