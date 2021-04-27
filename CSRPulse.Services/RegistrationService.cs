@@ -23,6 +23,12 @@ namespace CSRPulse.Services
         {
             try
             {
+                if (await _genRepo.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
+                {
+                    customer.RecordExist = true;
+                    return 0;
+                }
+
                 var dtoCustomer = _mapper.Map<DTOModel.Customer>(customer);
                 Model.StartingNumber startingNum = new Model.StartingNumber
                 {
@@ -36,7 +42,7 @@ namespace CSRPulse.Services
                 };
 
                 dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum);
-                 await _genRepo.InsertAsync(dtoCustomer);
+                await _genRepo.InsertAsync(dtoCustomer);
 
                 _genRepo.SaveChanges();
                 return dtoCustomer.CustomerID;

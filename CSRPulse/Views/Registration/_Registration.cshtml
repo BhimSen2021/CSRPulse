@@ -8,7 +8,7 @@
             <label asp-for="CustomerName" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="CustomerName" class="form-control" />
+            <input type="text" asp-for="CustomerName" class="form-control" autocomplete="off" />
             <span asp-validation-for="CustomerName" class="text-danger"></span>
         </div>
     </div>
@@ -17,7 +17,7 @@
             <label asp-for="Email" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Email" class="form-control" />
+            <input type="text" asp-for="Email" class="form-control" autocomplete="off" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
@@ -26,7 +26,7 @@
             <label asp-for="Telephone" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Telephone" class="form-control" />
+            <input type="text" asp-for="Telephone" class="form-control" autocomplete="off" />
             <span asp-validation-for="Telephone" class="text-danger"></span>
         </div>
     </div>
@@ -35,7 +35,7 @@
             <label asp-for="Website" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Website" class="form-control" />
+            <input type="text" asp-for="Website" class="form-control" autocomplete="off" />
         </div>
     </div>
     @*<div class="row">
@@ -111,6 +111,10 @@
 
 <script>
     function onSuccess(data) {
+        if (data.recordExist == true) {
+            alert('Work Email or  Phone No. is already exists in our database, please enter different detail or click on login option.');
+        }
+        else
         $("#form-container").html(data.htmlData);
     }
 </script>

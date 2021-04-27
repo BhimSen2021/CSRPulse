@@ -40,5 +40,7 @@ namespace CSRPulse.Model
         public CustomerPayment CustomerPayment { get; set; }
         public CustomerLicenseActivation CustomerLicense { get; set; }
 
+        public bool RecordExist { get; set; }
+
     }
 }

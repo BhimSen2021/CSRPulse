@@ -27,9 +27,10 @@ namespace CSRPulse.Services
         {
             CSRPulseDbContext.CustomeConnectionString = _connection;
             CSRPulseDbContext context = new CSRPulseDbContext();
+            //_ = new CSRPulseDbContext();
         }
         /// <summary>
-        /// 
+        ///  Generate Custom Code based on table 
         /// </summary>
         public string GenerateOrGetLatestCode(StartingNumber startingNumber)
         {
@@ -66,11 +67,16 @@ namespace CSRPulse.Services
 
         private string GenerateCode(DTOModel.StartingNumber startingNumber)
         {
-            string NewCode = string.Empty;
+            string newCode = string.Empty;
             if (startingNumber != null)
-                NewCode = startingNumber.Prefix +"-" + startingNumber.Number;
+            {
+                int maxNumber = startingNumber.NumberWidth;
+               
 
-            return NewCode;
+                newCode = startingNumber.Prefix + "-" + startingNumber.Number;
+
+            }
+            return newCode;
 
         }
     }

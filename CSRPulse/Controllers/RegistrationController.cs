@@ -50,6 +50,14 @@ namespace CSRPulse.Controllers
                         customer.CustomerId = customerID;
                         return Json(new { htmlData = ConvertViewToString("_PaymentOption", customer, true) });
                     }
+                    else
+                    {
+                        if (customer.RecordExist)
+                        {
+
+                            return Json(new { recordExist = true });
+                        }
+                    }
                 }
                 return Json(new { htmlData = ConvertViewToString("_Registration", customer, true) });
 
@@ -92,7 +100,7 @@ namespace CSRPulse.Controllers
 
                     var res = await registrationService.CustomerPaymentAsync(customer);
 
-                    return Json(new { success = 1 });
+                    return Json(new { success = res });
                 }
                 return new ContentResult();
             }
