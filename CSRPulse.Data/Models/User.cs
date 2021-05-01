@@ -8,6 +8,12 @@ namespace CSRPulse.Data.Models
 {
     public partial class User
     {
+        public User()
+        {
+            MenuCreatedByNavigation = new HashSet<Menu>();
+            MenuUpdatedByNavigation = new HashSet<Menu>();
+        }
+
         public int UserID { get; set; }
         public int UserTypeID { get; set; }
         public string UserName { get; set; }
@@ -25,5 +31,7 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
 
         public virtual UserType UserType { get; set; }
+        public virtual ICollection<Menu> MenuCreatedByNavigation { get; set; }
+        public virtual ICollection<Menu> MenuUpdatedByNavigation { get; set; }
     }
 }

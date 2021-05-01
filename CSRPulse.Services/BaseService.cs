@@ -12,12 +12,12 @@ namespace CSRPulse.Services
 {
     public class BaseService
     {
-        private readonly IMapper _mapper;
-        internal readonly IGenericRepository _genRepo=null;
-        public BaseService(IMapper mapper, IGenericRepository genRepo=null)
+        internal readonly IMapper _mapper;
+        internal readonly IGenericRepository _genericRepository = null;
+        public BaseService(IMapper mapper, IGenericRepository genericRepository)
         {
             _mapper = mapper;
-            _genRepo = genRepo;
+            _genericRepository = genericRepository;
         }
         /// <summary>
         /// This function is will refresh dbcontext class after database has been changed to switch new database
@@ -36,14 +36,14 @@ namespace CSRPulse.Services
         {
             try
             {
-               // IGenericRepository genericRepo = new GenericRepository();
-                if (_genRepo.Exists<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName))
+                // IGenericRepository genericRepo = new GenericRepository();
+                if (_genericRepository.Exists<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName))
                 {
-                    var getData = _genRepo.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
+                    var getData = _genericRepository.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
                     if (getData != null)
                     {
                         getData.Number++;
-                        _genRepo.Update(getData);
+                        _genericRepository.Update(getData);
 
                         return GenerateCode(getData);
                     }
@@ -52,7 +52,7 @@ namespace CSRPulse.Services
                 {
 
                     var dtoNumber = _mapper.Map<DTOModel.StartingNumber>(startingNumber);
-                    _genRepo.Insert(dtoNumber);
+                    _genericRepository.Insert(dtoNumber);
                     return GenerateCode(dtoNumber);
                 }
                 return string.Empty;
@@ -71,7 +71,7 @@ namespace CSRPulse.Services
             if (startingNumber != null)
             {
                 int maxNumber = startingNumber.NumberWidth;
-               
+
 
                 newCode = startingNumber.Prefix + "-" + startingNumber.Number;
 

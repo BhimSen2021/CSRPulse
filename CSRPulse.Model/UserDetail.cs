@@ -23,7 +23,7 @@ namespace CSRPulse.Model
         public int GenderID { get; set; }
         public bool IsMaintenance { get; set; }
         public Nullable<System.DateTime> MaintenanceDateTime { get; set; }
-        public List<UserAccessRight> userMenuRights { set; get; }
+        public List<UserRight> userMenuRights { set; get; }
 
     }
 }

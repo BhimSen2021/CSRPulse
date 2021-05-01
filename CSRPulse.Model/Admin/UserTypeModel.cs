@@ -8,7 +8,6 @@ namespace CSRPulse.Model.Admin
     {
         public int UserTypeId { get; set; }
         public string UserTypeName { get; set; }
-
-        public UserModel userModel { get; set; }
+        public User user { get; set; }
     }
 }

@@ -12,12 +12,10 @@ namespace CSRPulse.Services
 {
     public class AccountService : BaseService, IAccountService
     {
-        private readonly IGenericRepository _genericRepository;
-        private readonly IMapper _mapper;
-        public AccountService(IGenericRepository genericRepository, IMapper mapper) : base(mapper)
+
+
+        public AccountService(IMapper mapper, IGenericRepository genericRepository) : base(mapper, genericRepository)
         {
-            _genericRepository = genericRepository;
-            _mapper = mapper;
         }
 
         public async Task<int> CreateUserAsync(User user)
@@ -43,21 +41,29 @@ namespace CSRPulse.Services
             userDetail = new UserDetail();
 
             var uDetail = _genericRepository.GetFirstOrDefault<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password);
-            
+
             if (uDetail == null)
             {
                 return false;
             }
             else
             {
-                userDetail.UserID = uDetail.UserID;
-                userDetail.UserName = uDetail.UserName;
-                userDetail.EmailID = uDetail.EmailID;
-                userDetail.CreatedOn = uDetail.CreatedOn;
-                userDetail.CreatedBy = uDetail.CreatedBy;
-                userDetail.IsDeleted = false;
+              userDetail =  _mapper.Map<UserDetail>(uDetail);
+
+                var uRight = _genericRepository.GetFirstOrDefault<DTOModel.UserRights>(r => r.UserID == uDetail.UserID);
+
+                if (uRight != null)
+                {
+                   userDetail.userMenuRights =  _mapper.Map<List<UserRight>>(uRight);
+                }
+                //userDetail.UserID = uDetail.UserID;
+                //userDetail.UserName = uDetail.UserName;
+                //userDetail.EmailID = uDetail.EmailID;
+                //userDetail.CreatedOn = uDetail.CreatedOn;
+                //userDetail.CreatedBy = uDetail.CreatedBy;
+                //userDetail.IsDeleted = false;
             }
-           
+
             if (uDetail == null)
             {
                 return false;

@@ -12,18 +12,16 @@ namespace CSRPulse.Services
 {
     public class RegistrationService : BaseService, IRegistrationService
     {
-        // private readonly IGenericRepository _genRepo;
-        private readonly IMapper _mapper;
+        private new readonly IMapper _mapper;
         public RegistrationService(IGenericRepository _generic, IMapper mapper) : base(mapper, _generic)
         {
-            //_genRepo = generic;
             _mapper = mapper;
         }
         public async Task<int> CustomerRegistrationAsync(Model.Customer customer)
         {
             try
             {
-                if (await _genRepo.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
+                if (await _genericRepository.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
                 {
                     customer.RecordExist = true;
                     return 0;
@@ -42,9 +40,9 @@ namespace CSRPulse.Services
                 };
 
                 dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum);
-                await _genRepo.InsertAsync(dtoCustomer);
+                await _genericRepository.InsertAsync(dtoCustomer);
 
-                _genRepo.SaveChanges();
+                _genericRepository.SaveChanges();
                 return dtoCustomer.CustomerID;
             }
             catch (Exception)
@@ -60,11 +58,11 @@ namespace CSRPulse.Services
             {
 
                 var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
-                await _genRepo.InsertAsync(dtoCustPayment);
+                await _genericRepository.InsertAsync(dtoCustPayment);
 
                 var dtoCustLicence = _mapper.Map<DTOModel.CustomerLicenseActivation>(customer.CustomerLicense);
-                await _genRepo.InsertAsync(dtoCustLicence);
-                _genRepo.SaveChanges();
+                await _genericRepository.InsertAsync(dtoCustLicence);
+                _genericRepository.SaveChanges();
                 return true;
             }
             catch (Exception)

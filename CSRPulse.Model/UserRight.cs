@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Model
 {
-    public class UserAccessRight:BaseModel
+    public class UserRight:BaseModel
     {
         public int DepartmentID { get; set; }
         public int UserID { get; set; }

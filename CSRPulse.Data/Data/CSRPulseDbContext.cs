@@ -19,6 +19,7 @@ namespace CSRPulse.Data.Data
             : base(options)
         {
         }
+
         public static string CustomeConnectionString
         {
             get; set;
@@ -35,13 +36,16 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,8 +54,6 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<Customer>(entity =>
             {
-              //  entity.HasIndex(e => e.CustomerCode, "IX_Customer").IsUnique();
-
                 entity.Property(e => e.Address).HasMaxLength(200);
 
                 entity.Property(e => e.City).HasMaxLength(50);
@@ -133,6 +135,47 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.CustomerID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerPayment_CustomerPayment");
+            });
+
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Help).HasColumnType("text");
+
+                entity.Property(e => e.IconClass)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.MenuName)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.MenuCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Menu_CreatedBy");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.MenuUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_Menu_UpdatedBy");
             });
 
             modelBuilder.Entity<Plan>(entity =>
@@ -233,6 +276,26 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.UserTypeID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User_UserType");
+            });
+
+            modelBuilder.Entity<UserRights>(entity =>
+            {
+                entity.HasKey(e => new { e.UserID, e.MenuID })
+                    .HasName("PK_UserMenuRights");
+
+                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Menu)
+                    .WithMany(p => p.UserRights)
+                    .HasForeignKey(d => d.MenuID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRights_Menu");
             });
 
             modelBuilder.Entity<UserType>(entity =>

@@ -65,6 +65,7 @@ namespace CSRPulse.Controllers
                     if (isAuthenticated)
                     {                        
                         HttpContext.Session.SetComplexData("User", uDetail);
+                       
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return LocalRedirect(returnUrl);
