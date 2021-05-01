@@ -47,7 +47,7 @@ namespace CSRPulse.Controllers
                     int customerID = await registrationService.CustomerRegistrationAsync(customer);
                     if (customerID > 0)
                     {
-                        customer.CustomerId = customerID;
+                        customer.CustomerId = customerID;                    
                         return Json(new { htmlData = ConvertViewToString("_PaymentOption", customer, true) });
                     }
                     else

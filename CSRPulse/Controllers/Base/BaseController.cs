@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-
+using CSRPulse.Attributes;
 namespace CSRPulse.Controllers
 {
+  //  [CheckRight]
     public abstract class BaseController<T> : Controller where T : BaseController<T>
     {
         private ILogger<T> logger;
