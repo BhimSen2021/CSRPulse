@@ -4,8 +4,6 @@
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
 <div class="container-fluid">
     <section id="login">
         <div class="row">
@@ -16,19 +14,20 @@
                         <div class="card">
                             <div class="card-body">
                                 <form asp-action="Login" asp-controller="Account" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
                                         <label for="UserName">Username:</label>
                                         <input type="text" asp-for="UserName" class="form-control" placeholder="Enter username" />
-                                        <span asp-validation-for="UserName" class="text-danger"></span>                                       
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label for="Password">Password:</label>                                
+                                        <label for="Password">Password:</label>
                                         <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" />
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-block mb-2">Log In</button>
                                     <div class="form-group form-check">
-                                        <label class="form-check-label">  
+                                        <label class="form-check-label">
                                             <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
 
                                         </label>
@@ -43,18 +42,14 @@
                         <div class="row mt-4">
                             <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto text-center">
                                 <span>Not a customer?</span>
-                                <a  asp-action="Signup" class="btn btn-outline-primary">Try for free</a>
+                                <a asp-action="Signup" class="btn btn-outline-primary">Try for free</a>
                             </div>
 
                         </div>
 
                     </div>
                 </div>
-                <div class="row pos">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 m-auto text-center">
-                        <p style="font-size: 13px;">© 2021 salesforce.com, inc. All rights reserved. | <a href="#"> Privacy</a></p>
-                    </div>
-                </div>
+
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 log_bg d--n">
                 <h3 class="mt-4" style="font-weight: 100;">Sell, market, and service with the world's #1 <br>CRM.</h3>

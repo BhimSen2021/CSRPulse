@@ -11,11 +11,11 @@ namespace CSRPulse.Controllers
 {
     public class AccountController : BaseController<AccountController>
     {
-        private readonly ISignupService _signupService;
+        private readonly IAccountService _accountService;
 
-        public AccountController(ISignupService signupService)
+        public AccountController(IAccountService accountService)
         {
-            _signupService = signupService;
+            _accountService = accountService;
         }
         [HttpGet, Route("Signup")]
         public IActionResult Signup()
@@ -33,7 +33,7 @@ namespace CSRPulse.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _signupService.CreateUserAsync(user);
+                    await _accountService.CreateUserAsync(user);
                 }
                 return View(user);
             }
@@ -59,11 +59,20 @@ namespace CSRPulse.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        return LocalRedirect(returnUrl);
+                    bool isAuthenticated = false;
+                    UserDetail uDetail = new UserDetail();
+                    isAuthenticated = _accountService.AuthenticateUser(singIn, out uDetail);
+                    if (isAuthenticated)
+                    {                        
+                        HttpContext.Session.SetComplexData("User", uDetail);
+                        if (!string.IsNullOrEmpty(returnUrl))
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
+                        return RedirectToAction("Index", "Home");
                     }
-                    return RedirectToAction("Index", "Home");
+                    else
+                        ModelState.AddModelError("", "Invalid credentials");
 
                 }
                 return View(singIn);

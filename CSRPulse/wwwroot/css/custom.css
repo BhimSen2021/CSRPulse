@@ -294,11 +294,24 @@
     height: auto;
     padding: 0px 12px;
 }
+.pos{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
 @media (max-width:767px) {
     .foot-bottom-ul ul li{
         float: left;
         width: 100%;
         height: auto;
+    }
+    .d--n{
+        display: none;
+    }
+    .pos{
+        position: relative;
+        bottom: 0px;
+        width: 100%;
     }
 }
 
@@ -354,10 +367,12 @@ div.checkbox.switcher label, div.radio.switcher label {
   div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
     left: 50%;
   }
-
-.log_bg {
-    background: url(../images/login_bg.png);
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-}
+  .log_bg{
+      background: url(../images/login_bg.png);
+      background-position: center;
+      background-size: cover;
+      height: 100vh;
+  }
+  #contact{
+    padding: 0px 0px;
+  }
