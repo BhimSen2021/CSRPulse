@@ -324,7 +324,7 @@ namespace CSRPulse.Data.Repositories
             }
             return flag;
         }
-        public async Task<bool> RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList) where TEntity : class
+        public bool RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList) where TEntity : class
         {
             var flag = false;
             if (removeEntityList == null)
@@ -349,24 +349,14 @@ namespace CSRPulse.Data.Repositories
             Delete(entityToDelete);
            // _dbContext.SaveChanges();
         }
-        public async Task DeleteAsync<TEntity>(object id) where TEntity : class
-        {
-            TEntity entityToDelete = await _dbContext.Set<TEntity>().FindAsync(id);
-            await DeleteAsync(entityToDelete);
-         //   await _dbContext.SaveChangesAsync();
-        }
+       
         public virtual void Delete<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
         {
             var query = _dbContext.Set<TEntity>().Where(filter);
             _dbContext.Set<TEntity>().RemoveRange(query);
-          //  _dbContext.SaveChanges();
+          
         }
-        public async Task DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
-        {
-            var query = _dbContext.Set<TEntity>().Where(filter);
-            _dbContext.Set<TEntity>().RemoveRange(query);
-         //   await _dbContext.SaveChangesAsync();
-        }
+       
         public virtual void Delete<TEntity>(TEntity entityToDelete) where TEntity : class
         {
             if (entityToDelete == null)
@@ -392,31 +382,7 @@ namespace CSRPulse.Data.Repositories
                 throw fail;
             }
         }
-        public async Task DeleteAsync<TEntity>(TEntity entityToDelete) where TEntity : class
-        {
-            if (entityToDelete == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-            try
-            {
-                _dbContext.Set<TEntity>().Remove(entityToDelete);
-              //  await _dbContext.SaveChangesAsync();
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                var msg = string.Empty;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                var fail = new Exception(msg, dbEx);
-                throw fail;
-            }
-        }
+      
         public virtual void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
         {
             if (entityToUpdate == null)
@@ -442,30 +408,9 @@ namespace CSRPulse.Data.Repositories
                 throw fail;
             }
         }
-        public async Task UpdateAsync<TEntity>(TEntity entityToUpdate) where TEntity : class
+        public Task UpdateAsync<TEntity>(TEntity entityToUpdate) where TEntity : class
         {
-            if (entityToUpdate == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-            try
-            {
-                _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-             //   await _dbContext.SaveChangesAsync();
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                var msg = string.Empty;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                var fail = new Exception(msg, dbEx);
-                throw fail;
-            }
+            throw new NotImplementedException();
         }
         public virtual DbParameter GetParameter()
         {
@@ -555,5 +500,24 @@ namespace CSRPulse.Data.Repositories
             return returnValue;
         }
 
+        public Task DeleteAsync<TEntity>(object id) where TEntity : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync<TEntity>(TEntity entityToDelete) where TEntity : class
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IGenericRepository.RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

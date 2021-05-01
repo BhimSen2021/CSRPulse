@@ -41,30 +41,9 @@ namespace CSRPulse.Services.Admin.Plan
             }
         }
 
-        public async Task<int> AddNewUserTypeAsync(UserTypeModel uTypeModel)
+        public Task<int> AddNewUserTypeAsync(UserTypeModel uTypeModel)
         {
-            try
-            {
-                var dtoType = _mapper.Map<DTOModel.UserType>(uTypeModel);
-                await _genericRepository.InsertAsync(dtoType);
-                uTypeModel.userModel = new UserModel();
-                uTypeModel.userModel.UserTypeId = dtoType.UserTypeID;
-                uTypeModel.userModel.UserName ="A" ;
-                uTypeModel.userModel.Password ="12356" ;
-                uTypeModel.userModel.EmailId = "12356";
-                uTypeModel.userModel.FullName ="AAAA" ;
-                uTypeModel.userModel.IsActive =true ;
-                uTypeModel.userModel.IsDeleted = false;
-                uTypeModel.userModel.CreatedBy =1 ;
-                uTypeModel.userModel.CreatedOn = DateTime.Now;
-                var dtouser = _mapper.Map<DTOModel.User>(uTypeModel.userModel);
-                await _genericRepository.InsertAsync(dtouser);
-                return dtouser.UserTypeID;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
         public async Task<List<PlanModel>> GetAllPlanAsync()
