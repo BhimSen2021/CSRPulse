@@ -10,7 +10,7 @@ namespace CSRPulse.Model
         [Display(Name = "User Name"), Required(ErrorMessage = "Please Enter User Name")]
         public string UserName { get; set; }
 
-        [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Password")]
+        [DataType(DataType.Password), Required(ErrorMessage = "Please Enater Password")]
         public string Password { get; set; }
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
