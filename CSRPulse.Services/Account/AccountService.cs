@@ -54,7 +54,7 @@ namespace CSRPulse.Services
 
                 if (uRight != null)
                 {
-                   //userDetail.userMenuRights =  _mapper.Map<List<UserRight>>(uRight);
+                    userDetail.userMenuRights = _mapper.Map<List<UserRight>>(uRight);
                 }
             }
 

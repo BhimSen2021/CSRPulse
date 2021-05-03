@@ -1,6 +1,5 @@
 using AutoMapper;
 using CSRPulse.Data.Repositories;
-using CSRPulse.Services.Admin.Plan;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CSRPulse.Services;
+using CSRPulse.Services.Admin;
 using CSRPulse.Services.IServices;
 using System;
 
@@ -71,7 +71,7 @@ namespace CSRPulse
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSRPulse.Services.Admin.Plan
+namespace CSRPulse.Services.Admin
 {
     public interface IPlanService
     {
-        Task<int> AddNewPlanAsync(PlanModel planModel);
-        Task<List<PlanModel>> GetAllPlanAsync();
-        Task<PlanModel> GetPlanByIdAsync();
-        Task<int> AddNewUserTypeAsync(UserTypeModel planModel); 
+        Task<int> AddNewPlanAsync(Plan plan);
+        Task<List<Plan>> GetAllPlanAsync();
+        Task<Plan> GetPlanByIdAsync();
     }
 }

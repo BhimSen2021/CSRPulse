@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 
-namespace CSRPulse.Services.Admin.Plan
+namespace CSRPulse.Services.Admin
 {
     public class PlanService : IPlanService
     {
@@ -19,39 +19,28 @@ namespace CSRPulse.Services.Admin.Plan
             _genericRepository = genericRepository;
             _mapper = mapper;
         }
-        public async Task<int> AddNewPlanAsync(PlanModel planModel)
+        public async Task<int> AddNewPlanAsync(Plan plan)
         {
             try
             {
-                //var plan = new DTOModel.Plan()
-                //{
-                //    PlanName = planModel.PlanName,
-                //    PlanDetail = planModel.PlanDetail,
-                //    CreatedOn = DateTime.UtcNow,
-                //    CreatedBy = 1,
-                //    IsDeleted = false
-                //};
+               var pplan= _mapper.Map<DTOModel.Plan>(plan);                
+                 await _genericRepository.InsertAsync(pplan);
+                _genericRepository.SaveChanges();
 
-               var plan= _mapper.Map<DTOModel.Plan>(planModel);
-                return await _genericRepository.InsertAsync(plan);
+                return pplan.PlanID;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
-        public Task<int> AddNewUserTypeAsync(UserTypeModel uTypeModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<PlanModel>> GetAllPlanAsync()
+               
+        public async Task<List<Model.Plan>> GetAllPlanAsync()
         {
             IEnumerable<DTOModel.Plan> result = await _genericRepository.GetAsync<DTOModel.Plan>();
             try
             {
-                return _mapper.Map<List<PlanModel>>(result);
+                return _mapper.Map<List<Model.Plan>>(result);
               
             }
             catch (Exception ex)
@@ -60,7 +49,7 @@ namespace CSRPulse.Services.Admin.Plan
             }
         }
 
-        public Task<PlanModel> GetPlanByIdAsync()
+        public Task<Model.Plan> GetPlanByIdAsync()
         {
             throw new NotImplementedException();
         }

@@ -19,11 +19,9 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="aboutus">About</a>
+                        <a class="nav-link text-dark" asp-area="admin" asp-controller="Plan" asp-action="Index">Plan</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="contactus">Contact</a>
-                    </li>
+                    
                     @await Component.InvokeAsync("UserMenu")
                 </ul>
 

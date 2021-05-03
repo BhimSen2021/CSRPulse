@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-    public class PlanModel : BaseModel
+    public class Plan : BaseModel
     {
         [Key]
         [Column("PlanID")]
