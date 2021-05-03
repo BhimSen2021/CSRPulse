@@ -6,21 +6,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using CSRPulse.Data.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSRPulse.Services
 {
     public class MenuService : BaseService, IMenuService
-    {
+    {    
+
         public MenuService(IMapper mapper, IGenericRepository genericRepository) : base(mapper, genericRepository)
         {
-
+            
         }
 
-        public async Task<List<Menu>> GetMenuByUserAsync(int UserID)
+        public List<Menu> GetMenuByUserAsync(int UserID)
         {
             List<Menu> userMenu = new List<Menu>();
-            var uDetail = await _genericRepository.GetAsync<DTOModel.UserRights>(u => u.UserID == UserID && u.ShowMenu == true && u.Menu.IsDeleted == false && u.Menu.IsActive == true);
-            userMenu = _mapper.Map<List<Menu>>(uDetail);
+            Menu uMenu = new Menu();
+
+            var uDetail = _genericRepository.Get<DTOModel.UserRights>(u => u.UserId == UserID).FirstOrDefault();
+
+
+            //userMenu = _mapper.Map<List<Menu>>(uDetail.Menu);
 
             return userMenu;
         }

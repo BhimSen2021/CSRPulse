@@ -50,7 +50,7 @@ namespace CSRPulse.Services
             {
               userDetail =  _mapper.Map<UserDetail>(uDetail);
 
-                var uRight = _genericRepository.GetFirstOrDefault<DTOModel.UserRights>(r => r.UserID == uDetail.UserID);
+                var uRight = _genericRepository.GetFirstOrDefault<DTOModel.UserRights>(r => r.UserId == uDetail.UserId);
 
                 if (uRight != null)
                 {

@@ -1,3 +1,32 @@
-﻿<li class="nav-item">
-    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">View Component</a>
-</li>
+﻿@model IEnumerable<CSRPulse.Model.Menu>
+
+@{
+    if (Model != null)
+    {
+        var header = Model.Where(x => x.ParentMenuId == null).OrderBy(o => o.SequenceNo);
+        foreach (var hd in header)
+        {
+            var menuItem = Model.Where(x => x.ParentMenuId == hd.MenuId).OrderBy(o => o.SequenceNo);
+            if (menuItem.Count() > 0)
+            {
+                <li class="dropdown mr-2">
+                    <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@hd.MenuName</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left:auto; max-width:150px;">
+                        @foreach (var menu in menuItem)
+                        {
+                            <li><a href='@Url.Action("MenuRedirect", "Login", new { menuId = menu.MenuId })'>@menu.MenuName</a></li>
+                        }
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li class="@if (hd.MenuId == 1){<text>active</text>}"><a href='@Url.Action("MenuRedirect", "Login", new { menuId = hd.MenuId })'>@hd.MenuName</a></li>
+            }
+        }
+    }
+}
+
+@*<li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">View Component</a>
+    </li>*@

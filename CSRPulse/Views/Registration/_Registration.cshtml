@@ -1,14 +1,14 @@
 ﻿@model CSRPulse.Model.Customer
 
 
-<form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="PostRegistration" data-ajax-success="onSuccess">
+<form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="Registration" data-ajax-success="onSuccess">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <label asp-for="CustomerName" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="CustomerName" class="form-control" />
+            <input type="text" asp-for="CustomerName" class="form-control" autocomplete="off" />
             <span asp-validation-for="CustomerName" class="text-danger"></span>
         </div>
     </div>
@@ -17,7 +17,7 @@
             <label asp-for="Email" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Email" class="form-control" />
+            <input type="email" asp-for="Email" class="form-control" autocomplete="off" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
@@ -26,7 +26,7 @@
             <label asp-for="Telephone" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Telephone" class="form-control" />
+            <input type="text" asp-for="Telephone" class="form-control" autocomplete="off" />
             <span asp-validation-for="Telephone" class="text-danger"></span>
         </div>
     </div>
@@ -35,7 +35,7 @@
             <label asp-for="Website" class="col-form-label"></label>
         </div>
         <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Website" class="form-control" />
+            <input type="text" asp-for="Website" class="form-control" autocomplete="off" />
         </div>
     </div>
     @*<div class="row">
@@ -85,7 +85,7 @@
 
         <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <input type="checkbox" asp-for="IsAgree" />
-            <label for="IsAgree">I agree to the Master Subscription Agreement</label>
+            <label for="IsAgree">I agree to the Master Subscription Agreement</label><br />
             <span asp-validation-for="IsAgree" class="text-danger"></span>
         </div>
     </div>
@@ -102,14 +102,7 @@
     </div>
     <div class="row pb-4">
         <div class="regbutton col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <button type="submit" class="btn btn-md btn-primary btn-full">START MY FREE TRAIL</button>
-
-        </div>
-
-    </div>
-    <div class="row pb-4">
-        <div class="regbutton col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <button type="button" onclick="showpopper();" class="btn btn-md btn-primary btn-full">Popper</button>
+            <button type="submit" class="btn btn-md btn-primary btn-full">REGISTRATION</button>
 
         </div>
 
@@ -117,11 +110,9 @@
 </form>
 
 <script>
-    function showpopper() {
-        commonMessage('success','Welcome to CSR Pulse')
-
-    }
     function onSuccess(data) {
+        commonMessage('success', 'Dear Customer, Your registration is successfully done, Please select payment option.')
         $("#form-container").html(data.htmlData);
+
     }
 </script>

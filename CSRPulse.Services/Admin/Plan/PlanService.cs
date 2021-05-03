@@ -27,7 +27,7 @@ namespace CSRPulse.Services.Admin
                  await _genericRepository.InsertAsync(pplan);
                 _genericRepository.SaveChanges();
 
-                return pplan.PlanID;
+                return pplan.PlanId;
             }
             catch (Exception)
             {
