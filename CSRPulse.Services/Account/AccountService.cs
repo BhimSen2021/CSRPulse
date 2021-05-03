@@ -54,29 +54,13 @@ namespace CSRPulse.Services
 
                 if (uRight != null)
                 {
-                   userDetail.userMenuRights =  _mapper.Map<List<UserRight>>(uRight);
+                   //userDetail.userMenuRights =  _mapper.Map<List<UserRight>>(uRight);
                 }
-                //userDetail.UserID = uDetail.UserID;
-                //userDetail.UserName = uDetail.UserName;
-                //userDetail.EmailID = uDetail.EmailID;
-                //userDetail.CreatedOn = uDetail.CreatedOn;
-                //userDetail.CreatedBy = uDetail.CreatedBy;
-                //userDetail.IsDeleted = false;
             }
 
-            if (uDetail == null)
-            {
-                return false;
-            }
+            if (userDetail.UserID > 0) { return true; }
 
-            if (userDetail.UserID > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            else { return false; }
         }
     }
 }

@@ -20,8 +20,12 @@ namespace CSRPulse.Services
             CreateMap<CustomerLicenseActivation, DTOModel.CustomerLicenseActivation>().ReverseMap();
             CreateMap<DTOModel.User, UserDetail>().ReverseMap();
             CreateMap<DTOModel.UserRights, UserRight>().ReverseMap();
-
             
+            CreateMap<DTOModel.Menu, Menu>().ReverseMap();
+            CreateMap<Menu, UserRight>().ReverseMap();
+            CreateMap<DTOModel.UserRights, UserRight>().ReverseMap();
+            CreateMap<UserDetail, DTOModel.UserRights>().ReverseMap();
+
         }
     }
 }

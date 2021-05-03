@@ -12,10 +12,12 @@ namespace CSRPulse.Controllers
     public class AccountController : BaseController<AccountController>
     {
         private readonly IAccountService _accountService;
+        private readonly IMenuService _menuService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IMenuService menuService)
         {
             _accountService = accountService;
+            _menuService = menuService;
         }
         [HttpGet, Route("Signup")]
         public IActionResult Signup()
@@ -63,14 +65,14 @@ namespace CSRPulse.Controllers
                     UserDetail uDetail = new UserDetail();
                     isAuthenticated = _accountService.AuthenticateUser(singIn, out uDetail);
                     if (isAuthenticated)
-                    {                        
+                    {
                         HttpContext.Session.SetComplexData("User", uDetail);
-                       
+
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return LocalRedirect(returnUrl);
                         }
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
                     }
                     else
                         ModelState.AddModelError("", "Invalid credentials");
@@ -84,6 +86,19 @@ namespace CSRPulse.Controllers
                 throw;
             }
 
+        }
+
+        public async Task<ActionResult> _MenuAsync()
+        {
+            List<Menu> userMenu = new List<Menu>();
+            UserDetail uDetail = new UserDetail();
+
+            if (HttpContext.Session.GetComplexData<UserDetail>("User") != null)
+            {
+                uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
+            }
+            userMenu = await _menuService.GetMenuByUserAsync(uDetail.UserID);
+            return PartialView(userMenu);
         }
 
     }

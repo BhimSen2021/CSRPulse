@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] | CSRPulse</title>
+
+    <environment include="Development">
+        <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/css/Site.css" rel="stylesheet" />       
+    </environment>
+    <environment exclude="Development">
+        <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/css/site.min.css" rel="stylesheet" />
+    </environment>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setHeight();
+
+            $('.date').datepicker({
+                dateFormat: 'dd-mm-yy',
+                showOn: "button",
+            });
+        });
+        function setHeight() {
+            var height = $(window).height();
+            var divScroll = null;
+            if ($("#divScroll").length != 0)
+                divScroll = $("#divScroll");
+            else divScroll = $("#divContent");
+            var marginTop = divScroll.offset().top;
+            marginTop = marginTop + 26;
+            height = height - marginTop;          
+            divScroll.height(height);
+        }
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+    </script>
+</head>
+<body>
+    <partial name="_header" />
+
+    @RenderSection("breadcrumb", required: false)
+
+    <main role="main">
+        @RenderBody()
+    </main>
+    <partial name="_footer" />
+    <environment include="Development">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/lib/jquery/jquery.min.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    </environment>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
