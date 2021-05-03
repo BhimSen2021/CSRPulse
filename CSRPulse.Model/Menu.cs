@@ -9,17 +9,17 @@ namespace CSRPulse.Model
 {
     public class Menu:BaseModel
     {
-        public int MenuID { get; set; }
+        public int MenuId { get; set; }
         [Display(Name = "Menu Name :")]
         [Required(ErrorMessage = "Menu Name is required.")]
         public string MenuName { get; set; }
         [Display(Name = "Parent :")]
-        public Nullable<int> ParentID { get; set; }
+        public Nullable<int> ParentMenuId { get; set; }
         [Display(Name = "Sequence :")]
         public Nullable<int> SequenceNo { get; set; }
         [Display(Name = "URL :")]
         [Required(ErrorMessage = "URL is required.")]
-        public string URL { get; set; }
+        public string Url { get; set; }
 
         [Display(Name = "Icon Class :")]
         public string IconClass { get; set; }

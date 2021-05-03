@@ -32,10 +32,10 @@ namespace CSRPulse.Attributes
                 if (user != null && actionName != "index" && user.userMenuRights.Count > 0)
                 {
                     var menuRights = user.userMenuRights;
-                    if (menuRights.Any(x => x.menu.URL.ToLower() == indexPageURL))
+                    if (menuRights.Any(x => x.menu.Url.ToLower() == indexPageURL))
                     {
-                        var menuRight = menuRights.Where(x => x.menu.URL.ToLower() == indexPageURL).Select(
-                            y => new { ShowMenuRight = y.ShowMenu, CreateRight = y.Create, EditRight = y.Edit }).FirstOrDefault();
+                        var menuRight = menuRights.Where(x => x.menu.Url.ToLower() == indexPageURL).Select(
+                            y => new { ShowMenuRight = y.ShowMenu, CreateRight = y.CreateRight, EditRight = y.EditRight }).FirstOrDefault();
 
                         if (actionName == "index" && !menuRight.ShowMenuRight)
                             filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "MenuRender" }));
@@ -56,7 +56,7 @@ namespace CSRPulse.Attributes
                     {
                         if (user.userMenuRights.Count > 0)
                         {
-                            if (!user.userMenuRights.Any(x => x.menu.URL.ToLower() == indexPageURL))
+                            if (!user.userMenuRights.Any(x => x.menu.Url.ToLower() == indexPageURL))
                                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "MenuRender" }));
                         }
                         else

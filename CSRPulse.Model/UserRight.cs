@@ -8,14 +8,14 @@ namespace CSRPulse.Model
 {
     public class UserRight:BaseModel
     {
-        public int DepartmentID { get; set; }
+        
         public int UserID { get; set; }
         public int MenuID { get; set; }
         public bool ShowMenu { get; set; }
-        public bool Create { get; set; }
-        public bool Edit { get; set; }
-        public bool View { get; set; }
-        public bool Delete { get; set; }
+        public bool CreateRight { get; set; }
+        public bool EditRight { get; set; }
+        public bool ViewRight { get; set; }
+        public bool DeleteRight { get; set; }
         public Menu menu { set; get; }
         public string HelpText { set; get; }
     }

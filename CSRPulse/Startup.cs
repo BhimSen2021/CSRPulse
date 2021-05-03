@@ -34,9 +34,10 @@ namespace CSRPulse
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IRegistrationService, RegistrationService>();
+            services.AddScoped<IMenuService, MenuService>();
 
             #endregion
-                       
+
             services.AddSession(option =>
                 {
                     option.IdleTimeout = TimeSpan.FromMinutes(30);
