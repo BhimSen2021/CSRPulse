@@ -25,6 +25,22 @@
     {
       "library": "popper.js@2.9.2",
       "destination": "wwwroot/lib/popper.js/"
+    },
+    {
+      "library": "bootstrap-growl@1.0.0",
+      "destination": "wwwroot/bootstrap-growl/"
+    },
+    {
+      "library": "font-awesome@5.15.3",
+      "destination": "wwwroot/font-awesome/",
+      "files": [
+        "css/fontawesome.css",
+        "css/fontawesome.min.css"
+      ]
+    },
+    {
+      "library": "fontawesome-iconpicker@3.2.0",
+      "destination": "wwwroot/lib/fontawesome-iconpicker/"
     }
   ]
 }
