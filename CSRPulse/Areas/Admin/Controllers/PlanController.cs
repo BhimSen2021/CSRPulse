@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CSRPulse.Model.Admin;
 using CSRPulse.Services.Admin;
 
 namespace CSRPulse.Areas.Admin.Controllers
