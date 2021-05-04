@@ -101,5 +101,46 @@ namespace CSRPulse.Controllers
             return PartialView(userMenu);
         }
 
+
+        [HttpGet, Route("Login")]
+        public IActionResult CustomerLogin()
+        {
+            return View();
+        }
+
+        [HttpPost, Route("login")]
+        public IActionResult CustomerLogin(SingIn singIn, string returnUrl)
+        {
+            _logger.LogInformation("AccountController/CustomerLogin");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    bool isAuthenticated = false;
+                    UserDetail uDetail = new UserDetail();
+                    isAuthenticated = _accountService.AuthenticateUser(singIn, out uDetail);
+                    if (isAuthenticated)
+                    {
+                        HttpContext.Session.SetComplexData("User", uDetail);
+
+                        if (!string.IsNullOrEmpty(returnUrl))
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
+                        return RedirectToAction("CustomerLogin", "Account");
+                    }
+                    else
+                        ModelState.AddModelError("", "Invalid credentials");
+
+                }
+                return View(singIn);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
     }
 }

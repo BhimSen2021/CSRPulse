@@ -55,7 +55,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "MW-ANIL\\MSSQLSERVER2016.CSRPulse",
+   "UiHint": "IBRAHIM\\MSSQLSERVER2016.CSRPulse",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,
@@ -67,6 +67,6 @@
    "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
-   "UseNullableReferences": false,
+   "UseNullableReferences": true,
    "UseSpatial": false
 }

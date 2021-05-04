@@ -43,7 +43,7 @@ namespace CSRPulse.Services
                 await _genericRepository.InsertAsync(dtoCustomer);
 
                 _genericRepository.SaveChanges();
-                return dtoCustomer.CustomerID;
+                return dtoCustomer.CustomerId;
             }
             catch (Exception)
             {

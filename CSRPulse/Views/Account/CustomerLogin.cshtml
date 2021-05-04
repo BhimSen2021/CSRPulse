@@ -1,0 +1,76 @@
+﻿@model CSRPulse.Model.SingIn
+@{
+
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <section id="login">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 bg-light">
+                <div class="row mt-5">
+                    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto">
+                        <h4 class="text-center mt-5 mb-4">CSR<span class="text-primary pl-1">PULSE</span></h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <form asp-action="Login" asp-controller="Account" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label for="UserName">Company Code</label>
+                                        <input type="text" asp-for="CompanyCode" class="form-control" placeholder="Enter Company Code" />
+                                        <span asp-validation-for="CompanyCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="UserName">Username:</label>
+                                        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter username" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Password">Password:</label>
+                                        <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block mb-2">Log In</button>
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <a asp-action="ForgotPassword" asp-controller="Account">Forgot Your Password?</a>
+                                        <a class="float-right" href="#">Use Custom Domain</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto text-center">
+                                <span>Not a customer?</span>
+                                <a asp-action="Signup" class="btn btn-outline-primary">Try for free</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 log_bg d--n">
+                <h3 class="mt-4" style="font-weight: 100;">Sell, market, and service with the world's #1 <br>CRM.</h3>
+                <div class="row">
+                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
+                        <p class="text-justify" style="font-size: 18px;font-weight: 100;">
+                            Welcome to the Salesforce Customer Success Platform. Our new Lightning Platform gives you the fastest, most complete way
+                            to put your customers at the center of everything you do.
+                        </p>
+                        <a href="#" class="btn btn-primary">WATCH DEMOS</a>
+                        <a href="#" class="btn btn-light ml-4">FREE TRIAL</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+

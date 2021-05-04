@@ -19,7 +19,7 @@ namespace CSRPulse.Services
         public async Task<List<Menu>> GetMenuByUserAsync(int UserID)
         {
             List<Menu> userMenu = new List<Menu>();
-            var uDetail = await _genericRepository.GetAsync<DTOModel.UserRights>(u => u.UserID == UserID && u.ShowMenu == true && u.Menu.IsDeleted == false && u.Menu.IsActive == true);
+            var uDetail = await _genericRepository.GetAsync<DTOModel.UserRights>(u => u.UserId == UserID && u.ShowMenu == true && u.Menu.IsDeleted == false && u.Menu.IsActive == true);
             userMenu = _mapper.Map<List<Menu>>(uDetail);
 
             return userMenu;
