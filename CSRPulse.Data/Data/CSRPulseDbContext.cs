@@ -96,7 +96,7 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<CustomerLicenseActivation>(entity =>
             {
-                entity.HasKey(e => e.LicenceActID);
+                entity.HasKey(e => e.LicenceActId);
 
                 entity.Property(e => e.LicenceActId).HasColumnName("LicenceActID");
 
@@ -129,7 +129,7 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<CustomerPayment>(entity =>
             {
-                entity.HasKey(e => e.PaymentID);
+                entity.HasKey(e => e.PaymentId);
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
 
@@ -295,7 +295,7 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<UserRights>(entity =>
             {
-                entity.HasKey(e => new { e.UserID, e.MenuID })
+                entity.HasKey(e => new { e.UserId, e.MenuId })
                     .HasName("PK_UserMenuRights");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
