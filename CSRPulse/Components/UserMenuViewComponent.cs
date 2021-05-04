@@ -18,15 +18,15 @@ namespace CSRPulse.Components
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            UserDetail uDetail = new UserDetail();
+            var uDetail = new UserDetail();
 
             if (HttpContext.Session.GetComplexData<UserDetail>("User") != null)
             {
                 uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
             }
 
-            var listMenu = _menuService.GetMenuByUserAsync(uDetail.UserID);
-            return View(listMenu);
+            var uMenu = _menuService.GetMenuByUserAsync(uDetail.UserID);
+            return View(uMenu);
         }
     }
 }

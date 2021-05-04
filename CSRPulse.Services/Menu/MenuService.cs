@@ -13,24 +13,34 @@ using Microsoft.EntityFrameworkCore;
 namespace CSRPulse.Services
 {
     public class MenuService : BaseService, IMenuService
-    {    
+    {
 
         public MenuService(IMapper mapper, IGenericRepository genericRepository) : base(mapper, genericRepository)
         {
-            
+
         }
 
-        public List<Menu> GetMenuByUserAsync(int UserID)
+        public List<Menu> GetMenuByUserAsync(int userId)
         {
-            List<Menu> userMenu = new List<Menu>();
-            Menu uMenu = new Menu();
+            List<Menu> uMenu = new List<Menu>();
+            var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(x => x.UserId == userId).Include(d => d.Menu).ToList();
+          
+            uRights.ForEach(r =>
+            {
+                uMenu.Add(new Menu
+                {
+                    MenuId = r.MenuId,
+                    SequenceNo = r.Menu.SequenceNo,
+                    MenuName = r.Menu.MenuName,
+                    Url = r.Menu.Url,
+                    ParentMenuId = r.Menu.ParentMenuId,
+                    IconClass = r.Menu.IconClass,
+                    Help = r.Menu.Help
+                });
+            });
 
-            var uDetail = _genericRepository.Get<DTOModel.UserRights>(u => u.UserId == UserID).FirstOrDefault();
 
-
-            //userMenu = _mapper.Map<List<Menu>>(uDetail.Menu);
-
-            return userMenu;
+            return uMenu;
         }
     }
 }
