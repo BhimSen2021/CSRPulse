@@ -11,8 +11,7 @@ namespace CSRPulse.Data.Models
     {
         public User()
         {
-            MenuCreatedByNavigation = new HashSet<Menu>();
-            MenuUpdatedByNavigation = new HashSet<Menu>();
+            UserRights = new HashSet<UserRights>();
         }
 
         public int UserId { get; set; }
@@ -32,7 +31,6 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
 
         public virtual UserType UserType { get; set; }
-        public virtual ICollection<Menu> MenuCreatedByNavigation { get; set; }
-        public virtual ICollection<Menu> MenuUpdatedByNavigation { get; set; }
+        public virtual ICollection<UserRights> UserRights { get; set; }
     }
 }

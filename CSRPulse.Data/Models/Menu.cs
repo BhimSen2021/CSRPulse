@@ -29,8 +29,6 @@ namespace CSRPulse.Data.Models
         public string Help { get; set; }
         public bool IsDeleted { get; set; }
 
-        public virtual User CreatedByNavigation { get; set; }
-        public virtual User UpdatedByNavigation { get; set; }
         public virtual ICollection<UserRights> UserRights { get; set; }
     }
 }

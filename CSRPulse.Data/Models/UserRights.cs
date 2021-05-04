@@ -9,6 +9,7 @@ namespace CSRPulse.Data.Models
 {
     public partial class UserRights
     {
+        public int UserRightId { get; set; }
         public int UserId { get; set; }
         public int MenuId { get; set; }
         public bool ShowMenu { get; set; }
@@ -22,5 +23,6 @@ namespace CSRPulse.Data.Models
         public DateTime? UpdatedOn { get; set; }
 
         public virtual Menu Menu { get; set; }
+        public virtual User User { get; set; }
     }
 }
