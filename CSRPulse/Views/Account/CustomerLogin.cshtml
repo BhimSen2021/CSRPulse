@@ -13,33 +13,36 @@
                         <h4 class="text-center mt-5 mb-4">CSR<span class="text-primary pl-1">PULSE</span></h4>
                         <div class="card">
                             <div class="card-body">
-                                <form asp-action="Login" asp-controller="Account" method="post">
+                                <form asp-action="CustomerLogin" asp-controller="Account" method="post">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
-                                        <label for="UserName">Company Code</label>
-                                        <input type="text" asp-for="CompanyCode" class="form-control" placeholder="Enter Company Code" />
-                                        <span asp-validation-for="CompanyCode" class="text-danger"></span>
+                                        @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label", @for = "CompanyID" })
+                                        <input type="text" asp-for="CompanyID" class="form-control" placeholder="Enter Company ID" />
+                                        <span asp-validation-for="CompanyID" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="UserName">Username:</label>
-                                        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter username" />
-                                        <span asp-validation-for="UserName" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Password">Password:</label>
-                                        <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" />
-                                        <span asp-validation-for="Password" class="text-danger"></span>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-block mb-2">Log In</button>
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+                                    <button type="submit" name="ButtonName" value="verify" class="btn btn-primary btn-block mb-2">VERIFY</button>
+                                    <div id="div-user-dtl" class="d-none">
+                                        <div class="form-group">
+                                            <label for="UserName" class="control-label">Username:</label>
+                                            <input type="text" asp-for="UserName" class="form-control" placeholder="Enter username" />
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Password" class="control-label">Password:</label>
+                                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                        <button type="submit"  name="ButtonName" value="LogIn"  class="btn btn-primary btn-block mb-2">Log In</button>
+                                        <div class="form-group form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
 
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <a asp-action="ForgotPassword" asp-controller="Account">Forgot Your Password?</a>
-                                        <a class="float-right" href="#">Use Custom Domain</a>
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <a asp-action="ForgotPassword" asp-controller="Account">Forgot Your Password?</a>
+
+                                        </div>
                                     </div>
                                 </form>
                             </div>

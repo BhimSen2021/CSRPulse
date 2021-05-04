@@ -9,6 +9,11 @@ namespace CSRPulse.Data.Models
 {
     public partial class CustomerPayment
     {
+        public CustomerPayment()
+        {
+            CustomerLicenseActivation = new HashSet<CustomerLicenseActivation>();
+        }
+
         public int PaymentId { get; set; }
         public int CustomerId { get; set; }
         public decimal AmountPaid { get; set; }
@@ -22,5 +27,6 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
 
         public virtual Customer Customer { get; set; }
+        public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
     }
 }

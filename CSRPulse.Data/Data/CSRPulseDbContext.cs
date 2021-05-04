@@ -21,6 +21,11 @@ namespace CSRPulse.Data.Data
         {
         }
 
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
+        public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
+        public virtual DbSet<Plan> Plan { get; set; }
+
         public static string CustomeConnectionString
         {
             get; set;
@@ -38,21 +43,8 @@ namespace CSRPulse.Data.Data
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
-        public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
-        public virtual DbSet<Menu> Menu { get; set; }
-        public virtual DbSet<Plan> Plan { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<StartingNumber> StartingNumber { get; set; }
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserRights> UserRights { get; set; }
-        public virtual DbSet<UserType> UserType { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
@@ -110,6 +102,8 @@ namespace CSRPulse.Data.Data
 
                 entity.Property(e => e.LastActivationDate).HasColumnType("datetime");
 
+                entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+
                 entity.Property(e => e.PlanId).HasColumnName("PlanID");
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -119,6 +113,12 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerLicenseActivation_Customer");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.CustomerLicenseActivation)
+                    .HasForeignKey(d => d.PaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CustomerLicenseActivation_CustomerPayment");
 
                 entity.HasOne(d => d.Plan)
                     .WithMany(p => p.CustomerLicenseActivation)
@@ -152,36 +152,6 @@ namespace CSRPulse.Data.Data
                     .HasConstraintName("FK_CustomerPayment_CustomerPayment");
             });
 
-            modelBuilder.Entity<Menu>(entity =>
-            {
-                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Help).HasColumnType("text");
-
-                entity.Property(e => e.IconClass)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IsActive)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.MenuName)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.Url)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<Plan>(entity =>
             {
                 entity.Property(e => e.PlanId).HasColumnName("PlanID");
@@ -199,145 +169,6 @@ namespace CSRPulse.Data.Data
                     .HasMaxLength(100);
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Description).HasMaxLength(500);
-
-                entity.Property(e => e.ProductName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.YearlyPrice).HasColumnType("money");
-            });
-
-            modelBuilder.Entity<StartingNumber>(entity =>
-            {
-                entity.HasKey(e => e.StartNumberId);
-
-                entity.Property(e => e.StartNumberId).HasColumnName("StartNumberID");
-
-                entity.Property(e => e.ColumnName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Prefix)
-                    .IsRequired()
-                    .HasMaxLength(7);
-
-                entity.Property(e => e.TableName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.EmailId)
-                    .IsRequired()
-                    .HasColumnName("EmailID")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FullName)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ImageName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.MobileNo)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UserTypeId).HasColumnName("UserTypeID");
-
-                entity.HasOne(d => d.UserType)
-                    .WithMany(p => p.User)
-                    .HasForeignKey(d => d.UserTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_User_UserType");
-            });
-
-            modelBuilder.Entity<UserRights>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.MenuId })
-                    .HasName("PK_UserMenuRights");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.Property(e => e.MenuId).HasColumnName("MenuID");
-
-                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Menu)
-                    .WithMany(p => p.UserRights)
-                    .HasForeignKey(d => d.MenuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRights_Menu");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserRights)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRights_User");
-            });
-
-            modelBuilder.Entity<UserType>(entity =>
-            {
-                entity.Property(e => e.UserTypeId).HasColumnName("UserTypeID");
-
-                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.UserTypeName)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

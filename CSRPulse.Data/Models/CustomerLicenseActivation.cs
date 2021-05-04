@@ -15,6 +15,7 @@ namespace CSRPulse.Data.Models
         public int ActivationCount { get; set; }
         public DateTime ActivationDate { get; set; }
         public DateTime LastActivationDate { get; set; }
+        public int PaymentId { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
@@ -22,6 +23,7 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
 
         public virtual Customer Customer { get; set; }
+        public virtual CustomerPayment Payment { get; set; }
         public virtual Plan Plan { get; set; }
     }
 }

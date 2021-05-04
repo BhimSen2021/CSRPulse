@@ -102,26 +102,50 @@ namespace CSRPulse.Controllers
         }
 
 
-        [HttpGet, Route("Login")]
+        [HttpGet]
+
         public IActionResult CustomerLogin()
         {
             return View();
         }
 
-        [HttpPost, Route("login")]
-        public IActionResult CustomerLogin(SingIn singIn, string returnUrl)
+
+        /// <summary>
+        /// In this function, we'll check the customer in our database and then verify its credentail in customer database
+        /// /// </summary>
+        /// <param name="singIn"> contain user input fields</param>
+        /// <param name="returnUrl">to return previous page</param>
+        /// <param name="ButtonName">based on button, will perfom action</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult CustomerLogin(SingIn singIn, string returnUrl, string ButtonName)
         {
             _logger.LogInformation("AccountController/CustomerLogin");
             try
             {
+                /// First check the customer ID is exists in our database
+                if (ButtonName == "verify")
+                {
+                    string returnOutPut = string.Empty;
+                    bool isCustExists = false;
+                    isCustExists = _accountService.AuthenticateCustomer(singIn, out returnOutPut);
+                    if (isCustExists)
+                    {
+                        ModelState.AddModelError("", "Your Registration will be expire within 2 day(s),Please contact you administrator.");
+                        return View(singIn);
+
+                    }
+                }
+
+                // if customer ID is exists in our database, then check user credential in customer database
                 if (ModelState.IsValid)
                 {
                     bool isAuthenticated = false;
-                    UserDetail uDetail = new UserDetail();
-                    isAuthenticated = _accountService.AuthenticateUser(singIn, out uDetail);
+                    UserDetail userDetail = new UserDetail();
+                    isAuthenticated = _accountService.AuthenticateUser(singIn, out userDetail);
                     if (isAuthenticated)
                     {
-                        HttpContext.Session.SetComplexData("User", uDetail);
+                        HttpContext.Session.SetComplexData("User", userDetail);
 
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
