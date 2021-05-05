@@ -14,15 +14,35 @@
         <link href="~/css/site.min.css" rel="stylesheet" />
     </environment>
 
+
+</head>
+<body>
+    <partial name="_header" />
+
+    @RenderSection("breadcrumb", required: false)
+
+    <main role="main">
+        @RenderBody()
+    </main>
+    <partial name="_footer" />
+
+    <environment include="Development">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+
     <script type="text/javascript">
-        $(document).ready(function () {
-            setHeight();
-
-            $('.date').datepicker({
-                dateFormat: 'dd-mm-yy',
-                showOn: "button",
-            });
-
+        $(document).ready(function () { 
             $(window).scroll(function () {
                 if ($(this).scrollTop() > 100) {
 
@@ -36,46 +56,7 @@
                 return false;
             });
         });
-        function setHeight() {
-            var height = $(window).height();
-            var divScroll = null;
-            if ($("#divScroll").length != 0)
-                divScroll = $("#divScroll");
-            else divScroll = $("#divContent");
-            var marginTop = divScroll.offset().top;
-            marginTop = marginTop + 26;
-            height = height - marginTop;
-            divScroll.height(height);
-        }
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-
+       
     </script>
-</head>
-<body>
-    <partial name="_header" />
-
-    @RenderSection("breadcrumb", required: false)
-
-    <main role="main">
-        @RenderBody()
-    </main>
-    <partial name="_footer" />
-    <environment include="Development">
-        <script src="~/lib/jquery/jquery.js"></script>
-        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/lib/lib/jquery/jquery.min.js"></script>
-        <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-        <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-    </environment>
-        
-    @RenderSection("scripts", required: false)
-
 </body>
 </html>

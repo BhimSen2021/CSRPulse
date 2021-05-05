@@ -88,18 +88,5 @@ namespace CSRPulse.Controllers
 
         }
 
-        public ActionResult _MenuAsync()
-        {
-            List<Menu> userMenu = new List<Menu>();
-            UserDetail uDetail = new UserDetail();
-
-            if (HttpContext.Session.GetComplexData<UserDetail>("User") != null)
-            {
-                uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
-            }
-            userMenu = _menuService.GetMenuByUserAsync(uDetail.UserID);
-            return PartialView(userMenu);
-        }
-
     }
 }

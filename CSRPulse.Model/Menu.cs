@@ -27,7 +27,7 @@ namespace CSRPulse.Model
         [Display(Name = "Active :")]
         public bool IsActive { get; set; }
 
-        public string ParentName { get; set; }
+        public string Area { get; set; }
 
         public string Help { get; set; }
 

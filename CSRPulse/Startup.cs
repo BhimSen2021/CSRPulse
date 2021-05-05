@@ -10,6 +10,7 @@ using CSRPulse.Services;
 using CSRPulse.Services.Admin;
 using CSRPulse.Services.IServices;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace CSRPulse
 {
@@ -26,7 +27,7 @@ namespace CSRPulse
         {
             //services.AddDbContext<CSRPulseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), mig => mig.MigrationsAssembly("CSRPulse.Data")));
             services.AddControllersWithViews();
-
+            services.AddHttpContextAccessor();
             #region Register component for DI
             services.AddAutoMapper(typeof(AutoMapperServices));
             services.AddScoped<IBaseRepository, BaseRepository>();
@@ -35,6 +36,7 @@ namespace CSRPulse
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IMenuService, MenuService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             #endregion
 
