@@ -41,7 +41,7 @@ namespace CSRPulse.Services
         {
             userDetail = new UserDetail();
 
-            var uDetail = _genericRepository.GetFirstOrDefault<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password);
+            var uDetail = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.UserRights).FirstOrDefault();
 
             if (uDetail == null)
             {
@@ -50,12 +50,19 @@ namespace CSRPulse.Services
             else
             {
                 userDetail = _mapper.Map<UserDetail>(uDetail);
-
-                var uRight = _genericRepository.GetFirstOrDefault<DTOModel.UserRights>(r => r.UserId == uDetail.UserId);
-
-                if (uRight != null)
+                if (uDetail.UserRights != null)
                 {
-                    userDetail.userMenuRights = _mapper.Map<List<UserRight>>(uRight);
+                    userDetail.userMenuRights = uDetail.UserRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
+                    {
+                        UserId = uRigth.UserId,
+                        MenuId = uRigth.MenuId,
+                        ShowMenu = uRigth.ShowMenu,
+                        CreateRight = uRigth.CreateRight,
+                        EditRight = uRigth.EditRight,
+                        ViewRight = uRigth.ViewRight,
+                        DeleteRight = uRigth.DeleteRight
+
+                    }).ToList();
                 }
             }
 
@@ -84,51 +91,51 @@ namespace CSRPulse.Services
                                 if (DateTime.Now.Date.AddDays(3) == custAct.LastActivationDate.Date)
                                 {
                                     outPutValue = "3daysexp";
-                                    flag= true;
+                                    flag = true;
                                 }
                                 else if (DateTime.Now.Date.AddDays(2) == custAct.LastActivationDate.Date)
                                 {
                                     outPutValue = "2daysexp";
-                                    flag= true;
+                                    flag = true;
                                 }
                                 else if (DateTime.Now.Date.AddDays(1) == custAct.LastActivationDate.Date)
                                 {
                                     outPutValue = "1dayexp";
-                                    flag= true;
+                                    flag = true;
                                 }
                                 else if (DateTime.Now.Date == custAct.LastActivationDate.Date)
                                 {
                                     outPutValue = "0exp";
-                                    flag= true;
+                                    flag = true;
                                 }
                                 else if (DateTime.Now.Date > custAct.LastActivationDate.Date)
                                 {
                                     outPutValue = "expired";
-                                    flag= false;
+                                    flag = false;
                                 }
                             }
                             else
                             {
                                 outPutValue = "lincexpired";
-                                flag= false;
+                                flag = false;
                             }
                         }
                         else
                         {
                             outPutValue = "nopayment";
-                            flag= false;
+                            flag = false;
                         }
                     }
                     else
                     {
                         outPutValue = "nopayment";
-                        flag= false;
-                    }                   
+                        flag = false;
+                    }
                 }
                 else
                 {
                     outPutValue = "notexists";
-                    flag= false;
+                    flag = false;
                 }
 
                 if (flag)
@@ -146,6 +153,6 @@ namespace CSRPulse.Services
             }
         }
 
- 
+
     }
 }
