@@ -41,7 +41,7 @@ namespace CSRPulse.Services
         {
             userDetail = new UserDetail();
 
-            var uDetail = _genericRepository.GetFirstOrDefault<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password);
+            var uDetail = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.UserRights).FirstOrDefault();
 
             if (uDetail == null)
             {
@@ -50,12 +50,19 @@ namespace CSRPulse.Services
             else
             {
                 userDetail = _mapper.Map<UserDetail>(uDetail);
-
-                var uRight = _genericRepository.GetFirstOrDefault<DTOModel.UserRights>(r => r.UserId == uDetail.UserId);
-
-                if (uRight != null)
+                if (uDetail.UserRights != null)
                 {
-                    userDetail.userMenuRights = _mapper.Map<List<UserRight>>(uRight);
+                    userDetail.userMenuRights = uDetail.UserRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
+                    {
+                        UserId = uRigth.UserId,
+                        MenuId = uRigth.MenuId,
+                        ShowMenu = uRigth.ShowMenu,
+                        CreateRight = uRigth.CreateRight,
+                        EditRight = uRigth.EditRight,
+                        ViewRight = uRigth.ViewRight,
+                        DeleteRight = uRigth.DeleteRight
+
+                    }).ToList();
                 }
             }
 
@@ -64,84 +71,77 @@ namespace CSRPulse.Services
             else { return false; }
         }
 
-        public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int ? customerID)
+        public bool AuthenticateCustomer(SingIn singIn, out string outPutValue)
         {
             try
             {
                 outPutValue = string.Empty;
-                customerID = null;
                 bool flag = false;
                 var validateCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerCode == singIn.CompanyID).Include(p => p.CustomerPayment).Include(y => y.CustomerLicenseActivation);
-                if (validateCustomer.FirstOrDefault() != null)
+                if (validateCustomer != null)
                 {
-                    customerID = validateCustomer.FirstOrDefault().CustomerId;
-                    if (validateCustomer.FirstOrDefault().CustomerPayment != null && validateCustomer.FirstOrDefault().CustomerPayment.Count>0)
+                    var custPayment = validateCustomer.FirstOrDefault().CustomerPayment.OrderByDescending(o => o.PaymentId).FirstOrDefault();
+                    if (custPayment != null)
                     {
-                        var custPayment = validateCustomer.FirstOrDefault().CustomerPayment.OrderByDescending(o => o.PaymentId).FirstOrDefault();
-                        if (custPayment != null)
+                        if (custPayment.IsSuccess)
                         {
-                            if (custPayment.IsSuccess)
+                            var custAct = validateCustomer.FirstOrDefault().CustomerLicenseActivation.Where(x => x.PaymentId == custPayment.PaymentId).FirstOrDefault();
+                            if (custAct != null)
                             {
-                                var custAct = validateCustomer.FirstOrDefault().CustomerLicenseActivation.Where(x => x.PaymentId == custPayment.PaymentId).FirstOrDefault();
-                                if (custAct != null)
+                                if (DateTime.Now.Date.AddDays(3) == custAct.LastActivationDate.Date)
                                 {
-                                    if (DateTime.Now.Date.AddDays(3) == custAct.LastActivationDate.Date)
-                                    {
-                                        outPutValue = "3daysexp";
-                                        flag = true;
-                                    }
-                                    else if (DateTime.Now.Date.AddDays(2) == custAct.LastActivationDate.Date)
-                                    {
-                                        outPutValue = "2daysexp";
-                                        flag = true;
-                                    }
-                                    else if (DateTime.Now.Date.AddDays(1) == custAct.LastActivationDate.Date)
-                                    {
-                                        outPutValue = "1dayexp";
-                                        flag = true;
-                                    }
-                                    else if (DateTime.Now.Date == custAct.LastActivationDate.Date)
-                                    {
-                                        outPutValue = "0exp";
-                                        flag = true;
-                                    }
-                                    else if (DateTime.Now.Date > custAct.LastActivationDate.Date)
-                                    {
-                                        outPutValue = "expired";
-                                        flag = false;
-                                    }
-                                    else
-                                        flag = true;
+                                    outPutValue = "3daysexp";
+                                    flag= true;
                                 }
-                                else
+                                else if (DateTime.Now.Date.AddDays(2) == custAct.LastActivationDate.Date)
                                 {
-                                    outPutValue = "lincexpired";
-                                    flag = false;
+                                    outPutValue = "2daysexp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date.AddDays(1) == custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "1dayexp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date == custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "0exp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date > custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "expired";
+                                    flag= false;
                                 }
                             }
                             else
                             {
-                                outPutValue = "nopayment";
-                                flag = false;
+                                outPutValue = "lincexpired";
+                                flag= false;
                             }
+                        }
+                        else
+                        {
+                            outPutValue = "nopayment";
+                            flag= false;
                         }
                     }
                     else
                     {
                         outPutValue = "nopayment";
-                        flag = false;
+                        flag= false;
                     }                   
                 }
                 else
                 {
                     outPutValue = "notexists";
-                    flag= false;
+                    flag = false;
                 }
 
                 if (flag)
                 {
-                    //var database = validateCustomer.FirstOrDefault().DataBaseName;
-                   // SetConnectionString(ref database);
+                    var database = validateCustomer.FirstOrDefault().DataBaseName;
+                    SetConnectionString(ref database);
                 }
                 return flag;
 
@@ -153,6 +153,6 @@ namespace CSRPulse.Services
             }
         }
 
- 
+
     }
 }
