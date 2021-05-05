@@ -11,6 +11,11 @@ namespace CSRPulse.Data.Models
 {
     public partial class CustomerPayment
     {
+        public CustomerPayment()
+        {
+            CustomerLicenseActivation = new HashSet<CustomerLicenseActivation>();
+        }
+
         [Key]
         [Column("PaymentID")]
         public int PaymentId { get; set; }
@@ -33,5 +38,6 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(CustomerId))]
         [InverseProperty("CustomerPayment")]
         public virtual Customer Customer { get; set; }
+        public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
     }
 }

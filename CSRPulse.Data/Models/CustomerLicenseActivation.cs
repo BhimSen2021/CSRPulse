@@ -23,6 +23,7 @@ namespace CSRPulse.Data.Models
         public DateTime ActivationDate { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime LastActivationDate { get; set; }
+        public int PaymentId { get; set; }
         public bool IsDeleted { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
@@ -34,6 +35,7 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(CustomerId))]
         [InverseProperty("CustomerLicenseActivation")]
         public virtual Customer Customer { get; set; }
+        public virtual CustomerPayment Payment { get; set; }
         [ForeignKey(nameof(PlanId))]
         [InverseProperty("CustomerLicenseActivation")]
         public virtual Plan Plan { get; set; }

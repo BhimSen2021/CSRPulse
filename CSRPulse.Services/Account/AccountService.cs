@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSRPulse.Services
 {
@@ -48,7 +49,7 @@ namespace CSRPulse.Services
             }
             else
             {
-              userDetail =  _mapper.Map<UserDetail>(uDetail);
+                userDetail = _mapper.Map<UserDetail>(uDetail);
 
                 var uRight = _genericRepository.GetFirstOrDefault<DTOModel.UserRights>(r => r.UserId == uDetail.UserId);
 
@@ -62,5 +63,89 @@ namespace CSRPulse.Services
 
             else { return false; }
         }
+
+        public bool AuthenticateCustomer(SingIn singIn, out string outPutValue)
+        {
+            try
+            {
+                outPutValue = string.Empty;
+                bool flag = false;
+                var validateCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerCode == singIn.CompanyID).Include(p => p.CustomerPayment).Include(y => y.CustomerLicenseActivation);
+                if (validateCustomer != null)
+                {
+                    var custPayment = validateCustomer.FirstOrDefault().CustomerPayment.OrderByDescending(o => o.PaymentId).FirstOrDefault();
+                    if (custPayment != null)
+                    {
+                        if (custPayment.IsSuccess)
+                        {
+                            var custAct = validateCustomer.FirstOrDefault().CustomerLicenseActivation.Where(x => x.PaymentId == custPayment.PaymentId).FirstOrDefault();
+                            if (custAct != null)
+                            {
+                                if (DateTime.Now.Date.AddDays(3) == custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "3daysexp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date.AddDays(2) == custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "2daysexp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date.AddDays(1) == custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "1dayexp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date == custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "0exp";
+                                    flag= true;
+                                }
+                                else if (DateTime.Now.Date > custAct.LastActivationDate.Date)
+                                {
+                                    outPutValue = "expired";
+                                    flag= false;
+                                }
+                            }
+                            else
+                            {
+                                outPutValue = "lincexpired";
+                                flag= false;
+                            }
+                        }
+                        else
+                        {
+                            outPutValue = "nopayment";
+                            flag= false;
+                        }
+                    }
+                    else
+                    {
+                        outPutValue = "nopayment";
+                        flag= false;
+                    }                   
+                }
+                else
+                {
+                    outPutValue = "notexists";
+                    flag= false;
+                }
+
+                if (flag)
+                {
+                    var database = validateCustomer.FirstOrDefault().DataBaseName;
+                    SetConnectionString(ref database);
+                }
+                return flag;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+ 
     }
 }

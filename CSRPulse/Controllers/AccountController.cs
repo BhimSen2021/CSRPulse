@@ -88,5 +88,83 @@ namespace CSRPulse.Controllers
 
         }
 
+        public ActionResult _MenuAsync()
+        {
+            List<Menu> userMenu = new List<Menu>();
+            UserDetail uDetail = new UserDetail();
+
+            if (HttpContext.Session.GetComplexData<UserDetail>("User") != null)
+            {
+                uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
+            }
+            userMenu = _menuService.GetMenuByUserAsync(uDetail.UserID);
+            return PartialView(userMenu);
+        }
+
+
+        [HttpGet]
+
+        public IActionResult CustomerLogin()
+        {
+            return View();
+        }
+
+
+        /// <summary>
+        /// In this function, we'll check the customer in our database and then verify its credentail in customer database
+        /// /// </summary>
+        /// <param name="singIn"> contain user input fields</param>
+        /// <param name="returnUrl">to return previous page</param>
+        /// <param name="ButtonName">based on button, will perfom action</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult CustomerLogin(SingIn singIn, string returnUrl, string ButtonName)
+        {
+            _logger.LogInformation("AccountController/CustomerLogin");
+            try
+            {
+                /// First check the customer ID is exists in our database
+                if (ButtonName == "verify")
+                {
+                    string returnOutPut = string.Empty;
+                    bool isCustExists = false;
+                    isCustExists = _accountService.AuthenticateCustomer(singIn, out returnOutPut);
+                    if (isCustExists)
+                    {
+                        ModelState.AddModelError("", "Your Registration will be expire within 2 day(s),Please contact you administrator.");
+                        return View(singIn);
+
+                    }
+                }
+
+                // if customer ID is exists in our database, then check user credential in customer database
+                if (ModelState.IsValid)
+                {
+                    bool isAuthenticated = false;
+                    UserDetail userDetail = new UserDetail();
+                    isAuthenticated = _accountService.AuthenticateUser(singIn, out userDetail);
+                    if (isAuthenticated)
+                    {
+                        HttpContext.Session.SetComplexData("User", userDetail);
+
+                        if (!string.IsNullOrEmpty(returnUrl))
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
+                        return RedirectToAction("CustomerLogin", "Account");
+                    }
+                    else
+                        ModelState.AddModelError("", "Invalid credentials");
+
+                }
+                return View(singIn);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
     }
 }

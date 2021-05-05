@@ -17,12 +17,12 @@ namespace CSRPulse.Data.Repositories
 {
     public class GenericRepository : IGenericRepository
     {
-       protected internal CSRPulseDbContext _dbContext = null;
+        protected internal CSRPulseDbContext _dbContext = null;
         public GenericRepository()
         {
             _dbContext = new CSRPulseDbContext();
-        }        
-        
+        }
+
         public virtual IEnumerable<TEntity> Get<TEntity>(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "") where TEntity : class
         {
             IQueryable<TEntity> query = _dbContext.Set<TEntity>();
@@ -210,7 +210,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().Add(entity);
-             //   _dbContext.SaveChanges();
+                //   _dbContext.SaveChanges();
                 int ret = 0;
                 PropertyInfo key = typeof(TEntity).GetProperties().FirstOrDefault(p => p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
 
@@ -243,7 +243,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 await _dbContext.Set<TEntity>().AddAsync(entity);
-             //   await _dbContext.SaveChangesAsync();
+                //   await _dbContext.SaveChangesAsync();
                 int ret = 0;
                 PropertyInfo key = typeof(TEntity).GetProperties().FirstOrDefault(p => p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
 
@@ -277,7 +277,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().AddRange(entityList);
-             //   _dbContext.SaveChanges();
+                //   _dbContext.SaveChanges();
                 flag = true;
             }
             catch (Exception)
@@ -296,7 +296,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 await _dbContext.Set<TEntity>().AddRangeAsync(entityList);
-               // await _dbContext.SaveChangesAsync();
+                // await _dbContext.SaveChangesAsync();
                 flag = true;
             }
             catch (Exception)
@@ -315,7 +315,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
-          //      _dbContext.SaveChanges();
+                //      _dbContext.SaveChanges();
                 flag = true;
             }
             catch (Exception)
@@ -333,8 +333,8 @@ namespace CSRPulse.Data.Repositories
             }
             try
             {
-               _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
-           //     await _dbContext.SaveChangesAsync();
+                _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
+                //     await _dbContext.SaveChangesAsync();
                 flag = true;
             }
             catch (Exception)
@@ -347,16 +347,16 @@ namespace CSRPulse.Data.Repositories
         {
             TEntity entityToDelete = _dbContext.Set<TEntity>().Find(id);
             Delete(entityToDelete);
-           // _dbContext.SaveChanges();
+            // _dbContext.SaveChanges();
         }
-       
+
         public virtual void Delete<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
         {
             var query = _dbContext.Set<TEntity>().Where(filter);
             _dbContext.Set<TEntity>().RemoveRange(query);
-          
+
         }
-       
+
         public virtual void Delete<TEntity>(TEntity entityToDelete) where TEntity : class
         {
             if (entityToDelete == null)
@@ -366,7 +366,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().Remove(entityToDelete);
-              //  _dbContext.SaveChanges();
+                //  _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -382,7 +382,7 @@ namespace CSRPulse.Data.Repositories
                 throw fail;
             }
         }
-      
+
         public virtual void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
         {
             if (entityToUpdate == null)
@@ -392,7 +392,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-              //  _dbContext.SaveChanges();
+                //  _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException dbEx)
             {
