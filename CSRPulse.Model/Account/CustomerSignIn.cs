@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-    public class SingIn
+   public class CustomerSignIn
     {
         [Display(Name = "User Name"), Required(ErrorMessage = "Please Enter User Name")]
         public string UserName { get; set; }
@@ -15,5 +15,7 @@ namespace CSRPulse.Model
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
 
+        [Display(Name = "Company ID:"), Required(ErrorMessage = "Please Enter Company ID")]
+        public string CompanyID { get; set; }
     }
 }

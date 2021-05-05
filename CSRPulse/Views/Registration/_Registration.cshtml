@@ -111,7 +111,9 @@
 
 <script>
     function onSuccess(data) {
-        commonMessage('success', 'Dear Customer, Your registration is successfully done, Please select payment option.')
+        if (data.success == true) {
+            commonMessage('success', 'Dear Customer, Your registration is successfully done, Please select payment option.')
+        }
         $("#form-container").html(data.htmlData);
 
     }

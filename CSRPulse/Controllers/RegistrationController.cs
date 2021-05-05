@@ -15,9 +15,19 @@ namespace CSRPulse.Controllers
             this.registrationService = registrationService;
 
         }
-        public IActionResult Index()
+        public IActionResult Index(int? cid)
         {
             _logger.LogInformation("RegistrationController/Index");
+            if (cid.HasValue)
+            {
+                Model.Customer customer = new Model.Customer
+                {
+
+                    CustomerId = (int)cid
+                };
+                return View(customer);
+            }
+
             return View();
         }
         [HttpGet]
@@ -48,7 +58,7 @@ namespace CSRPulse.Controllers
                     if (customerID > 0)
                     {
                         customer.CustomerId = customerID;
-                        return Json(new { htmlData = ConvertViewToString("_PaymentOption", customer, true) });
+                        return Json(new { success = true, htmlData = ConvertViewToString("_PaymentOption", customer, true) });
                     }
                     else
                     {
@@ -94,7 +104,7 @@ namespace CSRPulse.Controllers
                         ActivationDate = DateTime.Now,
                         LastActivationDate = DateTime.Now.AddMonths(1),
                         CustomerID = customer.CustomerId,
-                        PlanID = 1,
+                        PlanID = 2,
                         CreatedBy = 1
                     };
 

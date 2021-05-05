@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse.Data", "CSRPulse.Data\CSRPulse.Data.csproj", "{909F72A9-32D5-4F90-8911-787A3F94C31B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.Data", "CSRPulse.Data\CSRPulse.Data.csproj", "{909F72A9-32D5-4F90-8911-787A3F94C31B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse.Common", "CSRPulse.Common\CSRPulse.Common.csproj", "{83501792-B734-42B0-9037-5D1577E011FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.Common", "CSRPulse.Common\CSRPulse.Common.csproj", "{83501792-B734-42B0-9037-5D1577E011FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse.Model", "CSRPulse.Model\CSRPulse.Model.csproj", "{87B0DFE2-49EC-4F76-806B-70B951B1AE8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.Model", "CSRPulse.Model\CSRPulse.Model.csproj", "{87B0DFE2-49EC-4F76-806B-70B951B1AE8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse.Services", "CSRPulse.Services\CSRPulse.Services.csproj", "{39BB8F45-30B4-4A54-A518-5DAB149CBC68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.Services", "CSRPulse.Services\CSRPulse.Services.csproj", "{39BB8F45-30B4-4A54-A518-5DAB149CBC68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse", "CSRPulse\CSRPulse.csproj", "{B771DBCC-B857-4C32-8835-7D775868CFF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse", "CSRPulse\CSRPulse.csproj", "{B771DBCC-B857-4C32-8835-7D775868CFF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

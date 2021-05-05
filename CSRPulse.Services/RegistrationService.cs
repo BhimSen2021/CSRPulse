@@ -19,56 +19,69 @@ namespace CSRPulse.Services
         }
         public async Task<int> CustomerRegistrationAsync(Model.Customer customer)
         {
-            try
+            using (var transaction = _genericRepository.BeginTransaction())
             {
-                if (await _genericRepository.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
+                try
                 {
-                    customer.RecordExist = true;
-                    return 0;
+                    if (await _genericRepository.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
+                    {
+                        customer.RecordExist = true;
+                        return 0;
+                    }
+
+                    var dtoCustomer = _mapper.Map<DTOModel.Customer>(customer);
+                    Model.StartingNumber startingNum = new Model.StartingNumber
+                    {
+                        TableName = "customer",
+                        ColumnName = "CustomerCode",
+                        Prefix = "CUST",
+                        Number = 1,
+                        NumberWidth = 7,
+                        CreatedBy = 1,
+                        CreatedOn = DateTimeOffset.UtcNow.Date
+                    };
+
+                    dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum);
+                    await _genericRepository.InsertAsync(dtoCustomer);
+                    transaction.Commit();
+
+                    return dtoCustomer.CustomerId;
                 }
-
-                var dtoCustomer = _mapper.Map<DTOModel.Customer>(customer);
-                Model.StartingNumber startingNum = new Model.StartingNumber
+                catch (Exception)
                 {
-                    TableName = "customer",
-                    ColumnName = "CustomerCode",
-                    Prefix = "CUST",
-                    Number = 1,
-                    NumberWidth = 7,
-                    CreatedBy = 1,
-                    CreatedOn = DateTimeOffset.UtcNow.Date
-                };
-
-                dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum);
-                await _genericRepository.InsertAsync(dtoCustomer);
-
-                _genericRepository.SaveChanges();
-                return dtoCustomer.CustomerId;
-            }
-            catch (Exception)
-            {
-
-                throw;
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
         public async Task<bool> CustomerPaymentAsync(Model.Customer customer)
         {
-            try
+            using (var transaction = _genericRepository.BeginTransaction())
             {
+                try
+                {
 
-                var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
-                await _genericRepository.InsertAsync(dtoCustPayment);
 
-                var dtoCustLicence = _mapper.Map<DTOModel.CustomerLicenseActivation>(customer.CustomerLicense);
-                await _genericRepository.InsertAsync(dtoCustLicence);
-                _genericRepository.SaveChanges();
-                return true;
-            }
-            catch (Exception)
-            {
+                    var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
+                    await _genericRepository.InsertAsync(dtoCustPayment);
 
-                throw;
+                    customer.CustomerLicense.PaymentId = dtoCustPayment.PaymentId;
+                    var dtoCustLicence = _mapper.Map<DTOModel.CustomerLicenseActivation>(customer.CustomerLicense);
+
+                    await _genericRepository.InsertAsync(dtoCustLicence);
+
+                    transaction.Commit();
+                    return true;
+                }
+
+
+
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
     }

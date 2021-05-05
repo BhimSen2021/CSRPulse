@@ -24,13 +24,12 @@ namespace CSRPulse.Services.Admin
             try
             {
                var pplan= _mapper.Map<DTOModel.Plan>(plan);                
-                 await _genericRepository.InsertAsync(pplan);
-                _genericRepository.SaveChanges();
+                 await _genericRepository.InsertAsync(pplan);            
 
                 return pplan.PlanId;
             }
             catch (Exception)
-            {
+            {               
                 throw;
             }
         }
