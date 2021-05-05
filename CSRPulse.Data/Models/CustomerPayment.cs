@@ -17,9 +17,7 @@ namespace CSRPulse.Data.Models
         }
 
         [Key]
-        [Column("PaymentID")]
         public int PaymentId { get; set; }
-        [Column("CustomerID")]
         public int CustomerId { get; set; }
         [Column(TypeName = "money")]
         public decimal AmountPaid { get; set; }
@@ -38,6 +36,7 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(CustomerId))]
         [InverseProperty("CustomerPayment")]
         public virtual Customer Customer { get; set; }
+        [InverseProperty("Payment")]
         public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
     }
 }

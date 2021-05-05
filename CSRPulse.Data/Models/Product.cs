@@ -12,7 +12,6 @@ namespace CSRPulse.Data.Models
     public partial class Product
     {
         [Key]
-        [Column("ProductID")]
         public int ProductId { get; set; }
         [Required]
         [StringLength(100)]

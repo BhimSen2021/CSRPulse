@@ -18,7 +18,6 @@ namespace CSRPulse.Data.Models
         }
 
         [Key]
-        [Column("CustomerID")]
         public int CustomerId { get; set; }
         [Required]
         [StringLength(30)]
@@ -30,7 +29,6 @@ namespace CSRPulse.Data.Models
         public string Address { get; set; }
         [StringLength(50)]
         public string Country { get; set; }
-        [Column("StateID")]
         public int? StateId { get; set; }
         [StringLength(50)]
         public string City { get; set; }

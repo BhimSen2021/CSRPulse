@@ -12,11 +12,8 @@ namespace CSRPulse.Data.Models
     public partial class CustomerLicenseActivation
     {
         [Key]
-        [Column("LicenceActID")]
         public int LicenceActId { get; set; }
-        [Column("CustomerID")]
         public int CustomerId { get; set; }
-        [Column("PlanID")]
         public int PlanId { get; set; }
         public int ActivationCount { get; set; }
         [Column(TypeName = "datetime")]
@@ -35,6 +32,8 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(CustomerId))]
         [InverseProperty("CustomerLicenseActivation")]
         public virtual Customer Customer { get; set; }
+        [ForeignKey(nameof(PaymentId))]
+        [InverseProperty(nameof(CustomerPayment.CustomerLicenseActivation))]
         public virtual CustomerPayment Payment { get; set; }
         [ForeignKey(nameof(PlanId))]
         [InverseProperty("CustomerLicenseActivation")]

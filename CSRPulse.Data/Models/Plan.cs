@@ -17,7 +17,6 @@ namespace CSRPulse.Data.Models
         }
 
         [Key]
-        [Column("PlanID")]
         public int PlanId { get; set; }
         [Required]
         [StringLength(100)]

@@ -22,34 +22,50 @@ namespace CSRPulse.Services
 
         public async Task<List<Menu>> GetMenuByUserAsync(int userId)
         {
-            List<Menu> uMenu = new List<Menu>();
-            var uRights = await _genericRepository.GetIQueryable<DTOModel.UserRights>(x => x.UserId == userId && x.ShowMenu == true).Include(d => d.Menu).ToListAsync();
-
-            uRights.ForEach(r =>
+            try
             {
-                uMenu.Add(new Menu
-                {
-                    MenuId = r.MenuId,
-                    SequenceNo = r.Menu.SequenceNo,
-                    MenuName = r.Menu.MenuName,
-                    Area = r.Menu.Area,
-                    Url = r.Menu.Url,
-                    ParentMenuId = r.Menu.ParentMenuId,
-                    IconClass = r.Menu.IconClass,
-                    Help = r.Menu.Help
-                });
-            });
+                List<Menu> uMenu = new List<Menu>();
+                var uRights = await _genericRepository.GetIQueryable<DTOModel.UserRights>(x => x.UserId == userId && x.ShowMenu == true).Include(d => d.Menu).ToListAsync();
 
-            return uMenu;
+                uRights.ForEach(r =>
+                {
+                    uMenu.Add(new Menu
+                    {
+                        MenuId = r.MenuId,
+                        SequenceNo = r.Menu.SequenceNo,
+                        MenuName = r.Menu.MenuName,
+                        Area = r.Menu.Area,
+                        Url = r.Menu.Url,
+                        ParentMenuId = r.Menu.ParentMenuId,
+                        IconClass = r.Menu.IconClass,
+                        Help = r.Menu.Help
+                    });
+                });
+
+                return uMenu;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         public async Task<List<UserRight>> GetUserRightsByUserAsync(int userId)
         {
-            List<UserRight> userRigth = new List<UserRight>();
-            var uRigth = await _genericRepository.GetAsync<DTOModel.UserRights>(r => r.UserId == userId && r.ShowMenu == true);
+            try
+            {
+                List<UserRight> userRigth = new List<UserRight>();
+                var uRigth = await _genericRepository.GetAsync<DTOModel.UserRights>(r => r.UserId == userId && r.ShowMenu == true);
 
-            _mapper.Map<List<Model.UserRight>>(uRigth);
-            return userRigth;
+                _mapper.Map<List<Model.UserRight>>(uRigth);
+                return userRigth;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
     }
 }

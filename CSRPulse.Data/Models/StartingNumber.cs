@@ -12,7 +12,6 @@ namespace CSRPulse.Data.Models
     public partial class StartingNumber
     {
         [Key]
-        [Column("StartNumberID")]
         public int StartNumberId { get; set; }
         [Required]
         [StringLength(50)]
