@@ -3,40 +3,24 @@
 
 <form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="Registration" data-ajax-success="onSuccess">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row">
-        <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <label asp-for="CustomerName" class="col-form-label"></label>
-        </div>
-        <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="CustomerName" class="form-control" autocomplete="off" />
-            <span asp-validation-for="CustomerName" class="text-danger"></span>
-        </div>
+    <div class="form-group">
+        <label asp-for="CustomerName" class="col-form-label"></label>
+        <input type="text" asp-for="CustomerName" class="form-control" autocomplete="off" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
     </div>
-    <div class="row">
-        <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <label asp-for="Email" class="col-form-label"></label>
-        </div>
-        <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="email" asp-for="Email" class="form-control" autocomplete="off" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+    <div class="form-group">
+        <label asp-for="Email" class="col-form-label"></label>
+        <input type="email" asp-for="Email" class="form-control" autocomplete="off" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div class="row">
-        <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <label asp-for="Telephone" class="col-form-label"></label>
-        </div>
-        <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Telephone" class="form-control" autocomplete="off" />
-            <span asp-validation-for="Telephone" class="text-danger"></span>
-        </div>
+    <div class="form-group">
+        <label asp-for="Telephone" class="col-form-label"></label>
+        <input type="text" asp-for="Telephone" class="form-control" autocomplete="off"  />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
     </div>
-    <div class="row">
-        <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <label asp-for="Website" class="col-form-label"></label>
-        </div>
-        <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <input type="text" asp-for="Website" class="form-control" autocomplete="off" />
-        </div>
+    <div class="form-group">
+        <label asp-for="Website" class="col-form-label"></label>
+        <input type="text" asp-for="Website" class="form-control" autocomplete="off"  />
     </div>
     @*<div class="row">
             <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -83,7 +67,7 @@
 
     <div class="row">
 
-        <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-2">
             <input type="checkbox" asp-for="IsAgree" />
             <label for="IsAgree">I agree to the Master Subscription Agreement</label><br />
             <span asp-validation-for="IsAgree" class="text-danger"></span>
@@ -92,15 +76,15 @@
 
     <div class="row">
         <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <span style="font-size: 12px; line-height: 1.42857143;">
+            <p class="mb-0" style="font-size: 12px; line-height: 1.42857143;">
                 By registering, you confirm that you agree to the storing and processing of your personal data by
                 Salesforce as described in the Privacy Statement.
-            </span>
+            </p>
 
         </div>
 
     </div>
-    <div class="row pb-4">
+    <div class="row">
         <div class="regbutton col col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <button type="submit" class="btn btn-md btn-primary btn-full">REGISTRATION</button>
 
@@ -111,9 +95,7 @@
 
 <script>
     function onSuccess(data) {
-        if (data.success == true) {
-            commonMessage('success', 'Dear Customer, Your registration is successfully done, Please select payment option.')
-        }
+        commonMessage('success', 'Dear Customer, Your registration is successfully done, Please select payment option.')
         $("#form-container").html(data.htmlData);
 
     }

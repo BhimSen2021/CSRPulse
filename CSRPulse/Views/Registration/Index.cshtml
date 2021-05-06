@@ -4,48 +4,63 @@
     ViewData["Title"] = "Customer Registration";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container-fluid">
-    <div class="row">
-        <div class="col text-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <div class="row columns-wrapper">
-                <div class="col text-left col-xs-12 col-sm-12 col-md-2 col-lg-2">
+<style type="text/css">
+    .form-group {
+        margin-bottom: 0rem;
+    }
+    ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        color: pink;
+    }
 
-                </div>
-                <div class="col text-left col-xs-12 col-sm-12 col-md-10 col-lg-10">
+    ::-moz-placeholder { /* Firefox 19+ */
+        color: pink;
+    }
 
+    :-ms-input-placeholder { /* IE 10+ */
+        color: pink;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+        color: pink;
+    }
+
+    input::placeholder {
+        color: red;
+    }
+</style>
+    <div class="row registor-bg">
+        <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 m-auto">
+            <div class="card my-4">
+                <div class="card-header bg-success text-white">Sign up now to start your free sales trial.</div>
+                <div class="card-body py-2">
+                    <div id="form-container">
+                        @{await Html.RenderPartialAsync("_Registration", Model);}
+
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col text-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <div class="row columns-wrapper">
-                <div class="col text-left col-xs-12 col-sm-12 col-md-12 col-lg-9">
-                    <div class="columns-wrapper mt-4 mt-xs-0 mb-lg-0">
-                        <div class="form-section col text-left col-xs-12 col-sm-12 col-md-12 col-lg-11">
-                            <div class="">
-                                <div class="text-center pt-4 pb-2">
-                                    <h6>Sign up now to start your free sales trial.</h6>
-                                </div>
-                                <div id="form-container">
-                                    @if (Model!=null && Model.CustomerId>0)
-                                    {
-                                        {await Html.RenderPartialAsync("_PaymentOption", Model);}
-                                    }
-                                    else
-                                    {
-                                        {await Html.RenderPartialAsync("_Registration", Model);}
-                                    }
+            <div class="col text-left col-xs-12 col-sm-12 col-md-6 col-lg-6 d-none">
+                <div class="row columns-wrapper">
+                    <div class="col text-left col-xs-12 col-sm-12 col-md-12 col-lg-9 my-3 pb-1">
+                        <div class="columns-wrapper mt-4 mt-xs-0 mb-lg-0">
+                            <div class="form-section col text-left col-xs-12 col-sm-12 col-md-12 col-lg-11">
+                                <div class="">
+                                    <div class="text-center pt-4 pb-2">
+                                        <h6>Sign up now to start your free sales trial.</h6>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col text-left col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                    <div class="col text-left col-xs-12 col-sm-12 col-md-12 col-lg-3">
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 
 <style>
     .btn-full {
@@ -76,9 +91,10 @@
         position: relative;
     }
 
-    .container-fluid {
+    .registor-bg {
         background-image: url(images/background-path.jpg);
         background-size: cover;
+        background-position:center;
     }
 
     .form-section {

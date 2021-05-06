@@ -1,3 +1,55 @@
+
+@font-face {
+    font-family: helvetica;
+    src: url(../fonts/Helvetica.ttf);
+}
+@font-face {
+    font-family: helvetica-bold;
+    src: url(../fonts/Helvetica-Bold.ttf);
+}
+@font-face {
+    font-family: roboto-reg;
+    src: url(../fonts/Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: roboto-light;
+    src: url(../fonts/Roboto-Light.ttf);
+}
+@font-face {
+    font-family: roboto-bold;
+    src: url(../fonts/Roboto-Bold.ttf);
+}
+html {
+    font-family: "roboto-reg", roboto-light, roboto-bold, "helvetica", helvetica-bold;
+}
+body {
+    font-family: "roboto-reg", roboto-light, roboto-bold, "helvetica", helvetica-bold;
+}
+h2, h3, h4, h5 {
+    font-family: "helvetica-bold" !important;
+}
+.btn {
+    font-family: "helvetica" !important;
+}
+p, span, tspan, label {
+    font-family: "roboto-light" !important;
+    color: #545454 !important;
+}
+li, li a {
+    font-family: "roboto-light" !important;
+}
+div ul li{
+    font-size:15px;
+}
+.bg-success {
+    background-color: #3eb785 !important;
+}
+.btn-success {
+    color: #fff;
+    background-color: #3eb785;
+    border-color: #3eb785;
+}
+
 .fixed-header {
     position: fixed;
     top: 0;
@@ -376,4 +428,8 @@ div.checkbox.switcher label, div.radio.switcher label {
   }
   #contact{
     padding: 0px 0px;
+  }
+
+  .plan-bg{
+      background:url(../images/busness-plan.jpg);
   }
