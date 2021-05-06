@@ -13,7 +13,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 
 namespace CSRPulse
-{
+{ 
     public class Startup
     {
         public Startup(IConfiguration configuration)

@@ -34,8 +34,14 @@
                 <div class="card-header bg-success text-white">Sign up now to start your free sales trial.</div>
                 <div class="card-body py-2">
                     <div id="form-container">
-                        @{await Html.RenderPartialAsync("_Registration", Model);}
-
+                        @if (Model != null && Model.CustomerId > 0)
+                        {
+                            { await Html.RenderPartialAsync("_PaymentOption", Model); }
+                        }
+                        else
+                        {
+                            { await Html.RenderPartialAsync("_Registration", Model); }
+                        }
                     </div>
                 </div>
             </div>

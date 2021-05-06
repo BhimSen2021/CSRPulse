@@ -5,7 +5,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label", @for = "CompanyID" })
-        <input type="text" asp-for="CompanyID" class="form-control" placeholder="Enter Company ID" />
+        <input type="text" asp-for="CompanyID" class="form-control" placeholder="Enter Company ID"  autocomplete="off" />
         <span asp-validation-for="CompanyID" class="text-danger"></span>
     </div>
     <button type="submit" name="ButtonName" value="verify" class="btn btn-primary btn-block mb-2">VERIFY</button>
@@ -17,7 +17,10 @@
         debugger;
         if (data.payment == true) {
             debugger;
-            window.location.href = "@Url.Action("Index","Registration")?cid=" + data.cid;
+
+            window.location.href = "@Url.Action("Index","Registration")?cid=" + data.cid;          
+
+            commonMessage('warning', data.msg);
         }
         else {
             debugger;
