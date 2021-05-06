@@ -3,47 +3,60 @@
     font-family: helvetica;
     src: url(../fonts/Helvetica.ttf);
 }
+
 @font-face {
     font-family: helvetica-bold;
     src: url(../fonts/Helvetica-Bold.ttf);
 }
+
 @font-face {
     font-family: roboto-reg;
     src: url(../fonts/Roboto-Regular.ttf);
 }
+
 @font-face {
     font-family: roboto-light;
     src: url(../fonts/Roboto-Light.ttf);
 }
+
 @font-face {
     font-family: roboto-bold;
     src: url(../fonts/Roboto-Bold.ttf);
 }
+
 html {
     font-family: "roboto-reg", roboto-light, roboto-bold, "helvetica", helvetica-bold;
 }
+
 body {
     font-family: "roboto-reg", roboto-light, roboto-bold, "helvetica", helvetica-bold;
 }
+
 h2, h3, h4, h5 {
     font-family: "helvetica-bold" !important;
 }
+
 .btn {
     font-family: "helvetica" !important;
 }
+
 p, span, tspan, label {
     font-family: "roboto-light" !important;
     color: #545454 !important;
 }
+
 li, li a {
     font-family: "roboto-light" !important;
 }
-div ul li{
-    font-size:15px;
+
+div ul li {
+    font-size: 15px;
 }
+
 .bg-success {
     background-color: #3eb785 !important;
 }
+
 .btn-success {
     color: #fff;
     background-color: #3eb785;
@@ -54,103 +67,118 @@ div ul li{
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%; 
+    width: 100%;
     background-color: #eee;
     box-shadow: 0px 0px 8px #545454;
     z-index: 10000;
 }
-.header-fix{
+
+.header-fix {
     transition: 0.5s ease-in-out;
 }
+
 #scroll {
-    position:fixed;
-    right:10px;
-    bottom:10px;
-    cursor:pointer;
-    width:50px;
-    height:50px;
-    background-color:#3498db;
-    text-indent:-9999px;
-    display:none;
-    -webkit-border-radius:60px;
-    -moz-border-radius:60px;
-    border-radius:60px
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    text-indent: -9999px;
+    display: none;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px
 }
-#scroll span {
-    position:absolute;
-    top:50%;
-    left:50%;
-    margin-left:-8px;
-    margin-top:-12px;
-    height:0;
-    width:0;
-    border:8px solid transparent;
-    border-bottom-color:#ffffff;
-}
-#scroll:hover {
-    background-color:#e74c3c;
-    opacity:1;
-    filter:"alpha(opacity=100)";
-    -ms-filter:"alpha(opacity=100)";
-}
-.top_li{
+
+    #scroll span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -8px;
+        margin-top: -12px;
+        height: 0;
+        width: 0;
+        border: 8px solid transparent;
+        border-bottom-color: #ffffff;
+    }
+
+    #scroll:hover {
+        background-color: #e74c3c;
+        opacity: 1;
+        filter: "alpha(opacity=100)";
+        -ms-filter: "alpha(opacity=100)";
+    }
+
+.top_li {
     float: left;
     width: 100%;
     height: auto;
 }
-.top_li ul{
-    float: left;
-    width: 100%;
-    height: auto;
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-}
-.top_li ul li{
-    float: right;
-    width: auto;
-    height: auto;
-    padding: 6px 12px;
-    border-right: 1px solid #ddd;
-}
-.top_li ul li:nth-last-child(1){
-    border-right: 0px solid #ddd;
-}
-.top_li ul li:nth-child(1){
-    border-right: 0px solid #ddd;
-}
-.top_li ul li a{
-    float: left;
-    width: auto;
-    height: auto;
-    color:#0B5CAB;
-}
+
+    .top_li ul {
+        float: left;
+        width: 100%;
+        height: auto;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .top_li ul li {
+            float: right;
+            width: auto;
+            height: auto;
+            padding: 6px 12px;
+            border-right: 1px solid #ddd;
+        }
+
+            .top_li ul li:nth-last-child(1) {
+                border-right: 0px solid #ddd;
+            }
+
+            .top_li ul li:nth-child(1) {
+                border-right: 0px solid #ddd;
+            }
+
+            .top_li ul li a {
+                float: left;
+                width: auto;
+                height: auto;
+                color: #0B5CAB;
+            }
 
 /* NAV CSS START*/
 
 .navbar-dark .navbar-brand {
     color: #343a40;
 }
+
 .navbar-dark .navbar-nav .nav-link {
     color: #0B5CAB;
     border-bottom: 3px solid transparent;
     transition: 0.5s ease-in-out;
 }
-.navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
-    color: #333;
-    border-bottom: 3px solid;
-}
+
+    .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+        color: #333;
+        border-bottom: 3px solid;
+    }
 /* NAV CSS END */
-.pp-color{
+.pp-color {
     color: #032D60;
 }
-.bann_bg{
+
+.bann_bg {
     background-color: #F5FBFF;
 }
-#wath-csr-wrap{
+
+#wath-csr-wrap {
     padding: 25px 0px;
 }
-.box{
+
+.box {
     float: left;
     width: 100%;
     min-height: 310px;
@@ -158,14 +186,17 @@ div ul li{
     margin-bottom: 15px;
     transition: 0.5s ease-in-out;
 }
-.box:hover{
-    box-shadow: 0px 0px 4px 0px #ddd;
-}
-.btn-pos{
+
+    .box:hover {
+        box-shadow: 0px 0px 4px 0px #ddd;
+    }
+
+.btn-pos {
     position: absolute;
     bottom: 20px;
     margin: 0px -30px;
 }
+
 .stretched-link::after {
     position: absolute;
     top: 0;
@@ -177,10 +208,12 @@ div ul li{
     content: "";
     background-color: rgba(0,0,0,0);
 }
-#wath-new-wrap{
+
+#wath-new-wrap {
     padding: 25px 0px;
 }
-.wath-new-wrap-box{
+
+.wath-new-wrap-box {
     float: left;
     width: 100%;
     min-height: 120px;
@@ -188,62 +221,73 @@ div ul li{
     margin-bottom: 15px;
     transition: 0.5s ease-in-out;
 }
-.wath-new-wrap-box:hover{
-    box-shadow: 0px 0px 4px 0px #ddd;
-}
-.img-div{
+
+    .wath-new-wrap-box:hover {
+        box-shadow: 0px 0px 4px 0px #ddd;
+    }
+
+.img-div {
     float: left;
     width: 100px;
     height: auto;
 }
-.cont-div{
+
+.cont-div {
     float: left;
     width: calc(100% - 100px);
     height: auto;
     padding: 0px 12px;
 }
-#here-wrap{
+
+#here-wrap {
     padding: 25px 0px;
 }
-.here{
+
+.here {
     float: left;
     width: 100%;
     height: auto;
 }
-.here ul{
-    float: left;
-    width: 100%;
-    height: auto;
-    padding: 0px;
-    margin: 0px;
-}
-.here ul li{
-    float: left;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 5px 15px 5px 30px;
-    list-style: none;
-    background-image: url(../images/tick.png);
-    background-repeat: no-repeat;
-    background-position: left center;
-    background-size: 25px;
-    text-align: left;
-}
-.here ul li:nth-last-child(1){
-	background-image: none;
-    margin-top: 25px;
-}
-#explore-wrap{
+
+    .here ul {
+        float: left;
+        width: 100%;
+        height: auto;
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .here ul li {
+            float: left;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 5px 15px 5px 30px;
+            list-style: none;
+            background-image: url(../images/tick.png);
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: 25px;
+            text-align: left;
+        }
+
+            .here ul li:nth-last-child(1) {
+                background-image: none;
+                margin-top: 25px;
+            }
+
+#explore-wrap {
     padding: 25px 0px;
 }
-.exp_box{
+
+.exp_box {
     float: left;
     width: 100%;
     height: auto;
     margin-bottom: 15px;
 }
-.img_style{
+
+.img_style {
     height: 100px;
     width: 100px;
     padding: 5px;
@@ -251,128 +295,164 @@ div ul li{
     line-height: 70px;
     box-shadow: 0px 5px 10px #ccc;
 }
-.b-color-1{
+
+.b-color-1 {
     border: 7px solid #022c60;
 }
-.b-color-2{
+
+.b-color-2 {
     border: 7px solid #00c3b3;
 }
-.b-color-3{
+
+.b-color-3 {
     border: 7px solid #fe7297;
 }
-.b-color-4{
+
+.b-color-4 {
     border: 7px solid #ff9339;
 }
-.b-color-5{
+
+.b-color-5 {
     border: 7px solid #3ba654;
 }
-.exp_btn{
+
+.exp_btn {
     background-color: #0B5CAB;
     border-color: #0B5CAB;
 }
-#our-cust-wrap{
+
+#our-cust-wrap {
     padding: 25px 0px;
 }
-.our-cust{
+
+.our-cust {
     float: left;
     width: 100%;
     min-height: 120px;
 }
-.our-cust span{
-    float: left;
-    width: 100%;
-    height: auto;
-    line-height: 20px;
-}
-#question-wrap{
+
+    .our-cust span {
+        float: left;
+        width: 100%;
+        height: auto;
+        line-height: 20px;
+    }
+
+#question-wrap {
     padding: 25px 0px;
 }
-.bg-quest{
+
+.bg-quest {
     background: url(../images/cloud.png);
     background-size: cover;
     min-height: 375px;
 }
-#footer-wrap{
+
+#footer-wrap {
     padding: 25px 0px 0px 0px;
 }
-.footer-ul{
+
+.footer-ul {
     float: left;
     width: 100%;
     height: auto;
 }
-.footer-ul ul{
+
+    .footer-ul ul {
+        float: left;
+        width: 100%;
+        height: auto;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .footer-ul ul li {
+            float: left;
+            width: 100%;
+            height: auto;
+        }
+
+            .footer-ul ul li a {
+                float: left;
+                width: 100%;
+                height: auto;
+                padding: 2px 0px;
+                font-size: 14px;
+            }
+
+                .footer-ul ul li a:hover {
+                    text-decoration: none;
+                }
+
+.foot-bottom-ul {
     float: left;
     width: 100%;
     height: auto;
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
 }
-.footer-ul ul li{
-    float: left;
-    width: 100%;
-    height: auto;
-}
-.footer-ul ul li a{
-    float: left;
-    width: 100%;
-    height: auto;
-    padding: 2px 0px;
-    font-size: 14px;
-}
-.footer-ul ul li a:hover{
-    text-decoration: none;
-}
-.foot-bottom-ul{
-    float: left;
-    width: 100%;
-    height: auto;
-}
-.foot-bottom-ul ul{
-    float: left;
-    width: 100%;
-    height: auto;
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-}
-.foot-bottom-ul ul li{
-    float: left;
-    width: auto;
-    height: auto;
-}
-.foot-bottom-ul ul li a{
-    float: left;
-    width: auto;
-    height: auto;
-    padding: 0px 12px;
-}
-.pos{
+
+    .foot-bottom-ul ul {
+        float: left;
+        width: 100%;
+        height: auto;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .foot-bottom-ul ul li {
+            float: left;
+            width: auto;
+            height: auto;
+        }
+
+            .foot-bottom-ul ul li a {
+                float: left;
+                width: auto;
+                height: auto;
+                padding: 0px 12px;
+            }
+
+.pos {
     position: absolute;
     bottom: 0px;
     width: 100%;
 }
+
 @media (max-width:767px) {
-    .foot-bottom-ul ul li{
+    .foot-bottom-ul ul li {
         float: left;
         width: 100%;
         height: auto;
     }
-    .d--n{
+
+    .d--n {
         display: none;
     }
-    .pos{
+
+    .pos {
         position: relative;
         bottom: 0px;
         width: 100%;
     }
 }
 
-#our_clint{
+#our_clint {
     padding: 25px 0px;
 }
-.bb:after {content:''; display:block; width:80px; height:4px; background:#007bff; margin:0 auto; margin-top:15px; border-radius:3px;}
-.plan-box{
+
+.bb:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #007bff;
+    margin: 0 auto;
+    margin-top: 15px;
+    border-radius: 3px;
+}
+
+.plan-box {
     float: left;
     width: 100%;
     height: auto;
@@ -385,51 +465,83 @@ div ul li{
 /* SWITCH CSS  */
 div.checkbox.switcher label, div.radio.switcher label {
     padding: 0;
-  }
-  div.checkbox.switcher label *, div.radio.switcher label * {
-    vertical-align: middle;
-  }
-  div.checkbox.switcher label input, div.radio.switcher label input {
-    display: none;
-  }
-  div.checkbox.switcher label input + span, div.radio.switcher label input + span {
-    position: relative;
-    display: inline-block;
-    margin-right: 10px;
-    width: 56px;
-    height: 28px;
-    background: #f2f2f2;
-    border: 1px solid #eee;
-    border-radius: 50px;
-    transition: all 0.3s ease-in-out;
-  }
-  div.checkbox.switcher label input + span small, div.radio.switcher label input + span small {
-    position: absolute;
-    display: block;
-    width: 50%;
-    height: 100%;
-    background: #fff;
-    border-radius: 50%;
-    transition: all 0.3s ease-in-out;
-    left: 0;
-  }
-  div.checkbox.switcher label input:checked + span, div.radio.switcher label input:checked + span {
-    background: #cadff1;
-    border-color: #269bff;
-  }
-  div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
-    left: 50%;
-  }
-  .log_bg{
-      background: url(../images/login_bg2.png);
-      background-position: center;
-      background-size: cover;
-      height: 70vh;
-  }
-  #contact{
-    padding: 0px 0px;
-  }
+}
 
-  .plan-bg{
-      background:url(../images/busness-plan.jpg);
-  }
+    div.checkbox.switcher label *, div.radio.switcher label * {
+        vertical-align: middle;
+    }
+
+    div.checkbox.switcher label input, div.radio.switcher label input {
+        display: none;
+    }
+
+        div.checkbox.switcher label input + span, div.radio.switcher label input + span {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+            width: 56px;
+            height: 28px;
+            background: #f2f2f2;
+            border: 1px solid #eee;
+            border-radius: 50px;
+            transition: all 0.3s ease-in-out;
+        }
+
+            div.checkbox.switcher label input + span small, div.radio.switcher label input + span small {
+                position: absolute;
+                display: block;
+                width: 50%;
+                height: 100%;
+                background: #fff;
+                border-radius: 50%;
+                transition: all 0.3s ease-in-out;
+                left: 0;
+            }
+
+        div.checkbox.switcher label input:checked + span, div.radio.switcher label input:checked + span {
+            background: #cadff1;
+            border-color: #269bff;
+        }
+
+            div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
+                left: 50%;
+            }
+
+.log_bg {
+    background: url(../images/login_bg2.png);
+    background-position: center;
+    background-size: cover;
+    height: 70vh;
+}
+
+#contact {
+    padding: 0px 0px;
+}
+
+.plan-bg {
+    background: url(../images/busness-plan.jpg);
+}
+
+.pln li {
+    float: left;
+    width: 100%;
+    text-align: left;
+    min-height: 32px;
+}
+
+    .pln li a {
+        width: 100%;
+        color: #333;
+    }
+
+        .pln li a i {
+            padding-right: 6px;
+        }
+
+.panel-collapse {
+    padding-left: 30px;
+}
+
+.show ul li a {
+    color: #818181;
+}
