@@ -131,13 +131,14 @@ namespace CSRPulse.Controllers
                     {
                         if (returnOutPut == "nopayment")
                         {
-                           // ModelState.AddModelError("", UserDefineMessage(returnOutPut));
+                            // ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                             //Customer customer = new Customer
                             //{
                             //    CustomerId = (int)customerID
                             //};
+                            var userMsg = UserDefineMessage(returnOutPut);
 
-                            return Json(new { payment = true,cid= (int)customerID });
+                            return Json(new { payment = true,cid= (int)customerID,msg= userMsg });
 
                         }
                         else
@@ -169,7 +170,7 @@ namespace CSRPulse.Controllers
                         {
                             return LocalRedirect(returnUrl);
                         }
-                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
+                        return RedirectToAction("Index", "Dashboard", new { Area = "Customer" });
                     }
                     else
                         ModelState.AddModelError("", "Invalid credentials");
@@ -211,10 +212,10 @@ namespace CSRPulse.Controllers
                         message = "Dear Customer, Your Licence will be expire today.";
                         break;
                     case "expired":
-                        message = "Dear Customer, Your Licence is expired. Please contact to you vendor.";
+                        message = "Dear Customer, Your Licence is expired. Please contact to your vendor.";
                         break;
                     case "lincexpired":
-                        message = "Dear Customer, Your Licence is expired. Please contact to you vendor.";
+                        message = "Dear Customer, Your Licence is expired. Please contact to your vendor.";
                         break;
                     case "nopayment":
                         message = "Dear Customer, We did'nt received payement for the selected plan, Please do payment to proceed.";

@@ -16,12 +16,12 @@
                                 <form asp-action="Login" asp-controller="Account" method="post">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
-                                        <label for="UserName">Username:</label>
+                                        <label for="UserName">Username</label>
                                         <input type="text" asp-for="UserName" class="form-control" placeholder="Enter username" />
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label for="Password">Password:</label>
+                                        <label for="Password">Password</label>
                                         <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" />
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
