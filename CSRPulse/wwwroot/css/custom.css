@@ -421,10 +421,10 @@ div.checkbox.switcher label, div.radio.switcher label {
     left: 50%;
   }
   .log_bg{
-      background: url(../images/login_bg.png);
+      background: url(../images/login_bg2.png);
       background-position: center;
       background-size: cover;
-      height: 100vh;
+      height: 70vh;
   }
   #contact{
     padding: 0px 0px;
