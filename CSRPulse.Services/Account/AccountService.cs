@@ -69,59 +69,66 @@ namespace CSRPulse.Services
             else { return false; }
         }
 
-        public bool AuthenticateCustomer(SingIn singIn, out string outPutValue)
+        public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID)
         {
             try
             {
                 outPutValue = string.Empty;
+                customerID = null;
                 bool flag = false;
                 var validateCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerCode == singIn.CompanyID).Include(p => p.CustomerPayment).Include(y => y.CustomerLicenseActivation);
-                if (validateCustomer != null)
+                if (validateCustomer.FirstOrDefault() != null)
                 {
-                    var custPayment = validateCustomer.FirstOrDefault().CustomerPayment.OrderByDescending(o => o.PaymentId).FirstOrDefault();
-                    if (custPayment != null)
+                    customerID = validateCustomer.FirstOrDefault().CustomerId;
+                    if (validateCustomer.FirstOrDefault().CustomerPayment != null && validateCustomer.FirstOrDefault().CustomerPayment.Count > 0)
                     {
-                        if (custPayment.IsSuccess)
+                        var custPayment = validateCustomer.FirstOrDefault().CustomerPayment.OrderByDescending(o => o.PaymentId).FirstOrDefault();
+                        if (custPayment != null)
                         {
-                            var custAct = validateCustomer.FirstOrDefault().CustomerLicenseActivation.Where(x => x.PaymentId == custPayment.PaymentId).FirstOrDefault();
-                            if (custAct != null)
+                            if (custPayment.IsSuccess)
                             {
-                                if (DateTime.Now.Date.AddDays(3) == custAct.LastActivationDate.Date)
+                                var custAct = validateCustomer.FirstOrDefault().CustomerLicenseActivation.Where(x => x.PaymentId == custPayment.PaymentId).FirstOrDefault();
+                                if (custAct != null)
                                 {
-                                    outPutValue = "3daysexp";
-                                    flag = true;
+                                    if (DateTime.Now.Date.AddDays(3) == custAct.LastActivationDate.Date)
+                                    {
+                                        outPutValue = "3daysexp";
+                                        flag = true;
+                                    }
+                                    else if (DateTime.Now.Date.AddDays(2) == custAct.LastActivationDate.Date)
+                                    {
+                                        outPutValue = "2daysexp";
+                                        flag = true;
+                                    }
+                                    else if (DateTime.Now.Date.AddDays(1) == custAct.LastActivationDate.Date)
+                                    {
+                                        outPutValue = "1dayexp";
+                                        flag = true;
+                                    }
+                                    else if (DateTime.Now.Date == custAct.LastActivationDate.Date)
+                                    {
+                                        outPutValue = "0exp";
+                                        flag = true;
+                                    }
+                                    else if (DateTime.Now.Date > custAct.LastActivationDate.Date)
+                                    {
+                                        outPutValue = "expired";
+                                        flag = false;
+                                    }
+                                    else
+                                        flag = true;
                                 }
-                                else if (DateTime.Now.Date.AddDays(2) == custAct.LastActivationDate.Date)
+                                else
                                 {
-                                    outPutValue = "2daysexp";
-                                    flag = true;
-                                }
-                                else if (DateTime.Now.Date.AddDays(1) == custAct.LastActivationDate.Date)
-                                {
-                                    outPutValue = "1dayexp";
-                                    flag = true;
-                                }
-                                else if (DateTime.Now.Date == custAct.LastActivationDate.Date)
-                                {
-                                    outPutValue = "0exp";
-                                    flag = true;
-                                }
-                                else if (DateTime.Now.Date > custAct.LastActivationDate.Date)
-                                {
-                                    outPutValue = "expired";
+                                    outPutValue = "lincexpired";
                                     flag = false;
                                 }
                             }
                             else
                             {
-                                outPutValue = "lincexpired";
+                                outPutValue = "nopayment";
                                 flag = false;
                             }
-                        }
-                        else
-                        {
-                            outPutValue = "nopayment";
-                            flag = false;
                         }
                     }
                     else
@@ -138,8 +145,8 @@ namespace CSRPulse.Services
 
                 if (flag)
                 {
-                    var database = validateCustomer.FirstOrDefault().DataBaseName;
-                    SetConnectionString(ref database);
+                    //var database = validateCustomer.FirstOrDefault().DataBaseName;
+                    // SetConnectionString(ref database);
                 }
                 return flag;
 

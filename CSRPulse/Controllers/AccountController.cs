@@ -86,7 +86,7 @@ namespace CSRPulse.Controllers
                 throw;
             }
 
-        }            
+        }
 
 
         [HttpGet]
@@ -94,7 +94,6 @@ namespace CSRPulse.Controllers
         {
             return View();
         }
-
 
         /// <summary>
         /// In this function, we'll check the customer in our database and then verify its credentail in customer database
@@ -104,7 +103,7 @@ namespace CSRPulse.Controllers
         /// <param name="ButtonName">based on button, will perfom action</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult CustomerLogin(SingIn singIn, string returnUrl, string ButtonName)
+        public IActionResult CustomerLogin(CustomerSignIn signIn, string returnUrl, string ButtonName)
         {
             _logger.LogInformation("AccountController/CustomerLogin");
             try
@@ -112,14 +111,40 @@ namespace CSRPulse.Controllers
                 /// First check the customer ID is exists in our database
                 if (ButtonName == "verify")
                 {
+                    ModelState.Remove("UserName");
+                    ModelState.Remove("Password");
+
+                    if (!ModelState.IsValid)
+                    {                       
+                        return Json(new { htmlData = ConvertViewToString("_Authenticate", signIn, true) });
+                    }
                     string returnOutPut = string.Empty;
+                    int? customerID = null;
                     bool isCustExists = false;
-                    isCustExists = _accountService.AuthenticateCustomer(singIn, out returnOutPut);
+                    isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID);
                     if (isCustExists)
                     {
-                        ModelState.AddModelError("", "Your Registration will be expire within 2 day(s),Please contact you administrator.");
-                        return View(singIn);
+                        ModelState.AddModelError("", UserDefineMessage(returnOutPut));
+                        return Json(new { htmlData = ConvertViewToString("_CustomerLogin", signIn, true) });
+                    }
+                    else
+                    {
+                        if (returnOutPut == "nopayment")
+                        {
+                           // ModelState.AddModelError("", UserDefineMessage(returnOutPut));
+                            //Customer customer = new Customer
+                            //{
+                            //    CustomerId = (int)customerID
+                            //};
 
+                            return Json(new { payment = true,cid= (int)customerID });
+
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", UserDefineMessage(returnOutPut));
+                            return Json(new { htmlData = ConvertViewToString("_Authenticate", signIn, true) });
+                        }
                     }
                 }
 
@@ -128,7 +153,14 @@ namespace CSRPulse.Controllers
                 {
                     bool isAuthenticated = false;
                     UserDetail userDetail = new UserDetail();
-                    isAuthenticated = _accountService.AuthenticateUser(singIn, out userDetail);
+                    SingIn sign = new SingIn
+                    {
+                        UserName = signIn.UserName,
+                        Password = signIn.Password,
+                        RememberMe = signIn.RememberMe
+                    };
+
+                    isAuthenticated = _accountService.AuthenticateUser(sign, out userDetail);
                     if (isAuthenticated)
                     {
                         HttpContext.Session.SetComplexData("User", userDetail);
@@ -137,17 +169,68 @@ namespace CSRPulse.Controllers
                         {
                             return LocalRedirect(returnUrl);
                         }
-                        return RedirectToAction("CustomerLogin", "Account");
+                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
                     }
                     else
                         ModelState.AddModelError("", "Invalid credentials");
 
                 }
-                return View(singIn);
+                return View(signIn);
             }
             catch (Exception ex)
             {
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        /// This function will return user define message, based on output return from  _accountService.AuthenticateCustomer() service 
+        /// </summary>
+        /// <param name="returnOutPut"></param>
+        /// <returns></returns>
+        [NonAction]
+        private string UserDefineMessage(string returnOutPut)
+        {
+            try
+            {
+                string message = string.Empty;
+                switch (returnOutPut)
+                {
+                    case "3daysexp":
+                        message = "Dear Customer, Your Licence will be expire in 3 days.";
+                        break;
+                    case "2daysexp":
+                        message = "Dear Customer, Your Licence will be expire in 2 days.";
+                        break;
+                    case "1dayexp":
+                        message = "Dear Customer, Your Licence will be expire in 1 day.";
+                        break;
+                    case "0exp":
+                        message = "Dear Customer, Your Licence will be expire today.";
+                        break;
+                    case "expired":
+                        message = "Dear Customer, Your Licence is expired. Please contact to you vendor.";
+                        break;
+                    case "lincexpired":
+                        message = "Dear Customer, Your Licence is expired. Please contact to you vendor.";
+                        break;
+                    case "nopayment":
+                        message = "Dear Customer, We did'nt received payement for the selected plan, Please do payment to proceed.";
+                        break;
+                    case "notexists":
+                        message = "Dear Customer, We did'nt find you company id in our database, please first register then try to login";
+                        break;
+                    default:
+                        break;
+                }
+                return message;
+
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
 

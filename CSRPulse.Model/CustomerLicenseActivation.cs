@@ -12,5 +12,6 @@ namespace CSRPulse.Model
         public int ActivationCount { get; set; }
         public DateTime ActivationDate { get; set; }
         public DateTime LastActivationDate { get; set; }
+        public int PaymentId { get; set; }
     }
 }

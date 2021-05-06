@@ -15,10 +15,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - CSR PULSE</title>
     <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
-
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true">
-
     <link href="~/font-awesome/css/fontawesome.css" rel="stylesheet" />
+
     <script type="text/javascript">
                 $(document).ready(function () {
 
@@ -91,20 +90,20 @@
 </head>
 <body>
     <partial name="_header" />
-   
-        <main role="main">
-            @RenderBody()
-        </main>
-   
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
     <partial name="_footer" />
 
     <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
-    
+
     @RenderSection("Scripts", required: false)
     <script type="text/javascript">
         $(window).scroll(function () {

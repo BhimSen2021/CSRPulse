@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSRPulse.Data.Repositories.Generic;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -50,6 +51,6 @@ namespace CSRPulse.Data.Repositories
         //void ExecuteWithStoreProcedure(string query, params object[] parameters);
         //DataTable GetTablesSchema(string sTableName);
 
-        bool SaveChanges();
+        IDatabaseTransaction BeginTransaction();
     }
 }
