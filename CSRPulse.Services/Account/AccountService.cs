@@ -13,8 +13,6 @@ namespace CSRPulse.Services
 {
     public class AccountService : BaseService, IAccountService
     {
-
-
         public AccountService(IMapper mapper, IGenericRepository genericRepository) : base(mapper, genericRepository)
         {
         }

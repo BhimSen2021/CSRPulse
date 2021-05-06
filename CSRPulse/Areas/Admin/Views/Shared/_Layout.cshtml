@@ -55,8 +55,24 @@
                 $("html, body").animate({ scrollTop: 0 }, 600);
                 return false;
             });
+
+            $('.dropdown').hover(
+                function () {
+                    $(this).find('ul').css({
+                        "display": "block",
+                        "margin-top": 0
+                    });
+                },
+                function () {
+                    $(this).find('ul').css({
+                        "display": "none",
+                        "margin-top": 0
+                    });
+                }
+            );
         });
-       
+
+        
     </script>
 </body>
 </html>
