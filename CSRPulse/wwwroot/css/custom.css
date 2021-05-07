@@ -70,7 +70,7 @@ div ul li {
     width: 100%;
     background-color: #eee;
     box-shadow: 0px 0px 8px #545454;
-    z-index: 10000;
+    z-index: 10000;   
 }
 
 .header-fix {
@@ -246,35 +246,52 @@ div ul li {
 .here {
     float: left;
     width: 100%;
-    height: auto;
+    min-height: 250px;
+    max-height: auto;
+    overflow: auto;
 }
 
     .here ul {
         float: left;
         width: 100%;
         height: auto;
-        padding: 0px;
+        padding: 0px 0px 0px 1.25rem;
         margin: 0px;
+        list-style: square;
+        list-style-type: disclosure-closed;
     }
 
         .here ul li {
             float: left;
             width: 100%;
             height: auto;
-            margin: 0;
-            padding: 5px 15px 5px 30px;
-            list-style: none;
-            background-image: url(../images/tick.png);
-            background-repeat: no-repeat;
-            background-position: left center;
-            background-size: 25px;
             text-align: left;
+            padding: 3px 0px;
+            font-size: 14px;
+            color: #545454;
+            font-weight: bold;
         }
 
-            .here ul li:nth-last-child(1) {
-                background-image: none;
-                margin-top: 25px;
+            .here ul li ul {
+                float: left;
+                width: 100%;
+                height: auto;
+                padding: 0px 0px 0px 1.25rem;
+                margin: 0px;
+                list-style: none;
             }
+
+                .here ul li ul li {
+                    float: left;
+                    width: 100%;
+                    height: auto;
+                    text-align: left;
+                    padding: 3px 0px;
+                    font-size: 14px;
+                    color: #818181;
+                    font-weight: normal;
+                    list-style: lower-roman
+                }
 
 #explore-wrap {
     padding: 25px 0px;

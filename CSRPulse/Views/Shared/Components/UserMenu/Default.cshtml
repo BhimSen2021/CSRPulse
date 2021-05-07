@@ -9,14 +9,14 @@
             var menuItem = Model.Where(x => x.ParentMenuId == hd.MenuId).OrderBy(o => o.SequenceNo);
             if (menuItem.Count() > 0)
             {
-                <li class="dropdown nav-item">
-                    <a class="dropdown-toggle text-dark nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@hd.MenuName</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left:auto; max-width:150px;">
+                <li class="treeview">
+                    <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa @hd.IconClass"></i><span class="app-menu__label">@hd.MenuName</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                    <ul class="treeview-menu">
                         @foreach (var menu in menuItem)
                         {
                             var childControllerName = menu.Url.Split(new char[] { '/' })[0];
                             var childActionName = menu.Url.Split(new char[] { '/' })[1];
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName">@menu.MenuName</a> </li>
+                            <li><a class="treeview-item" asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName"><i class="@menu.IconClass pr-2"></i> @menu.MenuName</a></li>
                         }
                     </ul>
                 </li>
@@ -25,8 +25,7 @@
             {
                 var controllerName = hd.Url.Split(new char[] { '/' })[0];
                 var actionName = hd.Url.Split(new char[] { '/' })[1];
-                <li class="nav-item"><a class="nav-link text-dark" asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName">@hd.MenuName</a> </li>
-                @*<li class="@if (hd.MenuId == 1){<text>active</text>}"><a href='@Url.Action("MenuRedirect", "Login", new { menuId = hd.MenuId })'>@hd.MenuName</a></li>*@
+                <li><a class="app-menu__item @if (hd.SequenceNo == 1){<text>active</text>}" asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName"><i class="app-menu__icon @hd.IconClass"></i><span class="app-menu__label">@hd.MenuName</span></a></li>
             }
         }
     }
