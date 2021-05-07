@@ -14,10 +14,12 @@ namespace CSRPulse.Services
 {
     public class MenuService : BaseService, IMenuService
     {
-
-        public MenuService(IMapper mapper, IGenericRepository genericRepository) : base(mapper, genericRepository)
+        private readonly IMapper _mapper;
+        private readonly IGenericRepository _genericRepository;
+        public MenuService(IMapper mapper, IGenericRepository genericRepository)
         {
-
+            _mapper = mapper;
+            _genericRepository = genericRepository;
         }
 
         public async Task<List<Menu>> GetMenuByUserAsync(int userId)
