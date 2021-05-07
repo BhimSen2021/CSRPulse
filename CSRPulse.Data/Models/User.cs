@@ -13,6 +13,10 @@ namespace CSRPulse.Data.Models
     {
         public User()
         {
+            DistrictCreatedByNavigation = new HashSet<District>();
+            DistrictUpdatedByNavigation = new HashSet<District>();
+            StateCreatedByNavigation = new HashSet<State>();
+            StateUpdatedByNavigation = new HashSet<State>();
             UserRights = new HashSet<UserRights>();
         }
 
@@ -49,6 +53,14 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(UserTypeId))]
         [InverseProperty("User")]
         public virtual UserType UserType { get; set; }
+        [InverseProperty(nameof(District.CreatedByNavigation))]
+        public virtual ICollection<District> DistrictCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(District.UpdatedByNavigation))]
+        public virtual ICollection<District> DistrictUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(State.CreatedByNavigation))]
+        public virtual ICollection<State> StateCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(State.UpdatedByNavigation))]
+        public virtual ICollection<State> StateUpdatedByNavigation { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<UserRights> UserRights { get; set; }
     }

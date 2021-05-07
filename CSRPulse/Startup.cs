@@ -37,6 +37,7 @@ namespace CSRPulse
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IDropdownBindService, DropdownBindService>();
 
             #endregion
 

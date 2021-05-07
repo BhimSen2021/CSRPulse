@@ -20,6 +20,12 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.User, UserDetail>().ReverseMap();
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
+
+            #region Dropdown Mapper
+            CreateMap<DTOModel.State, SelectListModel>()
+                .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
+                .ForMember(d => d.value, o => o.MapFrom(s => s.StateName));
+            #endregion
         }
     }
 }

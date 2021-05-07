@@ -4,25 +4,30 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 namespace CSRPulse.Model
 {
-   public class Customer:BaseModel
+    public class Customer : BaseModel
     {
         public int CustomerId { get; set; }
         public string CustomerCode { get; set; }
-        [Display(Name ="Company Name")]
-        [Required (ErrorMessage ="Please Enter Company Name")]
+        [Display(Name = "Company Name")]
+        [Required(ErrorMessage = "Please Enter Company Name")]
         public string CustomerName { get; set; }
         [Display(Name = "Address")]
+        [MinLength(5)]
+        [MaxLength(200)]
         public string Address { get; set; }
         [Display(Name = "Country")]
+        [Required(ErrorMessage = "Please Select Country")]
         public string Country { get; set; }
         [Display(Name = "State")]
+        [Range(1,Int64.MaxValue)]
+
         public int? StateId { get; set; }
         [Display(Name = "City")]
         public string City { get; set; }
-        [Display(Name = "Pin Code")]
+        [Display(Name = "Pin Code"), Required(ErrorMessage = "Please Enter Pin Code")]
         public string PostalCode { get; set; }
         [Display(Name = "Phone No.")]
-        [Required(ErrorMessage ="Please Enter Phone No.")]
+        [Required(ErrorMessage = "Please Enter Phone No.")]
         public string Telephone { get; set; }
         [Display(Name = "Work Email")]
         [Required(ErrorMessage = "Please Enter Work Email")]
@@ -34,7 +39,7 @@ namespace CSRPulse.Model
         public string Website { get; set; }
         public string DataBaseName { get; set; }
 
-        [Required(ErrorMessage ="Please select term & condition")]
+        [Required(ErrorMessage = "Please select term & condition")]
         public bool IsAgree { get; set; }
 
         public CustomerPayment CustomerPayment { get; set; }

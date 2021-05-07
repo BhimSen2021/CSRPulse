@@ -24,10 +24,12 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
+        public virtual DbSet<District> District { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
+        public virtual DbSet<State> State { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
@@ -92,6 +94,31 @@ namespace CSRPulse.Data.Data
                     .HasConstraintName("FK_CustomerPayment_CustomerPayment");
             });
 
+            modelBuilder.Entity<District>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DistrictCode).IsUnicode(false);
+
+                entity.Property(e => e.DistrictShort).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.DistrictCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .HasConstraintName("FK_User_District_CreatedBy");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.District)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_State_StateId");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.DistrictUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_User_District_UpdatedBy");
+            });
+
             modelBuilder.Entity<Menu>(entity =>
             {
                 entity.Property(e => e.Area).IsUnicode(false);
@@ -121,6 +148,25 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<State>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.StateCode).IsUnicode(false);
+
+                entity.Property(e => e.StateShort).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.StateCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .HasConstraintName("FK_User_CreatedBy");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.StateUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_User_UpdatedBy");
             });
 
             modelBuilder.Entity<User>(entity =>

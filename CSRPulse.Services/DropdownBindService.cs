@@ -4,25 +4,37 @@ using CSRPulse.Model;
 using CSRPulse.Services.IServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
+using DTOModel = CSRPulse.Data.Models;
 namespace CSRPulse.Services
 {
-    public class DropdownBindService :  IDropdownBindService
+    public class DropdownBindService : IDropdownBindService
     {
         private readonly IGenericRepository _genericRepository;
-        public DropdownBindService(IGenericRepository generic)
+        private readonly IMapper _mapper;
+
+        public DropdownBindService(IGenericRepository generic,IMapper mapper)
         {
             _genericRepository = generic;
+            _mapper = mapper;
         }
         public List<SelectListModel> GetCountryAsync(int? countryId)
         {
-            throw new NotImplementedException();
+            var countryList = new List<SelectListModel>()
+                {
+                    new SelectListModel { id = 1, value = "INDIA" }
+                };
+            return countryList;
         }
 
-        public List<SelectListModel> GetStateAsync(int? countryId, int? stateId)
+        public IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId)
         {
-            throw new NotImplementedException();
+            var dtoDist = _genericRepository.Get<DTOModel.State>(x => stateId.HasValue ? x.StateId == stateId : (1 > 0));
+            var districtList=  _mapper.Map<List<SelectListModel>>(dtoDist);
+            return districtList.ToList();
+
         }
     }
 }

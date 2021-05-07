@@ -5,15 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSRPulse.Services.IServices;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace CSRPulse.Controllers
 {
     public class RegistrationController : BaseController<RegistrationController>
     {
         private readonly IRegistrationService registrationService;
-        public RegistrationController(IRegistrationService registrationService)
+        private readonly IDropdownBindService ddlService;
+
+        public RegistrationController(IRegistrationService registrationService,IDropdownBindService ddlService)
         {
             this.registrationService = registrationService;
+            this.ddlService = ddlService;
+        }
 
+        [NonAction]
+        void BindDropdowns()
+        {
+            var stateList = ddlService.GetStateAsync(null, null);
+            ViewBag.ddlState = new SelectList(stateList, "value", "value");
         }
         public IActionResult Index(int? cid)
         {
@@ -27,7 +38,7 @@ namespace CSRPulse.Controllers
                 };
                 return View(customer);
             }
-
+            BindDropdowns();
             return View();
         }
         [HttpGet]
@@ -69,6 +80,7 @@ namespace CSRPulse.Controllers
                         }
                     }
                 }
+                BindDropdowns();
                 return Json(new { htmlData = ConvertViewToString("_Registration", customer, true) });
 
             }

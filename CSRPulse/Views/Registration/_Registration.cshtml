@@ -15,7 +15,7 @@
     </div>
     <div class="form-group">
         <label asp-for="Telephone" class="col-form-label"></label>
-        <input type="text" asp-for="Telephone" class="form-control" required autocomplete="off" />
+        <input type="tel" pattern="[0-9]{10}" asp-for="Telephone" maxlength="10" class="form-control" required autocomplete="off" />
         <span asp-validation-for="Telephone" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -26,12 +26,8 @@
         <label asp-for="Country" class="col-form-label"></label>
         <select asp-for="Country" aria-required="true" class=custom-select>
             <option disabled="" label="Country" selected="" value="">Country</option>
-            <option value="US">United States</option>
-            <option value="IN">India</option>
-            <option value="EH">Western Sahara</option>
-            <option value="YE">Yemen</option>
-            <option value="ZM">Zambia</option>
-            <option value="ZW">Zimbabwe</option>
+            <option value="India">India</option>
+
         </select>
         <span asp-validation-for="Country" class="text-danger"></span>
     </div>
@@ -41,24 +37,17 @@
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
                 <label asp-for="StateId" class="col-form-label"></label>
-                <select asp-for="StateId" aria-required="true" class=custom-select>
+                <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class=custom-select>
                     <option disabled="" label="State" selected="" value="">Country</option>
-                    <option value="US">United States</option>
-                    <option value="IN">India</option>
-                    <option value="EH">Western Sahara</option>
-                    <option value="YE">Yemen</option>
-                    <option value="ZM">Zambia</option>
-                    <option value="ZW">Zimbabwe</option>
                 </select>
+                <span asp-validation-for="StateId" class="text-danger"></span>
             </div>
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group">
-
                 <label asp-for="PostalCode" class="col-form-label"></label>
-
-                <input type="text" asp-for="PostalCode" class="form-control" />
-
+                <input type="text" asp-for="PostalCode" maxlength="6" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
         </div>
     </div>
@@ -73,7 +62,14 @@
 
         </div>*@
 
+<div class="form-group">
 
+    <label asp-for="Address" class="col-form-label"></label>
+
+    <textarea asp-for="Address" cols="37" rows="3" draggable="auto" class="form-control" ></textarea>
+    <span asp-validation-for="Address" class="text-danger"></span>
+
+</div>
     <div class="row">
 
         <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-2">
