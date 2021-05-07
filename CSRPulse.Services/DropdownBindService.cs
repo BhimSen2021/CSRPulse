@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CSRPulse.Services
 {
-    public class DropdownBindService : BaseService, IDropdownBindService
+    public class DropdownBindService :  IDropdownBindService
     {
         private readonly IGenericRepository _genericRepository;
         public DropdownBindService(IGenericRepository generic)
