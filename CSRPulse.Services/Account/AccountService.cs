@@ -13,9 +13,14 @@ namespace CSRPulse.Services
 {
     public class AccountService : BaseService, IAccountService
     {
-        public AccountService(IMapper mapper, IGenericRepository genericRepository) : base(mapper, genericRepository)
+        private readonly IMapper _mapper;
+        private readonly IGenericRepository _genericRepository;
+        public AccountService(IMapper mapper, IGenericRepository genericRepository)
         {
+            _mapper = mapper;
+            _genericRepository = genericRepository;
         }
+
 
         public async Task<int> CreateUserAsync(User user)
         {

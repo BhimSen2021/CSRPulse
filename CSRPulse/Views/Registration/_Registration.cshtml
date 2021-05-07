@@ -5,30 +5,44 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="CustomerName" class="col-form-label"></label>
-        <input type="text" asp-for="CustomerName" class="form-control" autocomplete="off" />
+        <input type="text" asp-for="CustomerName" class="form-control" required autocomplete="off" />
         <span asp-validation-for="CustomerName" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Email" class="col-form-label"></label>
-        <input type="email" asp-for="Email" class="form-control" autocomplete="off" />
+        <input type="email" asp-for="Email" class="form-control" required autocomplete="off" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Telephone" class="col-form-label"></label>
-        <input type="text" asp-for="Telephone" class="form-control" autocomplete="off" />
+        <input type="text" asp-for="Telephone" class="form-control" required autocomplete="off" />
         <span asp-validation-for="Telephone" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Website" class="col-form-label"></label>
         <input type="text" asp-for="Website" class="form-control" autocomplete="off" />
     </div>
-    @*<div class="row">
-            <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <label asp-for="Country" class="col-form-label"></label>
-            </div>
-            <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                <select id="CompanyCountry" aria-required="true" class=custom-select>
-                    <option disabled="" label="Country" selected="" value="">Country</option>
+    <div class="form-group">
+        <label asp-for="Country" class="col-form-label"></label>
+        <select asp-for="Country" aria-required="true" class=custom-select>
+            <option disabled="" label="Country" selected="" value="">Country</option>
+            <option value="US">United States</option>
+            <option value="IN">India</option>
+            <option value="EH">Western Sahara</option>
+            <option value="YE">Yemen</option>
+            <option value="ZM">Zambia</option>
+            <option value="ZW">Zimbabwe</option>
+        </select>
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+
+
+    <div class="row">
+        <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group">
+                <label asp-for="StateId" class="col-form-label"></label>
+                <select asp-for="StateId" aria-required="true" class=custom-select>
+                    <option disabled="" label="State" selected="" value="">Country</option>
                     <option value="US">United States</option>
                     <option value="IN">India</option>
                     <option value="EH">Western Sahara</option>
@@ -36,34 +50,29 @@
                     <option value="ZM">Zambia</option>
                     <option value="ZW">Zimbabwe</option>
                 </select>
-                <span asp-validation-for="Country" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group">
+
+                <label asp-for="PostalCode" class="col-form-label"></label>
+
+                <input type="text" asp-for="PostalCode" class="form-control" />
+
+            </div>
+        </div>
+    </div>
+
+
+
+    @*<div class="form-group">
+
+            <label asp-for="City" class="col-form-label"></label>
+
+            <input type="text" asp-for="City" class="form-control" />
+
         </div>*@
 
-    @*<div class="row">
-            <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <label asp-for="StateId" class="col-form-label"></label>
-            </div>
-            <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                <input type="text" asp-for="StateId" class="form-control" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <label asp-for="City" class="col-form-label"></label>
-            </div>
-            <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                <input type="text" asp-for="City" class="form-control" />
-            </div>
-        </div>
-        <div class="row pb-2">
-            <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <label asp-for="PostalCode" class="col-form-label"></label>
-            </div>
-            <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                <input type="text" asp-for="PostalCode" class="form-control" />
-            </div>
-        </div>*@
 
     <div class="row">
 

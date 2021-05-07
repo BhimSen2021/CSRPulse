@@ -8,8 +8,8 @@ namespace CSRPulse.Model
     {
         public int CustomerId { get; set; }
         public string CustomerCode { get; set; }
-        [Display(Name ="Name")]
-        [Required (ErrorMessage ="Please Enter Name")]
+        [Display(Name ="Company Name")]
+        [Required (ErrorMessage ="Please Enter Company Name")]
         public string CustomerName { get; set; }
         [Display(Name = "Address")]
         public string Address { get; set; }

@@ -12,9 +12,12 @@ namespace CSRPulse.Services
 {
     public class RegistrationService : BaseService, IRegistrationService
     {
-        private new readonly IMapper _mapper;
-        public RegistrationService(IGenericRepository _generic, IMapper mapper) : base(mapper, _generic)
+        private readonly IMapper _mapper;
+        private readonly IGenericRepository _genericRepository;
+
+        public RegistrationService(IGenericRepository generic, IMapper mapper)
         {
+            _genericRepository = generic;
             _mapper = mapper;
         }
         public async Task<int> CustomerRegistrationAsync(Model.Customer customer)
@@ -41,7 +44,7 @@ namespace CSRPulse.Services
                         CreatedOn = DateTimeOffset.UtcNow.Date
                     };
 
-                    dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum);
+                    dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum,_genericRepository);
                     await _genericRepository.InsertAsync(dtoCustomer);
                     transaction.Commit();
 

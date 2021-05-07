@@ -12,13 +12,15 @@ namespace CSRPulse.Services
 {
     public class BaseService
     {
-        internal readonly IMapper _mapper;
-        internal readonly IGenericRepository _genericRepository = null;
-        public BaseService(IMapper mapper, IGenericRepository genericRepository)
-        {
-            _mapper = mapper;
-            _genericRepository = genericRepository;
-        }
+        //internal readonly IMapper _mapper;
+        //internal readonly IGenericRepository _genericRepository = null;
+        //public BaseService(IMapper mapper, IGenericRepository genericRepository)
+        //{
+        //    _mapper = mapper;
+        //    _genericRepository = genericRepository;
+        //}
+   
+
         /// <summary>
         /// This function is will refresh dbcontext class after database has been changed to switch new database
         /// </summary>
@@ -32,11 +34,12 @@ namespace CSRPulse.Services
         /// <summary>
         ///  Generate Custom Code based on table 
         /// </summary>
-        public string GenerateOrGetLatestCode(StartingNumber startingNumber)
+        public string GenerateOrGetLatestCode(StartingNumber startingNumber, IGenericRepository _genericRepository)
         {
             try
             {
-                // IGenericRepository genericRepo = new GenericRepository();
+                //  IGenericRepository _genericRepository = new GenericRepository();
+              
                 if (_genericRepository.Exists<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName))
                 {
                     var getData = _genericRepository.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
@@ -51,7 +54,24 @@ namespace CSRPulse.Services
                 else
                 {
 
-                    var dtoNumber = _mapper.Map<DTOModel.StartingNumber>(startingNumber);
+                    //var dtoNumber = _mapper.Map<DTOModel.StartingNumber>(startingNumber);
+                    var dtoNumber = new DTOModel.StartingNumber
+                    {
+                        ColumnName = startingNumber.ColumnName,
+                        CreatedBy = startingNumber.CreatedBy,
+                        IsDeleted = startingNumber.IsDeleted,
+                        Number = startingNumber.Number,
+                        NumberWidth = startingNumber.NumberWidth,
+                        Prefix = startingNumber.Prefix,
+                        StartNumberId = startingNumber.StartNumberID,
+                        TableName = startingNumber.TableName,
+                        UpdatedBy = startingNumber.UpdatedBy,
+                        UpdatedOn = startingNumber.UpdatedOn
+                    };
+                    
+
+                        
+                    
                     _genericRepository.Insert(dtoNumber);
                     return GenerateCode(dtoNumber);
                 }
