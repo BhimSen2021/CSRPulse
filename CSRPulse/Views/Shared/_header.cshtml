@@ -1,11 +1,11 @@
 ﻿<div class="row">
     <div class="col-sm-12 p-0">
         <header>
-            <div class="top_li bg-light">
-                <ul>
-                    <partial name="_LoginInfo" />
-                </ul>
-            </div>
+            @*<div class="top_li bg-light">
+                    <ul>
+                        <partial name="_LoginInfo" />
+                    </ul>
+                </div>*@
             <nav class="navbar navbar-expand-md navbar-dark">
                 <!-- Brand -->
                 <a class="navbar-brand pr-5" asp-area="" asp-controller="Home" asp-action="Index">
@@ -39,12 +39,12 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Plan" asp-action="Index">Plan</a>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="btn btn-success" asp-controller="Registration" asp-action="Index">TRY FOR FREE</a>
+                            <a class="nav-link" asp-area="" asp-controller="Contact" asp-action="ContactMe">Contact Us</a>
                         </li>
+                        <li class="nav-item"><a class="nav-link" asp-action="CustomerLogin" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path">Login</a></li>
                     </ul>
+
                 </div>
             </nav>
 
