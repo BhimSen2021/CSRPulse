@@ -562,3 +562,9 @@ div.checkbox.switcher label, div.radio.switcher label {
 .show ul li a {
     color: #818181;
 }
+
+.registor-bg {
+    background-image: url(../images/background-path.jpg);
+    background-size: cover;
+    background-position: center;
+}

@@ -12,7 +12,7 @@ namespace CSRPulse.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[Controller]/[action]")]
-    public class AccountController :  BaseController<AccountController>
+    public class AccountController : BaseController<AccountController>
     {
         private readonly IAccountService _accountService;
         private readonly IMenuService _menuService;
@@ -61,7 +61,19 @@ namespace CSRPulse.Areas.Admin.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
-
         }
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            _logger.LogInformation("Amin/AccountController/Logout");
+            UserDetail userDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
+            if (userDetail != null)
+            {
+                HttpContext.Session.Clear();                
+            }
+            
+            return RedirectToAction("Index", "Home", new { Area = "" });
+        }
+
     }
 }
