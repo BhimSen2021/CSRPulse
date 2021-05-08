@@ -50,11 +50,12 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.Property(e => e.Address2).IsUnicode(false);
+
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.DataBaseName).IsUnicode(false);

@@ -11,6 +11,6 @@ namespace CSRPulse.Services.Admin
     {
         Task<int> AddNewPlanAsync(Plan plan);
         Task<List<Plan>> GetAllPlanAsync();
-        Task<Plan> GetPlanByIdAsync();
+        Task<Model.Plan> GetPlanByIdAsync(int planID);
     }
 }

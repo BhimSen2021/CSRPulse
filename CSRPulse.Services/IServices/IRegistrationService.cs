@@ -10,5 +10,8 @@ namespace CSRPulse.Services.IServices
         Task<int> CustomerRegistrationAsync(Model.Customer customer);
 
         Task<bool> CustomerPaymentAsync(Model.Customer customer);
+        Task<bool> CustomerExists(Model.Customer customer);
+        int GenerateOTP();
+        bool SendOTP(string email, int OTP);
     }
 }

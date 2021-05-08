@@ -11,7 +11,8 @@ namespace CSRPulse.Services
     {
         public AutoMapperServices()
         {
-            CreateMap<DTOModel.Plan, Plan>().ReverseMap();            
+            CreateMap<DTOModel.Plan, Plan>().ReverseMap();
+            CreateMap<Plan, Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
             CreateMap<Customer, DTOModel.Customer>();
             CreateMap<StartingNumber, DTOModel.StartingNumber>();

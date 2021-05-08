@@ -50,6 +50,9 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
+        [Column("address2")]
+        [StringLength(200)]
+        public string Address2 { get; set; }
 
         [InverseProperty("Customer")]
         public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }

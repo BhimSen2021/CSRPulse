@@ -20,6 +20,23 @@ namespace CSRPulse.Services
             _genericRepository = generic;
             _mapper = mapper;
         }
+        public async Task<bool> CustomerExists(Model.Customer customer)
+        {
+            try
+            {
+                if (await _genericRepository.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
+                {
+                    customer.RecordExist = true;
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public async Task<int> CustomerRegistrationAsync(Model.Customer customer)
         {
             using (var transaction = _genericRepository.BeginTransaction())
@@ -44,7 +61,7 @@ namespace CSRPulse.Services
                         CreatedOn = DateTimeOffset.UtcNow.Date
                     };
 
-                    dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum,_genericRepository);
+                    dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum, _genericRepository);
                     await _genericRepository.InsertAsync(dtoCustomer);
                     transaction.Commit();
 
@@ -86,6 +103,30 @@ namespace CSRPulse.Services
                     throw;
                 }
             }
+        }
+
+        public int GenerateOTP()
+        {
+            int _min = 100000;
+            int _max = 999999;
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
+        }
+
+        public bool SendOTP(string email, int OTP)
+        {
+            bool flag = false;
+            try
+            {
+
+                flag = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return flag;
         }
     }
 }

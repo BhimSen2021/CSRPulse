@@ -14,7 +14,7 @@ namespace CSRPulse.Controllers
         private readonly IRegistrationService registrationService;
         private readonly IDropdownBindService ddlService;
 
-        public RegistrationController(IRegistrationService registrationService,IDropdownBindService ddlService)
+        public RegistrationController(IRegistrationService registrationService, IDropdownBindService ddlService)
         {
             this.registrationService = registrationService;
             this.ddlService = ddlService;
@@ -24,22 +24,24 @@ namespace CSRPulse.Controllers
         void BindDropdowns()
         {
             var stateList = ddlService.GetStateAsync(null, null);
-            ViewBag.ddlState = new SelectList(stateList, "value", "value");
+            ViewBag.ddlState = new SelectList(stateList, "id", "value");
         }
-        public IActionResult Index(int? cid)
+        public IActionResult Index(int? cid, int? pId = null)
         {
             _logger.LogInformation("RegistrationController/Index");
+
+            Model.Customer customer = new Model.Customer
+            {
+                PlainId = pId
+            };
+
             if (cid.HasValue)
             {
-                Model.Customer customer = new Model.Customer
-                {
-
-                    CustomerId = (int)cid
-                };
-                return View(customer);
+                customer.CustomerId = (int)cid;
             }
             BindDropdowns();
-            return View();
+            return View(customer);
+
         }
         [HttpGet]
         public async Task<IActionResult> Registration()
@@ -54,7 +56,8 @@ namespace CSRPulse.Controllers
         /// <param name="customer"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Registration(Model.Customer customer)
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Registration(Model.Customer customer, string ButtonType)
         {
             _logger.LogInformation("RegistrationController/Index");
             try
@@ -64,19 +67,66 @@ namespace CSRPulse.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    customer.CreatedBy = 1;
-                    int customerID = await registrationService.CustomerRegistrationAsync(customer);
-                    if (customerID > 0)
+                    BindDropdowns();
+                    if (ButtonType == "verifydtl" || ButtonType == "Resend OTP")
                     {
-                        customer.CustomerId = customerID;
-                        return Json(new { success = true, htmlData = ConvertViewToString("_PaymentOption", customer, true) });
-                    }
-                    else
-                    {
-                        if (customer.RecordExist)
+                        bool res = await registrationService.CustomerExists(customer);
+                        if (!res)
                         {
-
                             return Json(new { recordExist = true });
+                        }
+
+                        int OTP = registrationService.GenerateOTP();
+                        HttpContext.Session.SetComplexData("OTP", OTP);
+
+                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP);
+                        if (ViewBag.OTPSent)
+                            ViewBag.Message = "OTP has ben sent on your Email.Please Enter OTP to verify your details.";
+                        ViewBag.IsVerified = false;
+                        return Json(new { htmlData = ConvertViewToString("_Registration", customer, true) });
+                    }
+                    if (ButtonType == "verifyotp")
+                    {
+
+                        if (HttpContext.Session.GetComplexData<int>("OTP") != 0)
+                        {
+                            var otpval = Convert.ToString(HttpContext.Session.GetComplexData<int>("OTP"));
+                            if (customer.OTP != "0" && otpval == customer.OTP)
+                            {
+                                ViewBag.Message = "OTP has been verified.";
+                                ViewBag.VerifyOTP = true;
+                                ViewBag.IsVerified = true;
+                            }
+                            else if (customer.OTP != "0" && otpval != customer.OTP)
+                            {
+                                ViewBag.Message = "Incorrct OTP.";
+                                ViewBag.IsVerified = false;
+                            }
+                            else
+                            {
+                                ViewBag.Message = "Please enter OTP.";
+                                ViewBag.IsVerified = false;
+                            }
+                            return Json(new { htmlData = ConvertViewToString("_Registration", customer, true) });
+                        }
+                    }
+
+                    if (ButtonType == "submit")
+                    {
+                        customer.CreatedBy = 1;
+                        int customerID = await registrationService.CustomerRegistrationAsync(customer);
+                        if (customerID > 0)
+                        {
+                            customer.CustomerId = customerID;
+                            return Json(new { success = true, htmlData = ConvertViewToString("_PaymentOption", customer, true) });
+                        }
+                        else
+                        {
+                            if (customer.RecordExist)
+                            {
+
+                                return Json(new { recordExist = true });
+                            }
                         }
                     }
                 }
