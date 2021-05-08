@@ -200,7 +200,7 @@ PublishScripts/
 **/[Pp]ackages/*
 
 # app settings can be ignored because every developer have own it
-**/appsettings.json
+**/appsettings.json/*
 
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
