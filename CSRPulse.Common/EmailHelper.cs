@@ -23,22 +23,22 @@ namespace CSRPulse.Common
 
         public static bool SendEmail(EmailMessage message)
         {
-            using (MailMessage email = new MailMessage())
-            {
-                //email.From = new MailAddress(message.From, message.FriendlyName);
 
-                email.From = new MailAddress("microwaretest@gmail.com", message.FriendlyName);
+            using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
+            {
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress("microwaretest@gmail.com");
+                mailMessage.BodyEncoding = Encoding.UTF8;
 
                 foreach (var toAddress in message.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    email.To.Add(toAddress);
+                    mailMessage.To.Add(toAddress);
                 }
-
                 if (!String.IsNullOrEmpty(message.CC))
                 {
                     foreach (var ccAddress in message.CC.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        email.CC.Add(ccAddress);
+                        mailMessage.CC.Add(ccAddress);
                     }
                 }
 
@@ -46,7 +46,7 @@ namespace CSRPulse.Common
                 {
                     foreach (var bccAddress in message.Bcc.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        email.Bcc.Add(bccAddress);
+                        mailMessage.Bcc.Add(bccAddress);
                     }
                 }
                 foreach (var attach in message.Attachments)
@@ -60,12 +60,13 @@ namespace CSRPulse.Common
                     {
                         attachment = AddAttachment(attach.FileName);
                     }
-                    email.Attachments.Add(attachment);
+                    mailMessage.Attachments.Add(attachment);
                 }
-                email.IsBodyHtml = message.HTMLView;
-                email.Subject = message.Subject;
-                email.Body = message.Body;
-                email.Priority = message.MailPriority;
+                mailMessage.Body = message.Body;
+                mailMessage.Subject = message.Subject;
+                mailMessage.IsBodyHtml = message.HTMLView;
+                client.EnableSsl = true;
+                mailMessage.Priority = message.MailPriority;
 
                 #region Set Embedded Content
                 if (message.EmbeddedContent != null)
@@ -83,35 +84,23 @@ namespace CSRPulse.Common
                         img.ContentLink = new Uri("cid:" + img.ContentId);
                         htmlView.LinkedResources.Add(img);
                     }
-                    email.AlternateViews.Add(plainView);
-                    email.AlternateViews.Add(htmlView);
+                    mailMessage.AlternateViews.Add(plainView);
+                    mailMessage.AlternateViews.Add(htmlView);
                 }
                 #endregion
-                SmtpClient client = new SmtpClient();
-                //client.Host = message.SmtpClientHost;
-                //client.Host = "smtp.gmail.com";
-                //NetworkCredential basicCredential = new NetworkCredential("microwaretest@gmail.com", "Microtest@123");
-                //client.Credentials = basicCredential;
-                // client.Port = 587;
-                //client.EnableSsl = true; // message.enableSSL;
-                //client.UseDefaultCredentials = true;
 
-                client.Host = "smtp.gmail.com";
-                NetworkCredential basicCredential1 = new NetworkCredential("microwaretest@gmail.com", "Microtest@123");
-                client.Credentials = basicCredential1;
-                client.Port = 587;
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("microwaretest@gmail.com", "Microtest@123");
+
+                client.Send(mailMessage);
 
                 try
                 {
-                    client.Send(email);
-                   // log.Info("Email Sent-" + message.To + ", DateTimeStamp - " + DateTime.Now);
+                    client.Send(mailMessage);                 
                     return true;
                 }
+
                 catch (Exception)
-                {
-                   // log.Error("Email Error-" + ex.Message + ", StackTrace-" + ex.StackTrace + ", DateTimeStamp-" + DateTime.Now);
+                {            
                     throw;
                 }
             }

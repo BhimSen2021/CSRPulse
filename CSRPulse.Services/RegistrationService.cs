@@ -7,6 +7,7 @@ using CSRPulse.Data.Repositories;
 using AutoMapper;
 using DTOModel = CSRPulse.Data.Models;
 using System.Transactions;
+using System.Linq;
 
 namespace CSRPulse.Services
 {
@@ -105,20 +106,30 @@ namespace CSRPulse.Services
             }
         }
 
-        public int GenerateOTP()
+        public string GenerateOTP()
         {
             int _min = 100000;
             int _max = 999999;
             Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
+            return _rdm.Next(_min, _max).ToString();
         }
 
-        public bool SendOTP(string email, int OTP)
+        public bool SendOTP(string email, string OTP)
         {
             bool flag = false;
             try
             {
+                StringBuilder emailBody = new StringBuilder("");
+                Common.EmailMessage message = new Common.EmailMessage();
+                message.To = email;
+                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 2).FirstOrDefault();
+                if (mailSubj != null)
+                    message.Subject = mailSubj.Subject;
+                else
+                    message.Subject = "Default Subject";
 
+                message.Body = "Your One Time Password for Registration is ." + OTP;
+                SendEmail(message);
                 flag = true;
             }
             catch (Exception ex)
@@ -127,6 +138,28 @@ namespace CSRPulse.Services
             }
 
             return flag;
+        }
+
+        void SendEmail(Common.EmailMessage message)
+        {
+            try
+            {
+                var emailsetting = _genericRepository.Get<DTOModel.EmailConfiguration>().FirstOrDefault();
+                //message.From = "CSRPulse <" + emailsetting.ToEmail + ">";
+                //message.UserName = emailsetting.UserName;
+                //message.Password = emailsetting.Password;
+                //message.SmtpClientHost = emailsetting.Server;
+                //message.SmtpPort = emailsetting.Port;
+                //message.enableSSL = emailsetting.Sslstatus;
+                //message.HTMLView = true;
+                //message.FriendlyName = emailsetting.Signature;
+                Common.EmailHelper.SendEmail(message);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

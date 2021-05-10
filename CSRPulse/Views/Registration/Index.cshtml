@@ -6,7 +6,7 @@
 }
 <div class="row registor-bg">
 
-    <div class="col col-xs-12 col-sm-12 col-md-7 col-lg-7 text-center">
+    <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 text-center ml-md-5 ml-lg-5">
 
         @await Component.InvokeAsync("Plan", new { planId = Model.PlainId })
 
@@ -36,8 +36,8 @@
         var elem = document.getElementById('sp-timer');
         function otpCountDown() {
             $("#sp-timer").attr("display", "block");
-            $('#div-otp').removeClass('d-none');
-            var timeleft = 100;
+            $('#OTP').value = '';
+            var timeleft = 300;
             var downloadTimer = setInterval(function () {
                 document.getElementById("sp-timer").innerHTML = 'OTP expire in ' + timeleft + ' seconds.';
                 timeleft -= 1;

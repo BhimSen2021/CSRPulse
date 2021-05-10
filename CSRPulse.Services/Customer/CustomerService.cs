@@ -24,10 +24,10 @@ namespace CSRPulse.Services
         {
             try
             {
-                var customerList = new List<Customer>();
-                IEnumerable<DTOModel.Customer> result = await _genericRepository.GetAsync<DTOModel.Customer>();
+               // var customerList = new List<Customer>();
+               var result = await _genericRepository.GetAsync<DTOModel.Customer>();
 
-                customerList = _mapper.Map<List<Customer>>(result);
+                var customerList = _mapper.Map<List<Customer>>(result);
 
                 //var result = await _genericRepository.GetAsync<DTOModel.Customer>();
 

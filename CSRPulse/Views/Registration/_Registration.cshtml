@@ -2,6 +2,7 @@
 
 
 <form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="Registration" data-ajax-success="onSuccess">
+    @Html.AntiForgeryToken()
 
     @if (ViewBag.OTPSent != null && ViewBag.OTPSent)
     {
@@ -21,14 +22,14 @@
     <div class="row">
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group mb-0">
-                <label asp-for="Email" class="col-form-label"></label>
+                <label asp-for="Email" class="col-form-label required"></label>
                 <input type="email" asp-for="Email" class="form-control form-control-sm" required autocomplete="off" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group mb-0">
-                <label asp-for="Telephone" class="col-form-label"></label>
+                <label asp-for="Telephone" class="col-form-label required"></label>
                 <input type="tel" pattern="[0-9]{10}" asp-for="Telephone" maxlength="10" class="form-control form-control-sm" required autocomplete="off" />
                 <span asp-validation-for="Telephone" class="text-danger"></span>
             </div>
@@ -44,7 +45,7 @@
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group mb-0">
-                <label asp-for="Country" class="col-form-label"></label>
+                <label asp-for="Country" class="col-form-label required"></label>
                 <select asp-for="Country" aria-required="true" class="custom-select custom-select-sm">
                     <option disabled="" label="Country" selected="" value="">Country</option>
                     <option value="India">India</option>
@@ -58,7 +59,7 @@
     <div class="row">
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group mb-0">
-                <label asp-for="StateId" class="col-form-label"></label>
+                <label asp-for="StateId" class="col-form-label required"></label>
                 <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="custom-select custom-select-sm">
                     <option disabled="" label="State" selected="" value="">Country</option>
                 </select>
@@ -67,7 +68,7 @@
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="form-group mb-0">
-                <label asp-for="PostalCode" class="col-form-label"></label>
+                <label asp-for="PostalCode" class="col-form-label required"></label>
                 <input type="text" asp-for="PostalCode" maxlength="6" class="form-control form-control-sm" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
@@ -86,7 +87,7 @@
 
     <div class="form-group mb-0">
 
-        <label asp-for="Address" class="col-form-label"></label>
+        <label asp-for="Address" class="col-form-label required"></label>
 
         <textarea asp-for="Address" cols="37" rows="1" class="form-control"></textarea>
         <span asp-validation-for="Address" class="text-danger"></span>
@@ -117,17 +118,33 @@
     </div>
 
     <div class="row">
-        <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="row d-none" id="div-otp">
-                <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <label asp-for="OTP" class="col-form-label">Enter OTP</label>
-                </div>
-                <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <input type="text" asp-for="OTP" autocomplete="off" class="form-control form-control-sm" maxlength="6" minlength="6" placeholder="OTP" />
-                    <span class="badge bg-info text-white" id="sp-timer"></span>
-                </div>
+
+        @if (ViewBag.IsOTPSection == false)
+        {
+
+            <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <hr />
+                <h6>One Time Password Verification</h6>
+                <p class="text-success" style="font-size: 12px; line-height: 1.42857143;">
+                    Please input The 6-digit One-time password (OTP) sent to your email account in the box below and click on <b>'Validate OTP'</b> button. If OTP is not recieved within 300 sec., Please click on the <b>'Resend OTP'</b> button to request a new OTP.
+                </p>
             </div>
-        </div>
+
+            <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label asp-for="OTP" class="col-form-label required">Enter OTP</label>
+                    </div>
+                    <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <input type="text" asp-for="OTP" autocomplete="off" class="form-control form-control-sm" maxlength="6" minlength="6" placeholder="OTP" />
+                        <span class="badge bg-info text-white" id="sp-timer"></span>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12 text-left">
             <div id="some_div" class="d-none">
                 <input type="submit" value="Resend OTP" id="btnResendOtp" name="ButtonType" class="btn btn-sm btn-info"
@@ -136,14 +153,17 @@
             @if (ViewBag.IsVerified == false)
             {
                 <div class="form-group">
-                    <button type="submit" value="verifyotp" id="btnVerifyOtp" name="ButtonType" class="btn btn-sm btn-success" title="Click here, to Verify OTP.">
-                        Verify OTP
+                    <button type="submit" value="verifyotp" id="btnVerifyOtp" name="ButtonType" class="btn btn-sm btn-success" title="Click here, to Validate OTP.">
+                        Validate OTP
                     </button>
                 </div>
-            }
-        </div>
-    </div>
 
+            }
+
+        </div>
+
+    </div>
+    <hr />
     @if (ViewBag.OTPSent == null && ViewBag.IsVerified == null)
     {
         <div class="form-group">
@@ -171,12 +191,21 @@
             debugger;
             commonMessage('warning', 'Dear Customer, Your Email or Phone No. is already exist,please to go login page');
         }
+        else if (data.rType == '1') {
+            commonMessage(data.msgType, data.msg);
+        }
+        else if (data.rType=='2')
+        {
+            debugger;
+            if (data.msgType == 'error' || data.msgType == 'warning') {
+                $('#div-otp').removeClass('d-none');
+            }
+            commonMessage(data.msgType, data.msg);
+        }
         $("#form-container").html(data.htmlData);
 
     }
     $(function () {
-       if ("@ViewBag.Message" != "")
-            commonMessage("success", "@ViewBag.Message");
 
         if ("@ViewBag.IsVerified" == "true") {
             debugger;

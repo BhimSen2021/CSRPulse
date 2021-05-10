@@ -108,7 +108,7 @@
             debugger;
     var str = '@HtmlEncoder.Encode(@messageError)';
     str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
-            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times"></i> Error:  </strong>' + msg, {
+            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times-circle"></i> Error:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,
@@ -121,7 +121,7 @@
             align: 'center',
             width: 'auto',
             allow_dismiss: false,
-            delay: 90000
+            delay: 10000
     });
         }
         else if (msgType == "warning") {

@@ -67,6 +67,8 @@ namespace CSRPulse.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    string msgType = string.Empty;
+                    string msg = string.Empty;
                     BindDropdowns();
                     if (ButtonType == "verifydtl" || ButtonType == "Resend OTP")
                     {
@@ -76,38 +78,46 @@ namespace CSRPulse.Controllers
                             return Json(new { recordExist = true });
                         }
 
-                        int OTP = registrationService.GenerateOTP();
+                        var OTP = registrationService.GenerateOTP();
                         HttpContext.Session.SetComplexData("OTP", OTP);
 
                         ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP);
                         if (ViewBag.OTPSent)
-                            ViewBag.Message = "OTP has ben sent on your Email.Please Enter OTP to verify your details.";
+                            msg = "OTP has ben sent on your Email.Please Enter OTP to verify your details.";
+
+                        msgType = "success";
                         ViewBag.IsVerified = false;
-                        return Json(new { htmlData = ConvertViewToString("_Registration", customer, true) });
+                        ViewBag.IsOTPSection = false;
+                        return Json(new { rType=1,msgType=msgType,msg=msg, htmlData = ConvertViewToString("_Registration", customer, true) });
                     }
                     if (ButtonType == "verifyotp")
                     {
 
-                        if (HttpContext.Session.GetComplexData<int>("OTP") != 0)
+                        if (!string.IsNullOrEmpty(HttpContext.Session.GetComplexData<string>("OTP")))
                         {
-                            var otpval = Convert.ToString(HttpContext.Session.GetComplexData<int>("OTP"));
-                            if (customer.OTP != "0" && otpval == customer.OTP)
+                            var otpval = Convert.ToString(HttpContext.Session.GetComplexData<string>("OTP"));
+                            if (!string.IsNullOrEmpty(customer.OTP) && otpval == customer.OTP)
                             {
-                                ViewBag.Message = "OTP has been verified.";
+                                msg = "OTP has been Validated.";
                                 ViewBag.VerifyOTP = true;
                                 ViewBag.IsVerified = true;
+                                msgType = "success";
                             }
-                            else if (customer.OTP != "0" && otpval != customer.OTP)
+                            else if (!string.IsNullOrEmpty(customer.OTP) && otpval != customer.OTP)
                             {
-                                ViewBag.Message = "Incorrct OTP.";
+                                msg = "Incorrct OTP, Please enter correct OTP";
                                 ViewBag.IsVerified = false;
+                                msgType = "error";
+                                ViewBag.IsOTPSection = false;
                             }
                             else
                             {
-                                ViewBag.Message = "Please enter OTP.";
+                                msg = "Please enter OTP.";
                                 ViewBag.IsVerified = false;
+                                msgType = "warning";
+                                ViewBag.IsOTPSection = false;
                             }
-                            return Json(new { htmlData = ConvertViewToString("_Registration", customer, true) });
+                            return Json(new { rType = 2, msgType = msgType, msg = msg, htmlData = ConvertViewToString("_Registration", customer, true) });
                         }
                     }
 
