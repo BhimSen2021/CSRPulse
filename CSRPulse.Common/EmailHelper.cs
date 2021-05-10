@@ -109,7 +109,7 @@ namespace CSRPulse.Common
                    // log.Info("Email Sent-" + message.To + ", DateTimeStamp - " + DateTime.Now);
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                    // log.Error("Email Error-" + ex.Message + ", StackTrace-" + ex.StackTrace + ", DateTimeStamp-" + DateTime.Now);
                     throw;
