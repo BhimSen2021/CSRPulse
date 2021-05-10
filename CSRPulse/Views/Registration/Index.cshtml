@@ -6,13 +6,13 @@
 }
 <div class="row registor-bg">
 
-    <div class="col col-xs-12 col-sm-12 col-md-7 col-lg-7">
-   
-            @await Component.InvokeAsync("Plan",new { planId = Model.PlainId })
-         
-   
+    <div class="col col-xs-12 col-sm-12 col-md-7 col-lg-7 text-center">
+
+        @await Component.InvokeAsync("Plan", new { planId = Model.PlainId })
+
+
     </div>
-    <div class="col col-lg-5 col-md-5 col-sm-12 col-xs-12 m-auto">
+    <div class="col col-lg-5 col-md-5 col-sm-12 col-xs-12">
         <div class="card my-4">
             <div class="card-header bg-success text-white">Sign up now to start your free sales trial.</div>
             <div class="card-body py-2">
@@ -31,22 +31,25 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    var elem = document.getElementById('sp-timer');
-    function otpCountDown() {
-        $("#sp-timer").attr("display", "block");
-        $('#div-otp').removeClass('d-none');
-        var timeleft = 300;
-        var downloadTimer = setInterval(function () {
-            document.getElementById("sp-timer").innerHTML = 'OTP expire in ' + timeleft + ' seconds.';
-            timeleft -= 1;
-            if (timeleft <= 0) {
-                clearInterval(downloadTimer);
-                document.getElementById("sp-timer").innerHTML = ""
-                $("#some_div").removeClass("d-none");
-                $('#btnVerifyOtp').addClass('d-none');
-            }
-        }, 1000);
-    }
-</script>
+@section Scripts{
+    <script type="text/javascript">
+        var elem = document.getElementById('sp-timer');
+        function otpCountDown() {
+            $("#sp-timer").attr("display", "block");
+            $('#div-otp').removeClass('d-none');
+            var timeleft = 100;
+            var downloadTimer = setInterval(function () {
+                document.getElementById("sp-timer").innerHTML = 'OTP expire in ' + timeleft + ' seconds.';
+                timeleft -= 1;
+                if (timeleft <= 0) {
+                    clearInterval(downloadTimer);
+                    document.getElementById("sp-timer").innerHTML = ""
+                    $("#some_div").removeClass("d-none");
+                    $('#btnVerifyOtp').addClass('d-none');
+                }
+            }, 1000);
+        }
+    </script>
+}
+
 

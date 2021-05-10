@@ -17,6 +17,56 @@
     <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true">
     <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <partial name="_header" />
+
+        <main role="main">
+            @RenderBody()
+        </main>
+
+        <partial name="_footer" />
+    </div>
+   
+
+    @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 300) {
+                $('.header-fix').addClass('fixed-header');
+                // $('nav div').addClass('visible-title');
+            }
+            else {
+                $('.header-fix').removeClass('fixed-header');
+                // $('nav div').removeClass('visible-title');
+            }
+        });
+
+        $(document).ready(function () {
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 100) {
+
+                    $('#scroll').fadeIn();
+                } else {
+                    $('#scroll').fadeOut();
+                }
+            });
+            $('#scroll').click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+                return false;
+            });
+        });
+    </script>
+
     <script type="text/javascript">
          $(document).ready(function () {
 
@@ -58,7 +108,7 @@
             debugger;
     var str = '@HtmlEncoder.Encode(@messageError)';
     str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
-            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fas fa-times"></i> Error:  </strong>' + msg, {
+            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times"></i> Error:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,
@@ -67,7 +117,7 @@
     }
     else if (msgType == "success") {
 
-        $.bootstrapGrowl('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="far fa-check-circle"></i> Success:  </strong>' + msg, {
+        $.bootstrapGrowl('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-check-circle"></i> Success:  </strong>' + msg, {
             align: 'center',
             width: 'auto',
             allow_dismiss: false,
@@ -76,7 +126,7 @@
         }
         else if (msgType == "warning") {
 
-            $.bootstrapGrowl('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fas fa-exclamation-triangle"></i> Warning:  </strong>' + msg, {
+            $.bootstrapGrowl('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-exclamation-triangle"></i> Warning:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,
@@ -85,52 +135,6 @@
         }
     }
 
-    </script>
-</head>
-<body>
-    <div class="container-fluid">
-        <partial name="_header" />
-
-        <main role="main">
-            @RenderBody()
-        </main>
-
-        <partial name="_footer" />
-    </div>
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
-
-    @RenderSection("Scripts", required: false)
-    <script type="text/javascript">
-        $(window).scroll(function () {
-            if ($(window).scrollTop() >= 300) {
-                $('.header-fix').addClass('fixed-header');
-                // $('nav div').addClass('visible-title');
-            }
-            else {
-                $('.header-fix').removeClass('fixed-header');
-                // $('nav div').removeClass('visible-title');
-            }
-        });
-
-        $(document).ready(function () {
-            $(window).scroll(function () {
-                if ($(this).scrollTop() > 100) {
-
-                    $('#scroll').fadeIn();
-                } else {
-                    $('#scroll').fadeOut();
-                }
-            });
-            $('#scroll').click(function () {
-                $("html, body").animate({ scrollTop: 0 }, 600);
-                return false;
-            });
-        });
     </script>
 </body>
 </html>
