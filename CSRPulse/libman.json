@@ -30,6 +30,6 @@
       "library": "bootstrap-growl@1.0.0",
       "destination": "wwwroot/bootstrap-growl/"
     }
-   
+    
   ]
 }

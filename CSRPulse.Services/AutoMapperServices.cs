@@ -14,7 +14,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Plan, Plan>().ReverseMap();
             CreateMap<Plan, Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
-            CreateMap<DTOModel.Customer, Customer>().ReverseMap();
+            CreateMap<DTOModel.Customer, Customer>();
             CreateMap<Customer, Customer>();
             CreateMap<StartingNumber, DTOModel.StartingNumber>();
             CreateMap<CustomerPayment, DTOModel.CustomerPayment>().ReverseMap();

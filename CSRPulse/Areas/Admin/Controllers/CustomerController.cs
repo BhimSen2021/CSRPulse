@@ -1,5 +1,6 @@
 ﻿using CSRPulse.Controllers;
 using CSRPulse.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,6 +12,7 @@ namespace CSRPulse.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[Controller]/[action]")]
+    [Authorize]
     public class CustomerController : BaseController<PlanController>
     {
         private readonly ICustomerService _customerService;
@@ -18,7 +20,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
-        }
+        } 
         public async Task<IActionResult> CustomerListAsync()
         {
             _logger.LogInformation("Admin/Customer/CustomerList");

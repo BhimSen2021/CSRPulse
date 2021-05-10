@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Components
 {
-    public class UserMenuViewComponent : ViewComponent
+    public class MenuViewComponent : ViewComponent
     {
         private IMenuService _menuService;
 
-        public UserMenuViewComponent(IMenuService menuService)
+        public MenuViewComponent(IMenuService menuService)
         {
             _menuService = menuService;
         }
@@ -25,9 +25,8 @@ namespace CSRPulse.Components
                 uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
             }
             var uMenu = await _menuService.GetMenuByUserAsync(uDetail.UserID);
-
-            
-            return View(uMenu);
+                        
+            return View("Menu",uMenu);
         }
     }
 }

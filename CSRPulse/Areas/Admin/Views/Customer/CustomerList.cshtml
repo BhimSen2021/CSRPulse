@@ -3,20 +3,22 @@
     ViewData["Title"] = "Customer List";
 }
 
-<div class="row pb-2">
-    <h2>Customer List</h2>
-
+<div class="row pt-2 pb-2">
+    <div class="col">
+        <h4>Customer List</h4>
+    </div>
 </div>
 <div class="row">
-    <div class="col-12">
-        <table class="table table-bordered table-responsive-lg">
+    <div class="col">
+        <table class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+
             <thead class="thead-light">
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CustomerId)
+                    <th style="width:8%">
+                        @Html.DisplayName("Customer Id")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CustomerCode)
+                        @Html.DisplayName("Customer Code")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.CustomerName)
@@ -27,11 +29,11 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Website)
                     </th>
-                    
+
                     <th>
-                        @Html.DisplayNameFor(model => model.CreatedOn)
+                        @Html.DisplayName("Registration date")
                     </th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
