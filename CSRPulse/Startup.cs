@@ -10,6 +10,7 @@ using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using System;
 using Microsoft.AspNetCore.Http;
+using CSRPulse.Model;
 
 namespace CSRPulse
 { 
@@ -39,6 +40,9 @@ namespace CSRPulse
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IDropdownBindService, DropdownBindService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IEmailService, EmailService>();
+
+            services.Configure<SMTPConfig>(Configuration.GetSection("SMTPConfig"));
 
             #endregion
 
