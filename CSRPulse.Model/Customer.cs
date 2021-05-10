@@ -11,7 +11,7 @@ namespace CSRPulse.Model
         [Display(Name = "Company Name")]
         [Required(ErrorMessage = "Please Enter Company Name")]
         public string CustomerName { get; set; }
-        [Display(Name = "Address")]
+        [Display(Name = "Address 1")]
         [MinLength(5)]
         [MaxLength(200)]
         public string Address { get; set; }
@@ -46,6 +46,15 @@ namespace CSRPulse.Model
         public CustomerLicenseActivation CustomerLicense { get; set; }
 
         public bool RecordExist { get; set; }
+
+        [Display(Name = "Address 2")]
+        [MinLength(5)]
+        [MaxLength(200)]
+        public string Address2 { get; set; }
+
+        public int? PlainId { get; set; }
+
+        public string OTP { get; set; }
 
     }
 }

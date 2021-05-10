@@ -22,17 +22,17 @@ namespace CSRPulse.Services
         {
             try
             {
-               var pplan= _mapper.Map<DTOModel.Plan>(plan);                
-                 await _genericRepository.InsertAsync(pplan);            
+                var pplan = _mapper.Map<DTOModel.Plan>(plan);
+                await _genericRepository.InsertAsync(pplan);
 
                 return pplan.PlanId;
             }
             catch (Exception)
-            {               
+            {
                 throw;
             }
         }
-               
+
         public async Task<List<Model.Plan>> GetAllPlanAsync()
         {
             IEnumerable<DTOModel.Plan> result = await _genericRepository.GetAsync<DTOModel.Plan>();
@@ -46,9 +46,18 @@ namespace CSRPulse.Services
             }
         }
 
-        public Task<Model.Plan> GetPlanByIdAsync()
+        public async Task<Model.Plan> GetPlanByIdAsync(int planID)
         {
-            throw new NotImplementedException();
+            var result= await _genericRepository.GetByIDAsync<DTOModel.Plan>(planID);
+            try
+            {
+                return _mapper.Map<Plan>(result);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
