@@ -15,6 +15,7 @@ namespace CSRPulse.Data.Models
         {
             CustomerLicenseActivation = new HashSet<CustomerLicenseActivation>();
             CustomerPayment = new HashSet<CustomerPayment>();
+            MailSendStatus = new HashSet<MailSendStatus>();
         }
 
         [Key]
@@ -57,5 +58,7 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         [InverseProperty("Customer")]
         public virtual ICollection<CustomerPayment> CustomerPayment { get; set; }
+        [InverseProperty("Customer")]
+        public virtual ICollection<MailSendStatus> MailSendStatus { get; set; }
     }
 }

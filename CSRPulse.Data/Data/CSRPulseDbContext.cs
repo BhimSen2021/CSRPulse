@@ -25,6 +25,10 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
         public virtual DbSet<District> District { get; set; }
+        public virtual DbSet<EmailConfiguration> EmailConfiguration { get; set; }
+        public virtual DbSet<MailProcess> MailProcess { get; set; }
+        public virtual DbSet<MailSendStatus> MailSendStatus { get; set; }
+        public virtual DbSet<MailSubject> MailSubject { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -119,6 +123,58 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.DistrictUpdatedByNavigation)
                     .HasForeignKey(d => d.UpdatedBy)
                     .HasConstraintName("FK_User_District_UpdatedBy");
+            });
+
+            modelBuilder.Entity<EmailConfiguration>(entity =>
+            {
+                entity.Property(e => e.Bcc).IsUnicode(false);
+
+                entity.Property(e => e.CcEmail).IsUnicode(false);
+
+                entity.Property(e => e.Password).IsUnicode(false);
+
+                entity.Property(e => e.Server).IsUnicode(false);
+
+                entity.Property(e => e.Signature).IsUnicode(false);
+
+                entity.Property(e => e.ToEmail).IsUnicode(false);
+
+                entity.Property(e => e.UserName).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.EmailConfigurationCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmailConfiguration_CreatedBy");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.EmailConfigurationUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_EmailConfiguration_UpdatedBy");
+            });
+
+            modelBuilder.Entity<MailSendStatus>(entity =>
+            {
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.MailSendStatus)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_MailSendStatus_Customer");
+
+                entity.HasOne(d => d.Subject)
+                    .WithMany(p => p.MailSendStatus)
+                    .HasForeignKey(d => d.SubjectId)
+                    .HasConstraintName("FK_MailSendStatus_MailSubject");
+            });
+
+            modelBuilder.Entity<MailSubject>(entity =>
+            {
+                entity.HasOne(d => d.MailProcess)
+                    .WithMany(p => p.MailSubject)
+                    .HasForeignKey(d => d.MailProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MailSubject__MailP__15A53433");
             });
 
             modelBuilder.Entity<Menu>(entity =>

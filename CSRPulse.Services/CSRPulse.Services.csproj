@@ -8,6 +8,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSRPulse.Common\CSRPulse.Common.csproj" />
     <ProjectReference Include="..\CSRPulse.Data\CSRPulse.Data.csproj" />
     <ProjectReference Include="..\CSRPulse.Model\CSRPulse.Model.csproj" />
   </ItemGroup>

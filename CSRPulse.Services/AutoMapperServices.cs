@@ -28,7 +28,6 @@ namespace CSRPulse.Services
                 .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
                 .ForMember(d => d.value, o => o.MapFrom(s => s.StateName));
             #endregion
-
         }
     }
 }

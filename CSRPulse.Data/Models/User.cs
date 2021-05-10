@@ -15,6 +15,8 @@ namespace CSRPulse.Data.Models
         {
             DistrictCreatedByNavigation = new HashSet<District>();
             DistrictUpdatedByNavigation = new HashSet<District>();
+            EmailConfigurationCreatedByNavigation = new HashSet<EmailConfiguration>();
+            EmailConfigurationUpdatedByNavigation = new HashSet<EmailConfiguration>();
             StateCreatedByNavigation = new HashSet<State>();
             StateUpdatedByNavigation = new HashSet<State>();
             UserRights = new HashSet<UserRights>();
@@ -57,6 +59,10 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<District> DistrictCreatedByNavigation { get; set; }
         [InverseProperty(nameof(District.UpdatedByNavigation))]
         public virtual ICollection<District> DistrictUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(EmailConfiguration.CreatedByNavigation))]
+        public virtual ICollection<EmailConfiguration> EmailConfigurationCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(EmailConfiguration.UpdatedByNavigation))]
+        public virtual ICollection<EmailConfiguration> EmailConfigurationUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(State.CreatedByNavigation))]
         public virtual ICollection<State> StateCreatedByNavigation { get; set; }
         [InverseProperty(nameof(State.UpdatedByNavigation))]
