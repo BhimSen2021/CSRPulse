@@ -1,6 +1,5 @@
 ﻿using CSRPulse.Data.Repositories;
 using CSRPulse.Model;
-using CSRPulse.Model.Admin;
 using DTOModel = CSRPulse.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 
-namespace CSRPulse.Services.Admin
+namespace CSRPulse.Services
 {
     public class PlanService : IPlanService
     {
@@ -39,12 +38,11 @@ namespace CSRPulse.Services.Admin
             IEnumerable<DTOModel.Plan> result = await _genericRepository.GetAsync<DTOModel.Plan>();
             try
             {
-                return _mapper.Map<List<Model.Plan>>(result);
-              
+                return _mapper.Map<List<Model.Plan>>(result);              
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

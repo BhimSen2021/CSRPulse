@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CSRPulse.Services;
-using CSRPulse.Services.Admin;
 using CSRPulse.Services.IServices;
 using System;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +27,8 @@ namespace CSRPulse
             //services.AddDbContext<CSRPulseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), mig => mig.MigrationsAssembly("CSRPulse.Data")));
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
-            #region Register component for DI
+            #region R E G I S T E R  C O M P O N E N T  F O R  D I 
+
             services.AddAutoMapper(typeof(AutoMapperServices));
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>();
@@ -38,6 +38,7 @@ namespace CSRPulse
             services.AddScoped<IMenuService, MenuService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IDropdownBindService, DropdownBindService>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             #endregion
 

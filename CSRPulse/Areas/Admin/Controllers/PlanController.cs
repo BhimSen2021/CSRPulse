@@ -1,12 +1,13 @@
 ﻿using CSRPulse.Controllers;
 using CSRPulse.Model;
+using CSRPulse.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CSRPulse.Services.Admin;
+
 
 namespace CSRPulse.Areas.Admin.Controllers
 {

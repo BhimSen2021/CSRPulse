@@ -1,17 +1,14 @@
 ﻿<div class="row">
     <div class="col-sm-12 p-0">
         <header>
-            @*<div class="top_li bg-light">
-                    <ul>
-                        <partial name="_LoginInfo" />
-                    </ul>
-                </div>*@
+           
             <nav class="navbar navbar-expand-md navbar-dark">
                 <!-- Brand -->
+               
                 <a class="navbar-brand pr-5" asp-area="" asp-controller="Home" asp-action="Index">
-                    CSR<span class="text-primary pl-1">PULSE</span>
+                    <img src="~/images/logo.png" width="50" height="50" asp-append-version="true" />
+                    @*CSR<span class="text-primary">Pulse</span>*@
                 </a>
-
                 <!-- Toggler/collapsibe Button -->
                 <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse"
                         data-target="#collapsibleNavbar">
@@ -42,9 +39,11 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Contact" asp-action="ContactMe">Contact Us</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" asp-action="CustomerLogin" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path">Login</a></li>
-                    </ul>
 
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="btn btn-primary" asp-action="CustomerLogin" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path"><i class="fa fa-sign-in"></i> Login</a></li>
+                    </ul>
                 </div>
             </nav>
 

@@ -1,11 +1,11 @@
 ﻿using CSRPulse.Model;
-using CSRPulse.Model.Admin;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSRPulse.Services.Admin
+namespace CSRPulse.Services
 {
     public interface IPlanService
     {
