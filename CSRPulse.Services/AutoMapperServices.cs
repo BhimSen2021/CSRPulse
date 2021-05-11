@@ -5,6 +5,8 @@ using System.Text;
 using DTOModel = CSRPulse.Data.Models;
 using CSRPulse.Model;
 using CSRPulse.Model.Admin;
+using System.Collections.ObjectModel;
+
 namespace CSRPulse.Services
 {
     public class AutoMapperServices : Profile
@@ -15,7 +17,7 @@ namespace CSRPulse.Services
             CreateMap<Plan, Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
             CreateMap<DTOModel.Customer, Customer>();
-            CreateMap<Customer, Customer>();
+
             CreateMap<StartingNumber, DTOModel.StartingNumber>();
             CreateMap<CustomerPayment, DTOModel.CustomerPayment>().ReverseMap();
             CreateMap<CustomerLicenseActivation, DTOModel.CustomerLicenseActivation>().ReverseMap();

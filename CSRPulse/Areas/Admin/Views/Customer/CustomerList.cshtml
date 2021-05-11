@@ -15,7 +15,7 @@
             <thead class="thead-light">
                 <tr>
                     <th style="width:8%">
-                        @Html.DisplayName("Customer Id")
+                        @Html.DisplayName("#")
                     </th>
                     <th>
                         @Html.DisplayName("Customer Code")
@@ -36,11 +36,11 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody>                
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
+                        <td>                            
                             @Html.DisplayFor(modelItem => item.CustomerId)
                         </td>
                         <td>
@@ -60,10 +60,8 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.CreatedOn)
                         </td>
-
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+                            <a asp-area="Admin" asp-controller="Customer" asp-action="Details" asp-route-CustomerId="@item.CustomerId"><i class="fa fa-eye" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 }

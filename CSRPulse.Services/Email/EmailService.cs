@@ -46,10 +46,6 @@ namespace CSRPulse.Services
                 mail.To.Add(toEmail);
             }
 
-            foreach (var ccEmail in emailOptions.CcEmails)
-            {
-                mail.CC.Add(ccEmail);
-            }
 
             NetworkCredential networkCredential = new NetworkCredential(_smtpConfig.UserName, _smtpConfig.Password);
 

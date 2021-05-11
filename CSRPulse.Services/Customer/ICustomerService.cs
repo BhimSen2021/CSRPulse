@@ -9,6 +9,7 @@ namespace CSRPulse.Services
     public interface ICustomerService
     {
         Task<List<Customer>> GetAllCustomerAsync();
+        Task<Customer> GetCustomerDetailsAsync(int customerId);
         Task<Customer> GetCustomerByIdAsync();
     }
 }

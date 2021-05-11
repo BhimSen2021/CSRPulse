@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSRPulse.Services
 {
@@ -49,9 +50,27 @@ namespace CSRPulse.Services
             }
         }
 
+        public async Task<Customer> GetCustomerDetailsAsync(int customerId)
+        {
+            try
+            {
+                var customer = new Customer();
+                var result = await _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerId == customerId).Include(a => a.CustomerLicenseActivation).Include(p => p.CustomerPayment).FirstOrDefaultAsync();
+
+                customer = _mapper.Map<Customer>(result);
+                return customer;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
         public Task<Customer> GetCustomerByIdAsync()
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

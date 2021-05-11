@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var message = TempData["Message"] == null ? "" : TempData["Message"].ToString();
+    var messageError = TempData["Error"] == null ? "" : TempData["Error"].ToString();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -8,9 +13,10 @@
 
     <environment include="Development">
         <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
-        <link href="~/css/main.css" rel="stylesheet" />
-        <link href="~/css/admin.css" rel="stylesheet" />
+        <link href="~/css/main.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/admin.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
 
         <link href="~/lib/data-tables/css/dataTables.bootstrap4.css" rel="stylesheet" />
         <link href="~/lib/data-tables/css/responsive.bootstrap4.css" rel="stylesheet" />
@@ -41,8 +47,9 @@
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
         <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
-        <script src="~/js/main.js"></script>
-        <script src="~/js/pace.min.js"></script>
+        <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
+        <script src="~/js/main.js" asp-append-version="true"></script>
+        <script src="~/js/pace.min.js" asp-append-version="true"></script>
 
         <script src="~/lib/data-tables/js/jquery.dataTables.js"></script>
         <script src="~/lib/data-tables/js/dataTables.bootstrap4.js"></script>
@@ -60,7 +67,6 @@
         <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
         <script src="~/js/main.js"></script>
         <script src="~/js/pace.min.js"></script>
-
     </environment>
 
     @RenderSection("scripts", required: false)
@@ -81,7 +87,62 @@
             });
             /*Make Data table */
             $('.dt-responsive').DataTable();
+
+            if ('@messageError' != "") {
+                var str = '@HtmlEncoder.Encode(@messageError)';
+                str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+                $.bootstrapGrowl("<i class='mdi-android-debug-bridge' aria-hidden='true'></i> " + str + "", {
+                    type: 'warning',
+                    align: 'center',
+                    width: 'auto',
+                    allow_dismiss: true,
+                    delay: 10000
+                });
+            }
+            if ('@message' != "") {
+                $.bootstrapGrowl("<i class='mdi-checkbox-marked-circle-outline' aria-hidden='true'></i> " + '@message', {
+                    type: 'success',
+                    align: 'center',
+                    width: 'auto',
+                    allow_dismiss: true,
+                    delay: 10000
+                });
+            }
         });
+
+    function commonMessage(msgType, msg) {
+        debugger;
+        if (msgType == "error") {
+            debugger;
+    var str = '@HtmlEncoder.Encode(@messageError)';
+    str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times-circle"></i> Error:  </strong>' + msg, {
+                align: 'center',
+                width: 'auto',
+                allow_dismiss: false,
+                delay: 10000
+    });
+    }
+    else if (msgType == "success") {
+
+        $.bootstrapGrowl('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-check-circle"></i> Success:  </strong>' + msg, {
+            align: 'center',
+            width: 'auto',
+            allow_dismiss: false,
+            delay: 10000
+    });
+        }
+        else if (msgType == "warning") {
+
+            $.bootstrapGrowl('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-exclamation-triangle"></i> Warning:  </strong>' + msg, {
+                align: 'center',
+                width: 'auto',
+                allow_dismiss: false,
+                delay: 10000
+            });
+        }
+    }
+
 
         if (document.location.hostname == 'pratikborsadiya.in') {
             (function (i, s, o, g, r, a, m) {
