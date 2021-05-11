@@ -14,12 +14,15 @@ namespace CSRPulse.Services
     public class RegistrationService : BaseService, IRegistrationService
     {
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
         private readonly IGenericRepository _genericRepository;
 
-        public RegistrationService(IGenericRepository generic, IMapper mapper)
+
+        public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService)
         {
             _genericRepository = generic;
             _mapper = mapper;
+            _emailService = emailService;
         }
         public async Task<bool> CustomerExists(Model.Customer customer)
         {
@@ -108,10 +111,33 @@ namespace CSRPulse.Services
 
         public string GenerateOTP()
         {
-            int _min = 100000;
-            int _max = 999999;
-            Random _rdm = new Random();
-            return _rdm.Next(_min, _max).ToString();
+            //  int _min = 100000;
+            //int _max = 999999;
+            //Random _rdm = new Random();
+            //return _rdm.Next(_min, _max).ToString();
+
+
+            string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string small_alphabets = "abcdefghijklmnopqrstuvwxyz";
+            string numbers = "1234567890";
+
+            string characters = numbers;
+            characters += alphabets + small_alphabets + numbers;
+
+            int length = 6;
+            string otp = string.Empty;
+            for (int i = 0; i < length; i++)
+            {
+                string character = string.Empty;
+                do
+                {
+                    int index = new Random().Next(0, characters.Length);
+                    character = characters.ToCharArray()[index].ToString();
+                } while (otp.IndexOf(character) != -1);
+                otp += character;
+            }
+            return otp;
+
         }
 
         public bool SendOTP(string email, string OTP)
@@ -124,42 +150,29 @@ namespace CSRPulse.Services
                 message.To = email;
                 var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 2).FirstOrDefault();
                 if (mailSubj != null)
+                {
                     message.Subject = mailSubj.Subject;
+                    message.SubjectId = mailSubj.SubjectId;
+                }
                 else
                     message.Subject = "Default Subject";
-
-                message.Body = "Your One Time Password for Registration is ." + OTP;
-                SendEmail(message);
+              
+                message.PlaceHolders = new List<KeyValuePair<string, string>>();
+                message.TemplateName = "TestEmail";
+                message.PlaceHolders.Add(
+                    new KeyValuePair<string, string>("$otp", OTP)
+                    );
+                _emailService.CustomerRegistrationMail(message);
                 flag = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
 
             return flag;
         }
 
-        void SendEmail(Common.EmailMessage message)
-        {
-            try
-            {
-                var emailsetting = _genericRepository.Get<DTOModel.EmailConfiguration>().FirstOrDefault();
-                //message.From = "CSRPulse <" + emailsetting.ToEmail + ">";
-                //message.UserName = emailsetting.UserName;
-                //message.Password = emailsetting.Password;
-                //message.SmtpClientHost = emailsetting.Server;
-                //message.SmtpPort = emailsetting.Port;
-                //message.enableSSL = emailsetting.Sslstatus;
-                //message.HTMLView = true;
-                //message.FriendlyName = emailsetting.Signature;
-                Common.EmailHelper.SendEmail(message);
-            }
-            catch (Exception ex)
-            {
 
-                throw ex;
-            }
-        }
     }
 }

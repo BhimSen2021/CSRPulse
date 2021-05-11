@@ -7,12 +7,17 @@ using CSRPulse.Data.Repositories;
 using DTOModel = CSRPulse.Data.Models;
 using System.Linq;
 using AutoMapper;
+using System.Threading.Tasks;
 
 namespace CSRPulse.Services
 {
     public class BaseService
     {
-        //internal readonly IMapper _mapper;
+        private readonly IMapper _mapper;
+        public BaseService(IMapper mapper= null)
+        {
+            _mapper = mapper;
+        }
         //internal readonly IGenericRepository _genericRepository = null;
         //public BaseService(IMapper mapper, IGenericRepository genericRepository)
         //{
@@ -91,6 +96,21 @@ namespace CSRPulse.Services
             }
             return newCode;
 
+        }
+
+        public virtual async Task<bool> SendMailStatusAsync(DTOModel.MailSendStatus sendStatus,IGenericRepository _genericRepository)
+        {
+            try
+            {
+              // var dtoModel= _mapper.Map<DTOModel.MailSendStatus>(sendStatus);
+               await _genericRepository.InsertAsync(sendStatus);
+                return true;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

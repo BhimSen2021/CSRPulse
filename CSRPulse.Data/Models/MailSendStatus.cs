@@ -17,7 +17,9 @@ namespace CSRPulse.Data.Models
         public int? CustomerId { get; set; }
         [Required]
         [StringLength(100)]
-        public string SenderEmail { get; set; }
+        public string ToEmails { get; set; }
+        [StringLength(200)]
+        public string CcEmails { get; set; }
         public int? SubjectId { get; set; }
         [StringLength(2000)]
         public string MailContent { get; set; }

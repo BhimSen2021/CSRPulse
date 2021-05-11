@@ -23,6 +23,16 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
 
+            #region Email Mapper
+            CreateMap<Common.EmailMessage, DTOModel.MailSendStatus>()
+                .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
+                .ForMember(d => d.ToEmails, o => o.MapFrom(s => s.To))
+                .ForMember(d => d.CcEmails, o => o.MapFrom(s => s.CC))
+                .ForMember(d => d.MailContent, o => o.MapFrom(s => s.Body))
+                .ForMember(d => d.SubjectId, o => o.MapFrom(s => s.SubjectId))
+            .ForAllOtherMembers(d => d.Ignore());
+            #endregion
+
             #region Dropdown Mapper
             CreateMap<DTOModel.State, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
