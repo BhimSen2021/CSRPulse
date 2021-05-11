@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CSRPulse.Common
 {
@@ -21,13 +22,13 @@ namespace CSRPulse.Common
 
 
 
-        public static bool SendEmail(EmailMessage message)
+        public static async Task<bool> SendEmail(EmailMessage message)
         {
 
-            using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
+            using (SmtpClient client = new SmtpClient(message.SmtpClientHost, message.SmtpPort))
             {
                 MailMessage mailMessage = new MailMessage();
-                mailMessage.From = new MailAddress("microwaretest@gmail.com");
+                mailMessage.From = new MailAddress(message.From,message.FriendlyName);
                 mailMessage.BodyEncoding = Encoding.UTF8;
 
                 foreach (var toAddress in message.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
@@ -89,13 +90,13 @@ namespace CSRPulse.Common
                 }
                 #endregion
 
-                client.Credentials = new NetworkCredential("microwaretest@gmail.com", "Microtest@123");
+                client.Credentials = new NetworkCredential(message.UserName, message.Password);
 
-                client.Send(mailMessage);
+               
 
                 try
                 {
-                    client.Send(mailMessage);                 
+                    await client.SendMailAsync(mailMessage);                 
                     return true;
                 }
 
@@ -249,6 +250,14 @@ namespace CSRPulse.Common
             Attachments = new List<MailAttachment>();
         }
         public List<EmbeddedContent> EmbeddedContent { set; get; }
+   
+        public List<KeyValuePair<string, string>> PlaceHolders { get; set; }
+
+        public string TemplateName { get; set; }
+
+        public int? CustomerId { get; set; }
+        public int SubjectId { get; set; }
+
     }
     /// <summary>
     /// Mail Attachment Class
@@ -265,11 +274,6 @@ namespace CSRPulse.Common
         public string Path { get; set; }
     }
 
-    public class EmailHeaderFooter
-    {
-        public static string Header = "<div style='background-color:{0}; height:50px; width:100%; color:white; display: inline-block;'><img src='cid:{1}' height='50'/></div>";
-        public static string Footer = "<div style='background-color:{0}; height:50px; width:100%; color:white;'><font face='Tahoma' size='2'><p>Best Regards,</p><font face='Tahoma' size='2'><p>WorkstreamX Support Team</p></div>";
-    }
 
 
 
