@@ -14,7 +14,7 @@ namespace CSRPulse.Services
 {
     public class EmailService : BaseService, IEmailService
     {
-        private const string templatePath = @"EmailTemplate/{0}.html";
+        private const string templatePath = @"wwwroot/Templates/EmailTemplate/{0}.html";
         private readonly IGenericRepository _genericRepository;
         private readonly IMapper _mapper;
 
