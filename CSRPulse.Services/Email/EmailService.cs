@@ -12,16 +12,16 @@ using AutoMapper;
 
 namespace CSRPulse.Services
 {
-    public class EmailService :BaseService, IEmailService
+    public class EmailService : BaseService, IEmailService
     {
         private const string templatePath = @"EmailTemplate/{0}.html";
         private readonly IGenericRepository _genericRepository;
         private readonly IMapper _mapper;
 
-        public EmailService(IGenericRepository genericRepository,IMapper mapper)
+        public EmailService(IGenericRepository genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
-           _mapper = mapper;
+            _mapper = mapper;
         }
 
         #region  Pre define method for email process, do not add anything in these method.
@@ -44,10 +44,8 @@ namespace CSRPulse.Services
                 }
             }
 
-            foreach (var ccEmail in emailOptions.CcEmails)
-            {
-                mail.CC.Add(ccEmail);
-            }
+            return text;
+        }
 
         async Task<bool> SendEmail(Common.EmailMessage message)
         {
@@ -67,7 +65,7 @@ namespace CSRPulse.Services
                 message.HTMLView = true;
                 message.FriendlyName = emailsetting.Signature;
                 var res = await Common.EmailHelper.SendEmail(message);
-               
+
                 dtoMailStatus.Status = res;
                 return await SendMailStatusAsync(dtoMailStatus, _genericRepository);
             }
@@ -82,18 +80,18 @@ namespace CSRPulse.Services
 
         public async Task<bool> CustomerRegistrationMail(Common.EmailMessage message)
         {
-          
+
             try
-            {           
+            {
                 message.Subject = UpdatePlaceHolders(message.Subject, message.PlaceHolders);
-                message.Body = UpdatePlaceHolders(GetEmailBody(message.TemplateName), message.PlaceHolders);                
-                return await SendEmail(message);               
+                message.Body = UpdatePlaceHolders(GetEmailBody(message.TemplateName), message.PlaceHolders);
+                return await SendEmail(message);
             }
             catch (Exception)
             {
                 throw;
             }
-            
+
         }
     }
 }
