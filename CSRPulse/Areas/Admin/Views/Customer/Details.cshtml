@@ -114,26 +114,35 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.CustomerLicenseList)
+                @if (Model.CustomerLicenseList.Count > 0)
                 {
-                    <tr>
-                        <td><span>@(Model.CustomerLicenseList.IndexOf(item)+1)</span></td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LicenceActID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PlanID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ActivationCount)
-                        </td>
+                    foreach (var item in Model.CustomerLicenseList.OrderByDescending(l => l.LicenceActID))
+                    {
+                        <tr>
+                            <td><span>@(Model.CustomerLicenseList.IndexOf(item) + 1)</span></td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LicenceActID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActivationCount)
+                            </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ActivationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastActivationDate)
-                        </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActivationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastActivationDate)
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="text-center">
+                        <td colspan="6">No records found.</td>
                     </tr>
                 }
             </tbody>
@@ -171,26 +180,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.CustomerPaymentList)
+                        @if (Model.CustomerLicenseList.Count > 0)
                         {
-                            <tr>
-                                <td><span>@(Model.CustomerPaymentList.IndexOf(item)+1)</span></td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PaymentID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AmountPaid)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PaymentMode)
-                                </td>
+                            foreach (var item in Model.CustomerPaymentList.OrderByDescending(p => p.PaymentID))
+                            {
+                                <tr>
+                                    <td><span>@(Model.CustomerPaymentList.IndexOf(item) + 1)</span></td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AmountPaid)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentMode)
+                                    </td>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PaymentDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsSuccess)
-                                </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsSuccess)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="text-center">
+                                <td colspan="6">No records found.</td>
                             </tr>
                         }
                     </tbody>
