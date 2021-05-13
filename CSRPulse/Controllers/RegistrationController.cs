@@ -6,9 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSRPulse.Controllers
 {
+ 
     public class RegistrationController : BaseController<RegistrationController>
     {
         private readonly IRegistrationService registrationService;

@@ -11,6 +11,7 @@ using System.Linq;
 
 namespace CSRPulse.Services
 {
+
     public class RegistrationService : BaseService, IRegistrationService
     {
         private readonly IMapper _mapper;
@@ -111,18 +112,12 @@ namespace CSRPulse.Services
 
         public string GenerateOTP()
         {
-            //  int _min = 100000;
-            //int _max = 999999;
-            //Random _rdm = new Random();
-            //return _rdm.Next(_min, _max).ToString();
-
-
             string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string small_alphabets = "abcdefghijklmnopqrstuvwxyz";
             string numbers = "1234567890";
 
             string characters = numbers;
-            characters += alphabets + small_alphabets + numbers;
+            characters += alphabets + numbers+ small_alphabets ;
 
             int length = 6;
             string otp = string.Empty;
@@ -160,7 +155,7 @@ namespace CSRPulse.Services
                 message.PlaceHolders = new List<KeyValuePair<string, string>>();
                 message.TemplateName = "TestEmail";
                 message.PlaceHolders.Add(
-                    new KeyValuePair<string, string>("$otp", OTP)
+                    new KeyValuePair<string, string>("{$otp}", OTP)
                     );
                 _emailService.CustomerRegistrationMail(message);
                 flag = true;
