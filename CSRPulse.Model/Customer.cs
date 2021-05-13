@@ -19,7 +19,7 @@ namespace CSRPulse.Model
         [Required(ErrorMessage = "Please Select Country")]
         public string Country { get; set; }
         [Display(Name = "State")]
-        [Range(1,Int64.MaxValue,ErrorMessage ="Please Select State")]
+        [Range(1, Int64.MaxValue, ErrorMessage = "Please Select State")]
         [Required(ErrorMessage = "Please Select State")]
         public int? StateId { get; set; }
         [Display(Name = "City")]
@@ -44,6 +44,9 @@ namespace CSRPulse.Model
 
         public CustomerPayment CustomerPayment { get; set; }
         public CustomerLicenseActivation CustomerLicense { get; set; }
+        public IList<CustomerPayment> CustomerPaymentList { get; set; }
+        public IList<CustomerLicenseActivation> CustomerLicenseList { get; set; }
+
 
         public bool RecordExist { get; set; }
 

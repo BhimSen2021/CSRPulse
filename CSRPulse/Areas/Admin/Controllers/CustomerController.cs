@@ -36,7 +36,7 @@ namespace CSRPulse.Areas.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> DetailsAsync( int customerId)
+        public async Task<IActionResult> Details( int customerId)
         {
             _logger.LogInformation("Admin/Customer/DetailsAsync");
             try

@@ -57,7 +57,13 @@ namespace CSRPulse.Services
                 var customer = new Customer();
                 var result = await _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerId == customerId).Include(a => a.CustomerLicenseActivation).Include(p => p.CustomerPayment).FirstOrDefaultAsync();
 
-                customer = _mapper.Map<Customer>(result);
+                customer = _mapper.Map<DTOModel.Customer, Customer>(result);
+                var cPayment = _mapper.Map<List<CustomerPayment>>(result.CustomerPayment);
+                var cActivation= _mapper.Map<List<CustomerLicenseActivation>>(result.CustomerLicenseActivation);
+
+                customer.CustomerPaymentList = cPayment;
+                customer.CustomerLicenseList = cActivation;
+
                 return customer;
             }
             catch (Exception)

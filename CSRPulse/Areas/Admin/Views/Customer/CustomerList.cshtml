@@ -33,37 +33,35 @@
                     <th>
                         @Html.DisplayName("Registration date")
                     </th>
-                    <th>Action</th>
+                    <th style="width:5%">Action</th>
                 </tr>
             </thead>
             <tbody>                
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>                            
-                            @Html.DisplayFor(modelItem => item.CustomerId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CustomerCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CustomerName)
-                        </td>
+                <tr>
+                    <td><span>@(Model.ToList().IndexOf(item)+1)</span></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Website)
-                        </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Website)
+                    </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedOn)
-                        </td>
-                        <td>
-                            <a asp-area="Admin" asp-controller="Customer" asp-action="Details" asp-route-CustomerId="@item.CustomerId"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                        </td>
-                    </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedOn)
+                    </td>
+                    <td class="text-center">
+                        <a asp-area="Admin" asp-controller="Customer" asp-action="Details" asp-route-CustomerId="@item.CustomerId"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

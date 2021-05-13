@@ -1,0 +1,202 @@
+﻿@model Customer
+@{
+    ViewData["Title"] = "Customer Details";
+}
+
+<div class="row pt-2 pb-2">
+    <div class="col">
+        <h4>Customer Details</h4>
+    </div>
+</div>
+<dl class="row">
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayName("Customer Code")<span class="pl-2 fa fa-id-card"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.CustomerCode)
+    </div>
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayName("Customer Name")<span class="pl-2 fa fa-user-circle"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.CustomerName)
+    </div>
+
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.Email)<span class="pl-2 fa fa-envelope"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.Email)
+    </div>
+
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.Telephone)<span class="pl-2 fa fa-phone"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.Telephone)
+    </div>
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.Website)<span class="pl-2 fa fa-globe"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.Website)
+    </div>
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayName("Data Base")<span class="pl-2 fa fa-database"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.DataBaseName)
+    </div>
+</dl>
+<dl class="row">
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.Country)
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.Country)
+    </div>
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.City)
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.City)
+    </div>
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.PostalCode)
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.PostalCode)
+    </div>
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.Address)<span class="pl-2 fa fa-address-card"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.Address)
+    </div>
+
+    <dt class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+        @Html.DisplayNameFor(model => model.Address2)<span class="pl-2 fa fa-address-card-o"></span>
+    </dt>
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+        @Html.DisplayFor(model => model.Address2)
+    </div>
+</dl>
+
+<hr />
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <div class="row">
+            <div class="col">
+                <h5 class="text-muted">License Details</h5>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+            <thead class="thead-light">
+                <tr>
+                    <th style="width:8%">
+                        @Html.DisplayName("#")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerLicense.LicenceActID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerLicense.PlanID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerLicense.ActivationCount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerLicense.ActivationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerLicense.LastActivationDate)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CustomerLicenseList)
+                {
+                    <tr>
+                        <td><span>@(Model.CustomerLicenseList.IndexOf(item)+1)</span></td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LicenceActID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PlanID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ActivationCount)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ActivationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastActivationDate)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <div class="row">
+            <div class="col">
+                <h5 class="text-muted">Payment Details</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width:8%">
+                                @Html.DisplayName("#")
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CustomerPayment.PaymentID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CustomerPayment.AmountPaid)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CustomerPayment.PaymentMode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CustomerPayment.PaymentDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CustomerPayment.IsSuccess)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CustomerPaymentList)
+                        {
+                            <tr>
+                                <td><span>@(Model.CustomerPaymentList.IndexOf(item)+1)</span></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaymentID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AmountPaid)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaymentMode)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaymentDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsSuccess)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

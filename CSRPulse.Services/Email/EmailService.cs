@@ -80,7 +80,6 @@ namespace CSRPulse.Services
 
         public async Task<bool> CustomerRegistrationMail(Common.EmailMessage message)
         {
-
             try
             {
                 message.Subject = UpdatePlaceHolders(message.Subject, message.PlaceHolders);

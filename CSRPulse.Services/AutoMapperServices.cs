@@ -16,7 +16,23 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Plan, Plan>().ReverseMap();
             CreateMap<Plan, Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
-            CreateMap<DTOModel.Customer, Customer>();
+           
+            CreateMap<DTOModel.Customer, Customer>()
+           .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
+           .ForMember(d => d.CustomerCode, o => o.MapFrom(s => s.CustomerCode))
+           .ForMember(d => d.CustomerName, o => o.MapFrom(s => s.CustomerName))
+           .ForMember(d => d.Address, o => o.MapFrom(s => s.Address))
+           .ForMember(d => d.Address2, o => o.MapFrom(s => s.Address2))
+           .ForMember(d => d.Country, o => o.MapFrom(s => s.Country))
+           .ForMember(d => d.City, o => o.MapFrom(s => s.City))
+           .ForMember(d => d.PostalCode, o => o.MapFrom(s => s.PostalCode))
+           .ForMember(d => d.Telephone, o => o.MapFrom(s => s.Telephone))
+           .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
+           .ForMember(d => d.Website, o => o.MapFrom(s => s.Website))
+           .ForMember(d => d.DataBaseName, o => o.MapFrom(s => s.DataBaseName))
+           .ForMember(d => d.IsDeleted, o => o.MapFrom(s => s.IsDeleted))
+           .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn)).ForAllOtherMembers(i => i.Ignore());
+
 
             CreateMap<StartingNumber, DTOModel.StartingNumber>();
             CreateMap<CustomerPayment, DTOModel.CustomerPayment>().ReverseMap();
