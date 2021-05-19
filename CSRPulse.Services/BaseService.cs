@@ -28,9 +28,9 @@ namespace CSRPulse.Services
         /// This function is will refresh dbcontext class after database has been changed to switch new database
         /// </summary>
         /// <param name="_connection"></param>
-        public static void SetConnectionString(ref string _connection)
+        public static void SetConnectionString(string _dataBase)
         {
-            CSRPulseDbContext.CustomeConnectionString = _connection;
+            CSRPulseDbContext.CustomeDataBase = _dataBase;
             CSRPulseDbContext context = new CSRPulseDbContext();
             //_ = new CSRPulseDbContext();
         }

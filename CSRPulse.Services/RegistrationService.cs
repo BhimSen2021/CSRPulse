@@ -101,8 +101,22 @@ namespace CSRPulse.Services
                     await _genericRepository.InsertAsync(dtoCustLicence);
 
                     transaction.Commit();
-                    await _dBForCustomer.CreateBD(dbName, _dbPath, customer.CustomerCode, "Password", out outputRes);
+                    DTOModel.Customer dtoCustomer = new DTOModel.Customer()
+                    {
+                        CustomerCode = customer.CustomerCode,
+                        CustomerName = customer.CustomerName,
+                        Email = customer.Email,
+                        Telephone = customer.Telephone,
+                        DataBaseName = dbName
+                    };
+                    await _dBForCustomer.CreateBD(dtoCustomer, _dbPath, "Password", out outputRes);
 
+                    var getCustDetail = _genericRepository.Get<DTOModel.Customer>(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
+                    if (getCustDetail != null)
+                    {
+                        getCustDetail.DataBaseName = dbName;
+                        _genericRepository.Update(getCustDetail);
+                    }
                     return true;
                 }
                 catch (Exception)

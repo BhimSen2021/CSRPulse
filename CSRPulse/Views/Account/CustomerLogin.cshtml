@@ -10,7 +10,16 @@
 <p class="text-muted mb-4">Enter your Customer, User id and password to access account.</p>
 
 <div id="div-form-container">
-    @{ await Html.RenderPartialAsync("_Authenticate", Model);}
+    @{ 
+        if (Model !=null)
+        {
+            await Html.RenderPartialAsync("_CustomerLogin", Model);
+        }
+        else
+        {
+            await Html.RenderPartialAsync("_Authenticate", Model);
+        }
+    }
 </div>
 
 

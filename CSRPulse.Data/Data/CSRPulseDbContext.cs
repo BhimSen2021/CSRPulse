@@ -41,7 +41,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserType> UserType { get; set; }
 
 
-        public static string CustomeConnectionString
+        public static string CustomeDataBase
         {
             get; set;
         }
@@ -52,8 +52,13 @@ namespace CSRPulse.Data.Data
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            if (!string.IsNullOrEmpty(CustomeConnectionString))
-                optionsBuilder.UseSqlServer(CustomeConnectionString);
+            if (!string.IsNullOrEmpty(CustomeDataBase))
+            {
+                var _Connection = configuration.GetConnectionString("DefaultConnection");
+                var _customConnection = _Connection.Replace("CSRPulse", CustomeDataBase);
+
+                optionsBuilder.UseSqlServer(_customConnection);
+            }
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
