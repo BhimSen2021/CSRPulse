@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using CSRPulse.Attributes;
 
 namespace CSRPulse.Controllers
 {
+    [CheckAuthorize] // it will check authorization on all the controller and its action which inherited by basecontroller
     public abstract class BaseController<T> : Controller where T : BaseController<T>
     {
         private ILogger<T> logger;

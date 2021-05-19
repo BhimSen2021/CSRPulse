@@ -16,14 +16,16 @@ namespace CSRPulse.Services
     {
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly IPrepareDBForCustomer _dBForCustomer;
         private readonly IGenericRepository _genericRepository;
 
-
-        public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService)
+        private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql";
+        public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer)
         {
             _genericRepository = generic;
             _mapper = mapper;
             _emailService = emailService;
+            _dBForCustomer = dBForCustomer;
         }
         public async Task<bool> CustomerExists(Model.Customer customer)
         {
@@ -42,16 +44,17 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public async Task<int> CustomerRegistrationAsync(Model.Customer customer)
+        public Task<int> CustomerRegistrationAsync(Model.Customer customer, out string customerCode)
         {
             using (var transaction = _genericRepository.BeginTransaction())
             {
                 try
                 {
-                    if (await _genericRepository.ExistsAsync<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
+                    customerCode = string.Empty;
+                    if (_genericRepository.Exists<DTOModel.Customer>(x => x.Email == customer.Email || x.Telephone == customer.Telephone))
                     {
                         customer.RecordExist = true;
-                        return 0;
+                        return Task.FromResult(0);
                     }
 
                     var dtoCustomer = _mapper.Map<DTOModel.Customer>(customer);
@@ -67,10 +70,10 @@ namespace CSRPulse.Services
                     };
 
                     dtoCustomer.CustomerCode = GenerateOrGetLatestCode(startingNum, _genericRepository);
-                    await _genericRepository.InsertAsync(dtoCustomer);
+                    _genericRepository.Insert(dtoCustomer);
                     transaction.Commit();
-
-                    return dtoCustomer.CustomerId;
+                    customerCode = dtoCustomer.CustomerCode;
+                    return Task.FromResult(dtoCustomer.CustomerId);
                 }
                 catch (Exception)
                 {
@@ -82,32 +85,34 @@ namespace CSRPulse.Services
 
         public async Task<bool> CustomerPaymentAsync(Model.Customer customer)
         {
+
+            string outputRes = string.Empty;
+
             using (var transaction = _genericRepository.BeginTransaction())
             {
                 try
                 {
-
-
+                    var dbName = "CSRPulse_" + customer.CustomerCode;
+                    dbName = dbName.Replace('-', '_');
                     var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
                     await _genericRepository.InsertAsync(dtoCustPayment);
-
                     customer.CustomerLicense.PaymentId = dtoCustPayment.PaymentId;
                     var dtoCustLicence = _mapper.Map<DTOModel.CustomerLicenseActivation>(customer.CustomerLicense);
-
                     await _genericRepository.InsertAsync(dtoCustLicence);
 
                     transaction.Commit();
+                    await _dBForCustomer.CreateBD(dbName, _dbPath, customer.CustomerCode, "Password", out outputRes);
+
                     return true;
                 }
-
-
-
                 catch (Exception)
                 {
                     transaction.Rollback();
                     throw;
                 }
             }
+
+
         }
 
         public string GenerateOTP()
@@ -117,7 +122,7 @@ namespace CSRPulse.Services
             string numbers = "1234567890";
 
             string characters = numbers;
-            characters += alphabets + numbers+ small_alphabets ;
+            characters += alphabets + numbers + small_alphabets;
 
             int length = 6;
             string otp = string.Empty;
@@ -151,7 +156,7 @@ namespace CSRPulse.Services
                 }
                 else
                     message.Subject = "Default Subject";
-              
+
                 message.PlaceHolders = new List<KeyValuePair<string, string>>();
                 message.TemplateName = "TestEmail";
                 message.PlaceHolders.Add(

@@ -1,89 +1,94 @@
-﻿
-@{
-
+﻿@{
     var message = TempData["Message"] == null ? "" : TempData["Message"].ToString();
     var messageError = TempData["Error"] == null ? "" : TempData["Error"].ToString();
-
-
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] | CSRPulse</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - CSR PULSE</title>
-    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true">
-    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet"  asp-append-version="true"/>
+    <meta content="A fully customize CSR Product." name="description" />
+    <meta content="Microware Computing & Consulting Pvt. Ltd" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico" asp-append-version="true">
 
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
+    <!-- App css -->
+
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app-creative.min.css" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="~/assets/css/app-creative-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    <!-- Data Table css -->
+    <link href="~/assets/css/vendor/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/assets/css/vendor/responsive.bootstrap4.css" rel="stylesheet" />
+    
 </head>
-<body>
-    <div class="container-fluid">
-        <partial name="_header" />
+<body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <partial name="_LeftSidebar" />
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
 
-        <main role="main">
-            @RenderBody()
-        </main>
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <partial name="_Topbar" />
+                <!-- end Topbar -->
+                <!-- Start Content-->
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+                <!-- container -->
 
-        <partial name="_footer" />
+            </div>
+            <!-- content -->
+            <!-- Footer Start -->
+            <partial name="_footer" />
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
     </div>
-   
+    <!-- END wrapper -->
+    <!-- Right Sidebar -->
+    <partial name="_RightSidebar" />
 
-    @RenderSection("Scripts", required: false)
+    <div class="rightbar-overlay"></div>
+    <!-- /End-bar -->
+    <!-- bundle -->
+    <script src="~/assets/js/vendor.min.js"></script>
+    <script src="~/assets/js/app.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
+
+    <!-- data tables -->
+    <script src="~/assets/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/vendor/dataTables.bootstrap4.js"></script>
+    <script src="~/assets/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="~/assets/js/vendor/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/js/pages/demo.datatable-init.js"></script>
+    @RenderSection("scripts", required: false)
+
     <script type="text/javascript">
-        $(window).scroll(function () {
-            if ($(window).scrollTop() >= 300) {
-                $('.header-fix').addClass('fixed-header');
-                // $('nav div').addClass('visible-title');
-            }
-            else {
-                $('.header-fix').removeClass('fixed-header');
-                // $('nav div').removeClass('visible-title');
-            }
-        });
-
         $(document).ready(function () {
-            $(window).scroll(function () {
-                if ($(this).scrollTop() > 100) {
-
-                    $('#scroll').fadeIn();
-                } else {
-                    $('#scroll').fadeOut();
-                }
-            });
-            $('#scroll').click(function () {
-                $("html, body").animate({ scrollTop: 0 }, 600);
-                return false;
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-         $(document).ready(function () {
-
-            $(".integerOnly").keypress(function (e) {
-                //if the letter is not digit then display error and don't type anything
-                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-                    //display error message
-                    //  $("#errmsg").html("Digits Only").show().fadeOut("slow");
-                    return false;
-                }
-            });
-
 
             if ('@messageError' != "") {
                 var str = '@HtmlEncoder.Encode(@messageError)';
                 str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
-                $.bootstrapGrowl("<i class='mdi-android-debug-bridge' aria-hidden='true'></i> " + str + "", {
+                $.bootstrapGrowl("<i class='dripicons-warning me-2'></i> " + str + "", {
                     type: 'warning',
                     align: 'center',
                     width: 'auto',
@@ -92,7 +97,7 @@
                 });
             }
             if ('@message' != "") {
-                $.bootstrapGrowl("<i class='mdi-checkbox-marked-circle-outline' aria-hidden='true'></i> " + '@message', {
+                $.bootstrapGrowl("<i class='dripicons-checkmark me-2'></i> " + '@message', {
                     type: 'success',
                     align: 'center',
                     width: 'auto',
@@ -103,29 +108,26 @@
         });
 
     function commonMessage(msgType, msg) {
-        debugger;
+
         if (msgType == "error") {
-            debugger;
-    var str = '@HtmlEncoder.Encode(@messageError)';
-    str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+            var str = '@HtmlEncoder.Encode(@messageError)';
+            str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
             $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times-circle"></i> Error:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,
                 delay: 10000
-    });
+            });
     }
     else if (msgType == "success") {
-
         $.bootstrapGrowl('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-check-circle"></i> Success:  </strong>' + msg, {
             align: 'center',
             width: 'auto',
             allow_dismiss: false,
             delay: 10000
-    });
-        }
+        });
+    }
         else if (msgType == "warning") {
-
             $.bootstrapGrowl('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-exclamation-triangle"></i> Warning:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
@@ -134,7 +136,6 @@
             });
         }
     }
-
     </script>
 </body>
 </html>

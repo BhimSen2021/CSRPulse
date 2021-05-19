@@ -2,47 +2,15 @@
 @{
 
     ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+
 }
-<div class="container-fluid">
-    <section id="login">
-        <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 bg-light">
-                <div class="row mt-5">
-                    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto">
-                        <h4 class="text-center mt-5 mb-4">CSR<span class="text-primary">Pulse</span></h4>
-                        <div class="card">                           
-                            <div class="card-body" id="div-form-container">
-                                @{ await Html.RenderPartialAsync("_Authenticate", Model);}
 
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 m-auto text-center">
-                                <span>Not a customer?</span>
-                                <a asp-action="Signup" class="btn btn-outline-primary">Try for free</a>
-                            </div>
+<h4 class="mt-0">Sign In</h4>
+<p class="text-muted mb-4">Enter your Customer, User id and password to access account.</p>
 
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 log_bg d--n text-white-50">
-                <h3 class="mt-4" style="font-weight: 100;">Sell, market, and service with the world's #1 <br>CRM.</h3>
-                <div class="row">
-                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
-                        <p class="text-justify text-white text-monospace" style="font-size: 18px; font-weight: 100;">
-                            Welcome to the Salesforce Customer Success Platform. Our new Lightning Platform gives you the fastest, most complete way
-                            to put your customers at the center of everything you do.
-                        </p>                       
-                        <a href="#" class="btn btn-light ml-4">FREE TRIAL</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div id="div-form-container">
+    @{ await Html.RenderPartialAsync("_Authenticate", Model);}
 </div>
 
 

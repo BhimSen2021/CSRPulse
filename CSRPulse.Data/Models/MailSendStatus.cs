@@ -20,6 +20,8 @@ namespace CSRPulse.Data.Models
         public string ToEmails { get; set; }
         [StringLength(200)]
         public string CcEmails { get; set; }
+        [StringLength(100)]
+        public string BccEmails { get; set; }
         public int? SubjectId { get; set; }
         [StringLength(2000)]
         public string MailContent { get; set; }

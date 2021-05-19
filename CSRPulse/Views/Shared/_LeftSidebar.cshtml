@@ -1,0 +1,49 @@
+﻿<div class="leftside-menu">
+
+    <!-- LOGO -->
+    <a href="#" class="logo text-center logo-light">
+        <span class="logo-lg">
+            <img src="~/assets/images/logo.png" asp-append-version="true" alt="" height="16">
+        </span>
+        <span class="logo-sm">
+            <img src="~/assets/images/logo_sm.png" asp-append-version="true" alt="" height="16">
+        </span>
+    </a>
+
+    <!-- LOGO -->
+    <a href="#" class="logo text-center logo-dark">
+        <span class="logo-lg">
+            <img src="~/assets/images/logo-dark.png" asp-append-version="true" alt="" height="16">
+        </span>
+        <span class="logo-sm">
+            <img src="~/assets/images/logo_sm_dark.png" asp-append-version="true" alt="" height="16">
+        </span>
+    </a>
+
+    <div class="h-100" id="leftside-menu-container" data-simplebar>
+        <!--- Sidemenu -->
+        <ul class="side-nav">
+            <li class="side-nav-title side-nav-item">Apps</li>
+            @await Component.InvokeAsync("Menu")
+
+        </ul>
+
+        <!-- Help Box -->
+        <div class="help-box help-box-light text-center">
+            <a href="javascript: void(0);" class="float-end close-btn text-body">
+                <i class="mdi mdi-close"></i>
+            </a>
+            <img src="~/assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
+            <h5 class="mt-3">Unlimited Access</h5>
+            <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
+            <a href="javascript: void(0);" class="btn btn-outline-primary btn-sm">Upgrade</a>
+        </div>
+        <!-- end Help Box -->
+        <!-- End Sidebar -->
+
+        <div class="clearfix"></div>
+
+    </div>
+    <!-- Sidebar -left -->
+
+</div>

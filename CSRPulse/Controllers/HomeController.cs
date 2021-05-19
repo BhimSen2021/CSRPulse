@@ -20,8 +20,10 @@ namespace CSRPulse.Controllers
 
         public IActionResult Index()
         {
-           
-            
+            return View();
+        }
+        public IActionResult Landing()
+        {
             return View();
         }
 

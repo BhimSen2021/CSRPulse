@@ -1,149 +1,301 @@
 ﻿
 @{
     ViewData["Title"] = "Plan";
-}
-
-<section id="plan">
-    <div class="row">
-        <div class="col-sm-12 p-0 text-white plan-bg" style="height: 180px;box-shadow: 0px 4px 8px #ccc;">
-            <div class="row m-0">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center"></div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center">
-                    <h5 class="mb-0 mt-5">15-day free trial.</h5>
-                    <p class="text-white mb-2">Find simple plan for comprehensive automations</p>
+    Layout = "_OuterLayout";
+}    
+<section class="py-2">
+    <div class="container">
+        <div class="row py-2">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <h1 class="mt-0"><i class="mdi mdi-tag-multiple"></i></h1>
+                    <h3>
+                        Choose <span class="text-primary">Plan</span>
+                    </h3>
+                    <p class="text-muted mt-2">
+                        <span class="h4 text-warning">
+                            15-day free trial.
+                        </span><br />
+                        Find simple plan for comprehensive automations
+                    </p>
                 </div>
             </div>
-
         </div>
-        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 m-auto">
-            <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="margin-top: -30px;">
-                    <div class="card plan-box">
-                        <div class="card-header pb-0 bg-white bb text-center"><b> BASIC </b></div>
-                        <div class="card-body text-center">
-                            <h5 class="text-center text-muted">
-                                <i class="fa fa-rupee fa"></i> 5,000 / Year
-                            </h5>
-                            <a type="button" class="btn btn-outline-info" asp-controller="Registration" asp-action="Index" asp-route-pId="2">GET STARTED</a>
-                            <div class="here mt-4">
-                                <ul>
-                                    <li>Partner/NGO On-boarding</li>
-                                    <li>Approved Proposal Repository</li>
-                                    <li>
-                                        Project Management
-                                        <ul>
-                                            <li>Project Geographical Coverage</li>
-                                            <li>Baseline collection based Geographical Coverage</li>
-                                            <li>Quarterly Indicative Progress</li>
-                                            <li>Quarterly Financial Progress</li>
-                                            <li>Fund Request </li>
-                                            <li>Fund release</li>
-                                            <li>Fund Reconciliation</li>
-                                            <li>Monitor Co-funder Financial</li>
-                                        </ul>
-                                    </li>
-                                    
-                                    <li>
-                                        Dashboard
-                                        <ul>
-                                            <li>Baseline</li>
-                                            <li>Intervention</li>
-                                            <li>Financial</li>
-                                        </ul>
-                                    </li>
-                                    <li>Intimation & Alerts</li>
-                                    <li>Log Trails</li>
-                                </ul>
-                            </div>
+
+        <div class="row mt-5 pt-3">
+            <div class="col-md-4">
+                <div class="card card-pricing">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <p class="card-pricing-plan-name fw-bold text-uppercase">Basic License </p>
+                            <i class="card-pricing-icon dripicons-user text-primary"></i>
+                            <h2 class="card-pricing-price">&#8377; 5,000 <span>/ Year</span></h2>
                         </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="margin-top: -30px;">
-                    <div class="card plan-box">
-                        <div class="card-header pb-0 bg-white bb text-center"><b> STANDARD </b></div>
-                        <div class="card-body text-center">
-                            <h5 class="text-center text-muted">
-                                <i class="fa fa-rupee fa"></i> 7,500 / Year
-                            </h5>
-                            <a type="button" class="btn btn-info text-white" asp-controller="Registration" asp-action="Index" asp-route-pId="2">GET STARTED</a>
-                            <div class="here mt-4">
-                                <ul>
-                                    <li>Partner/NGO On-boarding</li>
-                                    <li>Approved Proposal Repository</li>
-                                    <li>
-                                        Project Management
-                                        <ul>
-                                            <li>Project Geographical Coverage</li>
-                                            <li>Baseline collection based Geographical Coverage</li>
-                                            <li>Quarterly Indicative Progress</li>
-                                            <li>Quarterly Financial Progress</li>
-                                            <li>Fund Request </li>
-                                            <li>Fund release</li>
-                                            <li>Fund Reconciliation</li>
-                                            <li>Monitor Co-funder Financial</li>
-                                        </ul>
-                                    </li>
-                                    <li>Financial Audit Compliance NGO</li>
-                                    <li>
-                                        Dashboard
-                                        <ul>
-                                            <li>Baseline</li>
-                                            <li>Intervention</li>
-                                            <li>Financial</li>
-                                        </ul>
-                                    </li>
-                                    <li>Intimation & Alerts</li>
-                                    <li>Log Trails</li>
+                        <ul class="card-pricing-features">
+                            <li class="pt-0"><b class="text-warning"> Partner/NGO On-boarding</b></li>
+                            <li class="text-warning pt-0"><b>Approved Proposal Repository</b></li>
+                            <li class="text-warning pt-0">
+                                <b>
+                                    Project Management
+                                </b>
+                                <ul class="card-pricing-features">
+                                    <li><i>Project Geographical Coverage</i></li>
+                                    <li><i>Baseline collection based Geographical Coverage</i></li>
+                                    <li><i>Quarterly Indicative Progress</i></li>
+                                    <li><i>Quarterly Financial Progress</i></li>
+                                    <li><i>Fund Request</i></li>
+                                    <li><i>Fund release</i></li>
+                                    <li><i>Fund Reconciliation</i></li>
+                                    <li class="pt-0"><i>Monitor Co-funder Financial</i></li>
                                 </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="margin-top: -30px;">
-                    <div class="card plan-box">
-                        <div class="card-header pb-0 bg-white bb text-center"><b> PROFESSIONAL </b></div>
-                        <div class="card-body text-center">
-                            <h5 class="text-center text-muted">
-                                <i class="fa fa-rupee fa"></i> 12,500 / Year
-                            </h5>
-                            <a type="button" class="btn btn-outline-info" asp-controller="Registration" asp-action="Index" asp-route-pId="3">GET STARTED</a>
-                            <div class="here mt-4">
-                                <ul>
-                                    <li>Partner/NGO On-boarding</li>
-                                    <li>Approved Proposal Repository</li>
-                                    <li>
-                                        Project Management
-                                        <ul>
-                                            <li>Project Geographical Coverage</li>
-                                            <li>Baseline collection based Geographical Coverage</li>
-                                            <li>Quarterly Indicative Progress</li>
-                                            <li>Quarterly Financial Progress</li>
-                                            <li>Fund Request </li>
-                                            <li>Fund release</li>
-                                            <li>Fund Reconciliation</li>
-                                            <li>Monitor Co-funder Financial</li>
-                                        </ul>
-                                    </li>
-                                    <li>Internal Visit Report</li>
-                                    <li>Financial Audit Compliance NGO</li>
-                                    <li>
-                                        Dashboard
-                                        <ul>
-                                            <li>Baseline</li>
-                                            <li>Intervention</li>
-                                            <li>Financial</li>
-                                        </ul>
-                                    </li>
-                                    <li>Intimation & Alerts</li>
-                                    <li>Log Trails</li>
+                            </li>
+
+                            <li class="text-warning pt-0">
+                                <b>Dashboard</b>
+                                <ul class="card-pricing-features">
+                                    <li class="pt-0"><i>Baseline</i></li>
+                                    <li class="pt-0"><i>Intervention</i></li>
+                                    <li class="pt-0"><i>Financial</i></li>
                                 </ul>
-                            </div>
+                            </li>
+                            <li class="text-warning pt-0"><b>Intimation & Alerts</b></li>
+                            <li class="text-warning pt-0"><b>Log Trails</b></li>
+
+                        </ul>
+                        <div class="text-center">
+                            <a type="button" class="btn btn-primary mt-4 mb-2 btn-rounded" asp-controller="Registration" asp-action="Index" asp-route-pId="2">Get Started</a>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+            <div class="col-md-4">
+                <div class="card card-pricing card-pricing-recommended">
+                    <div class="card-body text-center">
+                        <div class="card-pricing-plan-tag">Recommended</div>
+                        <p class="card-pricing-plan-name fw-bold text-uppercase">Standard License</p>
+                        <i class="card-pricing-icon dripicons-briefcase text-primary"></i>
+                        <h2 class="card-pricing-price">&#8377; 7,500 <span>/ Year</span></h2>
+                        <ul class="card-pricing-features">
+                            <li class="text-info pt-0"><b>Partner/NGO On-boarding</b></li>
+                            <li class="text-info pt-0"><b>Approved Proposal Repository</b></li>
+                            <li class="text-info pt-0">
+                                <b>Project Management</b>
+                                <ul class="card-pricing-features">
+                                    <li class="pt-0"><i>Project Geographical Coverage</i></li>
+                                    <li class="pt-0"><i>Baseline collection based Geographical Coverage</i></li>
+                                    <li class="pt-0"><i>Quarterly Indicative Progress</i></li>
+                                    <li class="pt-0"><i>Quarterly Financial Progress</i></li>
+                                    <li class="pt-0"><i>Fund Request </i></li>
+                                    <li class="pt-0"><i>Fund release</i></li>
+                                    <li class="pt-0"><i>Fund Reconciliation</i></li>
+                                    <li class="pt-0"><i>Monitor Co-funder Financial</i></li>
+                                </ul>
+                            </li>
+                            <li class="text-info"><b>Financial Audit Compliance NGO</b></li>
+                            <li class="text-info">
+                                <b> Dashboard</b>
+                                <ul class="card-pricing-features">
+                                    <li class="pt-0"><i>Baseline</i></li>
+                                    <li class="pt-0"><i>Intervention</i></li>
+                                    <li class="pt-0"><i>Financial</i></li>
+                                </ul>
+                            </li>
+                            <li class="text-info"><b>Intimation & Alerts</b></li>
+                            <li class="text-info"><b>Log Trails</b></li>
+                        </ul>
+                        <a type="button" class="btn btn-primary mt-4 mb-2 btn-rounded" asp-controller="Registration" asp-action="Index" asp-route-pId="2">Get Started</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card card-pricing">
+                    <div class="card-body text-center">
+                        <p class="card-pricing-plan-name fw-bold text-uppercase">Professional License</p>
+                        <i class="card-pricing-icon dripicons-store text-primary"></i>
+                        <h2 class="card-pricing-price">&#8377; 12,000 <span>/ Year</span></h2>
+                        <ul class="card-pricing-features">
+                            <li class="text-success pt-0"><b>Partner/NGO On-boarding</b></li>
+                            <li class="text-success pt-0"><b>Approved Proposal Repository</b></li>
+                            <li class="text-success pt-0">
+                                <b>Project Management</b>
+                                <ul class="card-pricing-features">
+                                    <li class="pt-0"><i>Project Geographical Coverage</i></li>
+                                    <li class="pt-0"><i>Baseline collection based Geographical Coverage</i></li>
+                                    <li class="pt-0"><i>Quarterly Indicative Progress</i></li>
+                                    <li class="pt-0"><i>Quarterly Financial Progress</i></li>
+                                    <li class="pt-0"><i>Fund Request </i></li>
+                                    <li class="pt-0"><i>Fund release</i></li>
+                                    <li class="pt-0"><i>Fund Reconciliation</i></li>
+                                    <li class="pt-0"><i>Monitor Co-funder Financial</i></li>
+                                </ul>
+                            </li>
+                            <li class="text-success pt-0"><b>Internal Visit Report</b></li>
+                            <li class="text-success pt-0"><b>Financial Audit Compliance NGO</b></li>
+                            <li class="text-success pt-0">
+                                <b> Dashboard</b>
+                                <ul class="card-pricing-features">
+                                    <li class="pt-0"><i>Baseline</i></li>
+                                    <li class="pt-0"><i>Intervention</i></li>
+                                    <li class="pt-0"><i>Financial</i></li>
+                                </ul>
+                            </li>
+                            <li class="text-success"><b>Intimation & Alerts</b></li>
+                            <li class="text-success"><b>Log Trails</b></li>
+                        </ul>
+                        <a type="button" class="btn btn-primary mt-4 mb-2 btn-rounded" asp-controller="Registration" asp-action="Index" asp-route-pId="3">Get Started</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
+
+@*<section id="plan">
+        <div class="row">
+            <div class="col-sm-12 p-0 text-white plan-bg" style="height: 180px;box-shadow: 0px 4px 8px #ccc;">
+                <div class="row m-0">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center"></div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center">
+                        <h5 class="mb-0 mt-5">15-day free trial.</h5>
+                        <p class="text-white mb-2">Find simple plan for comprehensive automations</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 m-auto">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="margin-top: -30px;">
+                        <div class="card plan-box">
+                            <div class="card-header pb-0 bg-white bb text-center"><b> BASIC </b></div>
+                            <div class="card-body text-center">
+                                <h5 class="text-center text-muted">
+                                    <i class="fa fa-rupee fa"></i> 5,000 / Year
+                                </h5>
+                                <a type="button" class="btn btn-outline-info" asp-controller="Registration" asp-action="Index" asp-route-pId="2">GET STARTED</a>
+                                <div class="here mt-4">
+                                    <ul>
+                                        <li>Partner/NGO On-boarding</li>
+                                        <li>Approved Proposal Repository</li>
+                                        <li>
+                                            Project Management
+                                            <ul>
+                                                <li>Project Geographical Coverage</li>
+                                                <li>Baseline collection based Geographical Coverage</li>
+                                                <li>Quarterly Indicative Progress</li>
+                                                <li>Quarterly Financial Progress</li>
+                                                <li>Fund Request </li>
+                                                <li>Fund release</li>
+                                                <li>Fund Reconciliation</li>
+                                                <li>Monitor Co-funder Financial</li>
+                                            </ul>
+                                        </li>
+
+                                        <li>
+                                            Dashboard
+                                            <ul>
+                                                <li>Baseline</li>
+                                                <li>Intervention</li>
+                                                <li>Financial</li>
+                                            </ul>
+                                        </li>
+                                        <li>Intimation & Alerts</li>
+                                        <li>Log Trails</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="margin-top: -30px;">
+                        <div class="card plan-box">
+                            <div class="card-header pb-0 bg-white bb text-center"><b> STANDARD </b></div>
+                            <div class="card-body text-center">
+                                <h5 class="text-center text-muted">
+                                    <i class="fa fa-rupee fa"></i> 7,500 / Year
+                                </h5>
+                                <a type="button" class="btn btn-info text-white" asp-controller="Registration" asp-action="Index" asp-route-pId="2">GET STARTED</a>
+                                <div class="here mt-4">
+                                    <ul>
+                                        <li>Partner/NGO On-boarding</li>
+                                        <li>Approved Proposal Repository</li>
+                                        <li>
+                                            Project Management
+                                            <ul>
+                                                <li>Project Geographical Coverage</li>
+                                                <li>Baseline collection based Geographical Coverage</li>
+                                                <li>Quarterly Indicative Progress</li>
+                                                <li>Quarterly Financial Progress</li>
+                                                <li>Fund Request </li>
+                                                <li>Fund release</li>
+                                                <li>Fund Reconciliation</li>
+                                                <li>Monitor Co-funder Financial</li>
+                                            </ul>
+                                        </li>
+                                        <li>Financial Audit Compliance NGO</li>
+                                        <li>
+                                            Dashboard
+                                            <ul>
+                                                <li>Baseline</li>
+                                                <li>Intervention</li>
+                                                <li>Financial</li>
+                                            </ul>
+                                        </li>
+                                        <li>Intimation & Alerts</li>
+                                        <li>Log Trails</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="margin-top: -30px;">
+                        <div class="card plan-box">
+                            <div class="card-header pb-0 bg-white bb text-center"><b> PROFESSIONAL </b></div>
+                            <div class="card-body text-center">
+                                <h5 class="text-center text-muted">
+                                    <i class="fa fa-rupee fa"></i> 12,500 / Year
+                                </h5>
+                                <a type="button" class="btn btn-outline-info" asp-controller="Registration" asp-action="Index" asp-route-pId="3">GET STARTED</a>
+                                <div class="here mt-4">
+                                    <ul>
+                                        <li>Partner/NGO On-boarding</li>
+                                        <li>Approved Proposal Repository</li>
+                                        <li>
+                                            Project Management
+                                            <ul>
+                                                <li>Project Geographical Coverage</li>
+                                                <li>Baseline collection based Geographical Coverage</li>
+                                                <li>Quarterly Indicative Progress</li>
+                                                <li>Quarterly Financial Progress</li>
+                                                <li>Fund Request </li>
+                                                <li>Fund release</li>
+                                                <li>Fund Reconciliation</li>
+                                                <li>Monitor Co-funder Financial</li>
+                                            </ul>
+                                        </li>
+                                        <li>Internal Visit Report</li>
+                                        <li>Financial Audit Compliance NGO</li>
+                                        <li>
+                                            Dashboard
+                                            <ul>
+                                                <li>Baseline</li>
+                                                <li>Intervention</li>
+                                                <li>Financial</li>
+                                            </ul>
+                                        </li>
+                                        <li>Intimation & Alerts</li>
+                                        <li>Log Trails</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>*@
 
 

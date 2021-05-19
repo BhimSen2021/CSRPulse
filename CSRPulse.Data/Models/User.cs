@@ -20,11 +20,13 @@ namespace CSRPulse.Data.Models
             StateCreatedByNavigation = new HashSet<State>();
             StateUpdatedByNavigation = new HashSet<State>();
             UserRights = new HashSet<UserRights>();
+            UserRoles = new HashSet<UserRoles>();
         }
 
         [Key]
         public int UserId { get; set; }
         public int UserTypeId { get; set; }
+        public int RoleId { get; set; }
         [Required]
         [StringLength(50)]
         public string UserName { get; set; }
@@ -51,8 +53,10 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
-        public int? RoleId { get; set; }
 
+        [ForeignKey(nameof(RoleId))]
+        [InverseProperty("User")]
+        public virtual Role Role { get; set; }
         [ForeignKey(nameof(UserTypeId))]
         [InverseProperty("User")]
         public virtual UserType UserType { get; set; }
@@ -70,5 +74,7 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<State> StateUpdatedByNavigation { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<UserRights> UserRights { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<UserRoles> UserRoles { get; set; }
     }
 }

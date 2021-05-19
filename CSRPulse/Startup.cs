@@ -41,6 +41,7 @@ namespace CSRPulse
             services.AddScoped<IDropdownBindService, DropdownBindService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPrepareDBForCustomer, PrepareBDForCustomer>();
 
             services.Configure<SMTPConfig>(Configuration.GetSection("SMTPConfig"));
 
@@ -85,7 +86,7 @@ namespace CSRPulse
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Landing}/{id?}");
 
                 endpoints.MapControllerRoute(
                    name: "CSRPulseArea",

@@ -72,7 +72,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                 HttpContext.Session.Clear();                
             }
             
-            return RedirectToAction("Index", "Home", new { Area = "" });
+            return RedirectToAction("Landing", "Home", new { Area = "" });
         }
 
     }

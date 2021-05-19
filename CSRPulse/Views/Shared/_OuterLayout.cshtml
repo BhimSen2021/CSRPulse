@@ -1,0 +1,253 @@
+﻿@{
+    var message = TempData["Message"] == null ? "" : TempData["Message"].ToString();
+    var messageError = TempData["Error"] == null ? "" : TempData["Error"].ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Landing Page | CSRPulse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully customize CSR Product." name="description" />
+    <meta content="Microware Computing & Consulting Pvt. Ltd" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico" asp-append-version="true">
+
+    <!-- App css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="~/assets/css/app-creative.min.css" rel="stylesheet" type="text/css" id="light-style" asp-append-version="true" />
+    <link href="~/assets/css/app-creative-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" asp-append-version="true" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+
+    <!-- bundle -->
+    <script src="~/assets/js/vendor.min.js"></script>
+    <script src="~/assets/js/app.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            if ('@messageError' != "") {
+                var str = '@HtmlEncoder.Encode(@messageError)';
+                str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+                $.bootstrapGrowl("<i class='dripicons-warning me-2'></i> " + str + "", {
+                    type: 'warning',
+                    align: 'center',
+                    width: 'auto',
+                    allow_dismiss: true,
+                    delay: 10000
+                });
+            }
+            if ('@message' != "") {
+                $.bootstrapGrowl("<i class='dripicons-checkmark me-2'></i> " + '@message', {
+                    type: 'success',
+                    align: 'center',
+                    width: 'auto',
+                    allow_dismiss: true,
+                    delay: 10000
+                });
+            }
+        });
+
+    function commonMessage(msgType, msg) {
+
+        if (msgType == "error") {
+            var str = '@HtmlEncoder.Encode(@messageError)';
+            str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times-circle"></i> Error:  </strong>' + msg, {
+                align: 'center',
+                width: 'auto',
+                allow_dismiss: false,
+                delay: 10000
+            });
+    }
+    else if (msgType == "success") {
+        $.bootstrapGrowl('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-check-circle"></i> Success:  </strong>' + msg, {
+            align: 'center',
+            width: 'auto',
+            allow_dismiss: false,
+            delay: 10000
+        });
+    }
+        else if (msgType == "warning") {
+            $.bootstrapGrowl('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-exclamation-triangle"></i> Warning:  </strong>' + msg, {
+                align: 'center',
+                width: 'auto',
+                allow_dismiss: false,
+                delay: 10000
+            });
+        }
+    }
+    </script>
+</head>
+
+<body class="loading" data-layout-config='{"darkMode":true}'>
+
+    <!-- NAVBAR START -->
+    <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark bg-dark">
+        <div class="container">
+            <!-- logo -->
+            <a href="#" class="navbar-brand me-lg-5">
+                <img src="~/assets/images/logo.png" alt="" class="logo-dark" height="18" asp-append-version="true" />
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="mdi mdi-menu"></i>
+            </button>
+
+            <!-- menus -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+                <!-- left menu -->
+                <ul class="navbar-nav me-auto align-items-center">
+                    <li class="nav-item mx-lg-1">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item mx-lg-1">
+                        <a class="nav-link" href="">Features</a>
+                    </li>
+                    <li class="nav-item mx-lg-1">
+                        <a class="nav-link" asp-area="" asp-controller="Plan" asp-action="Index">Plan</a>
+                    </li>
+                    <li class="nav-item mx-lg-1">
+                        <a class="nav-link" href="">FAQs</a>
+                    </li>
+                    <li class="nav-item mx-lg-1">
+                        <a class="nav-link" href="">Clients</a>
+                    </li>
+                    <li class="nav-item mx-lg-1">
+                        <a class="nav-link" href="">Contact</a>
+                    </li>
+                </ul>
+
+                <!-- right menu -->
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item me-0">
+                        <a asp-area="" asp-controller="Account" asp-action="CustomerLogin" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex">
+                            <i class="mdi mdi-login me-2"></i> Login
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <!-- NAVBAR END -->
+    <!-- START HERO -->
+    <!--<section class="hero-section">-->
+        @*<div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="mt-md-4">
+                        <div>
+                            <span class="badge bg-danger rounded-pill">New</span>
+                            <span class="text-white-50 ms-1">Want to check out everything CSRPulse offers?</span>
+                        </div>
+                        <h2 class="text-white fw-normal mb-0 mt-3 hero-title">
+                            CSRPulse is India’s leading CSR knowledge driven media platform for the development community
+                        </h2>
+
+                        <p class="mb-0 font-16 text-white-50">
+                            CSRPulse can help you achieve your objectives. With years of experience in working on social development projects with nonprofits, corporate and social enterprises, we excel in catalyzing the vibrant social transformation movement in India by driving collaborations and partnerships for good.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 offset-md-2">
+                    <div class="text-md-end mt-3 mt-md-0">
+                        <img src="~/assets/images/features-1.svg" alt="" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!--</section>-->
+    <!-- END HERO -->
+
+    @RenderBody()
+
+    <footer class="bg-dark py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <img src="assets/images/logo.png" alt="" class="logo-dark" height="18" />
+                    <p class="text-muted mt-4">
+                        Hyper makes it easier to build better websites with
+                        <br> great speed. Save hundreds of hours of design
+                        <br> and development by using it.
+                    </p>
+
+                    <ul class="social-list list-inline mt-3">
+                        <li class="list-inline-item text-center">
+                            <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
+                        </li>
+                        <li class="list-inline-item text-center">
+                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                        </li>
+                        <li class="list-inline-item text-center">
+                            <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
+                        </li>
+                        <li class="list-inline-item text-center">
+                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="col-lg-2 mt-3 mt-lg-0">
+                    <h5 class="text-light">Company</h5>
+
+                    <ul class="list-unstyled ps-0 mb-0 mt-3">
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">About Us</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Documentation</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Blog</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Affiliate Program</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="col-lg-2 mt-3 mt-lg-0">
+                    <h5 class="text-light">Apps</h5>
+
+                    <ul class="list-unstyled ps-0 mb-0 mt-3">
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Ecommerce Pages</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Email</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Social Feed</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Projects</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Tasks Management</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 mt-3 mt-lg-0">
+                    <h5 class="text-light">Discover</h5>
+
+                    <ul class="list-unstyled ps-0 mb-0 mt-3">
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Help Center</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Our Products</a></li>
+                        <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mt-5">
+                        <p class="text-muted mt-4 text-center mb-0">
+                            © 2020 - 2021 CSRPulse |
+                            Microware Computer &amp; Consulting Pvt. Ltd.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- END FOOTER -->
+
+</body>
+
+</html>

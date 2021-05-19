@@ -11,11 +11,6 @@ namespace CSRPulse.Data.Models
 {
     public partial class State
     {
-        public State()
-        {
-            District = new HashSet<District>();
-        }
-
         [Key]
         public int StateId { get; set; }
         [Required]
@@ -44,7 +39,5 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(UpdatedBy))]
         [InverseProperty(nameof(User.StateUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
-        [InverseProperty("State")]
-        public virtual ICollection<District> District { get; set; }
     }
 }

@@ -1,60 +1,112 @@
 ﻿@model CSRPulse.Model.SingIn
 @{
+    ViewData["Title"] = "Admin Login";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Admin Login</title>
-    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <title>Admin Login | CSRPulse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully customize CSR Product." name="description" />
+    <meta content="Microware Computing & Consulting Pvt. Ltd" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico" asp-append-version="true">
 
-</head>
-<body>
-    <div class="container">
-        <h2 class=" mb-5 mt-5">CSR<span class="text-primary">Pulse</span></h2>
-
-        <h4 class="mt-0">Sign In</h4>
-        <p class="text-muted mb-4">Enter your user name and password to access account.</p>
-        <div class="row">
-            <div class="col-md-4">
-                <form method="post">
-
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="UserName" class="control-label"></label>
-                        <input asp-for="UserName" class="form-control" required />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
-
+    <!-- App css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app-creative.min.css" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="~/assets/css/app-creative-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
+   </head>
+<body class="authentication-bg pb-0" data-layout-config='{"darkMode":false}'>
+    <div class="auth-fluid">
+        <!--Auth fluid left content -->
+        <div class="auth-fluid-form-box">
+            <div class="align-items-center d-flex h-100">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="auth-brand text-center text-lg-start">
+                        <a href="#" class="logo-dark">
+                            <span><img src="~/assets/images/logo-dark.png" alt="" height="18" asp-append-version="true"></span>
+                        </a>
+                        <a href="#" class="logo-light">
+                            <span><img src="~/assets/images/logo-light.png" alt="" height="18" asp-append-version="true"></span>
+                        </a>
                     </div>
+                    <h4 class="mt-0">Sign In</h4>
+                    <p class="text-muted mb-4">Enter your User name and password to access account.</p>
 
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
+                    <div id="div-form-container">
+                        <form method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="mb-3">
+                                <label asp-for="UserName" class="form-label"></label>
+                                <input asp-for="UserName" class="form-control" required="" placeholder="Enter user name" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" class="form-control" required placeholder="Enter password" autocomplete="off" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
 
-                        <input asp-for="Password" class="form-control" required />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" asp-for="RememberMe">
+                                    @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "form-check-label", @for = "RememberMe" })
+                                </div>
+                            </div>
+                            <div class="d-grid mb-0 text-center">
+                                <button type="submit" class="btn btn-primary btn-block rounded-0"><i class="mdi mdi-login"></i> Log In </button>
+                            </div>
+                            <!-- social-->
+                            <div class="text-center mt-4">
+                                <p class="text-muted font-16">Sign in with</p>
+                                <ul class="social-list list-inline mt-3">
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                        <footer class="footer footer-alt">
+                            <p class="text-muted"><a asp-action="ForgotPassword" asp-controller="Account" class="text-muted ms-1"><b>Forgot Your Password?</b></a></p>
+                        </footer>
                     </div>
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-lg btn-block rounded-0" type="submit"><i class="fa fa-sign-in"></i> Log In </button>
-                    </div>
-                </form>
-                <div class="form-group pt-2">
-                    <a asp-area="Admin" asp-controller="Account" asp-action="ForgotPassword">Forgot password?</a>
-                    <a class="float-right" asp-area="Admin" asp-controller="Account" asp-action="Signup">Click here to signup</a>
                 </div>
-
-            </div>
-            <div class="col-md-8">
-                <img class="img-fluid" src="~/images/Admin/login.png" asp-append-version="true" />
             </div>
         </div>
-
+        <!-- end auth-fluid-form-box-->
+        <!-- Auth fluid right content -->
+        <div class="auth-fluid-right text-center">
+            <div class="auth-user-testimonial">
+                <h2 class="mb-3">Sell, market, and service with the world's #1 <br>CRM.</h2>
+                <p class="lead">
+                    <i class="mdi mdi-format-quote-open"></i>  Welcome to the Salesforce Customer Success Platform. Our new Lightning Platform gives you the fastest, most complete way
+                    to put your customers at the center of everything you do. <i class="mdi mdi-format-quote-close"></i>
+                </p>
+                <p>
+                    - CSRPulse Administrator login
+                </p>
+            </div> <!-- end auth-user-testimonial-->
+        </div>
+        <!-- end Auth fluid right content -->
     </div>
+
+    <!-- bundle -->
+    <script src="~/assets/js/vendor.min.js"></script>
+    <script src="~/assets/js/app.min.js"></script>
 </body>
 </html>
+

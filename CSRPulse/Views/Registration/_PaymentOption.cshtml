@@ -3,30 +3,28 @@
 <form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="PaymentOption" data-ajax-success="paymentSuccess">
 
     <input type="hidden" asp-for="CustomerId" />
+    <input type="hidden" asp-for="CustomerCode" />
     <div class="row">
         <div class="regbutton col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-           
+
 
         </div>
-       
+
     </div>
 
     <div class="row">
         <div class="col"><button type="submit" name="ButtonType" value="payment" class="btn btn-md btn-primary btn-block">PAYMENT</button></div>
         <div class="col"><button type="submit" name="ButtonType" value="free" class="btn btn-md btn-success btn-block">START MY FREE TRAIL</button></div>
     </div>
-   
+
 </form>
 
 <script type="text/javascript">
-            function paymentSuccess(data) {
-                debugger;
-                if (data.success == true) {                   
+            function paymentSuccess(data) {               
+                if (data.success == true) {
 
                     window.location.href = "@Url.Action("Index", "Home")";
                     commonMessage('warning', 'Trail Version activated for the 30 day, Registration details has been sent on your Email. Please goto login page.');
-                  
-                 
                 }
             }
 </script>

@@ -32,11 +32,14 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRights> UserRights { get; set; }
+        public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
+
 
         public static string CustomeConnectionString
         {
@@ -112,12 +115,6 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.DistrictCreatedByNavigation)
                     .HasForeignKey(d => d.CreatedBy)
                     .HasConstraintName("FK_User_District_CreatedBy");
-
-                entity.HasOne(d => d.State)
-                    .WithMany(p => p.District)
-                    .HasForeignKey(d => d.StateId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_State_StateId");
 
                 entity.HasOne(d => d.UpdatedByNavigation)
                     .WithMany(p => p.DistrictUpdatedByNavigation)
@@ -208,6 +205,13 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
             });
 
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.RoleId).ValueGeneratedNever();
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            });
+
             modelBuilder.Entity<State>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
@@ -245,6 +249,12 @@ namespace CSRPulse.Data.Data
 
                 entity.Property(e => e.UserName).IsUnicode(false);
 
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.User)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User_Role");
+
                 entity.HasOne(d => d.UserType)
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.UserTypeId)
@@ -269,6 +279,24 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRights_User");
+            });
+
+            modelBuilder.Entity<UserRoles>(entity =>
+            {
+                entity.HasKey(e => e.UserRoleId)
+                    .HasName("PK_UserRole");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.UserRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRole_Role");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserRoles)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRole_User");
             });
 
             modelBuilder.Entity<UserType>(entity =>

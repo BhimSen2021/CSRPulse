@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using DTOModel= CSRPulse.Data.Models;
+using DTOModel = CSRPulse.Data.Models;
 namespace CSRPulse.Services.IServices
 {
     public interface IRegistrationService
     {
-        Task<int> CustomerRegistrationAsync(Model.Customer customer);
+        Task<int> CustomerRegistrationAsync(Model.Customer customer, out string customerCode);
 
         Task<bool> CustomerPaymentAsync(Model.Customer customer);
         Task<bool> CustomerExists(Model.Customer customer);

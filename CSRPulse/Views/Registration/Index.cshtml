@@ -2,32 +2,36 @@
 
 @{
     ViewData["Title"] = "Customer Registration";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "_OuterLayout";
 }
 <div class="row registor-bg">
 
-    <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 text-center ml-md-5 ml-lg-5">
-
+    <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 ml-md-6 ml-lg-6">
         @await Component.InvokeAsync("Plan", new { planId = Model.PlainId })
-
-
     </div>
-    <div class="col col-lg-5 col-md-5 col-sm-12 col-xs-12">
-        <div class="card my-4">
-            <div class="card-header bg-success text-white">Sign up now to start your free sales trial.</div>
-            <div class="card-body py-2">
-                <div id="form-container">
-                    @if (Model != null && Model.CustomerId > 0)
-                    {
-                        { await Html.RenderPartialAsync("_PaymentOption", Model); }
-                    }
-                    else
-                    {
-                        { await Html.RenderPartialAsync("_Registration", Model); }
-                    }
+    <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 ml-md-6 ml-lg-6">
+        <div class="container">
+            <div class="row pt-0">
+                <div class="col-md-12">
+                    <div class="card card-pricing">
+                        <div class="card-body">
+                            <p class="fw-bold text-uppercase">Sign up now to start your free sales trial.</p>
+                            <div id="form-container">
+                                @if (Model != null && Model.CustomerId > 0)
+                                {
+                                    { await Html.RenderPartialAsync("_PaymentOption", Model); }
+                                }
+                                else
+                                {
+                                    { await Html.RenderPartialAsync("_Registration", Model); }
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 

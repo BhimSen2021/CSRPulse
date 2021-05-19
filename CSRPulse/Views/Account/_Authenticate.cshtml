@@ -1,19 +1,38 @@
 ﻿@model CSRPulse.Model.CustomerSignIn
 
 <form data-ajax="true" data-ajax-method="POST" asp-controller="Account" asp-action="CustomerLogin" data-ajax-success="onValidateSuccess">
-
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label", @for = "CompanyID" })
-        <input type="text" asp-for="CompanyID" class="form-control" placeholder="Enter Company ID"  autocomplete="off" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>   
+    <div class="mb-3">
+        @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "form-label", @for = "CompanyID" })
+        <input class="form-control" type="text" asp-for="CompanyID" placeholder="Enter company id" required="" autocomplete="off">
         <span asp-validation-for="CompanyID" class="text-danger"></span>
     </div>
-    <button type="submit" name="ButtonName" value="verify" class="btn btn-primary btn-block mb-2">VERIFY</button>
-
+    
+    <div class="d-grid mb-0 text-center">
+        <button class="btn btn-primary" name="ButtonName" type="submit" value="verify"><i class="mdi mdi-login mdi-18px"></i> Veryfy </button>
+    </div>
+    <!-- social-->
+    <div class="text-center mt-4">
+        <p class="text-muted font-16">Sign in with</p>
+        <ul class="social-list list-inline mt-3">
+            <li class="list-inline-item">
+                <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
+            </li>
+        </ul>
+    </div>
 </form>
 
 <script>
-    function onValidateSuccess(data) {
+    function onValidateSuccess(data) {       
         debugger;
         if (data.payment == true) {
             debugger;

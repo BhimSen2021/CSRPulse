@@ -115,7 +115,7 @@ namespace CSRPulse.Controllers
                     ModelState.Remove("Password");
 
                     if (!ModelState.IsValid)
-                    {                       
+                    {
                         return Json(new { htmlData = ConvertViewToString("_Authenticate", signIn, true) });
                     }
                     string returnOutPut = string.Empty;
@@ -137,8 +137,8 @@ namespace CSRPulse.Controllers
                             //    CustomerId = (int)customerID
                             //};
                             var userMsg = UserDefineMessage(returnOutPut);
-
-                            return Json(new { payment = true,cid= (int)customerID,msg= userMsg });
+                            TempData["customerCode"] = signIn.CompanyID;
+                            return Json(new { payment = true, cid = (int)customerID, msg = userMsg });
 
                         }
                         else

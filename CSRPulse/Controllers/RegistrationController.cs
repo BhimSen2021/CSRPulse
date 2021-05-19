@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CSRPulse.Controllers
 {
- 
+
     public class RegistrationController : BaseController<RegistrationController>
     {
         private readonly IRegistrationService registrationService;
@@ -40,6 +40,7 @@ namespace CSRPulse.Controllers
             if (cid.HasValue)
             {
                 customer.CustomerId = (int)cid;
+                customer.CustomerCode = (string)TempData["customerCode"];
             }
             BindDropdowns();
             return View(customer);
@@ -90,11 +91,10 @@ namespace CSRPulse.Controllers
                         msgType = "success";
                         ViewBag.IsVerified = false;
                         ViewBag.IsOTPSection = false;
-                        return Json(new { rType=1,msgType=msgType,msg=msg, htmlData = ConvertViewToString("_Registration", customer, true) });
+                        return Json(new { rType = 1, msgType = msgType, msg = msg, htmlData = ConvertViewToString("_Registration", customer, true) });
                     }
                     if (ButtonType == "verifyotp")
                     {
-
                         if (!string.IsNullOrEmpty(HttpContext.Session.GetComplexData<string>("OTP")))
                         {
                             var otpval = Convert.ToString(HttpContext.Session.GetComplexData<string>("OTP"));
@@ -126,10 +126,12 @@ namespace CSRPulse.Controllers
                     if (ButtonType == "submit")
                     {
                         customer.CreatedBy = 1;
-                        int customerID = await registrationService.CustomerRegistrationAsync(customer);
+                        string custCode;
+                        int customerID = await registrationService.CustomerRegistrationAsync(customer, out custCode);
                         if (customerID > 0)
                         {
                             customer.CustomerId = customerID;
+                            customer.CustomerCode = custCode;
                             return Json(new { success = true, htmlData = ConvertViewToString("_PaymentOption", customer, true) });
                         }
                         else

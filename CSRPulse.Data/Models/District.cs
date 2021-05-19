@@ -33,9 +33,6 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(CreatedBy))]
         [InverseProperty(nameof(User.DistrictCreatedByNavigation))]
         public virtual User CreatedByNavigation { get; set; }
-        [ForeignKey(nameof(StateId))]
-        [InverseProperty("District")]
-        public virtual State State { get; set; }
         [ForeignKey(nameof(UpdatedBy))]
         [InverseProperty(nameof(User.DistrictUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
