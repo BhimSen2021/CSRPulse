@@ -72,13 +72,13 @@ namespace CSRPulse.Services
             catch (Exception)
             {
                 await SendMailStatusAsync(dtoMailStatus, _genericRepository);
-                throw;
+                return false;
             }
         }
 
         #endregion
 
-        public async Task<bool> CustomerRegistrationMail(Common.EmailMessage message)
+        public async Task<bool> CustomerRelatedMails(Common.EmailMessage message)
         {
             try
             {

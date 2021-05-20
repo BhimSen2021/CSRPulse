@@ -55,7 +55,7 @@ namespace CSRPulse.Data.Repositories
                 return Task.FromResult(true);
 
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
                 dbSqlconnection.ConnectionString = customConnection;
                 //Script to kill existing connection so database can be dropped.

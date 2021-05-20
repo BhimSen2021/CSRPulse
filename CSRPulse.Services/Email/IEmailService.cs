@@ -8,7 +8,7 @@ namespace CSRPulse.Services
 {
     public interface IEmailService
     {
-        Task<bool> CustomerRegistrationMail(Common.EmailMessage message);
+        Task<bool> CustomerRelatedMails(Common.EmailMessage message);
     
     }
 }

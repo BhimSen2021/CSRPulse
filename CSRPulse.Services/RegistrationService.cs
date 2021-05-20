@@ -6,7 +6,6 @@ using CSRPulse.Services.IServices;
 using CSRPulse.Data.Repositories;
 using AutoMapper;
 using DTOModel = CSRPulse.Data.Models;
-using System.Transactions;
 using System.Linq;
 
 namespace CSRPulse.Services
@@ -125,9 +124,7 @@ namespace CSRPulse.Services
                     throw;
                 }
             }
-
         }
-
         public string GenerateOTP()
         {
             string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -149,11 +146,11 @@ namespace CSRPulse.Services
                 } while (otp.IndexOf(character) != -1);
                 otp += character;
             }
-            return otp;
-
+            return otp;      
         }
 
-        public bool SendOTP(string email, string OTP)
+
+        public bool SendOTP(string email, string OTP, string companyName)
         {
             bool flag = false;
             try
@@ -165,17 +162,17 @@ namespace CSRPulse.Services
                 if (mailSubj != null)
                 {
                     message.Subject = mailSubj.Subject;
-                    message.SubjectId = mailSubj.SubjectId;
+                    message.Subject = "Default Subject";
                 }
                 else
-                    message.Subject = "Default Subject";
-
-                message.PlaceHolders = new List<KeyValuePair<string, string>>();
-                message.TemplateName = "TestEmail";
+                    message.TemplateName = "TestEmail";
                 message.PlaceHolders.Add(
                     new KeyValuePair<string, string>("{$otp}", OTP)
                     );
-                _emailService.CustomerRegistrationMail(message);
+               
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", OTP));
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$company}", companyName));
+                _emailService.CustomerRelatedMails(message);
                 flag = true;
             }
             catch (Exception)
@@ -184,6 +181,8 @@ namespace CSRPulse.Services
             }
 
             return flag;
+       
         }
+
     }
 }

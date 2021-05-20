@@ -9,6 +9,7 @@
     <Content Remove="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Remove="Areas\Customer\Views\_ViewImports.cshtml" />
     <Content Remove="Areas\Customer\Views\_ViewStart.cshtml" />
+    <Content Remove="wwwroot\Templates\EmailTemplate\CustomerRegs.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +43,8 @@
     <None Include="Areas\Customer\Views\_ViewImports.cshtml" />
     <None Include="Areas\Customer\Views\_ViewStart.cshtml" />
     <None Include="wwwroot\js\site.js" />
-    <None Include="wwwroot\Templates\EmailTemplate\TestEmail.html" />
+    <None Include="wwwroot\Templates\EmailTemplate\CustomerRegs.html" />
+    <None Include="wwwroot\Templates\EmailTemplate\CustomerOTP.html" />
   </ItemGroup>
 
 </Project>

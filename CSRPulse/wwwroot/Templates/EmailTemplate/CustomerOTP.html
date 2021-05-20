@@ -20,7 +20,7 @@
                     <tr>
                         <td align="left" valign="top" bgcolor="#564319" style="background-color:#564319; font-family:Arial, Helvetica, sans-serif; padding:10px;">
                             <div style="font-size:36px; color:#ffffff;">
-                                <b>Account Registration</b>
+                                <b>Account Verification</b>
                             </div>
                            
                         </td>
@@ -30,7 +30,7 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td align="center" valign="middle" style="padding:10px; color:#564319; font-size:28px; font-family:Georgia, 'Times New Roman', Times, serif;">
-                                        Congratulations! <small>You are registered.</small>
+                                        <!--Congratulations! <small>You are registered.</small>-->
                                     </td>
                                 </tr>
                             </table>
@@ -41,7 +41,7 @@
                                     </td>
                                     <td align="left" valign="middle" style="color:#525252; font-family:Arial, Helvetica, sans-serif; padding:10px;">
                                         <div style="font-size:16px;">
-                                            Dear {emailId},
+                                            Dear {$company},
                                         </div>
                                         <div style="font-size:12px;">
                                             Thank you for showing your interest in CSRPulse.                                           
@@ -71,14 +71,13 @@
                                 <tr>
                                     <td align="left" valign="middle" style="padding:15px; font-family:Arial, Helvetica, sans-serif;">
                                         <div style="font-size:20px; color:#564319;">
-                                            <b>Please keep your credentials confidential for future use. </b>
+                                            <b>Please do not share your OTP to anyone. </b>
                                         </div>
                                         <div style="font-size:16px; color:#525252;">
-                                            <b>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> {emailId}
+                                          
+                                            <b>One Time Password (OTP) :</b> {$otp}
                                             <br />
-                                            <b>Username :</b> {$otp}
-                                            <br />
-                                            <b>Password :</b> {userpassword}
+                                           
                                         </div>
                                     </td>
                                 </tr>
