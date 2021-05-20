@@ -78,6 +78,7 @@ namespace CSRPulse.Services
         {
             try
             {
+                SetConnectionString(null);
                 outPutValue = string.Empty;
                 customerID = null;
                 bool flag = false;
@@ -150,8 +151,8 @@ namespace CSRPulse.Services
 
                 if (flag)
                 {
-                    //var database = validateCustomer.FirstOrDefault().DataBaseName;
-                    // SetConnectionString(ref database);
+                    var database = validateCustomer.FirstOrDefault().DataBaseName;                
+                    SetConnectionString(database);
                 }
                 return flag;
 

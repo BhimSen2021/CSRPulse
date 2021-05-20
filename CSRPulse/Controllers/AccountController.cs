@@ -124,6 +124,7 @@ namespace CSRPulse.Controllers
                     isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID);
                     if (isCustExists)
                     {
+                        
                         ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                         return Json(new { htmlData = ConvertViewToString("_CustomerLogin", signIn, true) });
                     }

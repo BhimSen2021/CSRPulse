@@ -66,7 +66,7 @@ namespace CSRPulse.Attributes
                     }
                     else
                     {
-                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "Index", controller = "Login" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "CustomerLogin", controller = "Account" }));
                         base.OnActionExecuting(filterContext);
 
                     }
