@@ -25,5 +25,8 @@ namespace CSRPulse.Model
         public Nullable<System.DateTime> MaintenanceDateTime { get; set; }
         public List<UserRight> userMenuRights { set; get; }
 
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+
     }
 }
