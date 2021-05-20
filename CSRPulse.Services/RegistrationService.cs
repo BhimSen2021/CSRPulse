@@ -6,7 +6,6 @@ using CSRPulse.Services.IServices;
 using CSRPulse.Data.Repositories;
 using AutoMapper;
 using DTOModel = CSRPulse.Data.Models;
-using System.Transactions;
 using System.Linq;
 
 namespace CSRPulse.Services
@@ -125,12 +124,7 @@ namespace CSRPulse.Services
                     throw;
                 }
             }
-
-
         }
-        }
-        }
-
         public string GenerateOTP()
         {
             string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -152,11 +146,11 @@ namespace CSRPulse.Services
                 } while (otp.IndexOf(character) != -1);
                 otp += character;
             }
-            return otp;
-        public bool SendOTP(string email, string OTP)
+            return otp;      
         }
 
-        public bool SendOTP(string email, string OTP,string companyName)
+
+        public bool SendOTP(string email, string OTP, string companyName)
         {
             bool flag = false;
             try
@@ -171,11 +165,11 @@ namespace CSRPulse.Services
                     message.Subject = "Default Subject";
                 }
                 else
-                message.TemplateName = "TestEmail";
+                    message.TemplateName = "TestEmail";
                 message.PlaceHolders.Add(
                     new KeyValuePair<string, string>("{$otp}", OTP)
                     );
-                _emailService.CustomerRegistrationMail(message);
+               
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", OTP));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$company}", companyName));
                 _emailService.CustomerRelatedMails(message);
@@ -186,8 +180,8 @@ namespace CSRPulse.Services
                 throw;
             }
 
-
-            return Task.FromResult(flag);
+            return flag;
+       
         }
 
     }
