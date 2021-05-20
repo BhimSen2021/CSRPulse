@@ -21,14 +21,14 @@
 
     <div class="row">
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group mt-3">
+            <div class="form-group mt-2">
                 <label asp-for="Email" class="form-label required"></label>
                 <input type="email" asp-for="Email" class="form-control form-control-sm" required autocomplete="off" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group mt-3">
+            <div class="form-group mt-2">
                 <label asp-for="Telephone" class="form-label required"></label>
                 <input type="tel" pattern="[0-9]{10}" asp-for="Telephone" maxlength="10" class="form-control form-control-sm" required autocomplete="off" />
                 <span asp-validation-for="Telephone" class="text-danger"></span>
@@ -37,13 +37,13 @@
     </div>
     <div class="row">
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group mt-3">
+            <div class="form-group mt-2">
                 <label asp-for="Website" class="form-label"></label>
                 <input type="text" asp-for="Website" class="form-control form-control-sm" autocomplete="off" />
             </div>
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group mt-3">
+            <div class="form-group mt-2">
                 <label asp-for="Country" class="form-label required"></label>
                 <select asp-for="Country" aria-required="true" class="form-select form-select-sm">
                     <option disabled="" label="Country" selected="" value="">Country</option>
@@ -56,7 +56,7 @@
 
     <div class="row">
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group mt-3">
+            <div class="form-group mt-2">
                 <label asp-for="StateId" class="form-label required"></label>
                 <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select form-select-sm">
                     <option disabled="" label="State" selected="" value="">Country</option>
@@ -65,34 +65,34 @@
             </div>
         </div>
         <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group mt-3">
+            <div class="form-group mt-2">
                 <label asp-for="PostalCode" class="form-label required"></label>
-                <input type="text" asp-for="PostalCode" maxlength="6" class="form-control form-control-sm" />
+                <input type="text" asp-for="PostalCode" maxlength="6" class="form-control form-control-sm" autocomplete="off" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
         </div>
     </div>
 
 
-    <div class="form-group mt-3">
+    <div class="form-group mt-2">
         <label asp-for="Address" class="form-label required"></label>
         <textarea asp-for="Address" cols="37" rows="1" class="form-control"></textarea>
         <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
-    <div class="form-group mt-3">
+    <div class="form-group mt-2">
         <label asp-for="Address2" class="form-label"></label>
         <textarea asp-for="Address2" cols="37" rows="1" draggable="false" resize class="form-control"></textarea>
         <span asp-validation-for="Address2" class="text-danger"></span>
     </div>
 
-    <div class="form-group mt-3">
+    <div class="form-group mt-2">
         <input type="checkbox" asp-for="IsAgree" />
         <label for="IsAgree">I agree to the Master Subscription Agreement</label><br />
         <span asp-validation-for="IsAgree" class="text-danger"></span>
     </div>
 
-    <div class="form-group mt-3">
+    <div class="form-group mt-2">
         <p class="mb-0" style="font-size: 12px; line-height: 1.42857143;">
             By registering, you confirm that you agree to the storing and processing of your personal data by
             CSRPulse as described in the Privacy Statement.

@@ -87,46 +87,36 @@ namespace CSRPulse.Services
         {
 
             string outputRes = string.Empty;
-
-            using (var transaction = _genericRepository.BeginTransaction())
+            var getCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
+            if (getCustomer != null)
             {
-                try
+                using (var transaction = _genericRepository.BeginTransaction())
                 {
-                    var dbName = "CSRPulse_" + customer.CustomerCode;
-                    dbName = dbName.Replace('-', '_');
-                    var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
-                    await _genericRepository.InsertAsync(dtoCustPayment);
-                    customer.CustomerLicense.PaymentId = dtoCustPayment.PaymentId;
-                    var dtoCustLicence = _mapper.Map<DTOModel.CustomerLicenseActivation>(customer.CustomerLicense);
-                    await _genericRepository.InsertAsync(dtoCustLicence);
-
-                    transaction.Commit();
-                    DTOModel.Customer dtoCustomer = new DTOModel.Customer()
+                    try
                     {
-                        CustomerCode = customer.CustomerCode,
-                        CustomerName = customer.CustomerName,
-                        Email = customer.Email,
-                        Telephone = customer.Telephone,
-                        DataBaseName = dbName
-                    };
-                    await _dBForCustomer.CreateBD(dtoCustomer, _dbPath, "Password", out outputRes);
+                        var dbName = "CSRPulse_" + customer.CustomerCode;
+                        dbName = dbName.Replace('-', '_');
+                        var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
+                        await _genericRepository.InsertAsync(dtoCustPayment);
+                        customer.CustomerLicense.PaymentId = dtoCustPayment.PaymentId;
+                        var dtoCustLicence = _mapper.Map<DTOModel.CustomerLicenseActivation>(customer.CustomerLicense);
+                        await _genericRepository.InsertAsync(dtoCustLicence);
 
-                    var getCustDetail = _genericRepository.Get<DTOModel.Customer>(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
-                    if (getCustDetail != null)
-                    {
-                        getCustDetail.DataBaseName = dbName;
-                        _genericRepository.Update(getCustDetail);
+                        transaction.Commit();
+                        getCustomer.DataBaseName = dbName;
+                        await _dBForCustomer.CreateBD(getCustomer, _dbPath, "Password", out outputRes);
+                        _genericRepository.Update(getCustomer);
+                        await SendRegistrationMail(getCustomer, "Password");
+                        return true;
                     }
-                    return true;
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    throw;
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
-
-
+            return false;
         }
 
         public string GenerateOTP()
@@ -154,7 +144,7 @@ namespace CSRPulse.Services
 
         }
 
-        public bool SendOTP(string email, string OTP)
+        public bool SendOTP(string email, string OTP,string companyName)
         {
             bool flag = false;
             try
@@ -169,14 +159,13 @@ namespace CSRPulse.Services
                     message.SubjectId = mailSubj.SubjectId;
                 }
                 else
-                    message.Subject = "Default Subject";
+                    message.Subject = "CSRPulse Mail";
 
                 message.PlaceHolders = new List<KeyValuePair<string, string>>();
-                message.TemplateName = "TestEmail";
-                message.PlaceHolders.Add(
-                    new KeyValuePair<string, string>("{$otp}", OTP)
-                    );
-                _emailService.CustomerRegistrationMail(message);
+                message.TemplateName = "CustomerOTP";
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", OTP));
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$company}", companyName));
+                _emailService.CustomerRelatedMails(message);
                 flag = true;
             }
             catch (Exception)
@@ -187,6 +176,40 @@ namespace CSRPulse.Services
             return flag;
         }
 
+        Task<bool> SendRegistrationMail(DTOModel.Customer customer, string password)
+        {
+            bool flag = false;
+            try
+            {
+                StringBuilder emailBody = new StringBuilder("");
+                Common.EmailMessage message = new Common.EmailMessage();
+                message.To = customer.Email;
+                message.CustomerId = customer.CustomerId;
+                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 2).FirstOrDefault();
+                if (mailSubj != null)
+                {
+                    message.Subject = mailSubj.Subject;
+                    message.SubjectId = mailSubj.SubjectId;
+                }
+                else
+                    message.Subject = "CSRPulse Mail";
+
+                message.PlaceHolders = new List<KeyValuePair<string, string>>();
+                message.TemplateName = "CustomerRegs";
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$company}", customer.CustomerName));
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$emailId}", customer.Email));
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$user}", customer.CustomerCode));
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$password}", password));
+                _emailService.CustomerRelatedMails(message);
+                flag = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return Task.FromResult(flag);
+        }
 
     }
 }

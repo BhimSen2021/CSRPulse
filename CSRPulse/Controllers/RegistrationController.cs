@@ -84,7 +84,7 @@ namespace CSRPulse.Controllers
                         var OTP = registrationService.GenerateOTP();
                         HttpContext.Session.SetComplexData("OTP", OTP);
 
-                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP);
+                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP,customer.CustomerName);
                         if (ViewBag.OTPSent)
                             msg = "OTP has ben sent on your Email.Please Enter OTP to verify your details.";
 
