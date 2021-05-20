@@ -20,6 +20,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         {
             _customerService = customerService;
         }
+        
         public async Task<IActionResult> CustomerListAsync()
         {
             _logger.LogInformation("Admin/Customer/CustomerList");

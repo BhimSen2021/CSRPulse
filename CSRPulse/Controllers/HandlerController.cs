@@ -17,5 +17,10 @@ namespace CSRPulse.Controllers
         {
             return View("UnAuthorizeAccess");
         }
+        [Route("Maintenance")]
+        public IActionResult Maintenance()
+        {
+            return View("Maintenance");
+        }
     }
 }

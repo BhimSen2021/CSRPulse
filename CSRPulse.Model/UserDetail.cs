@@ -17,6 +17,7 @@ namespace CSRPulse.Model
         public string MobileNo { get; set; }
         public string EmailID { get; set; }
         public string FullName { get; set; }
+        public string ImageName { get; set; }
         public string Designation { get; set; }
         public string PresentAddress { get; set; }
         public string DepartmentName { get; set; }
