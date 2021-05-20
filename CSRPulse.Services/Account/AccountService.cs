@@ -44,18 +44,25 @@ namespace CSRPulse.Services
         {
             userDetail = new UserDetail();
 
-            var uDetail = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.UserRights).FirstOrDefault();
+            var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.Role).FirstOrDefault();
 
-            if (uDetail == null)
+            if (uData == null)
             {
                 return false;
             }
-            else
+
+            if (uData != null)
             {
-                userDetail = _mapper.Map<UserDetail>(uDetail);
-                if (uDetail.UserRights != null)
+                userDetail = _mapper.Map<UserDetail>(uData);
+
+                userDetail.RoleId = uData.Role.RoleId;
+                userDetail.RoleName = uData.Role.RoleName;
+
+                var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.UserId == uData.UserId).Include(r => r.Menu).ToList();
+
+                if (uRights != null && uRights.Count > 0)
                 {
-                    userDetail.userMenuRights = uDetail.UserRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
+                    userDetail.userMenuRights = uRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
                     {
                         UserId = uRigth.UserId,
                         MenuId = uRigth.MenuId,
@@ -63,11 +70,56 @@ namespace CSRPulse.Services
                         CreateRight = uRigth.CreateRight,
                         EditRight = uRigth.EditRight,
                         ViewRight = uRigth.ViewRight,
-                        DeleteRight = uRigth.DeleteRight
+                        DeleteRight = uRigth.DeleteRight,
+                        menu = new Menu()
+                        {
+                            ParentMenuId = uRigth.Menu.ParentMenuId,
+                            MenuId = uRigth.Menu.MenuId,
+                            Area = uRigth.Menu.Area,
+                            MenuName = uRigth.Menu.MenuName,
+                            Url = uRigth.Menu.Url == null ? uRigth.Menu.Url : uRigth.Menu.Url.ToLower(),
+                            SequenceNo = uRigth.Menu.SequenceNo,
+                        }
 
                     }).ToList();
                 }
             }
+
+            //var uDetail = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.UserRights).ThenInclude(r => r.Menu).Include(r => r.Role).FirstOrDefault();
+
+            //if (uDetail == null)
+            //{
+            //    return false;
+            //}
+            //else
+            //{
+            //    userDetail = _mapper.Map<UserDetail>(uDetail);
+            //    if (uDetail.UserRights != null)
+            //    {
+            //        userDetail.userMenuRights = uDetail.UserRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
+            //        {
+            //            UserId = uRigth.UserId,
+            //            MenuId = uRigth.MenuId,
+            //            ShowMenu = uRigth.ShowMenu,
+            //            CreateRight = uRigth.CreateRight,
+            //            EditRight = uRigth.EditRight,
+            //            ViewRight = uRigth.ViewRight,
+            //            DeleteRight = uRigth.DeleteRight,
+            //            menu = new Menu()
+            //            {
+            //                ParentMenuId = uRigth.Menu.ParentMenuId,
+            //                MenuId = uRigth.Menu.MenuId,
+            //                Area = uRigth.Menu.Area,
+            //                MenuName = uRigth.Menu.MenuName,
+            //                Url = uRigth.Menu.Url,
+            //                SequenceNo = uRigth.Menu.SequenceNo,
+            //            }
+
+            //        }).ToList();
+            //    }
+
+
+            //}
 
             if (userDetail.UserID > 0) { return true; }
 
@@ -151,7 +203,7 @@ namespace CSRPulse.Services
 
                 if (flag)
                 {
-                    var database = validateCustomer.FirstOrDefault().DataBaseName;                
+                    var database = validateCustomer.FirstOrDefault().DataBaseName;
                     SetConnectionString(database);
                 }
                 return flag;

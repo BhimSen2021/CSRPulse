@@ -184,7 +184,6 @@ namespace CSRPulse.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
-
         }
 
         /// <summary>

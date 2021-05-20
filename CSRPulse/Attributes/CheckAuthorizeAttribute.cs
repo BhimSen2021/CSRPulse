@@ -20,21 +20,21 @@ namespace CSRPulse.Attributes
             if (controllerActionDescriptor != null)
             {
                 controllerName = controllerActionDescriptor.ControllerName.ToString().ToLower();
-                actionName = controllerActionDescriptor.ActionName.ToString();
+                actionName = controllerActionDescriptor.ActionName.ToString().ToLower();
             }
-            var user = filterContext.HttpContext.Session.GetComplexData<UserDetail>("user");
+            var user = filterContext.HttpContext.Session.GetComplexData<UserDetail>("User");
 
-            var indexPageURL = $"{controllerName}/index";
+            var indexPageURL = $"{controllerName}/{actionName}";
 
             if (!SharedControllers.controllers.Contains(controllerName))
             {
 
-                if (user != null && actionName != "index" && user.userMenuRights.Count > 0)
+                if (user != null && user.userMenuRights.Count > 0)
                 {
                     var menuRights = user.userMenuRights;
-                    if (menuRights.Any(x => x.menu.Url.ToLower() == indexPageURL))
+                    if (menuRights.Any(x => x.menu.Url == (indexPageURL)))
                     {
-                        var menuRight = menuRights.Where(x => x.menu.Url.ToLower() == indexPageURL).Select(
+                        var menuRight = menuRights.Where(x => x.menu.Url == indexPageURL).Select(
                             y => new { ShowMenuRight = y.ShowMenu, CreateRight = y.CreateRight, EditRight = y.EditRight }).FirstOrDefault();
 
                         if (actionName == "index" && !menuRight.ShowMenuRight)
@@ -52,11 +52,10 @@ namespace CSRPulse.Attributes
                 else
                 {
                     if (user != null)
-
                     {
                         if (user.userMenuRights.Count > 0)
                         {
-                            if (!user.userMenuRights.Any(x => x.menu.Url.ToLower() == indexPageURL))
+                            if (!user.userMenuRights.Any(x => x.menu.Url == indexPageURL))
                                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "Handler" }));
                         }
                         else

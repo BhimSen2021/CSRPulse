@@ -16,7 +16,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Plan, Plan>().ReverseMap();
             CreateMap<Plan, Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
-           
+
             CreateMap<DTOModel.Customer, Customer>()
            .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
            .ForMember(d => d.CustomerCode, o => o.MapFrom(s => s.CustomerCode))
@@ -40,6 +40,8 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.User, UserDetail>().ReverseMap();
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
+
+            CreateMap<DTOModel.Role, Role>();
 
             #region Email Mapper
             CreateMap<Common.EmailMessage, DTOModel.MailSendStatus>()

@@ -126,7 +126,6 @@ namespace CSRPulse.Services
                 }
             }
 
-
         }
 
         public string GenerateOTP()
@@ -186,7 +185,5 @@ namespace CSRPulse.Services
 
             return flag;
         }
-
-
     }
 }

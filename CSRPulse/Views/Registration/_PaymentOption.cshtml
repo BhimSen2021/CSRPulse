@@ -1,15 +1,12 @@
 ﻿
 @model CSRPulse.Model.Customer
 <form data-ajax="true" data-ajax-method="POST" asp-controller="Registration" asp-action="PaymentOption" data-ajax-success="paymentSuccess">
-
     <input type="hidden" asp-for="CustomerId" />
     <input type="hidden" asp-for="CustomerCode" />
     <div class="row">
         <div class="regbutton col col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-
         </div>
-
     </div>
 
     <div class="row">
@@ -20,9 +17,8 @@
 </form>
 
 <script type="text/javascript">
-            function paymentSuccess(data) {               
+            function paymentSuccess(data) {
                 if (data.success == true) {
-
                     window.location.href = "@Url.Action("Index", "Home")";
                     commonMessage('warning', 'Trail Version activated for the 30 day, Registration details has been sent on your Email. Please goto login page.');
                 }
