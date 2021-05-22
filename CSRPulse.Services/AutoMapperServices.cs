@@ -31,7 +31,10 @@ namespace CSRPulse.Services
            .ForMember(d => d.Website, o => o.MapFrom(s => s.Website))
            .ForMember(d => d.DataBaseName, o => o.MapFrom(s => s.DataBaseName))
            .ForMember(d => d.IsDeleted, o => o.MapFrom(s => s.IsDeleted))
-           .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn)).ReverseMap()
+           .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
+           .ForMember(d => d.CustomerUniqueId, o => o.MapFrom(s => s.CustomerUniqueId))
+           .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
+           .ReverseMap()
            .ForAllOtherMembers(i => i.Ignore());
 
 

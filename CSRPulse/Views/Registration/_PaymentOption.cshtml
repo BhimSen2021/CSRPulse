@@ -19,8 +19,8 @@
 <script type="text/javascript">
             function paymentSuccess(data) {
                 if (data.success == true) {
-                    window.location.href = "@Url.Action("Index", "Home")";
-                    commonMessage('warning', 'Trail Version activated for the 30 day, Registration details has been sent on your Email. Please goto login page.');
+                    window.location.href = "@Url.Action("CustomerLogin", "Account")";
+                    commonMessage('warning', 'Trail Version activated for the 30 day, Registration details has been sent on your Email.');
                 }
             }
 </script>

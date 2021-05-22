@@ -59,5 +59,6 @@ namespace CSRPulse.Model
 
         public string OTP { get; set; }
 
+        public string CustomerUniqueId { get; set; }
     }
 }

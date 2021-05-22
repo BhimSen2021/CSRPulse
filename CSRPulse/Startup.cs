@@ -11,9 +11,10 @@ using CSRPulse.Services.IServices;
 using System;
 using Microsoft.AspNetCore.Http;
 using CSRPulse.Model;
+using DNTCaptcha.Core;
 
 namespace CSRPulse
-{ 
+{
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -59,7 +60,9 @@ namespace CSRPulse
             });
 #endif
 
-   
+            services.AddDNTCaptcha(options =>
+                 options.UseCookieStorageProvider()
+                     .ShowThousandsSeparators(false));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

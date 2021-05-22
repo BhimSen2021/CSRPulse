@@ -40,7 +40,6 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
 
-
         public static string CustomeDataBase
         {
             get; set;

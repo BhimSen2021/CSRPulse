@@ -126,7 +126,7 @@ namespace CSRPulse.Services
             else { return false; }
         }
 
-        public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID)
+        public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID,out string companyName)
         {
             try
             {
@@ -134,10 +134,13 @@ namespace CSRPulse.Services
                 outPutValue = string.Empty;
                 customerID = null;
                 bool flag = false;
-                var validateCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerCode == singIn.CompanyID).Include(p => p.CustomerPayment).Include(y => y.CustomerLicenseActivation);
+                companyName = string.Empty;
+
+                var validateCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerUniqueId == singIn.CompanyID).Include(p => p.CustomerPayment).Include(y => y.CustomerLicenseActivation);
                 if (validateCustomer.FirstOrDefault() != null)
                 {
                     customerID = validateCustomer.FirstOrDefault().CustomerId;
+                    companyName = validateCustomer.FirstOrDefault().CustomerName;
                     if (validateCustomer.FirstOrDefault().CustomerPayment != null && validateCustomer.FirstOrDefault().CustomerPayment.Count > 0)
                     {
                         var custPayment = validateCustomer.FirstOrDefault().CustomerPayment.OrderByDescending(o => o.PaymentId).FirstOrDefault();

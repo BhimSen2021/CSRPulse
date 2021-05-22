@@ -14,7 +14,7 @@ namespace CSRPulse.Services
     public class BaseService
     {
         private readonly IMapper _mapper;
-        public BaseService(IMapper mapper= null)
+        public BaseService(IMapper mapper = null)
         {
             _mapper = mapper;
         }
@@ -41,7 +41,7 @@ namespace CSRPulse.Services
         {
             try
             {
-               // IGenericRepository _genericRepository = new GenericRepository();
+                // IGenericRepository _genericRepository = new GenericRepository();
                 if (_genericRepository.Exists<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName))
                 {
                     var getData = _genericRepository.Get<DTOModel.StartingNumber>(x => x.TableName == startingNumber.TableName).FirstOrDefault();
@@ -60,15 +60,15 @@ namespace CSRPulse.Services
                     var dtoNumber = new DTOModel.StartingNumber
                     {
                         ColumnName = startingNumber.ColumnName,
-                        CreatedBy= startingNumber.CreatedBy,
-                        IsDeleted= startingNumber.IsDeleted,
-                        Number= startingNumber.Number,
-                        NumberWidth= startingNumber.NumberWidth,
-                        Prefix= startingNumber.Prefix,
-                        StartNumberId= startingNumber.StartNumberID,
-                        TableName= startingNumber.TableName,
-                        UpdatedBy= startingNumber.UpdatedBy,
-                        UpdatedOn= startingNumber.UpdatedOn                       
+                        CreatedBy = startingNumber.CreatedBy,
+                        IsDeleted = startingNumber.IsDeleted,
+                        Number = startingNumber.Number,
+                        NumberWidth = startingNumber.NumberWidth,
+                        Prefix = startingNumber.Prefix,
+                        StartNumberId = startingNumber.StartNumberID,
+                        TableName = startingNumber.TableName,
+                        UpdatedBy = startingNumber.UpdatedBy,
+                        UpdatedOn = startingNumber.UpdatedOn
                     };
                     _genericRepository.Insert(dtoNumber);
                     return GenerateCode(dtoNumber);
@@ -89,21 +89,42 @@ namespace CSRPulse.Services
             if (startingNumber != null)
             {
                 int maxNumber = startingNumber.NumberWidth;
+                var numLen = startingNumber.Number.ToString().Length;
+                var cCode = string.Empty;
+                switch (numLen)
+                {
+                    case 1:
+                        cCode = "0000" + startingNumber.Number;
+                        break;
+                    case 2:
+                        cCode = "000" + startingNumber.Number;
+                        break;
+                    case 3:
+                        cCode = "00" + startingNumber.Number;
+                        break;
+                    case 4:
+                        cCode = "0" + startingNumber.Number;
+                        break;
+                    case 5:
+                        cCode = startingNumber.Number.ToString();
+                            break;
 
-
-                newCode = startingNumber.Prefix + "-" + startingNumber.Number;
+                    default:
+                        break;
+                }
+                newCode = startingNumber.Prefix + "-" + cCode;
 
             }
             return newCode;
 
         }
 
-        public virtual async Task<bool> SendMailStatusAsync(DTOModel.MailSendStatus sendStatus,IGenericRepository _genericRepository)
+        public virtual async Task<bool> SendMailStatusAsync(DTOModel.MailSendStatus sendStatus, IGenericRepository _genericRepository)
         {
             try
             {
-              // var dtoModel= _mapper.Map<DTOModel.MailSendStatus>(sendStatus);
-               await _genericRepository.InsertAsync(sendStatus);
+                // var dtoModel= _mapper.Map<DTOModel.MailSendStatus>(sendStatus);
+                await _genericRepository.InsertAsync(sendStatus);
                 return true;
 
             }

@@ -23,7 +23,6 @@ namespace CSRPulse.Data.Models
         [StringLength(100)]
         public string BccEmails { get; set; }
         public int? SubjectId { get; set; }
-      
         public string MailContent { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime SentOn { get; set; }

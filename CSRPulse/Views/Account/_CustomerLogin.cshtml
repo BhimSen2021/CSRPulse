@@ -1,5 +1,7 @@
 ﻿@model CSRPulse.Model.CustomerSignIn
+<p class="text-muted mb-3">Enter your credential to access your CSRPulse account.</p>
 
+<p class="text-muted"><span class="fw-bold">Company:</span> <spa>@ViewBag.companyName</spa></p>
 
 <form asp-action="CustomerLogin" asp-controller="Account" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -10,12 +12,10 @@
 
         </div>*@
 
-    <div class="mb-3">
-        <input type="hidden" asp-for="CompanyID" />
-        @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "form-label", @for = "CompanyID" })
-        <input type="text" asp-for="CompanyID" class="form-control" disabled="disabled">
-
-    </div>
+<div class="mb-3">
+    <input type="hidden" asp-for="CompanyID" />
+    <p class="text-muted"><span>  @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "fw-bold" }) :</span> <span> @Model.CompanyID</span></p>
+</div>
     <div class="mb-3">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
         <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">
@@ -27,11 +27,26 @@
         <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" required="" autocomplete="off">
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
+
     <div class="mb-3">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" asp-for="RememberMe">
-            @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "form-check-label", @for = "RememberMe" })
-        </div>
+        <dnt-captcha asp-captcha-generator-max="999999"
+                     asp-captcha-generator-min="111111"
+                     asp-captcha-generator-language="English"
+                     asp-captcha-generator-display-mode="ShowDigits"
+                     asp-use-relative-urls="true"
+                     asp-placeholder="Enter Captcha"
+                     asp-validation-error-message="Please enter the Captcha."
+                     asp-font-name="Tahoma"
+                     asp-font-size="20"
+                     asp-fore-color="#333333"
+                     asp-back-color="#ccc"
+                     asp-text-box-class="text-box form-control"
+                     asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
+                     asp-validation-message-class="text-danger"
+                     asp-refresh-button-class="fas fa-redo"
+                     asp-use-noise="false"
+
+                     />
     </div>
     <div class="d-grid mb-0 text-center">
         <button type="submit" name="ButtonName" class="btn btn-primary" value="LogIn"><i class="mdi mdi-login"></i> Log In </button>

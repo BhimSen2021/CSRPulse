@@ -28,6 +28,7 @@ namespace CSRPulse.Controllers
             var stateList = ddlService.GetStateAsync(null, null);
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
         }
+
         public IActionResult Index(int? cid, int? pId = null)
         {
             _logger.LogInformation("RegistrationController/Index");
