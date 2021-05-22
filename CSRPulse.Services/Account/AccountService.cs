@@ -84,43 +84,6 @@ namespace CSRPulse.Services
                     }).ToList();
                 }
             }
-
-            //var uDetail = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.UserRights).ThenInclude(r => r.Menu).Include(r => r.Role).FirstOrDefault();
-
-            //if (uDetail == null)
-            //{
-            //    return false;
-            //}
-            //else
-            //{
-            //    userDetail = _mapper.Map<UserDetail>(uDetail);
-            //    if (uDetail.UserRights != null)
-            //    {
-            //        userDetail.userMenuRights = uDetail.UserRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
-            //        {
-            //            UserId = uRigth.UserId,
-            //            MenuId = uRigth.MenuId,
-            //            ShowMenu = uRigth.ShowMenu,
-            //            CreateRight = uRigth.CreateRight,
-            //            EditRight = uRigth.EditRight,
-            //            ViewRight = uRigth.ViewRight,
-            //            DeleteRight = uRigth.DeleteRight,
-            //            menu = new Menu()
-            //            {
-            //                ParentMenuId = uRigth.Menu.ParentMenuId,
-            //                MenuId = uRigth.Menu.MenuId,
-            //                Area = uRigth.Menu.Area,
-            //                MenuName = uRigth.Menu.MenuName,
-            //                Url = uRigth.Menu.Url,
-            //                SequenceNo = uRigth.Menu.SequenceNo,
-            //            }
-
-            //        }).ToList();
-            //    }
-
-
-            //}
-
             if (userDetail.UserID > 0) { return true; }
 
             else { return false; }
