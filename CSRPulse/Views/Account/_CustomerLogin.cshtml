@@ -1,10 +1,9 @@
 ﻿@model CSRPulse.Model.CustomerSignIn
 <p class="text-muted mb-3">Enter your credential to access your CSRPulse account.</p>
 
-<p class="text-muted"><span class="fw-bold">Company:</span> <spa>@ViewBag.companyName</spa></p>
+<p class="text-muted"><span class="fw-bold">Company:</span> <spa>@TempData["companyName"]</spa></p>
 
 <form asp-action="CustomerLogin" asp-controller="Account" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     @*<div class="form-group">
             @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label", @for = "CompanyID" })
@@ -12,10 +11,11 @@
 
         </div>*@
 
-<div class="mb-3">
-    <input type="hidden" asp-for="CompanyID" />
-    <p class="text-muted"><span>  @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "fw-bold" }) :</span> <span> @Model.CompanyID</span></p>
-</div>
+    <div class="mb-3">
+        <input type="hidden" asp-for="CompanyID" />
+        <p class="text-muted"><span>  @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "fw-bold" }) :</span> <span> @Model.CompanyID</span></p>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
         <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">
@@ -44,9 +44,7 @@
                      asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
                      asp-validation-message-class="text-danger"
                      asp-refresh-button-class="fas fa-redo"
-                     asp-use-noise="false"
-
-                     />
+                     asp-use-noise="false" />
     </div>
     <div class="d-grid mb-0 text-center">
         <button type="submit" name="ButtonName" class="btn btn-primary" value="LogIn"><i class="mdi mdi-login"></i> Log In </button>

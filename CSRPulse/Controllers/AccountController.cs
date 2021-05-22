@@ -126,8 +126,9 @@ namespace CSRPulse.Controllers
                     string companyName;
                     isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID ,out companyName);
                     if (isCustExists)
-                    {
-                        ViewBag.companyName = companyName;
+                    {                     
+                        TempData["companyName"]= companyName;
+                        TempData.Keep("companyName");
                         ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                         return Json(new { htmlData = ConvertViewToString("_CustomerLogin", signIn, true) });
                     }
@@ -140,6 +141,7 @@ namespace CSRPulse.Controllers
                             //{
                             //    CustomerId = (int)customerID
                             //};
+                            TempData.Remove("companyName");
                             var userMsg = UserDefineMessage(returnOutPut);
                             TempData["customerCode"] = signIn.CompanyID;
                             return Json(new { payment = true, cid = (int)customerID, msg = userMsg });
@@ -147,6 +149,7 @@ namespace CSRPulse.Controllers
                         }
                         else
                         {
+                            TempData.Remove("companyName");
                             ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                             return Json(new { htmlData = ConvertViewToString("_Authenticate", signIn, true) });
                         }
@@ -156,8 +159,10 @@ namespace CSRPulse.Controllers
                 // if customer ID is exists in our database, then check user credential in customer database
                 if (ModelState.IsValid)
                 {
+                    TempData.Keep("companyName");
                     if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
                     {
+                        
                         this.ModelState.AddModelError(DNTCaptchaTagHelper.CaptchaInputName, "Please Enter Valid Captcha.");
                         return View(signIn);
                     }
@@ -174,7 +179,7 @@ namespace CSRPulse.Controllers
                     if (isAuthenticated)
                     {
                         HttpContext.Session.SetComplexData("User", userDetail);
-
+                        TempData.Remove("companyName");
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return LocalRedirect(returnUrl);
