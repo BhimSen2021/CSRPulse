@@ -40,7 +40,7 @@ namespace CSRPulse.Data.Repositories
                     dbSqlconnection.Open();
                     SqlCommand cmdScript = new SqlCommand(File.ReadAllText(dbPath));
                     cmdScript.Connection = dbSqlconnection;
-                    cmdScript.ExecuteNonQueryAsync();
+                    cmdScript.ExecuteNonQuery();
                     //------------------------------------------
 
                     // Insert Admin credential in [User] table in customer database
@@ -55,7 +55,7 @@ namespace CSRPulse.Data.Repositories
                 return Task.FromResult(true);
 
             }
-            catch (SqlException)
+            catch(SqlException ex)
             {
                 dbSqlconnection.ConnectionString = customConnection;
                 //Script to kill existing connection so database can be dropped.

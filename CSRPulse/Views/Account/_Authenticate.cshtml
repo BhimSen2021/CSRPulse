@@ -1,10 +1,11 @@
 ﻿@model CSRPulse.Model.CustomerSignIn
+    <p class="text-muted mb-4">Enter your Access Key,to verify your detail.</p>
 
 <form data-ajax="true" data-ajax-method="POST" asp-controller="Account" asp-action="CustomerLogin" data-ajax-success="onValidateSuccess">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>   
     <div class="mb-3">
         @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "form-label", @for = "CompanyID" })
-        <input class="form-control" type="text" asp-for="CompanyID" placeholder="Enter company id" required="" autocomplete="off">
+        <input class="form-control" type="text" asp-for="CompanyID" placeholder="Enter access key" required="" autocomplete="off">
         <span asp-validation-for="CompanyID" class="text-danger"></span>
     </div>
     

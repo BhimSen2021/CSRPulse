@@ -1,5 +1,7 @@
 ﻿using CSRPulse.Model;
 using CSRPulse.Services;
+using DNTCaptcha.Core;
+using DNTCaptcha.Core.Providers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,11 +15,12 @@ namespace CSRPulse.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IMenuService _menuService;
-
-        public AccountController(IAccountService accountService, IMenuService menuService)
+        private readonly IDNTCaptchaValidatorService _validatorService;
+        public AccountController(IAccountService accountService, IMenuService menuService, IDNTCaptchaValidatorService validatorService)
         {
             _accountService = accountService;
             _menuService = menuService;
+            _validatorService = validatorService;
         }
         [HttpGet, Route("Signup")]
         public IActionResult Signup()
@@ -25,7 +28,6 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("AccountController/UserSignup");
             return View();
         }
-
 
         [HttpPost, Route("Signup")]
         public async Task<IActionResult> Signup(User user)
@@ -88,7 +90,6 @@ namespace CSRPulse.Controllers
 
         }
 
-
         [HttpGet]
         public IActionResult CustomerLogin()
         {
@@ -102,7 +103,8 @@ namespace CSRPulse.Controllers
         /// <param name="returnUrl">to return previous page</param>
         /// <param name="ButtonName">based on button, will perfom action</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost]     
+       
         public IActionResult CustomerLogin(CustomerSignIn signIn, string returnUrl, string ButtonName)
         {
             _logger.LogInformation("AccountController/CustomerLogin");
@@ -121,10 +123,12 @@ namespace CSRPulse.Controllers
                     string returnOutPut = string.Empty;
                     int? customerID = null;
                     bool isCustExists = false;
-                    isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID);
+                    string companyName;
+                    isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID ,out companyName);
                     if (isCustExists)
-                    {
-                        
+                    {                     
+                        TempData["companyName"]= companyName;
+                        TempData.Keep("companyName");
                         ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                         return Json(new { htmlData = ConvertViewToString("_CustomerLogin", signIn, true) });
                     }
@@ -137,6 +141,7 @@ namespace CSRPulse.Controllers
                             //{
                             //    CustomerId = (int)customerID
                             //};
+                            TempData.Remove("companyName");
                             var userMsg = UserDefineMessage(returnOutPut);
                             TempData["customerCode"] = signIn.CompanyID;
                             return Json(new { payment = true, cid = (int)customerID, msg = userMsg });
@@ -144,6 +149,7 @@ namespace CSRPulse.Controllers
                         }
                         else
                         {
+                            TempData.Remove("companyName");
                             ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                             return Json(new { htmlData = ConvertViewToString("_Authenticate", signIn, true) });
                         }
@@ -153,6 +159,13 @@ namespace CSRPulse.Controllers
                 // if customer ID is exists in our database, then check user credential in customer database
                 if (ModelState.IsValid)
                 {
+                    TempData.Keep("companyName");
+                    if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
+                    {
+                        
+                        this.ModelState.AddModelError(DNTCaptchaTagHelper.CaptchaInputName, "Please Enter Valid Captcha.");
+                        return View(signIn);
+                    }
                     bool isAuthenticated = false;
                     UserDetail userDetail = new UserDetail();
                     SingIn sign = new SingIn
@@ -166,7 +179,7 @@ namespace CSRPulse.Controllers
                     if (isAuthenticated)
                     {
                         HttpContext.Session.SetComplexData("User", userDetail);
-
+                        TempData.Remove("companyName");
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return LocalRedirect(returnUrl);
@@ -221,7 +234,7 @@ namespace CSRPulse.Controllers
                         message = "Dear Customer, We did'nt received payement for the selected plan, Please do payment to proceed.";
                         break;
                     case "notexists":
-                        message = "Dear Customer, We did'nt find you company id in our database, please first register then try to login";
+                        message = "Dear Customer, We did'nt find you company detail in our database, please first register and then try to login.";
                         break;
                     default:
                         break;

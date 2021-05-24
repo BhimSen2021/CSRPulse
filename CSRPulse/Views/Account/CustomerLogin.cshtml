@@ -7,16 +7,17 @@
 }
 
 <h4 class="mt-0">Sign In</h4>
-<p class="text-muted mb-4">Enter your Customer, User id and password to access account.</p>
 
 <div id="div-form-container">
-    @{ 
-        if (Model !=null)
-        {
+    @{
+        if (Model != null)
+        {            
+
             await Html.RenderPartialAsync("_CustomerLogin", Model);
         }
         else
         {
+
             await Html.RenderPartialAsync("_Authenticate", Model);
         }
     }

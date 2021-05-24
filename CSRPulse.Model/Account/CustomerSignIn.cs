@@ -15,7 +15,7 @@ namespace CSRPulse.Model
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
 
-        [Display(Name = "Company ID"), Required(ErrorMessage = "Please Enter Company ID")]
+        [Display(Name = "Access Key"), Required(ErrorMessage = "Please Enter Access Key")]
         public string CompanyID { get; set; }
     }
 }
