@@ -145,7 +145,6 @@ namespace CSRPulse.Controllers
                             var userMsg = UserDefineMessage(returnOutPut);
                             TempData["customerCode"] = signIn.CompanyID;
                             return Json(new { payment = true, cid = (int)customerID, msg = userMsg });
-
                         }
                         else
                         {
