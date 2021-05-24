@@ -42,37 +42,3 @@
         }
     }
 }
-
-@*@{
-        if (Model != null)
-        {
-            var header = Model.Where(x => x.ParentMenuId == null).OrderBy(o => o.SequenceNo);
-            foreach (var hd in header)
-            {
-                var menuItem = Model.Where(x => x.ParentMenuId == hd.MenuId).OrderBy(o => o.SequenceNo);
-                if (menuItem.Count() > 0)
-                {
-                    <li class="treeview">
-                        <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa @hd.IconClass"></i><span class="app-menu__label">@hd.MenuName</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-                        <ul class="treeview-menu">
-                            @foreach (var menu in menuItem)
-                            {
-                                var childControllerName = menu.Url.Split(new char[] { '/' })[0];
-                                var childActionName = menu.Url.Split(new char[] { '/' })[1];
-                                <li><a class="treeview-item" asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName"><i class="@menu.IconClass pr-2"></i> @menu.MenuName</a></li>
-                            }
-                        </ul>
-                    </li>
-                }
-                else
-                {
-                    var controllerName = hd.Url.Split(new char[] { '/' })[0];
-                    var actionName = hd.Url.Split(new char[] { '/' })[1];
-                    <li><a class="app-menu__item" asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName"><i class="app-menu__icon @hd.IconClass"></i><span class="app-menu__label">@hd.MenuName</span></a></li>
-                }
-            }
-        }
-    }*@
-
-
-
