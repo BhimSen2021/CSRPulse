@@ -14,13 +14,15 @@ namespace CSRPulse.Data.Models
         [Key]
         public int LicenceActId { get; set; }
         public int CustomerId { get; set; }
+        public int PaymentId { get; set; }
         public int PlanId { get; set; }
+        [Required]
+        public bool? IsTrail { get; set; }
         public int ActivationCount { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime ActivationDate { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime LastActivationDate { get; set; }
-        public int PaymentId { get; set; }
         public bool IsDeleted { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }

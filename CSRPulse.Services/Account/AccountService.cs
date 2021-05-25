@@ -71,6 +71,7 @@ namespace CSRPulse.Services
                         EditRight = uRigth.EditRight,
                         ViewRight = uRigth.ViewRight,
                         DeleteRight = uRigth.DeleteRight,
+
                         menu = new Menu()
                         {
                             ParentMenuId = uRigth.Menu.ParentMenuId,
