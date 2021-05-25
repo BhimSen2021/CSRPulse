@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSRPulse.Model;
-
+using DNTCaptcha.Core;
+using DNTCaptcha.Core.Providers;
 namespace CSRPulse.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -16,10 +17,12 @@ namespace CSRPulse.Areas.Admin.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IMenuService _menuService;
-        public AccountController(IAccountService accountService, IMenuService menuService)
+        private readonly IDNTCaptchaValidatorService _validatorService;
+        public AccountController(IAccountService accountService, IMenuService menuService, IDNTCaptchaValidatorService validatorService)
         {
             _accountService = accountService;
             _menuService = menuService;
+            _validatorService = validatorService;
         }
 
         [HttpGet]
@@ -37,6 +40,13 @@ namespace CSRPulse.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
+                    {
+
+                        this.ModelState.AddModelError(DNTCaptchaTagHelper.CaptchaInputName, "Please Enter Valid Captcha.");
+                        return View(singIn);
+                    }
+
                     bool isAuthenticated = false;
                     UserDetail uDetail = new UserDetail();
                     isAuthenticated = _accountService.AuthenticateUser(singIn, out uDetail);

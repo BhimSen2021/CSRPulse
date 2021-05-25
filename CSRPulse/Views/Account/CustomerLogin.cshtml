@@ -3,7 +3,6 @@
 
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
-
 }
 
 <h4 class="mt-0">Sign In</h4>
@@ -11,8 +10,7 @@
 <div id="div-form-container">
     @{
         if (Model != null)
-        {            
-
+        {
             await Html.RenderPartialAsync("_CustomerLogin", Model);
         }
         else
