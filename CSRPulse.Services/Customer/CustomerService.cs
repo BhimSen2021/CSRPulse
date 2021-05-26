@@ -28,8 +28,11 @@ namespace CSRPulse.Services
                 var customerList = new List<Customer>();
                 var result = await _genericRepository.GetAsync<DTOModel.Customer>();
 
+                var results = _genericRepository.GetIQueryable<DTOModel.CustomerLicenseActivation>(x => x.IsDeleted == false);
+
                 foreach (var c in result)
                 {
+
                     customerList.Add(new Customer
                     {
                         CustomerId = c.CustomerId,
@@ -38,7 +41,9 @@ namespace CSRPulse.Services
                         Email = c.Email,
                         Website = c.Website,
                         DataBaseName = c.DataBaseName,
-                        CreatedOn = c.CreatedOn
+                        CreatedOn = c.CreatedOn,
+                        CurrentPlan = "",
+                        CurrentSubscription = ""
                     });
                 }
 
@@ -57,9 +62,10 @@ namespace CSRPulse.Services
                 var customer = new Customer();
                 var result = await _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerId == customerId).Include(a => a.CustomerLicenseActivation).Include(p => p.CustomerPayment).FirstOrDefaultAsync();
 
+
                 customer = _mapper.Map<DTOModel.Customer, Customer>(result);
                 var cPayment = _mapper.Map<List<CustomerPayment>>(result.CustomerPayment);
-                var cActivation= _mapper.Map<List<CustomerLicenseActivation>>(result.CustomerLicenseActivation);
+                var cActivation = _mapper.Map<List<CustomerLicenseActivation>>(result.CustomerLicenseActivation);
 
                 customer.CustomerPaymentList = cPayment;
                 customer.CustomerLicenseList = cActivation;
@@ -76,7 +82,5 @@ namespace CSRPulse.Services
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

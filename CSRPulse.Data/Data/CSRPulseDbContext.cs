@@ -40,10 +40,9 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
 
-        public static string CustomeDataBase
-        {
-            get; set;
-        }
+               
+        public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
@@ -52,12 +51,7 @@ namespace CSRPulse.Data.Data
                 .AddJsonFile("appsettings.json")
                 .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
-            {
-                var _Connection = configuration.GetConnectionString("DefaultConnection");
-                var _customConnection = _Connection.Replace("CSRPulse", CustomeDataBase);
-
-                optionsBuilder.UseSqlServer(_customConnection);
-            }
+                optionsBuilder.UseSqlServer(CustomeDataBase);
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
@@ -76,6 +70,8 @@ namespace CSRPulse.Data.Data
             modelBuilder.Entity<CustomerLicenseActivation>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsTrail).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CustomerLicenseActivation)
@@ -314,5 +310,7 @@ namespace CSRPulse.Data.Data
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+       
     }
 }

@@ -22,29 +22,28 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                     <thead class="thead-light">
                         <tr>
-                            <th style="width:8%">
+                            <th style="width:5%">
                                 @Html.DisplayName("#")
                             </th>
                             <th>
                                 @Html.DisplayName("Customer Code")
                             </th>
-                            <th>
+                            <th width="45%">
                                 @Html.DisplayNameFor(model => model.CustomerName)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Email)
+                                @Html.DisplayNameFor(model => model.CurrentPlan)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Website)
+                                @Html.DisplayNameFor(model => model.CurrentSubscription)
                             </th>
 
                             <th>
                                 @Html.DisplayName("Registration date")
                             </th>
-                            <th style="width:5%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,22 +55,20 @@
                                     @Html.DisplayFor(modelItem => item.CustomerCode)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.CustomerName)
+                                    <a class="text-info" asp-area="Admin" asp-controller="Customer" asp-action="Details" asp-route-CustomerId="@item.CustomerId">@item.CustomerName</a>
                                 </td>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Website)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                                <td class="text-center">                                    
+                                    <span class="badge badge-outline-success rounded-pill">Standard</span>
                                 </td>
                                 <td class="text-center">
-                                    <a asp-area="Admin" asp-controller="Customer" asp-action="Details" asp-route-CustomerId="@item.CustomerId" class="action-icon"><i class="mdi mdi-eye"></i></a>
+                                    <span class="badge badge-outline-info rounded-pill">Free Trial</span>
                                 </td>
+
+                                <td>
+                                    @item.CreatedOn.ToLongDateString()
+                                </td>
+
                             </tr>
                         }
                     </tbody>

@@ -51,7 +51,7 @@ namespace CSRPulse.Model
         public bool RecordExist { get; set; }
 
         [Display(Name = "Address 2")]
-        [MinLength(5,ErrorMessage ="Please enter minimum 5 characters.")]
+        [MinLength(5, ErrorMessage = "Please enter minimum 5 characters.")]
         [MaxLength(200)]
         public string Address2 { get; set; }
 
@@ -60,5 +60,10 @@ namespace CSRPulse.Model
         public string OTP { get; set; }
 
         public string CustomerUniqueId { get; set; }
+       
+        [Display(Name = "Plan")]
+        public string CurrentPlan { get; set; }
+        [Display(Name = "Subscription")]
+        public string CurrentSubscription { get; set; }
     }
 }
