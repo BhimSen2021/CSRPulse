@@ -19,8 +19,8 @@ namespace CSRPulse.Services
         private readonly IPrepareDBForCustomer _dBForCustomer;
         private readonly IGenericRepository _genericRepository;
 
-      //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
- 
+        //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
+
         public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer)
         {
             _genericRepository = generic;
@@ -88,7 +88,7 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<bool> CustomerPaymentAsync(Model.Customer customer,string _dbPath)
+        public async Task<bool> CustomerPaymentAsync(Model.Customer customer, string _dbPath)
         {
 
             string outputRes = string.Empty;
@@ -109,7 +109,7 @@ namespace CSRPulse.Services
                         await _genericRepository.InsertAsync(dtoCustLicence);
 
                         transaction.Commit();
-                        getCustomer.DataBaseName = dbName;                      
+                        getCustomer.DataBaseName = dbName;
                         await _dBForCustomer.CreateBD(getCustomer, _dbPath, "Password", out outputRes);
                         _genericRepository.Update(getCustomer);
                         await SendRegistrationMail(getCustomer, "Password");
@@ -117,7 +117,7 @@ namespace CSRPulse.Services
                     }
                     catch (Exception)
                     {
-                       transaction.Rollback();
+                        transaction.Rollback();
                         return false;
                     }
                 }

@@ -1,5 +1,7 @@
 ﻿using CSRPulse.Data.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,7 +18,7 @@ namespace CSRPulse.Data.Repositories
         }
 
 
-        public Task<bool> CreateBD(Customer dtoCustomer, string dbPath, string password, out string res)
+        public Task<bool> CreateBD(Customer dtoCustomer, string _dbPath, string password, out string res)
         {
             SqlConnection dbSqlconnection;
             dbSqlconnection = new SqlConnection(config.GetConnectionString("DefaultConnection"));
@@ -35,27 +37,42 @@ namespace CSRPulse.Data.Repositories
                     dbSqlconnection.Close();
                     //--------------------------------------------
 
-                    // changed connection from master to customer to run database structure script in created database
-                    dbSqlconnection.ConnectionString = customConnection.Replace("CSRPulse", dtoCustomer.DataBaseName);
-                    dbSqlconnection.Open();
-                    SqlCommand cmdScript = new SqlCommand(File.ReadAllText(dbPath));
-                    cmdScript.Connection = dbSqlconnection;
-                    cmdScript.ExecuteNonQuery();
-                    //------------------------------------------
-
-                    // Insert Admin credential in [User] table in customer database
-                    var insScript = $"insert into [User](UserTypeId,UserName,FullName,[Password],IsActive,IsDeleted,CreatedBy,RoleId,EmailID)values(2,'{dtoCustomer.CustomerCode}','{dtoCustomer.CustomerName}','{password}',1,0,1,99,'{dtoCustomer.Email}')";
-                    cmdScript.CommandText = insScript;
-                    cmdScript.ExecuteNonQuery();
-                    //-------------------------------------------
-                    dbSqlconnection.Close();
-                    res = "success";
                 }
+
+                // changed connection from master to customer to run database structure script in created database
+                dbSqlconnection.ConnectionString = customConnection.Replace("CSRPulse", dtoCustomer.DataBaseName);
+
+
+                FileInfo file = new FileInfo(_dbPath);
+                string script = file.OpenText().ReadToEnd();
+                Microsoft.Data.SqlClient.SqlConnection dbSqlconnection1 = new Microsoft.Data.SqlClient.SqlConnection(dbSqlconnection.ConnectionString);
+                Server server = new Server(new ServerConnection(dbSqlconnection1));
+                server.ConnectionContext.ExecuteNonQuery(script);
+
+                //------------------------------------------
+
+
+                // Run Store Procedure Script ti customer database
+                ////newbPath = dbPath.Replace("{}", "ProcedureScript");
+                ////SqlCommand procScript = new SqlCommand(File.ReadAllText(newbPath));
+                ////procScript.Connection = dbSqlconnection;
+                ////procScript.ExecuteNonQuery();
+
+                //-------------------------------------------------------
+
+                // Insert Admin credential in [User] table in customer database
+                ////var insScript = $"insert into [User](UserTypeId,UserName,FullName,[Password],IsActive,IsDeleted,CreatedBy,RoleId,EmailID)values(2,'{dtoCustomer.CustomerCode}','{dtoCustomer.CustomerName}','{password}',1,0,1,99,'{dtoCustomer.Email}')";
+                ////cmdScript.CommandText = insScript;
+                ////cmdScript.ExecuteNonQuery();
+                //-------------------------------------------
+                dbSqlconnection.Close();
+                res = "success";
+
 
                 return Task.FromResult(true);
 
             }
-            catch(SqlException)
+            catch (SqlException)
             {
                 dbSqlconnection.ConnectionString = customConnection;
                 //Script to kill existing connection so database can be dropped.

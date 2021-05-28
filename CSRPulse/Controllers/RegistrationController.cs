@@ -7,19 +7,23 @@ using System.Threading.Tasks;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace CSRPulse.Controllers
 {
 
     public class RegistrationController : BaseController<RegistrationController>
     {
+
         private readonly IRegistrationService registrationService;
         private readonly IDropdownBindService ddlService;
-
-        public RegistrationController(IRegistrationService registrationService, IDropdownBindService ddlService)
+        private IWebHostEnvironment _Environment;
+        public RegistrationController(IRegistrationService registrationService, IDropdownBindService ddlService, IWebHostEnvironment Environment)
         {
             this.registrationService = registrationService;
             this.ddlService = ddlService;
+            _Environment = Environment;
         }
 
         [NonAction]
@@ -85,7 +89,7 @@ namespace CSRPulse.Controllers
                         var OTP = registrationService.GenerateOTP();
                         HttpContext.Session.SetComplexData("OTP", OTP);
 
-                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP,customer.CustomerName);
+                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP, customer.CustomerName);
                         if (ViewBag.OTPSent)
                             msg = "OTP has ben sent on your Email.Please Enter OTP to verify your details.";
 
@@ -184,10 +188,10 @@ namespace CSRPulse.Controllers
                         PlanID = 2,
                         CreatedBy = 1
                     };
+                    string dbPath = Path.Combine(_Environment.WebRootPath, "DB/DefaultDbScript.sql");
+                    var res = await registrationService.CustomerPaymentAsync(customer, dbPath);
 
-                    var res = await registrationService.CustomerPaymentAsync(customer);
-
-                    return Json(new { success = res });
+                    return Json(new { success = res, bType = ButtonType });
                 }
                 return new ContentResult();
             }
