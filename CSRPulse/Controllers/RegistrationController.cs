@@ -86,7 +86,7 @@ namespace CSRPulse.Controllers
                             return Json(new { recordExist = true });
                         }
 
-                        var OTP = registrationService.GenerateOTP();
+                        var OTP = GenerateOTP();
                         HttpContext.Session.SetComplexData("OTP", OTP);
 
                         ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP,customer.CustomerName);

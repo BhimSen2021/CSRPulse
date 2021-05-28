@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using DTOModel = CSRPulse.Data.Models;
 using System.Linq;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace CSRPulse.Services
 {
@@ -17,11 +19,12 @@ namespace CSRPulse.Services
         private const string templatePath = @"wwwroot/Templates/EmailTemplate/{0}.html";
         private readonly IGenericRepository _genericRepository;
         private readonly IMapper _mapper;
-
-        public EmailService(IGenericRepository genericRepository, IMapper mapper)
+        private readonly SMTPConfig _mailSetting;
+        public EmailService(IGenericRepository genericRepository, IMapper mapper, IOptions<SMTPConfig> mailSetting)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _mailSetting = mailSetting.Value;
         }
 
         #region  Pre define method for email process, do not add anything in these method.
@@ -55,15 +58,17 @@ namespace CSRPulse.Services
                 dtoMailStatus = _mapper.Map<DTOModel.MailSendStatus>(message);
                 dtoMailStatus.SentOn = DateTime.Now;
                 dtoMailStatus.Status = false;
+
                 var emailsetting = _genericRepository.Get<DTOModel.EmailConfiguration>().FirstOrDefault();
-                message.From = "CSRPulse <" + emailsetting.ToEmail + ">";
-                message.UserName = emailsetting.UserName;
-                message.Password = emailsetting.Password;
-                message.SmtpClientHost = emailsetting.Server;
-                message.SmtpPort = emailsetting.Port;
-                message.enableSSL = emailsetting.Sslstatus;
+
+                message.From = $"{_mailSetting.DisplayName} <" + _mailSetting.SenderAddress + ">";
+                message.UserName = _mailSetting.UserName;
+                message.Password = _mailSetting.Password;
+                message.SmtpClientHost = _mailSetting.Host;
+                message.SmtpPort = _mailSetting.Port;
+                message.enableSSL = _mailSetting.EnableSSL;
                 message.HTMLView = true;
-                message.FriendlyName = emailsetting.Signature;
+                message.FriendlyName = emailsetting !=null ? emailsetting.Signature : _mailSetting.Signature;
                 var res = await Common.EmailHelper.SendEmail(message);
 
                 dtoMailStatus.Status = res;

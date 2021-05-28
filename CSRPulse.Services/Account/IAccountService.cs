@@ -13,6 +13,10 @@ namespace CSRPulse.Services
         bool AuthenticateUser(SingIn singIn, out UserDetail userDetail);
         bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID, out string companyName);
 
+        bool UserExists(string username, string password);
+        bool SendOTP(ForgotPassword forgotPassword);
+
+
 
     }
 }
