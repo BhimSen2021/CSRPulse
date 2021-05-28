@@ -19,7 +19,7 @@ namespace CSRPulse.Services
         private readonly IPrepareDBForCustomer _dBForCustomer;
         private readonly IGenericRepository _genericRepository;
 
-      //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql";
+      //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
  
         public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer)
         {
