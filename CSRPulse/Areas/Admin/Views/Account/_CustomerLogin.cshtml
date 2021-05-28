@@ -9,8 +9,13 @@
     </div>
 
     <div class="mb-3">
-        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label", @for = "Password" })
-        <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" required="" autocomplete="off">
+        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label", @for = "Password" })        
+        <div class="input-group input-group-merge">
+            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" required="" autocomplete="off">
+            <div class="input-group-text" data-password="false">
+                <span class="password-eye"></span>
+            </div>
+        </div>
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 

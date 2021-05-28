@@ -85,5 +85,12 @@ namespace CSRPulse.Areas.Admin.Controllers
             return RedirectToAction("Landing", "Home", new { Area = "" });
         }
 
+        [HttpGet]
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+
     }
 }

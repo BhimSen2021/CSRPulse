@@ -40,7 +40,6 @@ namespace CSRPulse.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -212,9 +211,7 @@ namespace CSRPulse.Services
             {
                 throw;
             }
-
             return Task.FromResult(flag);
         }
-
     }
 }

@@ -1,0 +1,33 @@
+﻿@model CSRPulse.Model.Ticket
+@{
+    ViewData["Title"] = "Ticket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Management</a></li>
+                    <li class="breadcrumb-item active">Ticket</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Ticket</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="form-container">
+                    @{ await Html.RenderPartialAsync("_Ticket", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
