@@ -270,7 +270,7 @@ namespace CSRPulse.Data.Repositories
         }
         public virtual bool AddMultipleEntity<TEntity>(IEnumerable<TEntity> entityList) where TEntity : class
         {
-            var flag = false;
+            bool flag;
             if (entityList == null)
             {
                 throw new ArgumentNullException("entity");
@@ -289,7 +289,7 @@ namespace CSRPulse.Data.Repositories
         }
         public async Task<bool> AddMultipleEntityAsync<TEntity>(IEnumerable<TEntity> entityList) where TEntity : class
         {
-            var flag = false;
+            bool flag;
             if (entityList == null)
             {
                 throw new ArgumentNullException("entity");
@@ -308,7 +308,7 @@ namespace CSRPulse.Data.Repositories
         }
         public virtual bool RemoveMultipleEntity<TEntity>(IEnumerable<TEntity> removeEntityList) where TEntity : class
         {
-            var flag = false;
+            bool flag;
             if (removeEntityList == null)
             {
                 throw new ArgumentNullException("entity");

@@ -6,8 +6,8 @@ using CSRPulse.Services.IServices;
 using CSRPulse.Data.Repositories;
 using AutoMapper;
 using DTOModel = CSRPulse.Data.Models;
-using System.Transactions;
 using System.Linq;
+
 
 namespace CSRPulse.Services
 {
@@ -19,7 +19,8 @@ namespace CSRPulse.Services
         private readonly IPrepareDBForCustomer _dBForCustomer;
         private readonly IGenericRepository _genericRepository;
 
-        private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql";
+      //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
+ 
         public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer)
         {
             _genericRepository = generic;
@@ -40,6 +41,7 @@ namespace CSRPulse.Services
             }
             catch (Exception)
             {
+
                 throw;
             }
         }
@@ -86,18 +88,19 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<bool> CustomerPaymentAsync(Model.Customer customer)
+        public async Task<bool> CustomerPaymentAsync(Model.Customer customer,string _dbPath)
         {
 
             string outputRes = string.Empty;
             var getCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
             if (getCustomer != null)
             {
+
                 using (var transaction = _genericRepository.BeginTransaction())
                 {
                     try
                     {
-                        var dbName = "CSRPulse_" + customer.CustomerCode;
+                        var dbName = "CSRPulse_" + getCustomer.CustomerCode;
                         dbName = dbName.Replace('-', '_');
                         var dtoCustPayment = _mapper.Map<DTOModel.CustomerPayment>(customer.CustomerPayment);
                         await _genericRepository.InsertAsync(dtoCustPayment);
@@ -106,7 +109,7 @@ namespace CSRPulse.Services
                         await _genericRepository.InsertAsync(dtoCustLicence);
 
                         transaction.Commit();
-                        getCustomer.DataBaseName = dbName;
+                        getCustomer.DataBaseName = dbName;                      
                         await _dBForCustomer.CreateBD(getCustomer, _dbPath, "Password", out outputRes);
                         _genericRepository.Update(getCustomer);
                         await SendRegistrationMail(getCustomer, "Password");
@@ -114,8 +117,8 @@ namespace CSRPulse.Services
                     }
                     catch (Exception)
                     {
-                        transaction.Rollback();
-                        throw;
+                       transaction.Rollback();
+                        return false;
                     }
                 }
             }
@@ -211,7 +214,9 @@ namespace CSRPulse.Services
             {
                 throw;
             }
+
             return Task.FromResult(flag);
         }
+
     }
 }

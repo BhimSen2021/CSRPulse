@@ -33,7 +33,7 @@ namespace CSRPulse.Data.Repositories
                     dbCommand.Connection = dbSqlconnection;
                     dbCommand.ExecuteNonQuery();
                     dbSqlconnection.Close();
-                    //------------------------------------------
+                    //--------------------------------------------
 
                     // changed connection from master to customer to run database structure script in created database
                     dbSqlconnection.ConnectionString = customConnection.Replace("CSRPulse", dtoCustomer.DataBaseName);

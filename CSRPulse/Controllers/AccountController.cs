@@ -103,8 +103,8 @@ namespace CSRPulse.Controllers
         /// <param name="returnUrl">to return previous page</param>
         /// <param name="ButtonName">based on button, will perfom action</param>
         /// <returns></returns>
-        [HttpPost]     
-       
+        [HttpPost]
+
         public IActionResult CustomerLogin(CustomerSignIn signIn, string returnUrl, string ButtonName)
         {
             _logger.LogInformation("AccountController/CustomerLogin");
@@ -124,10 +124,10 @@ namespace CSRPulse.Controllers
                     int? customerID = null;
                     bool isCustExists = false;
                     string companyName;
-                    isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID ,out companyName);
+                    isCustExists = _accountService.AuthenticateCustomer(signIn, out returnOutPut, out customerID, out companyName);
                     if (isCustExists)
-                    {                     
-                        TempData["companyName"]= companyName;
+                    {
+                        TempData["companyName"] = companyName;
                         TempData.Keep("companyName");
                         ModelState.AddModelError("", UserDefineMessage(returnOutPut));
                         return Json(new { htmlData = ConvertViewToString("_CustomerLogin", signIn, true) });
@@ -140,7 +140,7 @@ namespace CSRPulse.Controllers
                             //Customer customer = new Customer
                             //{
                             //    CustomerId = (int)customerID
-                            //};
+                            //};   
                             TempData.Remove("companyName");
                             var userMsg = UserDefineMessage(returnOutPut);
                             TempData["customerCode"] = signIn.CompanyID;
@@ -161,7 +161,7 @@ namespace CSRPulse.Controllers
                     TempData.Keep("companyName");
                     if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
                     {
-                        
+
                         this.ModelState.AddModelError(DNTCaptchaTagHelper.CaptchaInputName, "Please Enter Valid Captcha.");
                         return View(signIn);
                     }
@@ -247,6 +247,52 @@ namespace CSRPulse.Controllers
                 throw;
             }
 
+        }
+
+        public ViewResult ForgotPassword(string cid)
+        {
+            _logger.LogInformation($"Account/ForgotPassword/cid={cid}");
+            try
+            {
+                ForgotPassword forgotPassword = new ForgotPassword
+                {
+
+                    CompanyID = cid
+                };
+                TempData.Keep("companyName");
+                return View(forgotPassword);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+            }
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ForgotPassword(ForgotPassword forgotPassword, string Button)
+        {
+            _logger.LogInformation("Account/ForgotPassword");
+            try
+            {
+                if (Button == "OTP")
+                {
+                    ModelState.Remove("OTP");
+
+                    if (ModelState.IsValid)
+                    {
+
+                    }
+                    else
+                    {
+                        return PartialView("_Forgot", forgotPassword);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+            }
+            return ViewComponent("ResetPassword");
         }
     }
 }

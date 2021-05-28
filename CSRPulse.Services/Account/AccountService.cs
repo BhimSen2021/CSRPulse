@@ -179,7 +179,7 @@ namespace CSRPulse.Services
             catch (Exception ex)
             {
 
-                throw ex;
+                throw ex;  
             }
         }
 
