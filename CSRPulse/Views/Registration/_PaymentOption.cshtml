@@ -20,15 +20,7 @@
             function paymentSuccess(data) {
                 if (data.success == true) {
                     window.location.href = "@Url.Action("CustomerLogin", "Account")";
-                    commonMessage('warning', 'Trail Version activated for the 30 day, Registration details has been sent on your registered Email.');
-                }
-                else {
-                    if (bType == "free") {
-                        commonMessage('info', 'Dear Customer we are unable to create database for you,there is some technical issue, Once issue resolved, we will get back to you. Your registration details has been sent on your registered Email.');
-                    }
-                    else {
-                        commonMessage('info', 'Dear Customer we had recieved payment from your side, there is some technical issue, so we are unable to create database for you. Once issue resolved, we will get back to you. Your registration details has been sent on your registered Email.');
-                    }
+                    commonMessage('warning', 'Trail Version activated for the 30 day, Registration details has been sent on your Email.');
                 }
             }
 </script>

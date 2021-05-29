@@ -23,7 +23,7 @@ namespace CSRPulse.Data.Repositories
             SqlConnection dbSqlconnection;
             dbSqlconnection = new SqlConnection(config.GetConnectionString("DefaultConnection"));
             var customConnection = dbSqlconnection.ConnectionString;
-           
+
             try
             {
                 using (dbSqlconnection)
@@ -42,7 +42,7 @@ namespace CSRPulse.Data.Repositories
                 // changed connection from master to customer to run database structure script in created database
                 dbSqlconnection.ConnectionString = customConnection.Replace("CSRPulse", dtoCustomer.DataBaseName);
 
-              
+
                 FileInfo file = new FileInfo(_dbPath);
                 string script = file.OpenText().ReadToEnd();
                 Microsoft.Data.SqlClient.SqlConnection dbSqlconnection1 = new Microsoft.Data.SqlClient.SqlConnection(dbSqlconnection.ConnectionString);

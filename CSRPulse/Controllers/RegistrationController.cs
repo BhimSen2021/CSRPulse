@@ -15,7 +15,7 @@ namespace CSRPulse.Controllers
 
     public class RegistrationController : BaseController<RegistrationController>
     {
-   
+
         private readonly IRegistrationService registrationService;
         private readonly IDropdownBindService ddlService;
         private IWebHostEnvironment _Environment;
@@ -89,7 +89,7 @@ namespace CSRPulse.Controllers
                         var OTP = GenerateOTP();
                         HttpContext.Session.SetComplexData("OTP", OTP);
 
-                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP,customer.CustomerName);
+                        ViewBag.OTPSent = registrationService.SendOTP(customer.Email, OTP, customer.CustomerName);
                         if (ViewBag.OTPSent)
                             msg = "OTP has ben sent on your Email.Please Enter OTP to verify your details.";
 
@@ -191,7 +191,7 @@ namespace CSRPulse.Controllers
                     string dbPath = Path.Combine(_Environment.WebRootPath, "DB/DefaultDbScript.sql");
                     var res = await registrationService.CustomerPaymentAsync(customer, dbPath);
 
-                    return Json(new { success = res,bType=ButtonType });
+                    return Json(new { success = res, bType = ButtonType });
                 }
                 return new ContentResult();
             }

@@ -20,23 +20,7 @@ namespace CSRPulse.Common
         /// <returns></returns>
         /// 
 
-        //public static Task<bool> SendMail(EmailMessage message)
-        //{
-        //    MailMessage mail = new MailMessage();
-        //    SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
-        //    mail.From = new MailAddress(message.UserName);
-        //    mail.To.Add(message.To);
-        //    mail.Subject = "Test Mail";
-        //    mail.Body = "This is for testing SMTP mail from GMAIL";
-
-        //    SmtpServer.Port = 587;
-        //    SmtpServer.Credentials = new System.Net.NetworkCredential(message.UserName, message.Password);
-        //    SmtpServer.EnableSsl = true;
-
-        //    SmtpServer.Send(mail);
-        //    return Task.FromResult(true);
-        //}
 
         public static async Task<bool> SendEmail(EmailMessage message)
         {
@@ -44,7 +28,7 @@ namespace CSRPulse.Common
             using (SmtpClient client = new SmtpClient(message.SmtpClientHost, message.SmtpPort))
             {
                 MailMessage mailMessage = new MailMessage();
-                mailMessage.From = new MailAddress(message.From, message.FriendlyName);
+                mailMessage.From = new MailAddress(message.From,message.FriendlyName);
                 mailMessage.BodyEncoding = Encoding.UTF8;
 
                 foreach (var toAddress in message.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
@@ -82,7 +66,7 @@ namespace CSRPulse.Common
                 mailMessage.Body = message.Body;
                 mailMessage.Subject = message.Subject;
                 mailMessage.IsBodyHtml = message.HTMLView;
-                client.EnableSsl = message.enableSSL;
+                client.EnableSsl = true;
                 mailMessage.Priority = message.MailPriority;
 
                 #region Set Embedded Content
@@ -108,23 +92,20 @@ namespace CSRPulse.Common
 
                 client.Credentials = new NetworkCredential(message.UserName, message.Password);
 
-
+               
 
                 try
                 {
-                    await client.SendMailAsync(mailMessage);
+                    await client.SendMailAsync(mailMessage);                 
                     return true;
                 }
 
-                catch (Exception ex)
-                {
-                    throw ex;
+                catch (Exception)
+                {            
+                    throw;
                 }
             }
         }
-
-
-
         /// <summary>
         /// EMAILTEST METHOD --
         /// </summary>

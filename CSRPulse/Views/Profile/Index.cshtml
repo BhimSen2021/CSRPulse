@@ -1,0 +1,26 @@
+﻿@model CSRPulse.Model.UserDetail
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Profile</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="form-container">
+        @{ await Html.RenderPartialAsync("_Profile", Model); }
+    </div>
+</div>
+

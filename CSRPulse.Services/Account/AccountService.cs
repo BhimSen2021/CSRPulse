@@ -23,24 +23,7 @@ namespace CSRPulse.Services
             _emailService = emailService;
         }
 
-
-        public async Task<int> CreateUserAsync(User user)
-        {
-            try
-            {
-                var userDTO = _mapper.Map<DTOModel.User>(user);
-                return await _genericRepository.InsertAsync(user);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public Task<int> CreateCustomerAsync(Customer user)
-        {
-            throw new NotImplementedException();
-        }
+              
 
         public bool AuthenticateUser(SingIn singIn, out UserDetail userDetail)
         {
@@ -243,5 +226,50 @@ namespace CSRPulse.Services
 
             return flag;
         }
+
+        public async Task<int> CreateUserAsync(User user)
+        {
+            try
+            {
+                var userDTO = _mapper.Map<DTOModel.User>(user);
+                return await _genericRepository.InsertAsync(user);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Task<int> CreateCustomerAsync(Customer user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<User>> GetUserAsync()
+        {
+            var result = await _genericRepository.GetAsync<DTOModel.User>();
+            try
+            {
+                return _mapper.Map<List<User>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<User> GetUserByIdAsync(int userId)
+        {
+            var result = await _genericRepository.GetByIDAsync<DTOModel.User>(userId);
+            try
+            {
+                return _mapper.Map<User>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

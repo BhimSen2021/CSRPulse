@@ -7,3 +7,8 @@
 textarea {
     resize: none;
 }
+
+.text-start {
+    text-align: left !important;
+}
+

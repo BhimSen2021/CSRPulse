@@ -1,0 +1,80 @@
+﻿@model CSRPulse.Model.SignUp
+@{
+    ViewData["Title"] = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Management</a></li>
+                    <li class="breadcrumb-item active">Registration</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Registration</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-4 col-lg-5">
+        <div class="card mb-0">
+            <div class="card-body mb-0">
+                <h4 class="mt-0">Create Account</h4>
+                <form method="post" asp-area="Admin" asp-controller="Registration" asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-2">
+                        @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "form-label", @for = "FullName" })
+                        <input type="text" asp-for="FullName" class="form-control" placeholder="Enter full name" required="" autocomplete="off">
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "form-label", @for = "EmailId" })
+                        <input type="text" asp-for="EmailId" class="form-control" placeholder="Enter email id" required="" autocomplete="off">
+                        <span asp-validation-for="EmailId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        @Html.LabelFor(model => model.MobileNo, htmlAttributes: new { @class = "form-label", @for = "MobileNo" })
+                        <input type="text" asp-for="MobileNo" class="form-control" placeholder="Enter email id" required="" autocomplete="off">
+                        <span asp-validation-for="MobileNo" class="text-danger"></span>
+                    </div>
+                    <div class="mb-2">
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label", @for = "Password" })
+                        <div class="input-group input-group-merge">
+                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" required="" autocomplete="off">
+                            <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-2">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(model => model.IsAgree, htmlAttributes: new { @class = "form-check-input", @for = "IsAgree" })
+                            <label class="form-check-label" for="checkbox-signup">I accept <a href="javascript: void(0);" class="text-muted">Terms and Conditions</a></label>
+                            <br /><span asp-validation-for="IsAgree" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-2 d-grid text-center">
+                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-account-circle"></i> Sign Up </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

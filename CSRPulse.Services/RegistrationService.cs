@@ -19,8 +19,8 @@ namespace CSRPulse.Services
         private readonly IPrepareDBForCustomer _dBForCustomer;
         private readonly IGenericRepository _genericRepository;
 
-      //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
- 
+        //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
+
         public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer)
         {
             _genericRepository = generic;
@@ -88,7 +88,7 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<bool> CustomerPaymentAsync(Model.Customer customer,string _dbPath)
+        public async Task<bool> CustomerPaymentAsync(Model.Customer customer, string _dbPath)
         {
 
             string outputRes = string.Empty;
@@ -109,7 +109,7 @@ namespace CSRPulse.Services
                         await _genericRepository.InsertAsync(dtoCustLicence);
 
                         transaction.Commit();
-                        getCustomer.DataBaseName = dbName;                      
+                        getCustomer.DataBaseName = dbName;
                         await _dBForCustomer.CreateBD(getCustomer, _dbPath, "Password", out outputRes);
                         _genericRepository.Update(getCustomer);
                         await SendRegistrationMail(getCustomer, "Password");
@@ -117,7 +117,7 @@ namespace CSRPulse.Services
                     }
                     catch (Exception)
                     {
-                       transaction.Rollback();
+                        transaction.Rollback();
                         return false;
                     }
                 }
@@ -193,5 +193,48 @@ namespace CSRPulse.Services
             return Task.FromResult(flag);
         }
 
+        #region Admin Panel
+      
+        public async Task<int> RegistrationAsync(Model.SignUp signUp)
+        {
+            using (var transaction = _genericRepository.BeginTransaction())
+            {
+                try
+                {
+                    if (_genericRepository.Exists<DTOModel.User>(x => x.EmailId == signUp.EmailId || x.UserName == signUp.UserName))
+                    {
+                        signUp.RecordExist = true;
+                        return 0;
+                    }
+
+                    var user = new DTOModel.User()
+                    {
+                        RoleId = 99, // For Administrator
+                        UserTypeId = 1, // For Internal User
+                        UserName = signUp.UserName,
+                        FullName = signUp.FullName,
+                        EmailId = signUp.EmailId,
+                        Password = signUp.Password,
+                        MobileNo = signUp.MobileNo,
+                        ImageName = signUp.ImageName,   
+                        IsActive = true,
+                        CreatedBy = 1,
+                        CreatedOn = System.DateTime.Now
+                    };
+
+                    await _genericRepository.InsertAsync(user);
+                    transaction.Commit();
+                    return user.UserId;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+       
+
+        #endregion
     }
 }
