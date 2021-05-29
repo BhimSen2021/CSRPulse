@@ -261,7 +261,7 @@ namespace CSRPulse.Controllers
                             var OTP = GenerateOTP();
                             HttpContext.Session.SetComplexData("OTP", OTP);
                             forgotPassword.OTP = OTP;
-                            ViewBag.OTPSent = _accountService.SendOTP(forgotPassword);
+                            ViewBag.OTPSent = _accountService.SendOTP(forgotPassword,1);
                             ViewBag.OTPSent = true;
                             ViewBag.IsVerified = false;
                             ViewBag.IsOTPSection = false;
