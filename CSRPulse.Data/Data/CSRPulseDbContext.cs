@@ -38,13 +38,11 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
-        public virtual DbSet<UserType> UserType { get; set; }
-
-               
+        public virtual DbSet<UserType> UserType { get; set; }               
         public static string CustomeDataBase { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -59,20 +57,6 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-
-        //    IConfigurationRoot configuration = new ConfigurationBuilder()
-        //        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-        //        .AddJsonFile("appsettings.json")
-        //        .Build();
-        //    if (!string.IsNullOrEmpty(CustomeDataBase))
-        //        optionsBuilder.UseSqlServer(CustomeDataBase);
-        //    else
-        //        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        //}
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>(entity =>
@@ -325,7 +309,6 @@ namespace CSRPulse.Data.Data
 
             OnModelCreatingPartial(modelBuilder);
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
        

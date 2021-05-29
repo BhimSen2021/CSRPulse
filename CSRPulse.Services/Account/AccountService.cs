@@ -15,10 +15,12 @@ namespace CSRPulse.Services
     {
         private readonly IMapper _mapper;
         private readonly IGenericRepository _genericRepository;
-        public AccountService(IMapper mapper, IGenericRepository genericRepository)
+        private readonly IEmailService _emailService;
+        public AccountService(IMapper mapper, IGenericRepository genericRepository,IEmailService emailService)
         {
             _mapper = mapper;
             _genericRepository = genericRepository;
+            _emailService = emailService;
         }
 
               
@@ -73,7 +75,7 @@ namespace CSRPulse.Services
             else { return false; }
         }
 
-        public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID,out string companyName)
+        public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID, out string companyName)
         {
             try
             {
@@ -162,8 +164,67 @@ namespace CSRPulse.Services
             catch (Exception ex)
             {
 
-                throw ex;  
+                throw ex;
             }
+        }
+
+        public bool UserExists(string username, string password)
+        {
+          return _genericRepository.Exists<DTOModel.User>(x => x.UserName == username && (!string.IsNullOrEmpty(password) ? x.Password == password : (1 > 0))); 
+        }
+        /// <summary>
+        /// To send mail regarding password forgot
+        /// </summary>
+        /// <param name="forgotPassword">hold mail related data</param>
+        /// <param name="type"> 1 is for otp, 2 is for new password </param>
+        /// <returns></returns>
+        public bool SendOTP(ForgotPassword forgotPassword,int type)
+        {
+            bool flag = false;
+            try
+            {                
+                var custEmail = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserName == forgotPassword.UserName && x.IsActive == true).FirstOrDefault();
+                if (custEmail == null)
+                {
+                    return false;
+                }          
+                StringBuilder emailBody = new StringBuilder("");
+                Common.EmailMessage message = new Common.EmailMessage();
+                message.To = custEmail.EmailId;
+                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 2).FirstOrDefault();
+                if (mailSubj != null)
+                {
+                    message.Subject = mailSubj.Subject;
+                    message.SubjectId = mailSubj.SubjectId;
+                }
+                else
+                    message.Subject = "CSRPulse Mail";
+
+
+                message.TemplateName = type == 1 ? "ForgotOTP" : "RecoverPassword";
+
+                message.PlaceHolders = new List<KeyValuePair<string, string>>();
+
+                if (type == 1)
+                {
+                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", forgotPassword.OTP));
+                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$custName}", custEmail.FullName));
+                }
+                else if(type==2)
+                {
+                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$password}", forgotPassword.Password));
+                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$custName}", custEmail.FullName));
+                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$user}", custEmail.UserName));
+                }
+                _emailService.CustomerRelatedMails(message);
+                flag = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return flag;
         }
 
         public async Task<List<User>> GetUserAsync()
@@ -191,5 +252,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
     }
 }

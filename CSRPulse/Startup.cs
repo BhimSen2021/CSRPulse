@@ -64,6 +64,8 @@ namespace CSRPulse
             services.AddDNTCaptcha(options =>
                  options.UseCookieStorageProvider()
                      .ShowThousandsSeparators(false));
+
+            services.Configure<SMTPConfig>(Configuration.GetSection("MailSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

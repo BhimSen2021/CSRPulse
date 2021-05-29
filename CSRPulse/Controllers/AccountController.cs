@@ -243,30 +243,73 @@ namespace CSRPulse.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult ForgotPassword(ForgotPassword forgotPassword, string Button)
+        public IActionResult ForgotPassword(ForgotPassword forgotPassword, string ButtonType)
         {
             _logger.LogInformation("Account/ForgotPassword");
             try
             {
-                if (Button == "OTP")
+                if (ButtonType == "OTP" || ButtonType == "resendotp")
                 {
+                    TempData.Keep("companyName");
                     ModelState.Remove("OTP");
-
                     if (ModelState.IsValid)
                     {
-
+                        
+                        var userExists = _accountService.UserExists(forgotPassword.UserName, null);
+                        if (userExists)
+                        {
+                            var OTP = GenerateOTP();
+                            HttpContext.Session.SetComplexData("OTP", OTP);
+                            forgotPassword.OTP = OTP;
+                            ViewBag.OTPSent = _accountService.SendOTP(forgotPassword,1);
+                            ViewBag.OTPSent = true;
+                            ViewBag.IsVerified = false;
+                            ViewBag.IsOTPSection = false;
+                            forgotPassword.OTP = string.Empty;
+                            
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("UserName", "Please enter correct user name.");
+                            return View(forgotPassword);
+                        }
                     }
-                    else
+                }
+                else if (ButtonType == "verifyotp")
+                {
+                    TempData.Keep("companyName");
+                    if (ModelState.IsValid)
                     {
-                        return PartialView("_Forgot", forgotPassword);
+                       
+                        if (!string.IsNullOrEmpty(HttpContext.Session.GetComplexData<string>("OTP")))
+                        {
+                            var otpval = Convert.ToString(HttpContext.Session.GetComplexData<string>("OTP"));
+                            if (!string.IsNullOrEmpty(forgotPassword.OTP) && otpval == forgotPassword.OTP)
+                            {
+                                ViewBag.VerifyOTP = true;
+                                ViewBag.IsVerified = true;
+                            }
+                            else if (!string.IsNullOrEmpty(forgotPassword.OTP) && otpval != forgotPassword.OTP)
+                            {
+                                ModelState.AddModelError("OTP", "Incorrct OTP, Please enter correct OTP");
+                                ViewBag.IsVerified = false;
+                                ViewBag.IsOTPSection = false;
+                            }
+                        }
                     }
+                }
+                else if (ButtonType == "Reset")
+                {
+                    TempData.Remove("companyName");
+                    TempData["Message"] = "New password has been sent on your registered email.";
+                    return RedirectToAction("CustomerLogin");
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
             }
-            return ViewComponent("ResetPassword");
+            return View(forgotPassword);
         }
     }
 }

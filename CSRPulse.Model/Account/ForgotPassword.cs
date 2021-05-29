@@ -14,6 +14,7 @@ namespace CSRPulse.Model
         public string CompanyID { get; set; }
         [Required(ErrorMessage ="Please Enter OTP.")]
         public string OTP { get; set; }
+        public string Password { get; set; }
 
     }
 }

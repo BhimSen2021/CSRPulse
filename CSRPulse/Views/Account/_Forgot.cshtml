@@ -6,64 +6,90 @@
 
 <form method="post" asp-action="ForgotPassword">
     @Html.AntiForgeryToken()
+
+    @if (ViewBag.OTPSent != null && ViewBag.OTPSent)
+    {
+        <script type="text/javascript">
+            otpCountDown();
+        </script>
+    }
     <div class="mb-3">
         <input type="hidden" asp-for="CompanyID" />
         <p class="text-muted"><span>  @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "fw-bold" }) :</span> <span> @Model.CompanyID</span></p>
     </div>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
+    <div class="mb-1">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
-        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">
+        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" autocomplete="off">
         <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
     <div class="row">
-        <!-- OTP Validation Section  s-->
+        <!-- OTP Validation Section  -->
         @if (ViewBag.IsOTPSection == false)
         {
             <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <hr />
                 <h6>One Time Password Verification</h6>
                 <p class="text-success" style="font-size: 12px; line-height: 1.42857143;">
-                    Please input The 6-digit One-time password (OTP) sent to your registered email in the box below and click on <b>'Validate OTP'</b> button. If OTP is not recieved within 300 sec., Please click on the <b>'Resend OTP'</b> button to request a new OTP. 
+                    Please input The 6-digit One-time password (OTP) sent to your registered email, in the box below and click on <b>'Validate OTP'</b> button. If OTP is not recieved within 300 sec., Please click on the <b>'Resend OTP'</b> button to request a new OTP.
                 </p>
             </div>
+            <div class="row">
+                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <div class="row">
+                        <div class="col col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                            <label asp-for="OTP" class="form-label required">Enter OTP</label>
+                        </div>
+                        <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6 p-0 m-0">
+                            <input type="text" asp-for="OTP" autocomplete="off" class="form-control form-control-sm" maxlength="6" minlength="6" placeholder="OTP" />
+                            <span class="badge bg-info text-white" id="sp-timer"></span>
+                        </div>
+                        <span asp-validation-for="OTP" class="text-danger"></span>
+                    </div>
+                </div>
 
-            <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="row">
-                    <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <label asp-for="OTP" class="form-label required">Enter OTP</label>
+                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 text-left m-0 p-0">
+                    <div id="some_div" class="d-none">
+                        <button  type="submit" value="resendotp" id="btnResendOtp" name="ButtonType" class="btn btn-sm btn-info" title="Click here, to Resend OTP." >Resend OTP</button>
                     </div>
-                    <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <input type="text" asp-for="OTP" autocomplete="off" class="form-control form-control-sm" maxlength="6" minlength="6" placeholder="OTP" />
-                        <span class="badge bg-info text-white" id="sp-timer"></span>
-                    </div>
+                    @if (ViewBag.IsVerified == false)
+                    {
+                        <div>
+                            <button type="submit" value="verifyotp" id="btnVerifyOtp" name="ButtonType" class="btn btn-sm btn-success" title="Click here, to Validate OTP.">
+                                Validate OTP
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
 
         }
 
-        <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12 text-left">
-            <div id="some_div" class="d-none">
-                <input type="submit" value="Resend OTP" id="btnResendOtp" name="ButtonType" class="btn btn-sm btn-info" title="Click here, to Resend OTP." />
-            </div>
-            @if (ViewBag.IsVerified == false)
-            {
-                <div class="form-group mb-3">
-                    <button type="submit" value="verifyotp" id="btnVerifyOtp" name="ButtonType" class="btn btn-sm btn-success" title="Click here, to Validate OTP.">
-                        Validate OTP
-                    </button>
-                </div>
-            }
+
+    </div>
+    @if (ViewBag.OTPSent == null && ViewBag.IsVerified == null)
+    {
+        <div class="d-grid mb-0 text-center">
+            <button type="submit" name="ButtonType" class="btn btn-primary" value="OTP" data-toggle="tooltip" title="Click here, to send OTP on your registered mail."><i class="mdi mdi-lock-reset"></i> Send OTP </button>
         </div>
-    </div>
-    <div class="d-grid mb-0 text-center">
-        <button type="submit" name="ButtonName" class="btn btn-primary" value="OTP" data-toggle="tooltip" title="Click here, to send OTP on your registered mail."><i class="mdi mdi-lock-reset"></i> Send OTP </button>
-    </div>
+    }
+
     @if (ViewBag.IsVerified == true)
     {
 
         <div class="d-grid mb-0 text-center">
-            <button type="submit" name="ButtonName" class="btn btn-primary" value="Reset" data-toggle="tooltip" title="Click here, to send new password on your registered mail id or mobile no."><i class="mdi mdi-lock-reset"></i> Reset Password </button>
+            <button type="submit" name="ButtonType" class="btn btn-primary" value="Reset" data-toggle="tooltip" title="Click here, to send new password on your registered mail id or mobile no."><i class="mdi mdi-lock-reset"></i> Reset Password </button>
         </div>
     }
-    </form>
+</form>
+
+<script>
+    $(function () {
+
+        if ("@ViewBag.IsVerified" == "true") {
+            debugger;
+            $("#sp-timer").attr("display", "none");
+            $("#some_div").addClass("d-none");
+        }
+    });
+</script>
