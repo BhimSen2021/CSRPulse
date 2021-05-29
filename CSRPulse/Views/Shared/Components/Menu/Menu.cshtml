@@ -13,16 +13,23 @@
                 <li class="side-nav-item">
                     <a data-bs-toggle="collapse" href="#sidebar_@hd.MenuId" aria-expanded="false" aria-controls="sidebar_@hd.MenuId" class="side-nav-link">
                         <i class="@hd.IconClass"></i>
-                        <span> @hd.MenuName </span>                      
+                        <span> @hd.MenuName </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="sidebar_@hd.MenuId">
                         <ul class="side-nav-second-level">
                             @foreach (var menu in menuItem)
                             {
-                                var childControllerName = menu.Url.Split(new char[] { '/' })[0];
-                                var childActionName = menu.Url.Split(new char[] { '/' })[1];
-                                <li><a asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName">@menu.MenuName</a></li>
+                                var childControllerName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[0];
+                                var childActionName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[1];
+                                if (menu.Url == "#")
+                                {
+                                    <li><a href="#">@menu.MenuName</a></li>
+                                }
+                                else
+                                {
+                                    <li><a asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName">@menu.MenuName</a></li>
+                                }
                             }
                         </ul>
                     </div>
@@ -30,13 +37,25 @@
             }
             else
             {
-                var controllerName = hd.Url.Split(new char[] { '/' })[0];
-                var actionName = hd.Url.Split(new char[] { '/' })[1];
+
+                var controllerName = hd.Url == "#" ? "" : hd.Url.Split(new char[] { '/' })[0];
+                var actionName = hd.Url == "#" ? "" : hd.Url.Split(new char[] { '/' })[1];
                 <li class="side-nav-item">
-                    <a asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName" class="side-nav-link">
+                    @if (hd.Url == "#")
+                    {
+                    <a href="#" class="side-nav-link">
                         <i class="@hd.IconClass"></i>
                         <span> @hd.MenuName </span>
                     </a>
+                    }
+                    else
+                    {
+                    <a asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName" class="side-nav-link">
+                        <i class="@hd.IconClass"></i>
+                        <span> @hd.MenuName </span>
+                    </a> 
+                    }
+                    
                 </li>
             }
         }

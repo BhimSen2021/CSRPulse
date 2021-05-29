@@ -16,14 +16,14 @@ namespace CSRPulse.Services
         private readonly IMapper _mapper;
         private readonly IGenericRepository _genericRepository;
         private readonly IEmailService _emailService;
-        public AccountService(IMapper mapper, IGenericRepository genericRepository,IEmailService emailService)
+        public AccountService(IMapper mapper, IGenericRepository genericRepository, IEmailService emailService)
         {
             _mapper = mapper;
             _genericRepository = genericRepository;
             _emailService = emailService;
         }
 
-              
+
 
         public bool AuthenticateUser(SingIn singIn, out UserDetail userDetail)
         {
@@ -170,7 +170,7 @@ namespace CSRPulse.Services
 
         public bool UserExists(string username, string password)
         {
-          return _genericRepository.Exists<DTOModel.User>(x => x.UserName == username && (!string.IsNullOrEmpty(password) ? x.Password == password : (1 > 0))); 
+            return _genericRepository.Exists<DTOModel.User>(x => x.UserName == username && (!string.IsNullOrEmpty(password) ? x.Password == password : (1 > 0)));
         }
         /// <summary>
         /// To send mail regarding password forgot
@@ -178,16 +178,16 @@ namespace CSRPulse.Services
         /// <param name="forgotPassword">hold mail related data</param>
         /// <param name="type"> 1 is for otp, 2 is for new password </param>
         /// <returns></returns>
-        public bool SendOTP(ForgotPassword forgotPassword,int type)
+        public bool SendOTP(ForgotPassword forgotPassword, int type)
         {
             bool flag = false;
             try
-            {                
+            {
                 var custEmail = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserName == forgotPassword.UserName && x.IsActive == true).FirstOrDefault();
                 if (custEmail == null)
                 {
                     return false;
-                }          
+                }
                 StringBuilder emailBody = new StringBuilder("");
                 Common.EmailMessage message = new Common.EmailMessage();
                 message.To = custEmail.EmailId;
@@ -210,7 +210,7 @@ namespace CSRPulse.Services
                     message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", forgotPassword.OTP));
                     message.PlaceHolders.Add(new KeyValuePair<string, string>("{$custName}", custEmail.FullName));
                 }
-                else if(type==2)
+                else if (type == 2)
                 {
                     message.PlaceHolders.Add(new KeyValuePair<string, string>("{$password}", forgotPassword.Password));
                     message.PlaceHolders.Add(new KeyValuePair<string, string>("{$custName}", custEmail.FullName));
@@ -253,5 +253,34 @@ namespace CSRPulse.Services
             }
         }
 
+        public async Task<bool> UpdatePassword(string custCode, string password)
+        {
+            bool flag;
+            try
+            {
+
+                var custData = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserName == custCode).FirstOrDefault();
+                if (custData != null)
+                {
+                    custData.Password = password;
+                    _genericRepository.Update(custData);
+                }
+                ForgotPassword forgotPassword = new ForgotPassword
+                {
+                    Password = password,
+                    UserName = custCode
+                };
+                // 2 is for Password changed confirmation mail, it will used in send function to identity mail type.
+                flag = await Task.FromResult(SendOTP(forgotPassword, 2));
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return flag;
+
+        }
     }
 }
