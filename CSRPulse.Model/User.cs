@@ -27,5 +27,6 @@ namespace CSRPulse.Model
         public string ImageName { get; set; }
         public int? DefaultMenuId { get; set; }
         public bool IsActive { get; set; }
+      
     }
 }

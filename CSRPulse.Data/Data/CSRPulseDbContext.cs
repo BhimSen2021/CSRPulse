@@ -45,16 +45,33 @@ namespace CSRPulse.Data.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
-                optionsBuilder.UseSqlServer(CustomeDataBase);
+            {
+                var _Connection = configuration.GetConnectionString("DefaultConnection");
+                var _customConnection = _Connection.Replace("CSRPulse", CustomeDataBase);
+
+                optionsBuilder.UseSqlServer(_customConnection);
+            }
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+
+        //    IConfigurationRoot configuration = new ConfigurationBuilder()
+        //        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+        //        .AddJsonFile("appsettings.json")
+        //        .Build();
+        //    if (!string.IsNullOrEmpty(CustomeDataBase))
+        //        optionsBuilder.UseSqlServer(CustomeDataBase);
+        //    else
+        //        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

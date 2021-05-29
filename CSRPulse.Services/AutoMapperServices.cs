@@ -44,6 +44,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.User, UserDetail>().ReverseMap();
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
+            CreateMap<DTOModel.User, User>();
 
             CreateMap<DTOModel.Role, Role>();
 

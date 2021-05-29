@@ -218,5 +218,48 @@ namespace CSRPulse.Services
             return Task.FromResult(flag);
         }
 
+        #region Admin Panel
+      
+        public async Task<int> RegistrationAsync(Model.SignUp signUp)
+        {
+            using (var transaction = _genericRepository.BeginTransaction())
+            {
+                try
+                {
+                    if (_genericRepository.Exists<DTOModel.User>(x => x.EmailId == signUp.EmailId || x.UserName == signUp.UserName))
+                    {
+                        signUp.RecordExist = true;
+                        return 0;
+                    }
+
+                    var user = new DTOModel.User()
+                    {
+                        RoleId = 99, // For Administrator
+                        UserTypeId = 1, // For Internal User
+                        UserName = signUp.UserName,
+                        FullName = signUp.FullName,
+                        EmailId = signUp.EmailId,
+                        Password = signUp.Password,
+                        MobileNo = signUp.MobileNo,
+                        ImageName = signUp.ImageName,   
+                        IsActive = true,
+                        CreatedBy = 1,
+                        CreatedOn = System.DateTime.Now
+                    };
+
+                    await _genericRepository.InsertAsync(user);
+                    transaction.Commit();
+                    return user.UserId;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+       
+
+        #endregion
     }
 }

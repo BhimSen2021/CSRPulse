@@ -1,0 +1,73 @@
+﻿@model IEnumerable<User>
+@{
+    ViewData["Title"] = "User List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Registration</a></li>
+                    <li class="breadcrumb-item active">User List</li>
+                </ol>
+            </div>
+            <h4 class="page-title">User List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-end">
+                    <a asp-area="Admin" asp-controller="Registration" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create User</a>
+                </div>
+                <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Full Name</th>
+                            <th>User Name</th>
+                            <th>Email Id</th>
+                            <th>Phone No</th>
+                            <th>Is Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td class="table-user">
+                                        <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
+                                        @user.FullName
+                                    </td>
+                                    <td>@user.UserName</td>
+                                    <td>@user.EmailID</td>
+                                    <td>@user.MobileNo</td>
+                                    <td width="5%">
+                                        <div>
+                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if(user.IsActive) { <text> checked="checked" </text> } />
+
+                                            <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5">No Records Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
