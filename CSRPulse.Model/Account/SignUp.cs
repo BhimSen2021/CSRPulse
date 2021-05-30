@@ -13,7 +13,7 @@ namespace CSRPulse.Model
         [Display(Name = "Email address"), Required(ErrorMessage = "Please Enter Email address")]
         [StringLength(50, ErrorMessage = "{0} not be exceed 50 char")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email.")]
-        [RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Invalid email.")]
+        [RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Please enter a valid email address.")]
         public string EmailId { get; set; }
 
         [Display(Name = "Mobile No"), Required(ErrorMessage = "Please Enter Mobile Number")]
@@ -27,10 +27,7 @@ namespace CSRPulse.Model
         public string Password { get; set; }
 
         public IFormFileCollection ImageNameFileCollection { get; set; }
-        public string ImageName { get; set; }
-
-        [Display(Name = "I accept Terms and Conditions")]
-        public bool IsAgree { get; set; }
+        public string ImageName { get; set; }       
 
         public bool RecordExist { get; set; }
     }

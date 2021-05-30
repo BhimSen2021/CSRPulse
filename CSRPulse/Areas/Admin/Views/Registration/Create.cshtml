@@ -14,68 +14,74 @@
                     <li class="breadcrumb-item active">Registration</li>
                 </ol>
             </div>
-            <h4 class="page-title">Registration</h4>
+            <h4 class="page-title">Create an Account</h4>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-xl-4 col-lg-5">
-        <div class="card mb-0">
-            <div class="card-body mb-0">
-                <h4 class="mt-0">Create Account</h4>
-                <form method="post" asp-area="Admin" asp-controller="Registration" asp-action="Create">
-                    @Html.AntiForgeryToken()
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <div class="mb-2">
+    <div class="card mb-0">
+        <div class="card-body mb-0">
+            <p class="mb-4">Create CSRpulse Account</p>
+            <form method="post" asp-area="Admin" asp-controller="Registration" asp-action="Create" class="needs-validation" novalidate>
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label class="form-label" for="validationCustom01">First name</label>
+                    <input type="text" class="form-control" id="validationCustom01" placeholder="First name" value="Mark" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please provide a valid city.
+                    </div>
+                </div>
+
+                <div class="row">
+                    @*<div class="mb-2 col-6">*@
+                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
                         @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "form-label", @for = "FullName" })
-                        <input type="text" asp-for="FullName" class="form-control" placeholder="Enter full name" required="" autocomplete="off">
-                        <span asp-validation-for="FullName" class="text-danger"></span>
+                        <input type="text" asp-for="FullName" class="form-control" placeholder="Enter full name" autocomplete="off">
+                        <span asp-validation-for="FullName" class="invalid"></span>
                     </div>
 
-                    <div class="mb-2">
+                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
                         @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "form-label", @for = "EmailId" })
-                        <input type="text" asp-for="EmailId" class="form-control" placeholder="Enter email id" required="" autocomplete="off">
-                        <span asp-validation-for="EmailId" class="text-danger"></span>
+                        <input type="text" asp-for="EmailId" class="form-control" required placeholder="Enter email id" autocomplete="off">
+                        <span asp-validation-for="EmailId" class="invalid"></span>
                     </div>
 
-                    <div class="mb-2">
+                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
                         @Html.LabelFor(model => model.MobileNo, htmlAttributes: new { @class = "form-label", @for = "MobileNo" })
-                        <input type="text" asp-for="MobileNo" class="form-control" placeholder="Enter email id" required="" autocomplete="off">
-                        <span asp-validation-for="MobileNo" class="text-danger"></span>
+                        <input type="number" asp-for="MobileNo" class="form-control" maxlength="10" placeholder="Enter email id" autocomplete="off">
+                        <span asp-validation-for="MobileNo" class="invalid-feedback"></span>
                     </div>
-                    <div class="mb-2">
+                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
                         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
-                        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">
-                        <span asp-validation-for="UserName" class="text-danger"></span>
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" autocomplete="off">
+                        <span asp-validation-for="UserName" class="invalid"></span>
                     </div>
 
-                    <div class="mb-2">
+                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
                         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label", @for = "Password" })
                         <div class="input-group input-group-merge">
-                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" required="" autocomplete="off">
+                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" autocomplete="off">
                             <div class="input-group-text" data-password="false">
                                 <span class="password-eye"></span>
                             </div>
                         </div>
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <span asp-validation-for="Password" class="invalid"></span>
                     </div>
-                    <div class="mb-2">
-                        <div class="form-check">
-                            @Html.CheckBoxFor(model => model.IsAgree, htmlAttributes: new { @class = "form-check-input", @for = "IsAgree" })
-                            <label class="form-check-label" for="checkbox-signup">I accept <a href="javascript: void(0);" class="text-muted">Terms and Conditions</a></label>
-                            <br /><span asp-validation-for="IsAgree" class="text-danger"></span>
-                            <p> Paragraph Tag</p>
-                        </div>
+
+                    <div class="mb-2 text-end">
+                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-account-circle"></i> Submit </button>
                     </div>
-                    <div class="mb-2 d-grid text-center">
-                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-account-circle"></i> Sign Up </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 
 

@@ -26,14 +26,15 @@
                 <div class="text-end">
                     <a asp-area="Admin" asp-controller="Registration" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create User</a>
                 </div>
-                <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
                     <thead class="thead-light">
                         <tr>
+                            <th width="5%">#</th>
                             <th>Full Name</th>
                             <th>User Name</th>
                             <th>Email Id</th>
                             <th>Phone No</th>
-                            <th>Is Active</th>
+                            <th width="5%">Is Active</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +43,9 @@
                             @foreach (var user in Model)
                             {
                                 <tr>
+                                    <td>
+                                        <span>@(Model.ToList().IndexOf(user) +1)</span>
+                                    </td>
                                     <td class="table-user">
                                         <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
                                         @user.FullName
@@ -49,9 +53,9 @@
                                     <td>@user.UserName</td>
                                     <td>@user.EmailID</td>
                                     <td>@user.MobileNo</td>
-                                    <td width="5%">
+                                    <td>
                                         <div>
-                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if(user.IsActive) { <text> checked="checked" </text> } />
+                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if (user.IsActive) { <text> checked="checked" </text> } />
 
                                             <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                         </div>
@@ -62,7 +66,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="5">No Records Found</td>
+                                <td colspan="6">No Records Found</td>
                             </tr>
                         }
                     </tbody>

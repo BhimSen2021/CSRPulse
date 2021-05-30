@@ -57,7 +57,7 @@ namespace CSRPulse
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation().AddViewOptions(option =>
             {
-                option.HtmlHelperOptions.ClientValidationEnabled = false;
+                option.HtmlHelperOptions.ClientValidationEnabled = true;
             });
 #endif
 

@@ -50,9 +50,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             try
             {
                 _logger.LogInformation("Admin/RegistrationController/Create");
-                if (!singUp.IsAgree)
-                    ModelState.AddModelError("IsAgree", "Please accept terms and Conditions");
-
+               
                 if (ModelState.IsValid)
                 {
                     var result = await _registrationService.RegistrationAsync(singUp);
