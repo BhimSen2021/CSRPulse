@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,12 +12,10 @@ namespace CSRPulse.Data.Repositories
     public class PrepareBDForCustomer : IPrepareDBForCustomer
     {
         private readonly IConfiguration config;
-
         public PrepareBDForCustomer(IConfiguration configuration)
         {
             config = configuration;
         }
-
 
         public Task<bool> CreateBD(Customer dtoCustomer, string _dbPath, string password, out string res)
         {
@@ -51,19 +50,19 @@ namespace CSRPulse.Data.Repositories
 
                 //------------------------------------------
 
+                // Insert Admin default credential in [User],userrole,userrights tables in customer database                  
+                SqlCommand cmdScript = new SqlCommand();
+                cmdScript.Connection = dbSqlconnection;
+                cmdScript.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdScript.CommandText = "SPCreateUser";
+                cmdScript.Parameters.Add("@CustomerCode", SqlDbType.VarChar).Value = dtoCustomer.CustomerCode;
+                cmdScript.Parameters.Add("@CustomerName", SqlDbType.VarChar).Value = dtoCustomer.CustomerName;
+                cmdScript.Parameters.Add("@password", SqlDbType.NVarChar).Value = password;
+                cmdScript.Parameters.Add("@email", SqlDbType.NVarChar).Value = dtoCustomer.Email;
 
-                // Run Store Procedure Script ti customer database
-                ////newbPath = dbPath.Replace("{}", "ProcedureScript");
-                ////SqlCommand procScript = new SqlCommand(File.ReadAllText(newbPath));
-                ////procScript.Connection = dbSqlconnection;
-                ////procScript.ExecuteNonQuery();
-
-                //-------------------------------------------------------
-
-                // Insert Admin credential in [User] table in customer database
-                ////var insScript = $"insert into [User](UserTypeId,UserName,FullName,[Password],IsActive,IsDeleted,CreatedBy,RoleId,EmailID)values(2,'{dtoCustomer.CustomerCode}','{dtoCustomer.CustomerName}','{password}',1,0,1,99,'{dtoCustomer.Email}')";
-                ////cmdScript.CommandText = insScript;
-                ////cmdScript.ExecuteNonQuery();
+                cmdScript.Connection = dbSqlconnection;
+                cmdScript.Connection.Open();
+                cmdScript.ExecuteNonQuery();
                 //-------------------------------------------
                 dbSqlconnection.Close();
                 res = "success";

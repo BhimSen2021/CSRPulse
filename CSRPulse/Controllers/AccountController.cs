@@ -22,7 +22,7 @@ namespace CSRPulse.Controllers
             _menuService = menuService;
             _validatorService = validatorService;
         }
-      
+
         [HttpGet, Route("login")]
         public IActionResult Login()
         {
@@ -254,19 +254,18 @@ namespace CSRPulse.Controllers
                     ModelState.Remove("OTP");
                     if (ModelState.IsValid)
                     {
-                        
+
                         var userExists = _accountService.UserExists(forgotPassword.UserName, null);
                         if (userExists)
                         {
                             var OTP = GenerateOTP();
                             HttpContext.Session.SetComplexData("OTP", OTP);
                             forgotPassword.OTP = OTP;
-                            ViewBag.OTPSent = _accountService.SendOTP(forgotPassword,1);
+                            ViewBag.OTPSent = _accountService.SendOTP(forgotPassword, 1);
                             ViewBag.OTPSent = true;
                             ViewBag.IsVerified = false;
                             ViewBag.IsOTPSection = false;
                             forgotPassword.OTP = string.Empty;
-                            
                         }
                         else
                         {
@@ -280,7 +279,7 @@ namespace CSRPulse.Controllers
                     TempData.Keep("companyName");
                     if (ModelState.IsValid)
                     {
-                       
+
                         if (!string.IsNullOrEmpty(HttpContext.Session.GetComplexData<string>("OTP")))
                         {
                             var otpval = Convert.ToString(HttpContext.Session.GetComplexData<string>("OTP"));
@@ -301,6 +300,7 @@ namespace CSRPulse.Controllers
                 else if (ButtonType == "Reset")
                 {
                     TempData.Remove("companyName");
+                    _accountService.UpdatePassword(forgotPassword.UserName, "Password");
                     TempData["Message"] = "New password has been sent on your registered email.";
                     return RedirectToAction("CustomerLogin");
                 }

@@ -14,7 +14,7 @@ namespace CSRPulse.Services
         bool SendOTP(ForgotPassword forgotPassword, int type);
         Task<List<User>> GetUserAsync();
         Task<User> GetUserByIdAsync(int userId);
-
+        Task<bool> UpdatePassword(string custCode, string password);
 
     }
 }
