@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace CSRPulse.Areas.Admin.Controllers
 {
@@ -37,11 +38,15 @@ namespace CSRPulse.Areas.Admin.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
-           
+
         }
 
         [HttpGet]
-        public IActionResult Create() => View(new SignUp());
+        public IActionResult Create()
+        {
+            Thread.Sleep(5000);
+           return  View(new SignUp());
+        }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -50,7 +55,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             try
             {
                 _logger.LogInformation("Admin/RegistrationController/Create");
-               
+
                 if (ModelState.IsValid)
                 {
                     var result = await _registrationService.RegistrationAsync(singUp);
@@ -67,7 +72,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                 return View(singUp);
             }
             catch (Exception ex)
-            {               
+            {
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
