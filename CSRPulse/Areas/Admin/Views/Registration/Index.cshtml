@@ -55,7 +55,7 @@
                                     <td>@user.MobileNo</td>
                                     <td>
                                         <div>
-                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if (user.IsActive) { <text> checked="checked" </text> } />
+                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if (user.IsActive == true) { <text> checked="checked" </text> } />
 
                                             <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                         </div>
