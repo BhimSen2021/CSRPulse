@@ -19,11 +19,121 @@ textarea {
     color: #fa6767;
 }
 
-.input-validation-error {
-    border-color: #fa6767;
-    padding-right: calc(1.5em + .9rem);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23fa6767'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23fa6767' stroke='none'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right calc(.375em + .225rem) center;
-    background-size: calc(.75em + .45rem) calc(.75em + .45rem);   
+
+/*!
+        // 3. Loader
+        // --------------------------------------------------*/
+.loader {
+    top: 0;
+    left: 0;
+    position: fixed;
+    opacity: 0.8;
+    z-index: 10000000;
+    background: Black;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+}
+
+.strip-holder {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 50%;
+    margin-left: -50px;
+    position: relative;
+}
+
+.strip-1,
+.strip-2,
+.strip-3 {
+    width: 20px;
+    height: 20px;
+    background: #0072bc;
+    position: relative;
+    -webkit-animation: stripMove 2s ease infinite alternate;
+    animation: stripMove 2s ease infinite alternate;
+    -moz-animation: stripMove 2s ease infinite alternate;
+}
+
+.strip-2 {
+    -webkit-animation-duration: 2.1s;
+    animation-duration: 2.1s;
+    background-color: #23a8ff;
+}
+
+.strip-3 {
+    -webkit-animation-duration: 2.2s;
+    animation-duration: 2.2s;
+    background-color: #89d1ff;
+}
+
+@-webkit-keyframes stripMove {
+    0% {
+        transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -moz-transform: translate3d(0px, 0px, 0px);
+    }
+
+    50% {
+        transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -moz-transform: translate3d(0px, 0px, 0px);
+        transform: scale(4, 1);
+        -webkit-transform: scale(4, 1);
+        -moz-transform: scale(4, 1);
+    }
+
+    100% {
+        transform: translate3d(-50px, 0px, 0px);
+        -webkit-transform: translate3d(-50px, 0px, 0px);
+        -moz-transform: translate3d(-50px, 0px, 0px);
+    }
+}
+
+@-moz-keyframes stripMove {
+    0% {
+        transform: translate3d(-50px, 0px, 0px);
+        -webkit-transform: translate3d(-50px, 0px, 0px);
+        -moz-transform: translate3d(-50px, 0px, 0px);
+    }
+
+    50% {
+        transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -moz-transform: translate3d(0px, 0px, 0px);
+        transform: scale(4, 1);
+        -webkit-transform: scale(4, 1);
+        -moz-transform: scale(4, 1);
+    }
+
+    100% {
+        transform: translate3d(50px, 0px, 0px);
+        -webkit-transform: translate3d(50px, 0px, 0px);
+        -moz-transform: translate3d(50px, 0px, 0px);
+    }
+}
+
+@keyframes stripMove {
+    0% {
+        transform: translate3d(-50px, 0px, 0px);
+        -webkit-transform: translate3d(-50px, 0px, 0px);
+        -moz-transform: translate3d(-50px, 0px, 0px);
+    }
+
+    50% {
+        transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -moz-transform: translate3d(0px, 0px, 0px);
+        transform: scale(4, 1);
+        -webkit-transform: scale(4, 1);
+        -moz-transform: scale(4, 1);
+    }
+
+    100% {
+        transform: translate3d(50px, 0px, 0px);
+        -webkit-transform: translate3d(50px, 0px, 0px);
+        -moz-transform: translate3d(50px, 0px, 0px);
+    }
 }

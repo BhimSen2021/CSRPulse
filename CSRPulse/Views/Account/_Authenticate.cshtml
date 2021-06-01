@@ -33,17 +33,16 @@
 </form>
 
 <script>
-    function onValidateSuccess(data) {       
-        debugger;
-        if (data.payment == true) {
-            debugger;
+    function onValidateSuccess(data) {      
+       
+        if (data.payment == true) {    
 
             window.location.href = "@Url.Action("Index","Registration")?cid=" + data.cid;          
 
             commonMessage('warning', data.msg);
         }
         else {
-            debugger;
+     
             $('#div-form-container').html(data.htmlData);
         }
     }

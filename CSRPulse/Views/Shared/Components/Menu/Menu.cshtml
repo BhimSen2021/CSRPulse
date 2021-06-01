@@ -22,7 +22,7 @@
                             {
                                 var childControllerName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[0];
                                 var childActionName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[1];
-                                if (menu.Url == "#")
+                                if (menu.Url == "#" || menu.Url == null)
                                 {
                                     <li><a href="#">@menu.MenuName</a></li>
                                 }
@@ -41,7 +41,7 @@
                 var controllerName = hd.Url == "#" ? "" : hd.Url.Split(new char[] { '/' })[0];
                 var actionName = hd.Url == "#" ? "" : hd.Url.Split(new char[] { '/' })[1];
                 <li class="side-nav-item">
-                    @if (hd.Url == "#")
+                    @if (hd.Url == "#" || hd.Url==null)
                     {
                     <a href="#" class="side-nav-link">
                         <i class="@hd.IconClass"></i>

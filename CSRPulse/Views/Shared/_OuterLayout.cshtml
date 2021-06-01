@@ -29,6 +29,15 @@
 
     @RenderSection("scripts", required: false)
 
+    <script>
+        $(document)
+            .ajaxStart(function () {
+                $('#AjaxLoader').show();
+            })
+            .ajaxStop(function () {
+                $('#AjaxLoader').hide();
+            });
+    </script>
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -87,7 +96,7 @@
 </head>
 
 <body class="loading" data-layout-config='{"darkMode":true}'>
-
+    <partial name="_LoadingPanel" />
     <!-- NAVBAR START -->
     <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark bg-dark">
         <div class="container">
@@ -220,3 +229,4 @@
 
 </body>
 </html>
+ 
