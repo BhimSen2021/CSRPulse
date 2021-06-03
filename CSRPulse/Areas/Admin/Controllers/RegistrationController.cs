@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace CSRPulse.Areas.Admin.Controllers
 {
@@ -17,11 +20,13 @@ namespace CSRPulse.Areas.Admin.Controllers
     {
         private readonly IRegistrationService _registrationService;
         private readonly IAccountService _accountService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public RegistrationController(IRegistrationService registrationService, IAccountService accountService) : base()
+        public RegistrationController(IRegistrationService registrationService, IAccountService accountService, IWebHostEnvironment webHostEnvironment) : base()
         {
             _registrationService = registrationService;
             _accountService = accountService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -44,8 +49,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            Thread.Sleep(5000);
-           return  View(new SignUp());
+            return View(new SignUp());
         }
 
         [HttpPost]
@@ -58,6 +62,11 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    if (singUp.ImagePhoto != null)
+                    {
+                        string folder = "assets/images/users/";
+                        singUp.ImageName = await UploadImage(folder, singUp.ImagePhoto);
+                    }
                     var result = await _registrationService.RegistrationAsync(singUp);
                     if (singUp.RecordExist)
                     {
@@ -76,6 +85,17 @@ namespace CSRPulse.Areas.Admin.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
+        }
+
+        private async Task<string> UploadImage(string folderPath, IFormFile file)
+        {
+            if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
+                Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
+
+            folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
+            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+            return folderPath;
         }
 
     }

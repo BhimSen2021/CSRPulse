@@ -40,10 +40,7 @@
     <script src="~/assets/js/vendor/responsive.bootstrap4.min.js"></script>
     <script src="~/assets/js/pages/demo.datatable-init.js"></script>
 
-
-
-    <script>
-        debugger;
+    <script>      
         $(document)
             .ajaxStart(function () {
                 $('#AjaxLoader').show();
@@ -97,12 +94,10 @@
     <!-- /End-bar -->
 
 
-
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
         $(document).ready(function () {
-
             if ('@messageError' != "") {
                 var str = '@HtmlEncoder.Encode(@messageError)';
                 str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
