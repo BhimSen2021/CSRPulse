@@ -20,8 +20,6 @@ namespace CSRPulse.Data.Models
 
         [Key]
         public int CustomerId { get; set; }
-        [StringLength(10)]
-        public string CustomerUniqueId { get; set; }
         [Required]
         [StringLength(30)]
         public string CustomerCode { get; set; }
@@ -55,6 +53,8 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
+        [StringLength(10)]
+        public string CustomerUniqueId { get; set; }
 
         [InverseProperty("Customer")]
         public virtual ICollection<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }

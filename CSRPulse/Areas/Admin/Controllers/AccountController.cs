@@ -35,7 +35,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Login(SingIn singIn, string returnUrl)
         {
-            _logger.LogInformation("Amin/AccountController/Login");
+            _logger.LogInformation("Admin/AccountController/Login");
             try
             {
                 if (ModelState.IsValid)
@@ -61,7 +61,19 @@ namespace CSRPulse.Areas.Admin.Controllers
                         return RedirectToAction("Index", "Home", new { Area = "Admin" });
                     }
                     else
-                        ModelState.AddModelError("", "Invalid credentials");
+                    {
+                        if (uDetail.WrongAttemp.HasValue)
+                        {
+                            if (uDetail.WrongAttemp.Value == 0)
+                                ModelState.AddModelError("WrongAttemp", "Your account is temperory locked, please contact your administrator.");
+                            else
+                            {
+                                ModelState.AddModelError("WrongAttemp", $"{uDetail.WrongAttemp.Value} attemp(s) left.");
+                                ModelState.AddModelError("", "Invalid credentials");
+                            }
+                        }
+
+                    }
 
                 }
                 return View(singIn);

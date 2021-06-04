@@ -28,16 +28,43 @@ namespace CSRPulse.Services
         public bool AuthenticateUser(SingIn singIn, out UserDetail userDetail)
         {
             userDetail = new UserDetail();
+            //SetConnectionString(null); // to reset connection.
 
             var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.Role).FirstOrDefault();
 
             if (uData == null)
             {
+               var uInnerData= _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName).FirstOrDefault();
+                switch (uInnerData.WrongAttemp)
+                {
+                    case 0:
+                        userDetail.WrongAttemp = 0;
+                        break;
+                    case 2:
+                        userDetail.WrongAttemp = 1;
+                        break;
+                    case 1:
+                        userDetail.WrongAttemp = 0;
+                        break;
+                    default:
+                        userDetail.WrongAttemp = 2;
+                        break;
+                }
+                if(userDetail.WrongAttemp.HasValue)
+                {
+                    uInnerData.WrongAttemp = userDetail.WrongAttemp;
+                _genericRepository.Update(uInnerData);
+                    }
                 return false;
             }
 
             if (uData != null)
             {
+                if (uData.WrongAttemp == 0)
+                {
+                    userDetail.WrongAttemp = 0;
+                    return false;
+                }
                 userDetail = _mapper.Map<UserDetail>(uData);
 
                 userDetail.RoleId = uData.Role.RoleId;
@@ -69,6 +96,8 @@ namespace CSRPulse.Services
 
                     }).ToList();
                 }
+                uData.WrongAttemp = null;
+                _genericRepository.Update(uData);
             }
             if (userDetail.UserID > 0) { return true; }
 

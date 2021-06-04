@@ -160,8 +160,19 @@ namespace CSRPulse.Controllers
                         return RedirectToAction("Index", "Dashboard", new { Area = "Customer" });
                     }
                     else
-                        ModelState.AddModelError("", "Invalid credentials");
-
+                    {
+                        if (userDetail.WrongAttemp.HasValue)
+                        {
+                            if (userDetail.WrongAttemp.Value == 0)
+                                ModelState.AddModelError("WrongAttemp", "Your account is temperory locked, please contact your administrator.");
+                            else
+                            {
+                                ModelState.AddModelError("WrongAttemp", $"{userDetail.WrongAttemp.Value} attemp(s) left.");
+                                ModelState.AddModelError("", "Invalid credentials");
+                            }
+                        }
+                       
+                    }
                 }
                 return View(signIn);
             }

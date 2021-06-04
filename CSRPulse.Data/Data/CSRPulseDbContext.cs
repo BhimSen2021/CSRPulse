@@ -38,8 +38,12 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
-        public virtual DbSet<UserType> UserType { get; set; }               
-        public static string CustomeDataBase { get; set; }
+        public virtual DbSet<UserType> UserType { get; set; }
+
+        public static string CustomeDataBase
+        {
+            get; set;
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
@@ -309,8 +313,7 @@ namespace CSRPulse.Data.Data
 
             OnModelCreatingPartial(modelBuilder);
         }
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-       
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
