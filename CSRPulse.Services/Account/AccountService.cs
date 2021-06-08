@@ -34,35 +34,51 @@ namespace CSRPulse.Services
 
             if (uData == null)
             {
-               var uInnerData= _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName).FirstOrDefault();
-                switch (uInnerData.WrongAttemp)
+                var uInnerData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName).FirstOrDefault();
+                if (uInnerData != null)
                 {
-                    case 0:
-                        userDetail.WrongAttemp = 0;
-                        break;
-                    case 2:
-                        userDetail.WrongAttemp = 1;
-                        break;
-                    case 1:
-                        userDetail.WrongAttemp = 0;
-                        break;
-                    default:
-                        userDetail.WrongAttemp = 2;
-                        break;
-                }
-                if(userDetail.WrongAttemp.HasValue)
-                {
-                    uInnerData.WrongAttemp = userDetail.WrongAttemp;
-                _genericRepository.Update(uInnerData);
+                    if (uInnerData.WrongAttemp == 0 && uInnerData.LockDate.HasValue)
+                    {
+                        userDetail.ErrorMessage = uInnerData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
+                        return false;
                     }
+                    switch (uInnerData.WrongAttemp)
+                    {
+                        case 0:
+                            userDetail.WrongAttemp = 0;
+                            break;
+                        case 2:
+                            userDetail.WrongAttemp = 1;
+                            break;
+                        case 1:
+                            userDetail.WrongAttemp = 0;
+                            break;
+                        default:
+                            userDetail.WrongAttemp = 2;
+                            break;
+                    }
+                    if (userDetail.WrongAttemp.HasValue)
+                    {
+                        uInnerData.WrongAttemp = userDetail.WrongAttemp;
+                        uInnerData.LockDate = uInnerData.RoleId == (int)Common.Roles.Admin && userDetail.WrongAttemp == 0 ? DateTime.Now : uInnerData.LockDate;
+                        _genericRepository.Update(uInnerData);
+                    }
+                }
+                else
+                {
+                    userDetail.ErrorMessage = "notexists";
+                }
                 return false;
             }
-
             if (uData != null)
             {
-                if (uData.WrongAttemp == 0)
+                if (uData.WrongAttemp == 0 && uData.LockDate.HasValue)
                 {
-                    userDetail.WrongAttemp = 0;
+                    userDetail.ErrorMessage = uData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
+                    return false;
+                }
+                else if (uData.WrongAttemp == 0)
+                {
                     return false;
                 }
                 userDetail = _mapper.Map<UserDetail>(uData);

@@ -14,5 +14,7 @@ namespace CSRPulse.Model
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; } 
         public int? UpdatedBy { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }
