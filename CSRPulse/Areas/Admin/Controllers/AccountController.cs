@@ -62,7 +62,11 @@ namespace CSRPulse.Areas.Admin.Controllers
                     }
                     else
                     {
-                        if (uDetail.WrongAttemp.HasValue)
+                        if (uDetail.ErrorMessage == "notexists")
+                        {
+                            ModelState.AddModelError("", "Please enter correct user name.");
+                        }
+                        else if (uDetail.WrongAttemp.HasValue)
                         {
                             if (uDetail.WrongAttemp.Value == 0)
                                 ModelState.AddModelError("WrongAttemp", "Your account is temperory locked, please contact your administrator.");
@@ -71,6 +75,10 @@ namespace CSRPulse.Areas.Admin.Controllers
                                 ModelState.AddModelError("WrongAttemp", $"{uDetail.WrongAttemp.Value} attemp(s) left.");
                                 ModelState.AddModelError("", "Invalid credentials");
                             }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("WrongAttemp", $"Your account is temperory locked, please try after {uDetail.ErrorMessage}");
                         }
 
                     }
@@ -91,12 +99,12 @@ namespace CSRPulse.Areas.Admin.Controllers
             UserDetail userDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
             if (userDetail != null)
             {
-                HttpContext.Session.Clear();                
+                HttpContext.Session.Clear();
             }
-            
+
             return RedirectToAction("Landing", "Home", new { Area = "" });
         }
 
-        
+
     }
 }

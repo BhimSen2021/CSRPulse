@@ -161,7 +161,11 @@ namespace CSRPulse.Controllers
                     }
                     else
                     {
-                        if (userDetail.WrongAttemp.HasValue)
+                       if (userDetail.ErrorMessage == "notexists")
+                        {
+                            ModelState.AddModelError("", "Please enter correct user name.");
+                        }
+                        else if (userDetail.WrongAttemp.HasValue)
                         {
                             if (userDetail.WrongAttemp.Value == 0)
                                 ModelState.AddModelError("WrongAttemp", "Your account is temperory locked, please contact your administrator.");
@@ -171,7 +175,10 @@ namespace CSRPulse.Controllers
                                 ModelState.AddModelError("", "Invalid credentials");
                             }
                         }
-                       
+                        else
+                        {
+                            ModelState.AddModelError("WrongAttemp", $"Your account is temperory locked, please try after {userDetail.ErrorMessage}");
+                        }                       
                     }
                 }
                 return View(signIn);
