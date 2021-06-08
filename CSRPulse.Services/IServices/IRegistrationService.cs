@@ -14,6 +14,7 @@ namespace CSRPulse.Services.IServices
         bool SendOTP(string email, string OTP, string companyName);
 
         Task<int> RegistrationAsync(Model.SignUp signUp);
+        bool UserActiveDeActive(int userId, bool IsActive);
 
     }
 }

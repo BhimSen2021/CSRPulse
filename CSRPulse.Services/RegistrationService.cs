@@ -123,7 +123,7 @@ namespace CSRPulse.Services
                 }
             }
             return false;
-        }      
+        }
 
         public bool SendOTP(string email, string OTP, string companyName)
         {
@@ -194,7 +194,7 @@ namespace CSRPulse.Services
         }
 
         #region Admin Panel
-      
+
         public async Task<int> RegistrationAsync(Model.SignUp signUp)
         {
             using (var transaction = _genericRepository.BeginTransaction())
@@ -216,7 +216,7 @@ namespace CSRPulse.Services
                         EmailId = signUp.EmailId,
                         Password = signUp.Password,
                         MobileNo = signUp.MobileNo,
-                        ImageName = signUp.ImageName,   
+                        ImageName = signUp.ImageName,
                         IsActive = true,
                         CreatedBy = 1,
                         CreatedOn = System.DateTime.Now
@@ -233,7 +233,21 @@ namespace CSRPulse.Services
                 }
             }
         }
-       
+
+        public bool UserActiveDeActive(int userId, bool IsActive)
+        {
+            try
+            {
+                var user = _genericRepository.GetByID<DTOModel.User>(userId);
+                user.IsActive = IsActive;
+                _genericRepository.Update(user);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         #endregion
     }

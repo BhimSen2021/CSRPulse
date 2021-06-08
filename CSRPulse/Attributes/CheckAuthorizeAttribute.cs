@@ -35,7 +35,7 @@ namespace CSRPulse.Attributes
                     if (menuRights.Any(x => x.menu.Url == (indexPageURL)))
                     {
                         var menuRight = menuRights.Where(x => x.menu.Url == indexPageURL).Select(
-                            y => new { ShowMenuRight = y.ShowMenu, CreateRight = y.CreateRight, EditRight = y.EditRight }).FirstOrDefault();
+                            y => new { ShowMenuRight = y.ShowMenu, CreateRight = y.CreateRight, EditRight = y.EditRight, ViewRight = y.ViewRight, DeleteRight = y.DeleteRight }).FirstOrDefault();
 
                         if (actionName == "index" && !menuRight.ShowMenuRight)
                             filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "Handler" }));
@@ -44,6 +44,12 @@ namespace CSRPulse.Attributes
                             filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "Handler" }));
 
                         if (actionName == "create" && !menuRight.CreateRight)
+                            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "Handler" }));
+
+                        if (actionName == "details" && !menuRight.ViewRight)
+                            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "Handler" }));
+
+                        if (actionName == "delete" && !menuRight.DeleteRight)
                             filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "UnAuthorizeAccess", controller = "Handler" }));
                     }
                     else

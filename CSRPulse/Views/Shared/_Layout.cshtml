@@ -40,7 +40,7 @@
     <script src="~/assets/js/vendor/responsive.bootstrap4.min.js"></script>
     <script src="~/assets/js/pages/demo.datatable-init.js"></script>
 
-    <script>      
+    <script>
         $(document)
             .ajaxStart(function () {
                 $('#AjaxLoader').show();
@@ -51,7 +51,7 @@
     </script>
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
-<partial name="_LoadingPanel" />
+    <partial name="_LoadingPanel" />
     <!-- Begin page -->
     <div class="wrapper">
         <!-- ========== Left Sidebar Start ========== -->
@@ -101,20 +101,20 @@
             if ('@messageError' != "") {
                 var str = '@HtmlEncoder.Encode(@messageError)';
                 str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
-                $.bootstrapGrowl("<i class='dripicons-warning me-2'></i> " + str + "", {
-                    type: 'warning',
+                $.bootstrapGrowl('<div class="alert alert-danger alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Error : </strong>' + str, {
                     align: 'center',
                     width: 'auto',
-                    allow_dismiss: true,
+                    allow_dismiss: false,
                     delay: 10000
                 });
             }
             if ('@message' != "") {
-                $.bootstrapGrowl("<i class='dripicons-checkmark me-2'></i> " + '@message', {
-                    type: 'success',
+                var str = '@HtmlEncoder.Encode(@message)';
+                str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+                $.bootstrapGrowl('<div class="alert alert-success alert-dismissible"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Success: </strong>' + str, {
                     align: 'center',
                     width: 'auto',
-                    allow_dismiss: true,
+                    allow_dismiss: false,
                     delay: 10000
                 });
             }
@@ -125,23 +125,24 @@
         if (msgType == "error") {
             var str = '@HtmlEncoder.Encode(@messageError)';
             str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
-            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-times-circle"></i> Error:  </strong>' + msg, {
+            $.bootstrapGrowl('<div class="alert alert-danger alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Error : </strong>' + msg, {
+                align: 'center',
+                width: 'auto',
+                allow_dismiss: false,
+                delay: 10000
+            });
+        }
+    else if (msgType == "success") {
+            $.bootstrapGrowl('<div class="alert alert-success alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Success: </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,
                 delay: 10000
             });
     }
-    else if (msgType == "success") {
-        $.bootstrapGrowl('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-check-circle"></i> Success:  </strong>' + msg, {
-            align: 'center',
-            width: 'auto',
-            allow_dismiss: false,
-            delay: 10000
-        });
-    }
         else if (msgType == "warning") {
-            $.bootstrapGrowl('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong><i class="fa fa-exclamation-triangle"></i> Warning:  </strong>' + msg, {
+
+            $.bootstrapGrowl('<div class="alert alert-warning alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Warning: </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,

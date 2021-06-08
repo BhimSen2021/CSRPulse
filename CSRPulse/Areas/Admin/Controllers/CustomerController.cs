@@ -26,6 +26,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             _logger.LogInformation("Admin/Customer/CustomerList");
             try
             {
+          
                 var customerList = await _customerService.GetAllCustomerAsync();
                 return View(customerList);
             }

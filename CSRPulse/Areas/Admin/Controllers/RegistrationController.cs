@@ -87,6 +87,13 @@ namespace CSRPulse.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult UserActiveDeActive(int userId, bool IsActive)
+        {
+            _logger.LogInformation("Admin/RegistrationController/UserActiveDeActive");
+            var result = _registrationService.UserActiveDeActive(userId, IsActive);
+            return Json(result);
+        }
         private async Task<string> UploadImage(string folderPath, IFormFile file)
         {
             if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
