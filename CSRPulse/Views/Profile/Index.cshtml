@@ -18,9 +18,21 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div id="form-container">
-        @{ await Html.RenderPartialAsync("_Profile", Model); }
-    </div>
-</div>
 
+<div class="row" id="form-container">
+    @{ await Html.RenderPartialAsync("_Profile", Model); }
+
+    <div id="div-edit-profile" class="col-xl-8 col-lg-7"></div>
+</div>
+<script>
+    function onSuccess(data) {
+        debugger;
+        if (data.status != undefined) {
+            var msgType = data.status == true ? 'success' : 'error';
+            commonMessage(msgType, data.msg);
+            window.location.reload();
+        }
+        else
+            $("#div-edit-profile").html(data.htmlData);
+    }
+</script>

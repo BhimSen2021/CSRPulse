@@ -23,8 +23,6 @@ namespace CSRPulse.Services
             _emailService = emailService;
         }
 
-
-
         public bool AuthenticateUser(SingIn singIn, out UserDetail userDetail)
         {
             userDetail = new UserDetail();
@@ -327,5 +325,52 @@ namespace CSRPulse.Services
             return flag;
 
         }
+
+        public List<UserDetail> GetUserProfileAsync()
+        {
+            var result = _genericRepository.GetIQueryable<DTOModel.User>().Include(r => r.Role);
+            try
+            {
+                return _mapper.Map<List<UserDetail>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public UserDetail GetUserProfileByIdAsync(int userId)
+        {
+            var result = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserId == userId).Include(r => r.Role).FirstOrDefault();
+            try
+            {
+                return _mapper.Map<UserDetail>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                var userDtl = _genericRepository.GetByID<DTOModel.User>(user.UserID);
+                if (userDtl != null)
+                {
+                    userDtl.FullName = user.FullName;
+                    userDtl.MobileNo = user.MobileNo;
+                    userDtl.EmailId = user.EmailID;
+                    userDtl.ImageName = user.ImageName;
+                    _genericRepository.Update(userDtl);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return true;
+        }
+
     }
 }
