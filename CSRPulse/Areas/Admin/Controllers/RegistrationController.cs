@@ -67,6 +67,9 @@ namespace CSRPulse.Areas.Admin.Controllers
                         string folder = "assets/images/users/";
                         singUp.ImageName = await UploadImage(folder, singUp.ImagePhoto);
                     }
+                    else
+                        singUp.ImageName = "sample-profile.png";
+
                     var result = await _registrationService.RegistrationAsync(singUp);
                     if (singUp.RecordExist)
                     {

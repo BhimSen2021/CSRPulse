@@ -1,4 +1,5 @@
 ﻿@inject ICustomerService customerService
+@inject IMaintenanceService maintenanceService
 @using System.IO;
 @{
     ViewData["Title"] = "Management Console";
@@ -7,13 +8,14 @@
 
     var startupPath = Directory.GetCurrentDirectory();
     var drive = startupPath.Substring(0, 1);
-    DriveInfo dInfo = new DriveInfo(drive);   
+    DriveInfo dInfo = new DriveInfo(drive);
     var perStr = "";
     if (dInfo.IsReady)
     {
-        perStr = (((dInfo.TotalFreeSpace / 1073741824) * 100) / (dInfo.TotalSize / 1073741824)).ToString()+"%";        
+        perStr = (((dInfo.TotalFreeSpace / 1073741824) * 100) / (dInfo.TotalSize / 1073741824)).ToString() + "%";
     }
 
+    var IsMaintenance = maintenanceService.IsUnderMaintenance();
 }
 
 <div class="row">
@@ -94,7 +96,7 @@
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Our Plans</p>
                         <a asp-area="" asp-controller="Plan" asp-action="Index">
-                            <p class="text-info">See more</p>
+                            <p class="text-info">Click Here</p>
                         </a>
                         <div class="row">
                             <div class="col-3"></div>
@@ -108,7 +110,7 @@
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Quick Email</p>
                         <a asp-area="" asp-controller="QuickEmail" asp-action="Index">
-                            <p class="text-info">See more</p>
+                            <p class="text-info">Click Here</p>
                         </a>
                         <div class="row">
                             <div class="col-3"></div>
@@ -136,7 +138,7 @@
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Manage Users</p>
                         <a asp-area="Admin" asp-controller="Registration" asp-action="Index">
-                            <p class="text-info">See more</p>
+                            <p class="text-info">Click Here</p>
                         </a>
                         <div class="row">
                             <div class="col-3"></div>
@@ -193,7 +195,9 @@
 
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Under Maintenance</p>
-                        <p class="text-info">Click Here</p>
+                        <a asp-area="Admin" asp-controller="Maintenance" asp-action="Index">
+                            <p class="text-info">Click Here</p>
+                        </a>
                         <div class="row">
                             @*<div class="col-3"></div>*@
                             <div class="col-6 text-end m-0 t-0">
@@ -201,7 +205,16 @@
 
                             </div>
                             <div class="col-6 text-dark m-0 p-0 text-start">
-                                <p class="font-24">No</p>
+                                <p class="font-24">
+                                    @if (IsMaintenance)
+                                    {
+                                        <span>Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span>No</span>
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ namespace CSRPulse.Common
 
         public static readonly List<string> controllers = new List<string>() {
 
-           "base","account","registration","dashboard","quickemail","profile"
+           "base","account","registration","dashboard","quickemail","maintenance"
         };
     }
 }

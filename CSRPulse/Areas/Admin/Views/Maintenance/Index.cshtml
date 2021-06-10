@@ -1,6 +1,6 @@
-﻿@model CSRPulse.Model.QuickEmail
+﻿@model CSRPulse.Model.Maintenance
 @{
-    ViewData["Title"] = "Quick Email";
+    ViewData["Title"] = "Maintenance";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,11 +10,11 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Management</a></li>
-                    <li class="breadcrumb-item active">Quick Email</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Manage</a></li>
+                    <li class="breadcrumb-item active">Maintenance</li>
                 </ol>
             </div>
-            <h4 class="page-title">Quick Email</h4>
+            <h4 class="page-title">Maintenance</h4>
         </div>
     </div>
 </div>
@@ -24,15 +24,10 @@
         <div class="card">
             <div class="card-body">
                 <div id="form-container">
-                    @{ await Html.RenderPartialAsync("_QuickEmail", Model); }
+                    @{ await Html.RenderPartialAsync("_Maintenance", Model); }
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    //$(document).ready(function () {
-    //    $('#Subjects_dropdown').multiselect();
-    //});
-</script>
 

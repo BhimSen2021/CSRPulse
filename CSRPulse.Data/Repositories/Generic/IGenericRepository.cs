@@ -16,6 +16,7 @@ namespace CSRPulse.Data.Repositories
         IEnumerable<TEntity> Get<TEntity>(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "") where TEntity : class;
         Task<IEnumerable<TEntity>> GetAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "") where TEntity : class;
         IEnumerable<TEntity> GetReportResult<TEntity>(int pageNum, int pageSize, out int rowsCount, Expression<Func<TEntity, bool>> filter = null, string sortOn = "", bool isAscendingOrder = false, string includeProperties = "") where TEntity : class;
+        
         IEnumerable<TEntity> GetPagedResult<TEntity>(int pageNum, int pageSize, out int rowsCount, Expression<Func<TEntity, bool>> filter = null, string sortOn = "", bool isAscendingOrder = false, string includeProperties = "") where TEntity : class;
         Tuple<IEnumerable<TEntity>, int> GetPagedResultAsync<TEntity>(int pageNum, int pageSize, Expression<Func<TEntity, bool>> filter = null, string sortOn = "", bool isAscendingOrder = false, string includeProperties = "") where TEntity : class;
         TEntity GetByID<TEntity>(object id) where TEntity : class;

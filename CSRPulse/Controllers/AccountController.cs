@@ -16,11 +16,13 @@ namespace CSRPulse.Controllers
         private readonly IAccountService _accountService;
         private readonly IMenuService _menuService;
         private readonly IDNTCaptchaValidatorService _validatorService;
-        public AccountController(IAccountService accountService, IMenuService menuService, IDNTCaptchaValidatorService validatorService)
+        private readonly IMaintenanceService _maintenanceService;
+        public AccountController(IAccountService accountService, IMenuService menuService, IDNTCaptchaValidatorService validatorService, IMaintenanceService maintenanceService)
         {
             _accountService = accountService;
             _menuService = menuService;
             _validatorService = validatorService;
+            _maintenanceService = maintenanceService;
         }
 
         [HttpGet, Route("login")]
@@ -84,6 +86,12 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("AccountController/CustomerLogin");
             try
             {
+                /// First check site is under maintenance
+                if (IsMaintenance())
+                {
+                    return Json(new { maintenance = true, htmlData = ConvertViewToString("_Authenticate", signIn, true) });
+                }
+
                 /// First check the customer ID is exists in our database
                 if (ButtonName == "verify")
                 {
@@ -132,6 +140,8 @@ namespace CSRPulse.Controllers
                 // if customer ID is exists in our database, then check user credential in customer database
                 if (ModelState.IsValid)
                 {
+
+
                     TempData.Keep("companyName");
                     if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
                     {
@@ -161,7 +171,7 @@ namespace CSRPulse.Controllers
                     }
                     else
                     {
-                       if (userDetail.ErrorMessage == "notexists")
+                        if (userDetail.ErrorMessage == "notexists")
                         {
                             ModelState.AddModelError("", "Please enter correct user name.");
                         }
@@ -177,8 +187,8 @@ namespace CSRPulse.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("WrongAttemp", $"Your account is temporary locked, please try after {userDetail.ErrorMessage}");
-                        }                       
+                            ModelState.AddModelError("WrongAttemp", $"Your account is temperory locked, please try after {userDetail.ErrorMessage}");
+                        }
                     }
                 }
                 return View(signIn);
@@ -328,6 +338,27 @@ namespace CSRPulse.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
             }
             return View(forgotPassword);
+        }
+
+        [NonAction]
+        private bool IsMaintenance()
+        {
+            var mData = _maintenanceService.GetMaintenanceDetails();
+            if (mData != null)
+            {
+                var cDateTime = DateTime.UtcNow;
+                if (cDateTime < mData.EndDateTime)
+                {
+                    _maintenanceService.UpdateMaintenance(IsMaintenance: true);
+                    return true;
+                }
+                else
+                {
+                    _maintenanceService.UpdateMaintenance(IsMaintenance: false);
+                    return false;
+                }
+            }
+            return false;
         }
     }
 }

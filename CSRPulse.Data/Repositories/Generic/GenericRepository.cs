@@ -503,5 +503,7 @@ namespace CSRPulse.Data.Repositories
         {
             return new EntityDatabaseTransaction(_dbContext);
         }
+
+       
     }
 }
