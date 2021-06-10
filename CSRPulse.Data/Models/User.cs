@@ -56,6 +56,8 @@ namespace CSRPulse.Data.Models
         public byte? WrongAttemp { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LockDate { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? LastLogin { get; set; }
 
         [ForeignKey(nameof(RoleId))]
         [InverseProperty("User")]

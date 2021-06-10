@@ -29,6 +29,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<MailProcess> MailProcess { get; set; }
         public virtual DbSet<MailSendStatus> MailSendStatus { get; set; }
         public virtual DbSet<MailSubject> MailSubject { get; set; }
+        public virtual DbSet<Maintenance> Maintenance { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -61,6 +62,7 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>(entity =>
@@ -177,6 +179,13 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.MailProcessId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__MailSubject__MailP__15A53433");
+            });
+
+            modelBuilder.Entity<Maintenance>(entity =>
+            {
+                entity.Property(e => e.EndDateTime).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.StartDateTime).HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<Menu>(entity =>

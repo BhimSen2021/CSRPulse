@@ -47,6 +47,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.User, User>();
 
             CreateMap<DTOModel.Role, Role>();
+            CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
 
             #region Email Mapper
             CreateMap<Common.EmailMessage, DTOModel.MailSendStatus>()

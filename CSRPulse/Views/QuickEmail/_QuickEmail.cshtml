@@ -2,21 +2,37 @@
 <form data-ajax="true" data-ajax-method="POST" asp-controller="QuickEmail" asp-action="QuickEmail" data-ajax-success="onSuccess">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+    @*<div class="mb-2">
+        <select class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="Choose ...">
+            
+            
+                <option value="AZ">Arizona</option>
+                <option value="CO">Colorado</option>
+                <option value="ID">Idaho</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NM">New Mexico</option>
+                <option value="ND">North Dakota</option>
+                <option value="UT">Utah</option>
+                <option value="WY">Wyoming</option>
+            
+        </select>
+    </div>*@
     <div class="mb-2">
         <label asp-for="To" class="form-label"></label>
-        <input type="text" asp-for="To" class="form-control" placeholder="Example@email.com" required autocomplete="off" />
-        <span asp-validation-for="To" class="text-danger"></span>
+        <input type="text" asp-for="To" class="form-control" placeholder="Example@email.com" autocomplete="off" />
+        <span asp-validation-for="To" class="invalid"></span>
     </div>
+   
     <div class="mb-2">
         <label asp-for="Subject" class="form-label"></label>
-        <input type="text" asp-for="Subject" class="form-control" placeholder="Your subject" required autocomplete="off" />
-        <span asp-validation-for="Subject" class="text-danger"></span>
+        <input type="text" asp-for="Subject" class="form-control" placeholder="Your subject" autocomplete="off" />
+        <span asp-validation-for="Subject" class="invalid"></span>
     </div>
     <div class="mb-2">
         <label asp-for="Message" class="form-label"></label>
         <textarea asp-for="Message" id="comments" rows="4" class="form-control" placeholder="Type your message here..."></textarea>
-        <span asp-validation-for="Message" class="text-danger"></span>
+        <span asp-validation-for="Message" class="invalid"></span>
     </div>
     <div class="mt-2">
         <div class="col-12 text-end">
@@ -26,6 +42,7 @@
         </div>
     </div>
 </form>
+
 <script>
     function onSuccess(data) {
         if (data.success == true) {
@@ -38,3 +55,4 @@
     }
 
 </script>
+
