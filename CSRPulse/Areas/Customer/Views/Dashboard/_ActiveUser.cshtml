@@ -1,0 +1,55 @@
+﻿@model Task<List<User>>
+
+<div class="card">
+    <div class="card-body pb-0">
+        <div class="dropdown float-end">
+            <span data-widget="remove" id="removeClass" class="pull-right font-20 mt-0">
+                <i class="uil uil-times-circle"></i>
+            </span>
+        </div>
+        <h4 class="mb-2">Active Users</h4>
+        <hr />
+        <div data-simplebar style="max-height: 280px;">
+            @foreach (var item in Model.Result)
+            {
+                var logindate=string.Empty;
+                var logintime=string.Empty;
+                {
+                     logindate = item.LastLogin.HasValue ? item.LastLogin.Value.ToShortDateString() : null;
+                     logintime = item.LastLogin.HasValue ? item.LastLogin.Value.ToShortTimeString() : null;
+
+                    if (DateTime.Now.ToShortDateString() == logindate)
+                        logindate = "today";
+
+
+                }
+                <div class="d-flex align-items-start">
+                    <img class="me-3 rounded-circle" src="~/assets/images/users/avatar-1.jpg" width="40">
+                    <div class="w-100 overflow-hidden">
+                        <span class="float-end">  <img src="~/images/online.gif" width="15"></span>
+                        <h5><a asp-controller="Profile" asp-action="Index" asp-route-uid="@item.UserID">@item.FullName</a></h5>
+                        <span class="font-13">last seen @logindate at @logintime </span>
+                    </div>
+                </div>
+            }
+        </div>
+        <style>
+            svg {
+                width: 40%;
+            }
+        </style>
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+        $("#addClass").click(function () {
+            $('#qnimate').addClass('popup-box-on');
+        });
+
+        $("#removeClass").click(function () {
+            $('#qnimate').removeClass('popup-box-on');
+        });
+    })
+</script>

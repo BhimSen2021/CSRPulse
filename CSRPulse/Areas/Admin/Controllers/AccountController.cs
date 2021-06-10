@@ -69,7 +69,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                         else if (uDetail.WrongAttemp.HasValue)
                         {
                             if (uDetail.WrongAttemp.Value == 0)
-                                ModelState.AddModelError("WrongAttemp", "Your account is temperory locked, please contact your administrator.");
+                                ModelState.AddModelError("WrongAttemp", "Your account is temporary locked, please contact your administrator.");
                             else
                             {
                                 ModelState.AddModelError("WrongAttemp", $"{uDetail.WrongAttemp.Value} attemp(s) left.");
@@ -78,7 +78,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("WrongAttemp", $"Your account is temperory locked, please try after {uDetail.ErrorMessage}");
+                            ModelState.AddModelError("WrongAttemp", $"Your account is temporary locked, please try after {uDetail.ErrorMessage}");
                         }
 
                     }

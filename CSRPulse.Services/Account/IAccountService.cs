@@ -15,6 +15,9 @@ namespace CSRPulse.Services
         Task<List<User>> GetUserAsync();
         Task<User> GetUserByIdAsync(int userId);
         Task<bool> UpdatePassword(string custCode, string password);
+        UserDetail GetUserProfileByIdAsync(int userId);
+        List<UserDetail> GetUserProfileAsync();
 
+        bool UpdateUser(User user);
     }
 }

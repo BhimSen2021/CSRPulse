@@ -178,7 +178,7 @@ namespace CSRPulse.Controllers
                         else if (userDetail.WrongAttemp.HasValue)
                         {
                             if (userDetail.WrongAttemp.Value == 0)
-                                ModelState.AddModelError("WrongAttemp", "Your account is temperory locked, please contact your administrator.");
+                                ModelState.AddModelError("WrongAttemp", "Your account is temporary locked, please contact your administrator.");
                             else
                             {
                                 ModelState.AddModelError("WrongAttemp", $"{userDetail.WrongAttemp.Value} attemp(s) left.");

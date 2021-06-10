@@ -17,12 +17,13 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body text-center">
                 <div class="row">
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Manage Users</p>
                         <a asp-area="Admin" asp-controller="Registration" asp-action="Index">
                             <p class="text-info">See more</p>
@@ -37,10 +38,10 @@
                         </div>
                     </div>
 
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Quick Email</p>
                         <a asp-area="" asp-controller="QuickEmail" asp-action="Index">
-                            <p class="text-info">See more</p>
+                            <p class="text-info">Click here</p>
                         </a>
                         <div class="row">
                             <div class="col-3"></div>
@@ -83,8 +84,8 @@
 
 
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Online Users</p>
-                        <p>  <a href="#" id="addClass"> See more </a></p>
+                        <p class="font-15 mb-0 fw-bold">Active Users</p>
+                        <p>  <a data-ajax="true"  data-ajax-update="#qnimate" data-ajax-mode="replace"  asp-controller="Dashboard" asp-action="GetActiveUser" id="addClass"> See more </a></p>
                         <div class="row">
                             <div class="col-6 text-end m-0 t-0">
                                 <img src="~/images/Admin/MC/partner.png" alt="" height="55" asp-append-version="true" />
@@ -95,78 +96,17 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="popup-box chat-popup" id="qnimate">
-    <div class="popup-head">
-        <div class="row">
-            <div class="col-md-9 text-start pt-1 text-start">Active Users</div>
-            <div class="col-md-2 text-end pt-0 mt-0">
-                <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button">
-                    <i class="fa fa-times-circle" aria-hidden="true"></i>
-                </button>
 
-            </div>
-        </div>
-    </div>
-    <div class="popup-messages">
-        <div class="direct-chat-messages">
-            @*<div class="chat-box-single-line">
-            <abbr class="timestamp">October 8th, 2015</abbr>
-        </div>*@
-            <div class="direct-chat-msg mb-3">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">
-                        Anil
-                        @*<a asp-area="" asp-controller="Profile" asp-action="Index" asp-route-cid="">
-            Anil
-        </a>*@
-                    </span>
-                </div>
-                <img alt="message user image" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="direct-chat-img">
-            </div>
-            <div class="direct-chat-msg mb-3">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Ibrahim</span>
-                </div>
-                <img alt="message user image" src="~/images/3.png" class="direct-chat-img">
-            </div>
-            <div class="direct-chat-msg mb-3">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Rajesh</span>
-                </div>
-                <img alt="message user image"  src="~/images/3.png" class="direct-chat-img">
-            </div>
-            <div class="direct-chat-msg mb-3">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Rajesh</span>
-                </div>
-                <img alt="message user image"  src="~/images/3.png" class="direct-chat-img">
-            </div>
-            <div class="direct-chat-msg mb-3">
-                <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Rajesh</span>
-                </div>
-                <img alt="message user image"  src="~/images/3.png" class="direct-chat-img">
-            </div>
-          
-        </div>
-    </div>
-    <div class="popup-messages-footer">        
+        
+    
 </div>
 
-<style>
-    svg {
-        width: 40%;
-    }
-</style>
-</div>
 <script>
     $(function () {
         $("#addClass").click(function () {

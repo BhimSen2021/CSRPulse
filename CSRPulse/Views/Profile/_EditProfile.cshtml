@@ -1,0 +1,89 @@
+﻿@using CSRPulse.Models
+@model User
+<div class="card">
+    <div class="card-body">
+
+        <form data-ajax="true" data-ajax-method="POST" asp-controller="Profile" asp-action="Edit" data-ajax-success="onSuccess" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UserID" />
+            <h5><i class="mdi mdi-account-circle me-1"></i> Edit Profile</h5>
+            <div class="row">
+                <div class="col-xl-6 text-center">
+                    <img id="profileImage" src="~/assets/images/users/@Model.ImageName" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" title="Click to select image" style="cursor:pointer" />
+                    <i style="margin-left:-25px; vertical-align:bottom; font-size:24px;" class="uil-camera-change text-muted"></i>
+                    <input asp-for="ImageName" style="display:none">
+
+                    <div asp-validation-summary="ModelOnly" class="text-start invalid"></div>
+                    <div class="mb-3 mt-5 text-start">
+
+                        <label asp-for="FullName" class="form-label">Full Name</label>
+                        <input type="text" asp-for="FullName" class="form-control" maxlength="50" placeholder="Enter full name (max 50 characters)" autocomplete="off">
+                        <span asp-validation-for="FullName" class="invalid"></span>
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label asp-for="MobileNo" class="form-label">Mobile No.</label>
+                        <input type="text" asp-for="MobileNo" class="form-control" maxlength="10" pattern="[0-9]{10}" placeholder="Enter mobile number" autocomplete="off">
+                        <span asp-validation-for="MobileNo" class="invalid"></span>
+                    </div>
+
+                </div> <!-- end card-body -->
+
+                <div class="col-xl-6">
+
+                    <div class="text-start mb-3">
+                        <label asp-for="EmailID" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="uil uil-at"></i></span>
+                            <input type="email" class="form-control" asp-for="EmailID" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
+                        </div>
+                        <span asp-validation-for="EmailID" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <div class="input-group input-group-merge">
+                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" autocomplete="off">
+                            <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                            </div>
+                        </div>
+                        <span class="font-11 text-muted">Password must contain at least 8 characters, including UPPER/lowercase, special and numbers</span>
+                        <span asp-validation-for="Password" class="invalid"></span>
+                    </div>
+
+                </div>
+
+            </div> <!-- end card -->
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save-edit"></i> Update</button>
+            </div>
+
+        </form>
+
+        <!-- end settings content-->
+    </div> <!-- end card body -->
+</div> <!-- end card -->
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#profileImage").click(function () {
+            debugger;
+            $("#ImageName").trigger('click');
+        });
+
+        $(function () {
+            $(":file").change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        });
+
+        function imageIsLoaded(e) {
+            $('#profileImage').attr('src', e.target.result);
+        };
+    </script>
+}
