@@ -64,6 +64,10 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.State, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
                 .ForMember(d => d.value, o => o.MapFrom(s => s.StateName));
+
+            CreateMap<DTOModel.Role, SelectListModel>()
+              .ForMember(d => d.id, o => o.MapFrom(s => s.RoleId))
+              .ForMember(d => d.value, o => o.MapFrom(s => s.RoleName));
             #endregion
         }
     }

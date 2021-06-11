@@ -30,5 +30,6 @@ namespace CSRPulse.Model
         public byte? WrongAttemp { get; set; }      
         public DateTime? LockDate { get; set; }      
         public DateTime? LastLogin { get; set; }
+        public string RoleName { get; set; }
     }
 }

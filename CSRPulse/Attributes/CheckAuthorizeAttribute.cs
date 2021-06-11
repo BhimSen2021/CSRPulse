@@ -28,10 +28,10 @@ namespace CSRPulse.Attributes
 
             if (!SharedControllers.controllers.Contains(controllerName))
             {
-
                 if (user != null && user.userMenuRights.Count > 0)
                 {
                     var menuRights = user.userMenuRights;
+
                     if (menuRights.Any(x => x.menu.Url == (indexPageURL)))
                     {
                         var menuRight = menuRights.Where(x => x.menu.Url == indexPageURL).Select(

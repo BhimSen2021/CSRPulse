@@ -209,7 +209,7 @@ namespace CSRPulse.Services
 
                     var user = new DTOModel.User()
                     {
-                        RoleId = 99, // For Administrator
+                        RoleId = signUp.RoleId == 0 ? 99 : signUp.RoleId, // For Administrator
                         UserTypeId = 1, // For Internal User
                         UserName = signUp.UserName,
                         FullName = signUp.FullName,
