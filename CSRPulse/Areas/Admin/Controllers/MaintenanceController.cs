@@ -35,18 +35,23 @@ namespace CSRPulse.Areas.Admin.Controllers
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> MaintenanceAsync(Maintenance maintenance)
         {
-            bool Issuccess = false;
+            bool IsMaintenance = false;
             _logger.LogInformation("MaintenanceController/MaintenanceAsync");
             try
             {
-                if (maintenance.StartDateTime > maintenance.EndDateTime)
+                if (maintenance.EndDateTime != null)
                 {
-                    ModelState.AddModelError("EndDateTime", "End date time should be greater then start date time");                  
+                    if (maintenance.StartDateTime > maintenance.EndDateTime)
+                    {
+                        ModelState.AddModelError("EndDateTime", "End date time should be greater then start date time");
+                    }
                 }
 
                 if (ModelState.IsValid)
-                {                    
-                    Issuccess = await _maintenanceService.GoUnderMaintenance(maintenance);
+                {
+                    IsMaintenance = await _maintenanceService.GoUnderMaintenance(maintenance);
+                    var sendEmail = _maintenanceService.SendEmail(maintenance.Message);
+
                 }
                 else
                 {
@@ -55,11 +60,11 @@ namespace CSRPulse.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                Issuccess = false;
+                IsMaintenance = false;
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
-            return Json(new { success = Issuccess, htmlData = ConvertViewToString("_Maintenance", maintenance, true) });
+            return Json(new { isMaintenance = IsMaintenance, isDown = maintenance.IsMaintenance, htmlData = ConvertViewToString("_Maintenance", maintenance, true) });
         }
     }
 }

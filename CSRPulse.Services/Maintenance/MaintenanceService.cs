@@ -14,12 +14,13 @@ namespace CSRPulse.Services
     {
         private readonly IMapper _mapper;
         private readonly IGenericRepository _genericRepository;
+        private readonly IEmailService _emailService;
 
-
-        public MaintenanceService(IMapper mapper, IGenericRepository genericRepository)
+        public MaintenanceService(IMapper mapper, IGenericRepository genericRepository, IEmailService emailService)
         {
             _mapper = mapper;
             _genericRepository = genericRepository;
+            _emailService = emailService;
         }
 
         public Maintenance GetMaintenanceDetails()
@@ -46,7 +47,7 @@ namespace CSRPulse.Services
                 var mData = _genericRepository.Get<DTOModel.Maintenance>().FirstOrDefault();
                 if (mData != null)
                 {
-                    mData.IsMaintenance = true;
+                    mData.IsMaintenance = maintenance.IsMaintenance;
                     mData.StartDateTime = maintenance.StartDateTime;
                     mData.EndDateTime = maintenance.EndDateTime;
                     mData.Message = maintenance.Message;
@@ -60,7 +61,6 @@ namespace CSRPulse.Services
 
                     return true;
                 }
-
             }
             catch (Exception)
             {
@@ -77,6 +77,57 @@ namespace CSRPulse.Services
                 return mData.IsMaintenance;
             }
             return false;
+        }
+
+        public bool SendEmail(string Message)
+        {
+            bool flag = false;
+            try
+            {
+                StringBuilder emailBody = new StringBuilder("");
+                Common.EmailMessage message = new Common.EmailMessage();
+                string to = string.Empty;
+                string cc = string.Empty;
+                var uData = _genericRepository.Get<DTOModel.User>(u => u.IsActive == true && u.IsDeleted == false).ToList();
+                var cData = _genericRepository.Get<DTOModel.Customer>(u => u.IsDeleted == false).ToList();
+                if (uData != null)
+                {
+                    foreach (var item in uData)
+                    {
+                        to += item.EmailId + ";";
+                    }
+                }
+                if (cData != null)
+                {
+                    foreach (var item in cData)
+                    {
+                        cc += item.Email + ";";
+                    }
+                }
+                message.To = to.TrimEnd(';');
+                message.CC = cc.TrimEnd(';');
+
+                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 4).FirstOrDefault();
+                if (mailSubj != null)
+                {
+                    message.Subject = mailSubj.Subject;
+                    message.SubjectId = mailSubj.SubjectId;
+                }
+                else
+                    message.Subject = "CSRPulse Mail";
+
+                message.PlaceHolders = new List<KeyValuePair<string, string>>();
+                message.TemplateName = "Maintenance";
+                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$message}", Message));
+                _emailService.CustomerRelatedMails(message);
+                flag = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return flag;
         }
 
         public void UpdateMaintenance(bool IsMaintenance)

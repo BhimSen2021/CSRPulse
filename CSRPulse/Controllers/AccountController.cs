@@ -346,16 +346,19 @@ namespace CSRPulse.Controllers
             var mData = _maintenanceService.GetMaintenanceDetails();
             if (mData != null)
             {
-                var cDateTime = DateTime.UtcNow;
-                if (cDateTime < mData.EndDateTime)
+                var cDateTime = DateTime.Now;
+                if (mData.EndDateTime == null)
                 {
-                    _maintenanceService.UpdateMaintenance(IsMaintenance: true);
-                    return true;
+                    if (cDateTime > mData.StartDateTime && mData.IsMaintenance)
+                    { return true; }
+
+                    else { return false; }
                 }
                 else
                 {
-                    _maintenanceService.UpdateMaintenance(IsMaintenance: false);
-                    return false;
+                    if (cDateTime > mData.StartDateTime && cDateTime < mData.EndDateTime)
+                    { return true; }
+                    else { return false; }
                 }
             }
             return false;
