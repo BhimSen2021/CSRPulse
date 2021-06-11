@@ -1,5 +1,5 @@
 ﻿@using CSRPulse.Models
-@model User
+@model SignUp
 <div class="card">
     <div class="card-body">
 
@@ -11,7 +11,7 @@
                 <div class="col-xl-6 text-center">
                     <img id="profileImage" src="~/assets/images/users/@Model.ImageName" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" title="Click to select image" style="cursor:pointer" />
                     <i style="margin-left:-25px; vertical-align:bottom; font-size:24px;" class="uil-camera-change text-muted"></i>
-                    <input asp-for="ImageName" style="display:none">
+                    <input asp-for="ImagePhoto" style="display:none">
 
                     <div asp-validation-summary="ModelOnly" class="text-start invalid"></div>
                     <div class="mb-3 mt-5 text-start">
@@ -31,12 +31,12 @@
                 <div class="col-xl-6">
 
                     <div class="text-start mb-3">
-                        <label asp-for="EmailID" class="form-label">Email</label>
+                        <label asp-for="EmailId" class="form-label">Email</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="uil uil-at"></i></span>
-                            <input type="email" class="form-control" asp-for="EmailID" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
+                            <input type="email" class="form-control" asp-for="EmailId" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
                         </div>
-                        <span asp-validation-for="EmailID" class="invalid"></span>
+                        <span asp-validation-for="EmailId" class="invalid"></span>
                     </div>
 
                     <div class="mb-3">
@@ -49,6 +49,17 @@
                         </div>
                         <span class="font-11 text-muted">Password must contain at least 8 characters, including UPPER/lowercase, special and numbers</span>
                         <span asp-validation-for="Password" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group input-group-merge">
+                            <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Enter Confirm password" autocomplete="off">
+                            <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="invalid"></span>
                     </div>
 
                 </div>

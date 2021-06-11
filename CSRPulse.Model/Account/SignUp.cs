@@ -40,5 +40,7 @@ namespace CSRPulse.Model
         public string ImageName { get; set; }
 
         public bool RecordExist { get; set; }
+
+        public int UserID { get; set; }
     }
 }
