@@ -41,10 +41,9 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
 
-        public static string CustomeDataBase
-        {
-            get; set;
-        }
+
+        public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
@@ -62,6 +61,7 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -183,8 +183,6 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<Maintenance>(entity =>
             {
-                entity.Property(e => e.EndDateTime).HasDefaultValueSql("(getdate())");
-
                 entity.Property(e => e.StartDateTime).HasDefaultValueSql("(getdate())");
             });
 

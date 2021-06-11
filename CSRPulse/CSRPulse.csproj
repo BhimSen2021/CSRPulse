@@ -12,6 +12,7 @@
     <Content Remove="wwwroot\Templates\EmailTemplate\CustomerRegs.html" />
     <Content Remove="wwwroot\Templates\EmailTemplate\ForgotOTP.html" />
     <Content Remove="wwwroot\Templates\EmailTemplate\RecoverPassword.html" />
+    <Content Remove="wwwroot\Templates\Maintenance.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,7 @@
     <None Include="wwwroot\Templates\EmailTemplate\ForgotOTP.html" />
     <None Include="wwwroot\Templates\EmailTemplate\CustomerRegs.html" />
     <None Include="wwwroot\Templates\EmailTemplate\CustomerOTP.html" />
+    <None Include="wwwroot\Templates\EmailTemplate\Maintenance.html" />
   </ItemGroup>
 
 </Project>

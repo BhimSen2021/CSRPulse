@@ -12,5 +12,6 @@ namespace CSRPulse.Services
         Maintenance GetMaintenanceDetails();
         void UpdateMaintenance(bool IsMaintenance);
         bool IsUnderMaintenance();
+        bool SendEmail(string Message);
     }
 }

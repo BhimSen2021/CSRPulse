@@ -31,14 +31,13 @@
                     <div class="text-center">
                         <img src="~/assets/images/maintenance.svg" height="140" alt="site is under maintenance">
                         <h3 class="mt-4">Site is Under Maintenance</h3>
-                        <p>We're making the system more awesome. We'll be back shortly.</p>
 
                         @if (Maintenance != null)
                         {
-                            <h3 class="mt-4"></h3>
-                            <label id="lbltime" style="display:none">@Maintenance.EndDateTime.ToString("MMM dd yyyy HH:mm:ss")</label>
-
+                            <label id="lbltime" style="display:none">@Maintenance.EndDateTime?.ToString("MMM dd yyyy HH:mm:ss")</label>
+                            <p>@Maintenance.Message</p>
                         }
+
                         <p class="h3">
                             <span id="days"></span> <span id="hours"></span> <span id="mins"></span><span id="secs"></span>
                             <span id="end"></span>
@@ -87,36 +86,39 @@
     <script>
         // The data/time we want to countdown to
         var tt = $("#lbltime").text();
-        var countDownDate = new Date(tt).getTime();
+        if (tt != '') {
+            var countDownDate = new Date(tt).getTime();
 
-        // Run myfunc every second
-        var myfunc = setInterval(function () {
+            // Run myfunc every second
+            var myfunc = setInterval(function () {
 
-            var now = new Date().getTime();
-            var timeleft = countDownDate - now;
+                var now = new Date().getTime();
+                var timeleft = countDownDate - now;
 
-            // Calculating the days, hours, minutes and seconds left
-            var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+                // Calculating the days, hours, minutes and seconds left
+                var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
 
-            // Result is output to the specific element
-            document.getElementById("days").innerHTML = days + "d "
-            document.getElementById("hours").innerHTML = hours + "h "
-            document.getElementById("mins").innerHTML = minutes + "m "
-            document.getElementById("secs").innerHTML = seconds + "s "
+                // Result is output to the specific element
+                document.getElementById("days").innerHTML = days + "d "
+                document.getElementById("hours").innerHTML = hours + "h "
+                document.getElementById("mins").innerHTML = minutes + "m "
+                document.getElementById("secs").innerHTML = seconds + "s "
 
-            // Display the message when countdown is over
-            if (timeleft < 0) {
-                clearInterval(myfunc);
-                document.getElementById("days").innerHTML = ""
-                document.getElementById("hours").innerHTML = ""
-                document.getElementById("mins").innerHTML = ""
-                document.getElementById("secs").innerHTML = ""
-                document.getElementById("end").innerHTML = "TIME UP!!";
-            }
-        }, 1000);
+                // Display the message when countdown is over
+                if (timeleft < 0) {
+                    clearInterval(myfunc);
+                    document.getElementById("days").innerHTML = ""
+                    document.getElementById("hours").innerHTML = ""
+                    document.getElementById("mins").innerHTML = ""
+                    document.getElementById("secs").innerHTML = ""
+                    document.getElementById("end").innerHTML = "TIME UP!!";
+                    window.location.href = "@Url.Action("Account", "CustomerLogin", new { Area = "" })";
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
