@@ -45,9 +45,15 @@ namespace CSRPulse.Services
                 .ForMember(d => d.RoleName, o => o.MapFrom(s => s.Role.RoleName)).ReverseMap();
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
-            CreateMap<DTOModel.User, User>();
+            CreateMap<DTOModel.User, User>().ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId)).ReverseMap();
 
-            CreateMap<DTOModel.Role, Role>();
+            CreateMap<DTOModel.Role, Model.Role>()
+                .ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId))
+                .ForMember(d => d.RoleName, o => o.MapFrom(s => s.RoleName))
+                .ForMember(d => d.RoleShortName, o => o.MapFrom(s => s.RoleShortName))
+                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
+                  .ForMember(d => d.Seniorty, o => o.MapFrom(s => s.Seniorty))
+                   .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
             CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
 
             #region Email Mapper

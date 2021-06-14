@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using CSRPulse.Attributes;
 using System;
+using CSRPulse.Model;
 
 namespace CSRPulse.Controllers
 {
@@ -18,6 +19,20 @@ namespace CSRPulse.Controllers
         private ILogger<T> logger;
 
         protected ILogger<T> _logger => logger ??= HttpContext.RequestServices.GetService<ILogger<T>>();
+
+        protected UserDetail userDetail
+        {
+            get
+            {
+                UserDetail userDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
+
+                return userDetail;
+
+            }
+        }
+
+
+
         public ActionResult DownloadFile(string fileName, string fullPath, string sContentType)
         {
             if (System.IO.File.Exists(fullPath))

@@ -1,6 +1,6 @@
 ﻿@model CSRPulse.Model.User
 @{
-    ViewData["Title"] = "Add New User";
+    ViewData["Title"] = "Edit User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,10 +11,11 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Add New User</li>
+                    <li class="breadcrumb-item active">Users</li>
+                    <li class="breadcrumb-item active">Edit User</li>
                 </ol>
             </div>
-            <h4 class="page-title">Create an Account</h4>
+            <h4 class="page-title">Edit User</h4>
         </div>
     </div>
 </div>
@@ -23,13 +24,13 @@
 
 <div class="card">
     <div class="card-body">
-        <form method="post" asp-area="Customer" asp-controller="User" asp-action="Create" enctype="multipart/form-data">
+        <form method="post" asp-area="Customer" asp-controller="User" asp-action="Edit" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
-          
+            <input type="hidden" asp-for="UserID" />
+            <input type="hidden" asp-for="UserName" />
             <div class="row">
-                <h4 class="text-muted text-start mb-3">Please fill in this form to create an account.</h4>
                 <div class="col-xl-4 text-center">
-                    <img id="myImg" src="~/assets/images/users/sample-profile.png" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" title="Click to select image" style="cursor:pointer" />
+                    <img id="myImg" src="~/assets/images/users/@Model.ImageName" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" title="Click to select image" style="cursor:pointer" />
                     <i style="margin-left:-25px; vertical-align:bottom; font-size:24px;" class="uil-camera-change text-muted"></i>
                     @*<input id="UserImg" title="Upload image" type="file" name="UserImg" accept=".png,.jpg,.jpeg" style="display: none" />*@
                     <input asp-for="ImagePhoto" style="display:none">
@@ -37,13 +38,13 @@
                     <div asp-validation-summary="ModelOnly" class="text-start invalid"></div>
                     <div class="mb-3 mt-5 text-start">
                         <label asp-for="FullName" for="FullName" class="form-label">Full Name</label>
-                      
+
                         <input type="text" asp-for="FullName" class="form-control" maxlength="50" placeholder="Enter full name (max 50 characters)" autocomplete="off">
 
                         <span asp-validation-for="FullName" class="invalid"></span>
                     </div>
                     <div class="text-start mb-3">
-                        <label asp-for="EmailID" for="EmailID" class="form-label">Email ID</label>                      
+                        <label asp-for="EmailID" for="EmailID" class="form-label">Email ID</label>
                         <input type="text" asp-for="EmailID" class="form-control" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
                         <span asp-validation-for="EmailID" class="invalid"></span>
                     </div>
@@ -53,23 +54,17 @@
                 </div>
                 <div class="col-xl-5">
                     <div class="mb-3">
-                        <label asp-for="MobileNo" for="MobileNo" class="form-label">Mobile No.</label>                   
+                        <label asp-for="MobileNo" for="MobileNo" class="form-label">Mobile No.</label>
                         <input type="text" asp-for="MobileNo" class="form-control" maxlength="10" pattern="[0-9]{10}" placeholder="Enter mobile number (max 10 characters)" autocomplete="off">
                         <span asp-validation-for="MobileNo" class="invalid"></span>
                     </div>
                     <div class="form-group mb-3">
-                      <label asp-for="RoleId" for="RoleId" class="form-label">Role</label>
+                        <label asp-for="RoleId" for="RoleId" class="form-label">Role</label>
                         <select asp-for="RoleId" asp-items="@ViewBag.ddlRole" aria-required="true" class="form-select">
                             <option disabled="" label="Role" selected="" value="">Role</option>
                         </select>
                         <span asp-validation-for="RoleId" class="invalid"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="UserName" for="UserName" class="form-label">User Name</label>                       
-                        <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter user name (max 50 characters)" autocomplete="off">
-                        <span asp-validation-for="UserName" class="invalid"></span>
-                    </div>
+                    </div>                 
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label", @for = "Password" })
                         <div class="input-group input-group-merge">
@@ -94,7 +89,7 @@
                         <span asp-validation-for="ConfirmPassword" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">
-                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-account-circle"></i> Submit </button>
+                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-account-edit"></i> Update </button>
                     </div>
                 </div>
 
