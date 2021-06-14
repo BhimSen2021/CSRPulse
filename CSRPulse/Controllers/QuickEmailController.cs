@@ -1,4 +1,6 @@
 ﻿using CSRPulse.Model;
+using CSRPulse.Services;
+using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -10,36 +12,50 @@ namespace CSRPulse.Controllers
 {
     public class QuickEmailController : BaseController<QuickEmailController>
     {
-        public QuickEmailController()
+        private readonly IDropdownBindService _dropdownBindService;
+        private readonly IQuickEmailService _quickEmailService;
+        public QuickEmailController(IDropdownBindService dropdownBindService, IQuickEmailService quickEmailService)
         {
-
+            _dropdownBindService = dropdownBindService;
+            _quickEmailService = quickEmailService;
         }
         public IActionResult Index()
         {
-            return View();
+            QuickEmail quickEmail = new QuickEmail();
+            return View(new QuickEmail());
         }
 
-        [HttpGet]
-        public async Task<IActionResult> QuickEmail()
-        {
-            return await Task.FromResult((IActionResult)PartialView("_QuickEmail", new QuickEmail()));
-        }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult QuickEmail(QuickEmail quickEmail)
+        public async Task<IActionResult> Index(QuickEmail quickEmail)
         {
             bool Issuccess = false;
             try
             {
-                Issuccess = true;
+                if (quickEmail.ToEmails.Length == 0 && quickEmail.BccEmails.Length == 0)
+                {
+                    ModelState.AddModelError("", "Please specify at least one recipient");
+                }
+                if (ModelState.IsValid) { 
+                    Issuccess = await _quickEmailService.SendEmailAsync(quickEmail);
+                    if(Issuccess)
+                        TempData["Message"] = "Email sending failed.";
+                    else 
+                        TempData["Error"] = "Failed to send your message. Please try later.";
+
+                }
+                else
+                    return View(quickEmail);
+
             }
             catch (Exception)
             {
-                Issuccess = false;
-                throw;
+                TempData["Error"] = "Failed to send your message Please contact the administrator.";
+                return View(quickEmail);
             }
-            return Json(new { success = Issuccess, htmlData = ConvertViewToString("_QuickEmail", quickEmail, true) });
+            return RedirectToAction(nameof(Index));
         }
+
     }
 }

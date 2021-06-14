@@ -8,10 +8,10 @@ namespace CSRPulse.Services
 {
     public interface IMaintenanceService
     {
-        Task<bool> GoUnderMaintenance(Maintenance maintenance);
+        Task<bool> GoUnderMaintenanceAsync(Maintenance maintenance);
         Maintenance GetMaintenanceDetails();
         void UpdateMaintenance(bool IsMaintenance);
         bool IsUnderMaintenance();
-        bool SendEmail(string Message);
+        Task<bool> SendEmailAsync(string Message);
     }
 }

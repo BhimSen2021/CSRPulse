@@ -49,8 +49,8 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    IsMaintenance = await _maintenanceService.GoUnderMaintenance(maintenance);
-                    var sendEmail = _maintenanceService.SendEmail(maintenance.Message);
+                    IsMaintenance = await _maintenanceService.GoUnderMaintenanceAsync(maintenance);
+                    var sendEmail = await _maintenanceService.SendEmailAsync(maintenance.Message);
 
                 }
                 else

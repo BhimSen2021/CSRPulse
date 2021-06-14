@@ -40,7 +40,7 @@ namespace CSRPulse.Services
 
         }
 
-        public async Task<bool> GoUnderMaintenance(Maintenance maintenance)
+        public async Task<bool> GoUnderMaintenanceAsync(Maintenance maintenance)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace CSRPulse.Services
             return false;
         }
 
-        public bool SendEmail(string Message)
+        public async Task<bool> SendEmailAsync(string Message)
         {
             bool flag = false;
             try
@@ -119,12 +119,12 @@ namespace CSRPulse.Services
                 message.PlaceHolders = new List<KeyValuePair<string, string>>();
                 message.TemplateName = "Maintenance";
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$message}", Message));
-                _emailService.CustomerRelatedMails(message);
-                flag = true;
+                flag = await _emailService.CustomerRelatedMails(message);
+
             }
             catch (Exception)
             {
-                throw;
+                flag = false;
             }
 
             return flag;

@@ -15,7 +15,7 @@ namespace CSRPulse.Services
         private readonly IGenericRepository _genericRepository;
         private readonly IMapper _mapper;
 
-        public DropdownBindService(IGenericRepository generic,IMapper mapper)
+        public DropdownBindService(IGenericRepository generic, IMapper mapper)
         {
             _genericRepository = generic;
             _mapper = mapper;
@@ -32,9 +32,21 @@ namespace CSRPulse.Services
         public IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId)
         {
             var dtoDist = _genericRepository.Get<DTOModel.State>(x => stateId.HasValue ? x.StateId == stateId : (1 > 0));
-            var districtList=  _mapper.Map<List<SelectListModel>>(dtoDist);
+            var districtList = _mapper.Map<List<SelectListModel>>(dtoDist);
             return districtList.ToList();
 
         }
+
+        public IEnumerable<SelectListModel> GetAllEmails()
+        {
+            var uEmails = _genericRepository.Get<DTOModel.User>(u => u.IsActive == true && u.IsDeleted == false).Select(x => new SelectListModel() { id = x.UserId, value = x.EmailId }).ToList();
+
+            var cEmails = _genericRepository.Get<DTOModel.Customer>(c => c.IsDeleted == false).Select(x => new SelectListModel() { id = x.CustomerId, value = x.Email }).ToList();
+
+            uEmails.AddRange(cEmails);
+
+            return uEmails.OrderBy(x => x.value);
+        }
+
     }
 }

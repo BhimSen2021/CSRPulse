@@ -101,8 +101,8 @@ namespace CSRPulse.Common
                 }
 
                 catch (Exception)
-                {            
-                    throw;
+                {
+                    return false;
                 }
             }
         }
