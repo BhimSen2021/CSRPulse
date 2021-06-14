@@ -55,5 +55,36 @@ namespace CSRPulse.Services
             return roleList.ToList();
 
         }
+
+        public IEnumerable<SelectListModel> GetDistrict(int? stateId, int? districtId)
+        {
+            try
+            {
+
+                var dtoDistrict = _genericRepository.Get<DTOModel.District>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)));
+                var districtList = _mapper.Map<List<SelectListModel>>(dtoDistrict);
+                return districtList.ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public IEnumerable<SelectListModel> GetBlock(int? stateId, int? districtId,int? blockId)
+        {
+            try
+            {
+
+                var dtoBlock = _genericRepository.Get<DTOModel.Block>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)) && (blockId.HasValue ? x.BlockId == blockId.Value : (1 > 0)));
+                var blockList = _mapper.Map<List<SelectListModel>>(dtoBlock);
+                return blockList.ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

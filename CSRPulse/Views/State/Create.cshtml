@@ -1,0 +1,56 @@
+﻿@model CSRPulse.Model.State
+@{
+    ViewData["Title"] = "Add New State";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Add New State</li>
+                </ol>
+            </div>
+            <h4 class="page-title">State</h4>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-controller="State" asp-action="Create">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mb-3">
+                        <label asp-for="StateName" for="MobileNo" class="form-label">State</label>
+                        <input type="text" asp-for="StateName" class="form-control" maxlength="100" placeholder="Enter State (max 100 characters)" autocomplete="off">
+                        <span asp-validation-for="StateName" class="invalid"></span>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label asp-for="StateShort" for="UserName" class="form-label">Short Name</label>
+                        <input type="text" asp-for="StateShort" class="form-control" maxlength="4" placeholder="Enter short name (max 4 characters)" autocomplete="off">
+                        <span asp-validation-for="StateShort" class="invalid"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="StateCode" for="StateCode" class="form-label">Short Name</label>
+                        <input type="text" asp-for="StateCode" class="form-control" maxlength="2" placeholder="Enter state code (max 2 characters)" autocomplete="off">
+                        <span asp-validation-for="StateCode" class="invalid"></span>
+                    </div>
+                    <div class="mb-2 text-end">
+                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-file-document"></i> Create </button>
+                    </div>
+                </div>
+
+            </div> <!-- end card -->
+        </form>
+    </div> <!-- end card body-->
+</div>

@@ -21,6 +21,7 @@ namespace CSRPulse.Data.Data
         {
         }
 
+        public virtual DbSet<Block> Block { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
@@ -40,7 +41,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
-
+        public virtual DbSet<Village> Village { get; set; }
         public static string CustomeDataBase
         {
             get; set;
@@ -62,9 +63,36 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Block>(entity =>
+            {
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.BlockCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Block_User");
+
+                entity.HasOne(d => d.District)
+                    .WithMany(p => p.Block)
+                    .HasForeignKey(d => d.DistrictId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Block_District");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Block)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Block_State");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.BlockUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_Block_User1");
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.Property(e => e.Address2).IsUnicode(false);
@@ -122,6 +150,12 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.DistrictCreatedByNavigation)
                     .HasForeignKey(d => d.CreatedBy)
                     .HasConstraintName("FK_User_District_CreatedBy");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.District)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_District_State");
 
                 entity.HasOne(d => d.UpdatedByNavigation)
                     .WithMany(p => p.DistrictUpdatedByNavigation)
@@ -316,6 +350,40 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<Village>(entity =>
+            {
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Block)
+                    .WithMany(p => p.Village)
+                    .HasForeignKey(d => d.BlockId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Village_Block");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.VillageCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Village_User");
+
+                entity.HasOne(d => d.District)
+                    .WithMany(p => p.Village)
+                    .HasForeignKey(d => d.DistrictId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Village_District");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Village)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Village_State");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.VillageUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_Village_User1");
             });
 
             OnModelCreatingPartial(modelBuilder);

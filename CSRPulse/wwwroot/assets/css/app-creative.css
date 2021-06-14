@@ -48,7 +48,24 @@ File: Main Css File
   :root {
     scroll-behavior: smooth; } }
 
-@media screen and (max-width: 1200px) and (min-width: 600px) {
+
+@media screen and (max-width: 600px) and (min-width: 0px) {
+    body {
+        margin: 0;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.7rem;
+        font-weight: 400;
+        line-height: 1.5;
+        /*color: #333;*/
+        color: #333;
+        background-color: #fafbfe;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+}
+
+
+@media screen and (max-width: 1200px) and (min-width: 601px) {
     body {
         margin: 0;
         font-family: "Nunito", sans-serif;
