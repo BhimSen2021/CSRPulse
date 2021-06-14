@@ -49,7 +49,7 @@ namespace CSRPulse.Services
                 {
                     mData.IsMaintenance = maintenance.IsMaintenance;
                     mData.StartDateTime = maintenance.StartDateTime;
-                    mData.EndDateTime = maintenance.EndDateTime;
+                    mData.EndDateTime = maintenance.EndDateTime.Value;
                     mData.Message = maintenance.Message;
                     _genericRepository.Update(mData);
                     return true;

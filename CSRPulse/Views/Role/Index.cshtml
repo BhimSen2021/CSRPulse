@@ -1,6 +1,6 @@
-﻿@model IEnumerable<UserDetail>
+﻿@model IEnumerable<Role>
 @{
-    ViewData["Title"] = "User List";
+    ViewData["Title"] = "Role";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,10 +11,10 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                    <li class="breadcrumb-item active">User List</li>
+                    <li class="breadcrumb-item active">Role</li>
                 </ol>
             </div>
-            <h4 class="page-title">User List</h4>
+            <h4 class="page-title">Role List</h4>
         </div>
     </div>
 </div>
@@ -24,44 +24,37 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-end">
-                    <a asp-area="Customer" asp-controller="User" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New User</a>
+                    <a asp-area="Customer" asp-controller="Role" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Role</a>
                 </div>
                 <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
                     <thead class="thead-light">
                         <tr>
                             <th width="5%">#</th>
-                            <th>User Name</th>
-                            <th>Full Name</th>
-                            <th>Email Id</th>
-                            <th>Phone No</th>
-                            <th>Role</th>
+                            <th>Role Name</th>
+                            <th>Short Name</th>
                             <th width="5%">Active</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (Model.Count() > 0)
                         {
-                            @foreach (var user in Model)
+                            @foreach (var role in Model)
                             {
                                 <tr>
                                     <td>
-                                        <span>@(Model.ToList().IndexOf(user) +1)</span>
+                                        <span>@(Model.ToList().IndexOf(role) +1)</span>
                                     </td>
-                                    <td class="table-user" id="tooltip-container2">
-                                        <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
-                                        <span  data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this user.">  @Html.ActionLink(user.UserName, "Edit", "User", new { uid = user.UserID })</span>
-                                    </td>
-                                    <td>@user.FullName</td>
-                                    <td>@user.EmailID</td>
-                                    <td>@user.MobileNo</td>
-                                    <td>@user.RoleName</td>
+
+                                    <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this role.">  @Html.ActionLink(role.RoleName, "Edit", "Role", new { rid = role.RoleId })</span></td>      
+                                    <td>@role.RoleShortName</td>
                                     <td>
                                         <div>
-                                            <input type="checkbox" id="switch_@user.UserID" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)"  data-switch="success" @if (user.IsActive == true) { <text> checked="checked" </text> } />
-                                            <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block" ></label>
+                                            <input type="checkbox" id="switch_@role.RoleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (role.IsActive == true) { <text> checked="checked" </text> } />
+                                            <label for="switch_@role.RoleId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                         </div>
                                     </td>
-                                </tr>   
+                                </tr>
+
                             }
                         }
                         else
@@ -89,7 +82,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
-                <button type="button" onclick="UserActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
+                <button type="button" onclick="RoleActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -105,7 +98,7 @@
             $('.btnconfirm').attr('id', id + '_' + cnt.checked);
 
         }
-        function UserActiveDeActive(IsActive) {
+        function RoleActiveDeActive(IsActive) {
             debugger;
             var userId = IsActive.id.split('_')[0];
             var isChecked = IsActive.id.split('_')[1];
@@ -113,20 +106,20 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/Admin/Registration/UserActiveDeActive',
+                url: '/Role/RoleActiveDeActive',
                 data: { userId: userId, IsActive: isChecked },
                 success: function (responce) {
                     if (responce) {
-                        commonMessage('success', 'User status changed successfully.');
+                        commonMessage('success', 'Role status changed successfully.');
                     }
 
                     else {
-                        commonMessage('warning', 'User status changing failed.');
+                        commonMessage('warning', 'Role status changing failed.');
                     }
 
                 },
                 error: function (responce) {
-                    commonMessage('error', 'User status changing failed.');
+                    commonMessage('error', 'Role status changing failed.');
                 }
             });
         }

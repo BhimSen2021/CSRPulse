@@ -1,4 +1,4 @@
-﻿using CSRPulse.Model;
+using CSRPulse.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +17,8 @@ namespace CSRPulse.Services
         Task<bool> UpdatePassword(string custCode, string password);
         UserDetail GetUserProfileByIdAsync(int userId);
         List<UserDetail> GetUserProfileAsync();
-
-        bool UpdateUser(SignUp user);
+        bool CreateUser(Model.User user);
+        bool UpdateUser(User user);
     }
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

@@ -44,26 +44,15 @@ namespace CSRPulse.Controllers
         public async Task<PartialViewResult> Edit(int id)
         {
             var uDetail = await _accountService.GetUserByIdAsync(id);
-            Model.SignUp signUp = new Model.SignUp
-            {
-                FullName = uDetail.FullName,
-                MobileNo = uDetail.MobileNo,
-                EmailId = uDetail.EmailID,
-                Password = uDetail.Password,
-                ConfirmPassword = uDetail.Password,
-                ImageName = uDetail.ImageName,
-                UserID=id
-            };
-
-            return PartialView("_EditProfile", signUp);
+           
+            return PartialView("_EditProfile", uDetail);
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(Model.SignUp userDetail)
+        public async Task<IActionResult> Edit(Model.User userDetail)
         {
             try
-            {
-               
+            {               
                 ModelState.Remove("UserID");
                 ModelState.Remove("UserName");
                 if (ModelState.IsValid)
@@ -72,8 +61,7 @@ namespace CSRPulse.Controllers
                     {
                         string folder = "assets/images/users/";
                         userDetail.ImageName = await UploadImage(folder, userDetail.ImagePhoto);
-                    }               
-
+                    }
                     var res = _accountService.UpdateUser(userDetail);
                     var msg = res == true ? "Profile updated successfully." : "Unable to update profile.";
                     return Json(new { status=res, msg= msg });

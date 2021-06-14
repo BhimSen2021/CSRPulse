@@ -8,4 +8,10 @@ namespace CSRPulse.Common
     {
       Admin=99    
     }
+
+    public enum UserType
+    {
+        Internal = 1,
+        External=2
+    }
 }

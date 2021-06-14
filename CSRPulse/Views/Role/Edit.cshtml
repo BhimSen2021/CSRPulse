@@ -1,0 +1,53 @@
+﻿@model CSRPulse.Model.Role
+@{
+    ViewData["Title"] = "Edit Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Role</li>
+                    <li class="breadcrumb-item active">Edit Role</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Role</h4>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-controller="Role" asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="RoleId" />
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb-3">
+                        <label asp-for="RoleName" for="MobileNo" class="form-label">Role</label>
+                        <input type="text" asp-for="RoleName" class="form-control" maxlength="50" placeholder="Enter Role (max 50 characters)" autocomplete="off">
+                        <span asp-validation-for="RoleName" class="invalid"></span>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label asp-for="RoleShortName" for="UserName" class="form-label">Short Name</label>
+                        <input type="text" asp-for="RoleShortName" class="form-control" maxlength="10" placeholder="Enter short name (max 10 characters)" autocomplete="off">
+                        <span asp-validation-for="RoleShortName" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-2 text-end">
+                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-file-document-edit"></i> Update </button>
+                    </div>
+                </div>
+
+            </div> <!-- end card -->
+        </form>
+    </div> <!-- end card body-->
+</div>

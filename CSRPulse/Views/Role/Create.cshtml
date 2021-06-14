@@ -1,0 +1,74 @@
+﻿@model CSRPulse.Model.Role
+@{
+    ViewData["Title"] = "Add New Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Add New Role</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Role</h4>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-controller="Role" asp-action="Create">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb-3">
+                        <label asp-for="RoleName" for="MobileNo" class="form-label">Role</label>
+                        <input type="text" asp-for="RoleName" class="form-control" maxlength="50" placeholder="Enter Role (max 50 characters)" autocomplete="off">
+                        <span asp-validation-for="RoleName" class="invalid"></span>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label asp-for="RoleShortName" for="UserName" class="form-label">Short Name</label>
+                        <input type="text" asp-for="RoleShortName" class="form-control" maxlength="10" placeholder="Enter short name (max 10 characters)" autocomplete="off">
+                        <span asp-validation-for="RoleShortName" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-2 text-end">
+                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-file-document"></i> Create </button>
+                    </div>
+                </div>
+
+            </div> <!-- end card -->
+        </form>
+    </div> <!-- end card body-->
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#myImg").click(function () {
+            $("#ImagePhoto").trigger('click');
+        });
+
+        $(function () {
+            $(":file").change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        });
+
+        function imageIsLoaded(e) {
+            $('#myImg').attr('src', e.target.result);
+        };
+    </script>
+}

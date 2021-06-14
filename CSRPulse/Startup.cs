@@ -45,6 +45,7 @@ namespace CSRPulse
             services.AddScoped<IPrepareDBForCustomer, PrepareBDForCustomer>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IMaintenanceService, MaintenanceService>();
+            services.AddScoped<IRoleServices, RoleServices>();
             
             services.Configure<SMTPConfig>(Configuration.GetSection("SMTPConfig"));
 

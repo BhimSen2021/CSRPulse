@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -16,14 +17,21 @@ namespace CSRPulse.Model
         [Display(Name = "User Name"), Required(ErrorMessage = "Please Enter User Name")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Password")]
-        public string Password { get; set; }
         [Required(ErrorMessage = "Please Enter Mobile Number")]
         public string MobileNo { get; set; }
         [Display(Name = "Work Email"), Required(ErrorMessage = "Please Enter Work Email ID")]
         [StringLength(50, ErrorMessage = "{0} not be exceed 50 char"), DataType(DataType.EmailAddress, ErrorMessage = "Invalid email.")]
         [RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Invalid email.")]
         public string EmailID { get; set; }
+
+        [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Password")]
+        [StringLength(50)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$", ErrorMessage = "Invalid password patterns.")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Confirm Password")]
+        [Display(Name = "Confirm Password"), Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
         public string ImageName { get; set; }
         public int? DefaultMenuId { get; set; }
         public bool IsActive { get; set; }
@@ -31,5 +39,9 @@ namespace CSRPulse.Model
         public DateTime? LockDate { get; set; }      
         public DateTime? LastLogin { get; set; }
         public string RoleName { get; set; }
+        public int RoleId { get; set; }
+        public IFormFile ImagePhoto { get; set; }     
+
+        public bool RecordExist { get; set; }
     }
 }

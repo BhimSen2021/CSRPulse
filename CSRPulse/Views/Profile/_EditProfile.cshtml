@@ -1,5 +1,5 @@
 ﻿@using CSRPulse.Models
-@model SignUp
+@model User
 <div class="card">
     <div class="card-body">
 
@@ -31,12 +31,12 @@
                 <div class="col-xl-6">
 
                     <div class="text-start mb-3">
-                        <label asp-for="EmailId" class="form-label">Email</label>
+                        <label asp-for="EmailID" class="form-label">Email</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="uil uil-at"></i></span>
-                            <input type="email" class="form-control" asp-for="EmailId" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
+                            <input type="email" class="form-control" asp-for="EmailID" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
                         </div>
-                        <span asp-validation-for="EmailId" class="invalid"></span>
+                        <span asp-validation-for="EmailID" class="invalid"></span>
                     </div>
 
                     <div class="mb-3">

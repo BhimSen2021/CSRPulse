@@ -328,7 +328,7 @@ namespace CSRPulse.Services
 
         public List<UserDetail> GetUserProfileAsync()
         {
-            var result =  _genericRepository.GetIQueryable<DTOModel.User>().Include(r => r.Role);
+            var result = _genericRepository.GetIQueryable<DTOModel.User>().Include(r => r.Role);
             try
             {
                 return _mapper.Map<List<UserDetail>>(result);
@@ -350,16 +350,31 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public bool UpdateUser(Model.SignUp user)
+
+        public bool CreateUser(Model.User user)
+        {
+            try
+            {
+                var dtoUser = _mapper.Map<DTOModel.User>(user);
+                _genericRepository.Insert(dtoUser);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return true;
+        }
+        public bool UpdateUser(Model.User user)
         {
             try
             {
                 var userDtl = _genericRepository.GetByID<DTOModel.User>(user.UserID);
                 if (userDtl != null)
                 {
+                    userDtl.RoleId = user.RoleId;
                     userDtl.FullName = user.FullName;
                     userDtl.MobileNo = user.MobileNo;
-                    userDtl.EmailId = user.EmailId;
+                    userDtl.EmailId = user.EmailID;
                     userDtl.ImageName = user.ImageName;
                     userDtl.Password = user.Password == userDtl.Password ? userDtl.Password : user.Password;
                     _genericRepository.Update(userDtl);

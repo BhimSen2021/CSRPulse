@@ -27,8 +27,8 @@
                     <img class="me-3 rounded-circle" src="~/assets/images/users/avatar-1.jpg" width="40">
                     <div class="w-100 overflow-hidden">
                         <span class="float-end">  <img src="~/images/online.gif" width="15"></span>
-                        <h5><a asp-controller="Profile" asp-action="Index" asp-route-uid="@item.UserID">@item.FullName</a></h5>
-                        <span class="font-13">last seen @logindate at @logintime </span>
+                        <h5 class="mb-0"><a asp-controller="Profile" asp-action="Index" asp-route-uid="@item.UserID">@item.FullName</a></h5>
+                        <span class="font-11">last seen @logindate at @logintime </span>
                     </div>
                 </div>
             }
