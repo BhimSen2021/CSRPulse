@@ -42,5 +42,8 @@ namespace CSRPulse.Model
         public bool RecordExist { get; set; }
 
         public int UserID { get; set; }
+        [Display(Name ="Role")]
+        [Range(1,Int32.MaxValue,ErrorMessage ="Please select Role.")]
+        public int RoleId { get; set; }
     }
 }

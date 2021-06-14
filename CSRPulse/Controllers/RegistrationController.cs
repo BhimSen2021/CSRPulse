@@ -57,7 +57,6 @@ namespace CSRPulse.Controllers
             return await Task.FromResult((IActionResult)PartialView("_Registration", new Model.Customer()));
         }
 
-
         /// <summary>
         /// To Register New Cutomer
         /// </summary>

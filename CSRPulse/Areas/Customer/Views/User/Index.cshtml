@@ -1,0 +1,105 @@
+﻿@model IEnumerable<UserDetail>
+@{
+    ViewData["Title"] = "User List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item active">User List</li>
+                </ol>
+            </div>
+            <h4 class="page-title">User List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-end">
+                    <a asp-area="Customer" asp-controller="User" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New User</a>
+                </div>
+                <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+                    <thead class="thead-light">
+                        <tr>
+                            <th width="5%">#</th>
+                            <th>User Name</th>
+                            <th>Full Name</th>
+                            <th>Email Id</th>
+                            <th>Phone No</th>
+                            <th>Role</th>
+                            <th width="5%">Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span>@(Model.ToList().IndexOf(user) +1)</span>
+                                    </td>
+                                    <td class="table-user">
+                                        <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
+                                        @user.UserName
+                                    </td>
+                                    <td>  @user.FullName</td>
+                                    <td>@user.EmailID</td>
+                                    <td>@user.MobileNo</td>
+                                    <td>@user.RoleName</td>
+                                    <td>
+                                        <div>
+                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if (user.IsActive == true) { <text> checked="checked" </text> } onchange="UserActiveDeActive(this)" />
+                                            <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">No Records Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        function UserActiveDeActive(IsActive) {
+            var userId = IsActive.id.split('_')[1];
+            debugger;
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Admin/Registration/UserActiveDeActive',
+                data: { userId: userId, IsActive: IsActive.checked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'User status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'User status changing failed.');
+                    }
+
+                },
+                error: function (responce) {
+                    commonMessage('error', 'User status changing failed.');
+                }
+            });
+        }
+    </script>
+}

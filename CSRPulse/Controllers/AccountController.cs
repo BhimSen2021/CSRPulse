@@ -181,7 +181,7 @@ namespace CSRPulse.Controllers
                                 ModelState.AddModelError("WrongAttemp", "Your account is temporary locked, please contact your administrator.");
                             else
                             {
-                                ModelState.AddModelError("WrongAttemp", $"{userDetail.WrongAttemp.Value} attemp(s) left.");
+                                ModelState.AddModelError("WrongAttemp", $"Invalid credential, {userDetail.WrongAttemp.Value} attemp(s) left.");
                                 ModelState.AddModelError("", "Invalid credentials");
                             }
                         }

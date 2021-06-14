@@ -36,7 +36,7 @@
             <p> <span class="font-13">last seen @logindate at @logintime </span></p>
             @if (loggedIn == uData.UserID)
             {
-        <div class="text-center mt-sm-0 mt-3 text-sm-end">
+        <div class="text-center mt-sm-0 mt-3 text-sm-center">
             <a data-ajax="true" data-ajax-update="#div-edit-profile" data-ajax-mode="replace" asp-controller="Profile" asp-action="Edit" asp-route-id="@uData.UserID"class="btn btn-light">
                 <i class="mdi mdi-account-edit me-1"></i> Edit Profile
             </a>          

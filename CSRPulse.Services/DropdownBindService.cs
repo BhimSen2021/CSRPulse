@@ -48,5 +48,12 @@ namespace CSRPulse.Services
             return uEmails.OrderBy(x => x.value);
         }
 
+        public IEnumerable<SelectListModel> GetRole(int? roleid)
+        {
+            var dtoRole = _genericRepository.Get<DTOModel.Role>(x => roleid.HasValue ? x.RoleId == roleid.Value : (1 > 0));
+            var roleList = _mapper.Map<List<SelectListModel>>(dtoRole);
+            return roleList.ToList();
+
+        }
     }
 }

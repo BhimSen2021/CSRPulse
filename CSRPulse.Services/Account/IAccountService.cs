@@ -18,6 +18,6 @@ namespace CSRPulse.Services
         UserDetail GetUserProfileByIdAsync(int userId);
         List<UserDetail> GetUserProfileAsync();
 
-        bool UpdateUser(User user);
+        bool UpdateUser(SignUp user);
     }
 }

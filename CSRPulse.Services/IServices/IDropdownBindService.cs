@@ -12,5 +12,6 @@ namespace CSRPulse.Services.IServices
         IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId);
 
         IEnumerable<SelectListModel> GetAllEmails();
+        IEnumerable<SelectListModel> GetRole(int? roleid);
     }
 }
