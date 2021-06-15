@@ -46,9 +46,9 @@ namespace CSRPulse
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IMaintenanceService, MaintenanceService>();
             services.AddScoped<IQuickEmailService, QuickEmailService>();
-
             services.AddScoped<IRoleServices, RoleServices>();
-            
+
+            services.AddScoped<IUOMService, UOMService>();
             services.Configure<SMTPConfig>(Configuration.GetSection("SMTPConfig"));
 
             #endregion

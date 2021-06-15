@@ -1,0 +1,59 @@
+﻿@model Uom
+@{
+    ViewData["Title"] = "Unit of mesurement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item active">UoM</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Unit Of Measurement List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-controller="UoM" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UOMId" />
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label asp-for="UnitName" class="form-label required"></label>
+                                <input type="text" asp-for="UnitName" class="form-control" maxlength="50" placeholder="Enter Role (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="UnitName" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <div>
+                                    <input asp-for="IsActive" type="checkbox" id="@Model.UOMId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" />
+                                    <label for="@Model.UOMId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>
+
+
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="UoM" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit"></i> Update </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

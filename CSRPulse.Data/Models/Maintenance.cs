@@ -17,7 +17,7 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "datetime")]
         public DateTime StartDateTime { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime EndDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
         [Required]
         [StringLength(2000)]
         public string Message { get; set; }

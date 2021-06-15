@@ -12,9 +12,10 @@ namespace CSRPulse.Model
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public int CreatedBy { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? UpdatedOn { get; set; } 
+        public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
         public string ErrorMessage { get; set; }
+        public bool IsExist { get; set; }
     }
 }

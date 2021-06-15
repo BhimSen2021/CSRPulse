@@ -40,7 +40,7 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid) { 
                     Issuccess = await _quickEmailService.SendEmailAsync(quickEmail);
                     if(Issuccess)
-                        TempData["Message"] = "Email sending failed.";
+                        TempData["Message"] = "Email has been sent successfully.";
                     else 
                         TempData["Error"] = "Failed to send your message. Please try later.";
 

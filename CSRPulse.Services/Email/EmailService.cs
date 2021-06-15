@@ -72,7 +72,8 @@ namespace CSRPulse.Services
                 var res = await Common.EmailHelper.SendEmail(message);
 
                 dtoMailStatus.Status = res;
-                return await SendMailStatusAsync(dtoMailStatus, _genericRepository);
+                await SendMailStatusAsync(dtoMailStatus, _genericRepository);
+                return res;
             }
             catch (Exception)
             {
