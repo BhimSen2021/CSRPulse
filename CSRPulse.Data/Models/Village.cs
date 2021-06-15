@@ -9,45 +9,43 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    public partial class District
+    public partial class Village
     {
-        public District()
-        {
-            Block = new HashSet<Block>();
-            Village = new HashSet<Village>();
-        }
-
         [Key]
+        public int VillageId { get; set; }
+        public int BlockId { get; set; }
         public int DistrictId { get; set; }
         public int StateId { get; set; }
         [Required]
-        [StringLength(200)]
-        public string DistrictName { get; set; }
+        [StringLength(50)]
+        public string VillageName { get; set; }
         [Required]
-        [StringLength(3)]
-        public string DistrictCode { get; set; }
-        [StringLength(4)]
-        public string DistrictShort { get; set; }
-        public bool IsActive { get; set; }
+        [StringLength(6)]
+        public string VillageCode { get; set; }
+        public int LocationType { get; set; }
+        [Required]
+        public bool? IsActive { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
-        public int? CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
 
+        [ForeignKey(nameof(BlockId))]
+        [InverseProperty("Village")]
+        public virtual Block Block { get; set; }
         [ForeignKey(nameof(CreatedBy))]
-        [InverseProperty(nameof(User.DistrictCreatedByNavigation))]
+        [InverseProperty(nameof(User.VillageCreatedByNavigation))]
         public virtual User CreatedByNavigation { get; set; }
+        [ForeignKey(nameof(DistrictId))]
+        [InverseProperty("Village")]
+        public virtual District District { get; set; }
         [ForeignKey(nameof(StateId))]
-        [InverseProperty("District")]
+        [InverseProperty("Village")]
         public virtual State State { get; set; }
         [ForeignKey(nameof(UpdatedBy))]
-        [InverseProperty(nameof(User.DistrictUpdatedByNavigation))]
+        [InverseProperty(nameof(User.VillageUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
-        [InverseProperty("District")]
-        public virtual ICollection<Block> Block { get; set; }
-        [InverseProperty("District")]
-        public virtual ICollection<Village> Village { get; set; }
     }
 }

@@ -49,6 +49,10 @@ namespace CSRPulse
             services.AddScoped<IRoleServices, RoleServices>();
 
             services.AddScoped<IUOMService, UOMService>();
+            services.AddScoped<IStateServices, StateServices>();
+            services.AddScoped<IDistrictServices, DistrictServices>();
+            services.AddScoped<IBlockServices, BlockServices>();
+            services.AddScoped<IVillageServices, VillageServices>();
             services.Configure<SMTPConfig>(Configuration.GetSection("SMTPConfig"));
 
             #endregion

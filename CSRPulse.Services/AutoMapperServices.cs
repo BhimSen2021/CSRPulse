@@ -84,7 +84,35 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Role, SelectListModel>()
               .ForMember(d => d.id, o => o.MapFrom(s => s.RoleId))
               .ForMember(d => d.value, o => o.MapFrom(s => s.RoleName));
+
+            CreateMap<DTOModel.District, SelectListModel>()
+             .ForMember(d => d.id, o => o.MapFrom(s => s.DistrictId))
+             .ForMember(d => d.value, o => o.MapFrom(s => s.DistrictName));
+
+            CreateMap<DTOModel.Block, SelectListModel>()
+             .ForMember(d => d.id, o => o.MapFrom(s => s.BlockId))
+             .ForMember(d => d.value, o => o.MapFrom(s => s.BlockName));
             #endregion
+
+            CreateMap<DTOModel.State, State>().ReverseMap();
+
+            CreateMap<DTOModel.District, District>()
+                .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName));
+            CreateMap<District, DTOModel.District>();
+
+
+            CreateMap<DTOModel.Block, Block>()
+              .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
+             .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName));
+            CreateMap<Block, DTOModel.Block>();
+
+            CreateMap<DTOModel.Village, Village>()
+            .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
+           .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName))
+            .ForMember(d => d.BlockName, o => o.MapFrom(s => s.Block.BlockName))
+            ;
+            CreateMap<Village, DTOModel.Village>()
+                .ForMember(d => d.LocationType, o => o.MapFrom(s => (int)s.LocationType));
         }
     }
 }

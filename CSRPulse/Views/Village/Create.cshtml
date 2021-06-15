@@ -1,0 +1,133 @@
+﻿@model CSRPulse.Model.Village
+@using CSRPulse.Common
+@{
+    ViewData["Title"] = "Add New Village";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Add New Village</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Village</h4>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-controller="Village" asp-action="Create">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>        
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-2">
+
+                    <label asp-for="StateId" for="StateId" class="form-label">State</label>
+                    <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
+                        <option disabled="" label="State" selected="" value="">State</option>
+                    </select>
+                    <span asp-validation-for="StateId" class="invalid"></span>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-2">
+                    <label asp-for="DistrictId" for="DistrictId" class="form-label">District</label>
+                    <select asp-for="DistrictId" aria-required="true" onchange="BindVillage(this)" class="form-select">
+                        <option disabled="" label="District" selected="" value="">District</option>
+                    </select>
+                    <span asp-validation-for="DistrictId" class="invalid"></span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-2">
+                    <label asp-for="BlockId" for="BlockId" class="form-label"></label>
+                    <select asp-for="BlockId" aria-required="true" class="form-select">
+                        <option disabled="" label="Block" selected="" value="">Block</option>
+                    </select>
+                    <span asp-validation-for="BlockId" class="invalid"></span>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-2">
+                    <label asp-for="VillageName" for="VillageName" class="form-label">Village</label>
+                    <input type="text" asp-for="VillageName" class="form-control" maxlength="100" placeholder="Enter Village (max 50 characters)" autocomplete="off">
+                    <span asp-validation-for="VillageName" class="invalid"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-2">
+                    <label asp-for="VillageCode" for="VillageCode" class="form-label">Short Name</label>
+                    <input type="text" asp-for="VillageCode" class="form-control" maxlength="2" placeholder="Enter state code (max 2 characters)" autocomplete="off">
+                    <span asp-validation-for="VillageCode" class="invalid"></span>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-2">
+                    <label asp-for="LocationType" for="LocationType" class="form-label"></label>
+                    <select asp-for="LocationType" asp-items="@Html.GetEnumSelectList<EnumLocationType>()" aria-required="true" class="form-select">
+                        <option disabled="" label="LocationType" selected="" value="">LocationType</option>
+                    </select>
+                    <span asp-validation-for="VillageId" class="invalid"></span>
+                </div>
+            </div>
+            <div class="mb-2 text-end">
+                <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-file-document"></i> Create </button>
+            </div>
+
+        </form>
+    </div> <!-- end card body-->
+</div>
+
+<script>
+        function BindDistrict(e) {
+            if ($("#StateId").val() != "") {
+                var StateId = 0;
+                StateId = $("#StateId").val();     
+
+                if (StateId > 0) {
+                jQuery.post("@Url.Action("BindDistrict", "Village")", {
+                    StateId: StateId
+                }).done(function (data) {
+                    debugger;
+                    if (data != "") {
+                        $("#DistrictId").html("");
+                        $.each(data, function (key, value) {
+                            $("#DistrictId").append($("<option></option>").val(value.Value).html(value.Text));
+                        });
+                    }
+                });
+            } else {
+                    $("#DistrictId").append($("<option></option>").val("").html('District'));
+            }
+        }
+    }
+
+            function BindBlock(e) {
+                if ($("#StateId").val() != "" && $("#DistrictId").val() != "") {
+                var StateId = 0;
+                StateId = $("#StateId").val();
+                    var DistrictId = 0;
+                    DistrictId = $("#DistrictId").val();
+                 
+
+                if (StateId > 0) {
+                jQuery.post("@Url.Action("BindDistrict", "Village")", {
+                    StateId: StateId,
+                    DistrictId: DistrictId
+                }).done(function (data) {
+                    debugger;
+                    if (data != "") {
+                        $("#BlockId").html("");
+                        $.each(data, function (key, value) {
+                            $("#BlockId").append($("<option></option>").val(value.Value).html(value.Text));
+                        });
+                    }
+                });
+            } else {
+                    $("#BlockId").append($("<option></option>").val("").html('District'));
+            }
+        }
+    }
+</script>

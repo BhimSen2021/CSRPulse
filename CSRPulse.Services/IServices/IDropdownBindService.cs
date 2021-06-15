@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Services.IServices
 {
-   public interface IDropdownBindService
+    public interface IDropdownBindService
     {
         List<SelectListModel> GetCountryAsync(int? countryId);
         IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId);
 
         IEnumerable<SelectListModel> GetAllEmails();
         IEnumerable<SelectListModel> GetRole(int? roleid);
+
+        IEnumerable<SelectListModel> GetDistrict(int? stateId, int? districtId);
+        IEnumerable<SelectListModel> GetBlock(int? stateId, int? districtId, int? blockId);
     }
 }

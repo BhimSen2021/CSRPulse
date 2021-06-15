@@ -13,6 +13,8 @@ namespace CSRPulse.Data.Models
     {
         public User()
         {
+            BlockCreatedByNavigation = new HashSet<Block>();
+            BlockUpdatedByNavigation = new HashSet<Block>();
             DistrictCreatedByNavigation = new HashSet<District>();
             DistrictUpdatedByNavigation = new HashSet<District>();
             EmailConfigurationCreatedByNavigation = new HashSet<EmailConfiguration>();
@@ -21,6 +23,8 @@ namespace CSRPulse.Data.Models
             StateUpdatedByNavigation = new HashSet<State>();
             UserRights = new HashSet<UserRights>();
             UserRoles = new HashSet<UserRoles>();
+            VillageCreatedByNavigation = new HashSet<Village>();
+            VillageUpdatedByNavigation = new HashSet<Village>();
         }
 
         [Key]
@@ -65,6 +69,10 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(UserTypeId))]
         [InverseProperty("User")]
         public virtual UserType UserType { get; set; }
+        [InverseProperty(nameof(Block.CreatedByNavigation))]
+        public virtual ICollection<Block> BlockCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(Block.UpdatedByNavigation))]
+        public virtual ICollection<Block> BlockUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(District.CreatedByNavigation))]
         public virtual ICollection<District> DistrictCreatedByNavigation { get; set; }
         [InverseProperty(nameof(District.UpdatedByNavigation))]
@@ -81,5 +89,9 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<UserRights> UserRights { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<UserRoles> UserRoles { get; set; }
+        [InverseProperty(nameof(Village.CreatedByNavigation))]
+        public virtual ICollection<Village> VillageCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(Village.UpdatedByNavigation))]
+        public virtual ICollection<Village> VillageUpdatedByNavigation { get; set; }
     }
 }

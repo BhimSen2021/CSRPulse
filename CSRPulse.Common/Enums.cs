@@ -20,4 +20,10 @@ namespace CSRPulse.Common
         Internal = 1,
         External=2
     }
+
+    public enum EnumLocationType
+    {
+        Type1=1,
+        Type2=2
+    }
 }

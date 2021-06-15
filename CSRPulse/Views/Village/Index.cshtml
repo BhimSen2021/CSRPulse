@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Village>
+@{
+    ViewData["Title"] = "Village";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Village</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Village List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-end">
+                    <a asp-controller="Village" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Village</a>
+                </div>
+                <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+                    <thead class="thead-light">
+                        <tr>
+                            <th width="5%">#</th>
+                            <th>Village Name</th>
+                            <th>Village Code</th>
+                            <th>State</th>
+                            <th>District</th>
+                            <th>Block</th>
+                            <th width="5%">Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var village in Model)
+                            {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(village) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this village.">  @Html.ActionLink(village.VillageName, "Edit", "Village", new { rid = village.VillageId })</span></td>
+                            <td>@village.VillageCode</td>
+                            <td>@village.StateName</td>
+                            <td>@village.DistrictName</td>
+                            <td>@village.BlockName</td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@village.VillageId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (village.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@village.VillageId" data-on-label="Yes" data-off-label="No" class="mb-0 d-village"></label>
+                                </div>
+                            </td>
+                        </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">No Records Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="info-header-modal" class="modal fade" tabindex="-1" village="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="info-header-modalLabel">Confirmation</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                Do you want to perform this action ?.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
+                <button type="button" onclick="VillageActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function openpopup(cnt) {
+            debugger;
+            var id = cnt.id.split('_')[1];
+            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+        }
+        function VillageActiveDeActive(IsActive) {
+            debugger;
+            var userId = IsActive.id.split('_')[0];
+            var isChecked = IsActive.id.split('_')[1];
+            debugger;
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Village/VillageActiveDeActive',
+                data: { userId: userId, IsActive: isChecked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'Village status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'Village status changing failed.');
+                    }
+
+                },
+                error: function (responce) {
+                    commonMessage('error', 'Village status changing failed.');
+                }
+            });
+        }
+    </script>
+}
