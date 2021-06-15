@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class UoMController : BaseController<UoMController>
+    public class ThemeController : BaseController<UoMController>
     {
-        private readonly IUOMService _uOMService;
-        public UoMController(IUOMService uOMService)
+        private readonly IThemeService _themeService;
+        public ThemeController(IThemeService themeService)
         {
-            _uOMService = uOMService;
+            _themeService = themeService;
         }
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("UoMController/Index");
+            _logger.LogInformation("ThemeController/Index");
             try
             {
-                var result = await _uOMService.GetUOMsAsync();
+                var result = await _themeService.GetThemesAsync();
                 return View(result);
             }
             catch (Exception ex)
@@ -34,31 +34,31 @@ namespace CSRPulse.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Uom());
+            return View(new Theme());
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Create(Uom uom)
+        public async Task<IActionResult> Create(Theme theme)
         {
             try
             {
-                _logger.LogInformation("UoMController/Create");
+                _logger.LogInformation("ThemeController/Create");
                 if (ModelState.IsValid)
                 {
-                    uom.CreatedBy = userDetail.CreatedBy;
-                    var result = await _uOMService.CreateUOMAsync(uom);
+                    theme.CreatedBy = userDetail.CreatedBy;
+                    var result = await _themeService.CreateThemeAsync(theme);
                     if (result.IsExist)
                     {
-                        ModelState.AddModelError("", "Unit name already exists.");
+                        ModelState.AddModelError("", "Theme name already exists.");
                     }
-                    if (result.UOMId > 0)
+                    if (result.ThemeId > 0)
                     {
-                        TempData["Message"] = "Unit of measurement created successfully.";
+                        TempData["Message"] = "Theme created successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                 }
-                return View(uom);
+                return View(theme);
             }
             catch (Exception ex)
             {
@@ -67,11 +67,11 @@ namespace CSRPulse.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(int uomId)
+        public async Task<IActionResult> Edit(int ThemeId)
         {
             try
             {
-                var uDetail = await _uOMService.GetUOMByIdAsync(uomId);
+                var uDetail = await _themeService.GetThemeByIdAsync(ThemeId);
                 return View(uDetail);
             }
             catch (Exception)
@@ -83,23 +83,23 @@ namespace CSRPulse.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(Uom uom)
+        public async Task<IActionResult> Edit(Theme theme)
         {
             try
             {
-                _logger.LogInformation("UoMController/Edit");
+                _logger.LogInformation("ThemeController/Edit");
                 if (ModelState.IsValid)
                 {
-                    uom.UpdatedBy = userDetail.CreatedBy;
-                    uom.UpdatedOn = DateTime.Now;
-                    var result = await _uOMService.UpdateUOMAsync(uom);
-                    if (uom.IsExist)
+                    theme.UpdatedBy = userDetail.CreatedBy;
+                    theme.UpdatedOn = DateTime.Now;
+                    var result = await _themeService.UpdateThemeAsync(theme);
+                    if (theme.IsExist)
                     {
-                        ModelState.AddModelError("", "Unit name already exists");
+                        ModelState.AddModelError("", "Theme name already exists");
                     }
                     else if (result)
                     {
-                        TempData["Message"] = "UoM Updated Successfully.";
+                        TempData["Message"] = "Theme Updated Successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                     else
@@ -107,7 +107,7 @@ namespace CSRPulse.Controllers
                         TempData["Error"] = "UoM Updation Failed.";
                     }
                 }
-                return View(uom);
+                return View(theme);
             }
             catch (Exception ex)
             {

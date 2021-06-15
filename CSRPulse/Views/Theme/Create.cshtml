@@ -1,0 +1,59 @@
+﻿@model CSRPulse.Model.Theme
+@{
+    ViewData["Title"] = "Add New Theme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item active">Theme</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Add New Theme</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-area="" asp-controller="Theme" asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label asp-for="ThemeName" class="form-label required"></label>
+                                <input type="text" asp-for="ThemeName" class="form-control" maxlength="50" placeholder="Enter Theme Name (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="ThemeName" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ThemeCode" class="form-label"></label>
+                                <input type="text" asp-for="ThemeCode" class="form-control" maxlength="3" placeholder="Enter Theme Code (max 3 characters)" autocomplete="off">
+                                <span asp-validation-for="ThemeCode" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <input asp-for="IsActive" type="checkbox" id="@Model.ThemeId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" checked="checked" />
+                                <label for="@Model.ThemeId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="Theme" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document"></i> Save </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class UoMController : BaseController<UoMController>
+    public class SubThemeController :  BaseController<UoMController>
     {
-        private readonly IUOMService _uOMService;
-        public UoMController(IUOMService uOMService)
+        private readonly ISubThemeService _subThemeService;
+        public SubThemeController(ISubThemeService subThemeService)
         {
-            _uOMService = uOMService;
+            _subThemeService = subThemeService;
         }
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("UoMController/Index");
+            _logger.LogInformation("SubThemeController/Index");
             try
             {
-                var result = await _uOMService.GetUOMsAsync();
+                var result = await _subThemeService.GetSubThemesAsync();
                 return View(result);
             }
             catch (Exception ex)
@@ -34,31 +34,31 @@ namespace CSRPulse.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Uom());
+            return View(new SubTheme());
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Create(Uom uom)
+        public async Task<IActionResult> Create(SubTheme subTheme)
         {
             try
             {
-                _logger.LogInformation("UoMController/Create");
+                _logger.LogInformation("SubThemeController/Create");
                 if (ModelState.IsValid)
                 {
-                    uom.CreatedBy = userDetail.CreatedBy;
-                    var result = await _uOMService.CreateUOMAsync(uom);
+                    subTheme.CreatedBy = userDetail.CreatedBy;
+                    var result = await _subThemeService.CreateSubThemeAsync(subTheme);
                     if (result.IsExist)
                     {
-                        ModelState.AddModelError("", "Unit name already exists.");
+                        ModelState.AddModelError("", "SubTheme name already exists.");
                     }
-                    if (result.UOMId > 0)
+                    if (result.ThemeId > 0)
                     {
-                        TempData["Message"] = "Unit of measurement created successfully.";
+                        TempData["Message"] = "SubTheme created successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                 }
-                return View(uom);
+                return View(subTheme);
             }
             catch (Exception ex)
             {
@@ -67,47 +67,46 @@ namespace CSRPulse.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(int uomId)
+        public async Task<IActionResult> Edit(int SubThemeId)
         {
             try
             {
-                var uDetail = await _uOMService.GetUOMByIdAsync(uomId);
+                var uDetail = await _subThemeService.GetSubThemeByIdAsync(SubThemeId);
                 return View(uDetail);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(Uom uom)
+        public async Task<IActionResult> Edit(SubTheme subTheme)
         {
             try
             {
-                _logger.LogInformation("UoMController/Edit");
+                _logger.LogInformation("SubThemeController/Edit");
                 if (ModelState.IsValid)
                 {
-                    uom.UpdatedBy = userDetail.CreatedBy;
-                    uom.UpdatedOn = DateTime.Now;
-                    var result = await _uOMService.UpdateUOMAsync(uom);
-                    if (uom.IsExist)
+                    subTheme.UpdatedBy = userDetail.CreatedBy;
+                    subTheme.UpdatedOn = DateTime.Now;
+                    var result = await _subThemeService.UpdateSubThemeAsync(subTheme);
+                    if (subTheme.IsExist)
                     {
-                        ModelState.AddModelError("", "Unit name already exists");
+                        ModelState.AddModelError("", "SubTheme name already exists");
                     }
                     else if (result)
                     {
-                        TempData["Message"] = "UoM Updated Successfully.";
+                        TempData["Message"] = "SubTheme Updated Successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        TempData["Error"] = "UoM Updation Failed.";
+                        TempData["Error"] = "SubTheme Updation Failed.";
                     }
                 }
-                return View(uom);
+                return View(subTheme);
             }
             catch (Exception ex)
             {

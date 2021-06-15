@@ -9,24 +9,23 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Services
 {
-    public class ThemeService : BaseService, IThemeService
+    public class SubThemeService : BaseService, ISubThemeService
     {
         private readonly IGenericRepository _genericRepository;
         private readonly IMapper _mapper;
 
-        public ThemeService(IGenericRepository generic, IMapper mapper)
+        public SubThemeService(IGenericRepository generic, IMapper mapper)
         {
             _genericRepository = generic;
             _mapper = mapper;
         }
-
-        public async Task<Theme> CreateThemeAsync(Theme theme)
+        public async Task<SubTheme> CreateSubThemeAsync(SubTheme theme)
         {
             try
             {
-                var model = _mapper.Map<DTOModel.Theme>(theme);
+                var model = _mapper.Map<DTOModel.SubTheme>(theme);
 
-                var IsExist = _genericRepository.Exists<DTOModel.Theme>(x => x.ThemeName.ToLower() == theme.ThemeName.ToLower());
+                var IsExist = _genericRepository.Exists<DTOModel.SubTheme>(x => x.SubThemeName.ToLower() == theme.SubThemeName.ToLower() && x.ThemeId == theme.ThemeId);
                 if (!IsExist)
                 {
                     var id = await _genericRepository.InsertAsync(model);
@@ -41,15 +40,15 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<Theme> GetThemeByIdAsync(int ThemeId)
+        public async Task<SubTheme> GetSubThemeByIdAsync(int SubThemeId)
         {
             try
             {
-                var result = await _genericRepository.GetByIDAsync<DTOModel.Theme>(ThemeId);
+                var result = await _genericRepository.GetByIDAsync<DTOModel.SubTheme>(SubThemeId);
                 if (result != null)
-                    return _mapper.Map<Theme>(result);
+                    return _mapper.Map<SubTheme>(result);
                 else
-                    return new Theme();
+                    return new SubTheme();
 
             }
             catch (Exception)
@@ -58,12 +57,12 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<Theme>> GetThemesAsync()
+        public async Task<List<SubTheme>> GetSubThemesAsync()
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.Theme>();
-                return _mapper.Map<List<Theme>>(result);
+                var result = await _genericRepository.GetAsync<DTOModel.SubTheme>();
+                return _mapper.Map<List<SubTheme>>(result);
             }
             catch (Exception)
             {
@@ -71,21 +70,22 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<bool> UpdateThemeAsync(Theme theme)
+        public async Task<bool> UpdateSubThemeAsync(SubTheme theme)
         {
             try
             {
-                var IsExist = _genericRepository.Exists<DTOModel.Theme>(x => x.ThemeName.ToLower() == theme.ThemeName.ToLower() && x.ThemeId != theme.ThemeId);
+                var IsExist = _genericRepository.Exists<DTOModel.SubTheme>(x => x.SubThemeName.ToLower() == theme.SubThemeName.ToLower() && x.SubThemeId != theme.SubThemeId && x.ThemeId != theme.ThemeId);
 
                 theme.IsExist = IsExist;
 
                 if (!IsExist)
                 {
-                    var result = await _genericRepository.GetByIDAsync<DTOModel.Theme>(theme.ThemeId);
+                    var result = await _genericRepository.GetByIDAsync<DTOModel.SubTheme>(theme.SubThemeId);
                     if (result != null)
                     {
-                        result.ThemeName = theme.ThemeName;
-                        result.ThemeCode = theme.ThemeCode;
+                        result.ThemeId = theme.ThemeId;
+                        result.SubThemeName = theme.SubThemeName;
+                        result.SubThemeCode = theme.SubThemeCode;
                         result.IsActive = theme.IsActive;
                         result.UpdatedOn = theme.UpdatedOn;
                         result.UpdatedBy = theme.UpdatedBy;
