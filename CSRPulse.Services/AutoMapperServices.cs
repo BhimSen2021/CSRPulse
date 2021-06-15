@@ -51,9 +51,9 @@ namespace CSRPulse.Services
                 .ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId))
                 .ForMember(d => d.RoleName, o => o.MapFrom(s => s.RoleName))
                 .ForMember(d => d.RoleShortName, o => o.MapFrom(s => s.RoleShortName))
-                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
-                  .ForMember(d => d.Seniorty, o => o.MapFrom(s => s.Seniorty))
-                   .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+                .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
+                .ForMember(d => d.Seniorty, o => o.MapFrom(s => s.Seniorty))
+                .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
             CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
 
             #region Email Mapper
@@ -61,11 +61,21 @@ namespace CSRPulse.Services
                 .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
                 .ForMember(d => d.ToEmails, o => o.MapFrom(s => s.To))
                 .ForMember(d => d.CcEmails, o => o.MapFrom(s => s.CC))
+                 .ForMember(d => d.BccEmails, o => o.MapFrom(s => s.Bcc))
                 .ForMember(d => d.MailContent, o => o.MapFrom(s => s.Body))
                 .ForMember(d => d.SubjectId, o => o.MapFrom(s => s.SubjectId))
             .ForAllOtherMembers(d => d.Ignore());
             #endregion
 
+            #region Thematic Mapper
+            CreateMap<DTOModel.Uom, Uom>().ReverseMap();
+            CreateMap<DTOModel.Activity, Activity>().ReverseMap();
+            CreateMap<DTOModel.SubActivity, SubActivity>().ReverseMap();
+            CreateMap<DTOModel.Theme, Theme>().ReverseMap();
+            CreateMap<DTOModel.SubTheme, SubTheme>().ReverseMap();
+            CreateMap<DTOModel.Indicator, Indicator>().ReverseMap();
+
+            #endregion
             #region Dropdown Mapper
             CreateMap<DTOModel.State, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))

@@ -21,12 +21,14 @@ namespace CSRPulse.Data.Data
         {
         }
 
+        public virtual DbSet<Activity> Activity { get; set; }
         public virtual DbSet<Block> Block { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
         public virtual DbSet<District> District { get; set; }
         public virtual DbSet<EmailConfiguration> EmailConfiguration { get; set; }
+        public virtual DbSet<Indicator> Indicator { get; set; }
         public virtual DbSet<MailProcess> MailProcess { get; set; }
         public virtual DbSet<MailSendStatus> MailSendStatus { get; set; }
         public virtual DbSet<MailSubject> MailSubject { get; set; }
@@ -37,18 +39,19 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
         public virtual DbSet<State> State { get; set; }
+        public virtual DbSet<SubActivity> SubActivity { get; set; }
+        public virtual DbSet<SubTheme> SubTheme { get; set; }
+        public virtual DbSet<Theme> Theme { get; set; }
+        public virtual DbSet<Uom> Uom { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
-        public virtual DbSet<Village> Village { get; set; }
-        public static string CustomeDataBase
-        {
-            get; set;
-        }
+
+        public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -65,6 +68,23 @@ namespace CSRPulse.Data.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Activity>(entity =>
+            {
+                entity.Property(e => e.ActivityCode).IsUnicode(false);
+
+                entity.Property(e => e.ActivityName).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.Activity)
+                    .HasForeignKey(d => d.ThemeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Activity_Theme");
+            });
+
             modelBuilder.Entity<Block>(entity =>
             {
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
@@ -191,6 +211,46 @@ namespace CSRPulse.Data.Data
                     .HasConstraintName("FK_EmailConfiguration_UpdatedBy");
             });
 
+            modelBuilder.Entity<Indicator>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IndicatorCode).IsUnicode(false);
+
+                entity.Property(e => e.IndicatorName).IsUnicode(false);
+
+                entity.Property(e => e.IndicatorShortName).IsUnicode(false);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Activity)
+                    .WithMany(p => p.Indicator)
+                    .HasForeignKey(d => d.ActivityId)
+                    .HasConstraintName("FK_Indicator_Activity");
+
+                entity.HasOne(d => d.SubActivity)
+                    .WithMany(p => p.Indicator)
+                    .HasForeignKey(d => d.SubActivityId)
+                    .HasConstraintName("FK_Indicator_SubActivity");
+
+                entity.HasOne(d => d.SubTheme)
+                    .WithMany(p => p.Indicator)
+                    .HasForeignKey(d => d.SubThemeId)
+                    .HasConstraintName("FK_Indicator_SubTheme");
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.Indicator)
+                    .HasForeignKey(d => d.ThemeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Indicator_Theme");
+
+                entity.HasOne(d => d.Uom)
+                    .WithMany(p => p.Indicator)
+                    .HasForeignKey(d => d.Uomid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Indicator_UOM");
+            });
+
             modelBuilder.Entity<MailSendStatus>(entity =>
             {
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
@@ -217,8 +277,6 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<Maintenance>(entity =>
             {
-                entity.Property(e => e.EndDateTime).HasDefaultValueSql("(getdate())");
-
                 entity.Property(e => e.StartDateTime).HasDefaultValueSql("(getdate())");
             });
 
@@ -255,6 +313,8 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<Role>(entity =>
             {
+                entity.Property(e => e.RoleId).ValueGeneratedNever();
+
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
             });
 
@@ -275,6 +335,66 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.StateUpdatedByNavigation)
                     .HasForeignKey(d => d.UpdatedBy)
                     .HasConstraintName("FK_User_UpdatedBy");
+            });
+
+            modelBuilder.Entity<SubActivity>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.SubActivityCode).IsUnicode(false);
+
+                entity.Property(e => e.SubActivityName).IsUnicode(false);
+
+                entity.HasOne(d => d.Activity)
+                    .WithMany(p => p.SubActivity)
+                    .HasForeignKey(d => d.ActivityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubActivity_Activity");
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.SubActivity)
+                    .HasForeignKey(d => d.ThemeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubActivity_Theme");
+            });
+
+            modelBuilder.Entity<SubTheme>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.SubThemeCode).IsUnicode(false);
+
+                entity.Property(e => e.SubThemeName).IsUnicode(false);
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.SubTheme)
+                    .HasForeignKey(d => d.ThemeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubTheme_Theme");
+            });
+
+            modelBuilder.Entity<Theme>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ThemeCode).IsUnicode(false);
+
+                entity.Property(e => e.ThemeName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Uom>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.UnitName).IsUnicode(false);
             });
 
             modelBuilder.Entity<User>(entity =>

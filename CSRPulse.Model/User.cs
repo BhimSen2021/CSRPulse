@@ -34,7 +34,7 @@ namespace CSRPulse.Model
         public string ConfirmPassword { get; set; }
         public string ImageName { get; set; }
         public int? DefaultMenuId { get; set; }
-        public bool IsActive { get; set; }
+       
         public byte? WrongAttemp { get; set; }      
         public DateTime? LockDate { get; set; }      
         public DateTime? LastLogin { get; set; }

@@ -23,7 +23,7 @@
         <div class="card">
             <div class="card-body">
                 <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
-                    <thead class="table-light">
+                    <thead class="thead-light">
                         <tr>
                             <th style="width:5%">
                                 @Html.DisplayName("#")
@@ -58,7 +58,7 @@
                                     <a class="text-info" asp-area="Admin" asp-controller="Customer" asp-action="Details" asp-route-CustomerId="@item.CustomerId">@item.CustomerName</a>
                                 </td>
 
-                                <td class="text-center">                                    
+                                <td class="text-center">
                                     <span class="badge badge-outline-success rounded-pill">Standard</span>
                                 </td>
                                 <td class="text-center">

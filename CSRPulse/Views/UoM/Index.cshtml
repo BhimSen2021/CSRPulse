@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Uom>
+@{
+    ViewData["Title"] = "Unit of mesurement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item active">UoM</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Unit Of Measurement List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-end">
+                    <a asp-area="" asp-controller="UoM" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New UoM</a>
+                </div>
+                <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+                    <thead class="thead-light">
+                        <tr>
+                            <th width="5%">#</th>
+                            <th>@Html.DisplayNameFor(model => model.UnitName)</th>
+                            <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var uom in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span>@(Model.ToList().IndexOf(uom) +1)</span>
+                                    </td>
+
+                                    <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this role.">  @Html.ActionLink(uom.UnitName, "Edit", "UoM", new { uomId = uom.UOMId })</span></td>
+
+                                    <td>
+                                        <div>
+                                            <input type="checkbox" id="switch_@uom.UOMId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" disabled @if (uom.IsActive == true) { <text> checked="checked" </text> } />
+                                            <label for="switch_@uom.UOMId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No Records Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

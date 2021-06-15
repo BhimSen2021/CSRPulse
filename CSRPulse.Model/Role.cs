@@ -15,8 +15,7 @@ namespace CSRPulse.Model
         [Display(Name = "Role Short Name"), StringLength(10)]
         public string RoleShortName { get; set; }
         public int? Seniorty { get; set; }
-        [Required]
-        public bool? IsActive { get; set; }
+       
         public int? ReportTo { get; set; }
 
         public bool RecordExist { get; set; }

@@ -24,8 +24,7 @@ namespace CSRPulse.Model
         [StringLength(5)]
         [Display(Name = "Block Code")]
         public string BlockCode { get; set; }
-        public int BlockType { get; set; }     
-        public bool IsActive { get; set; }
+        public int BlockType { get; set; }            
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }

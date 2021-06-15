@@ -55,7 +55,7 @@ namespace CSRPulse.Services
                     message.Subject = "CSRPulse- QuickEmail Notification";
 
                 message.PlaceHolders = new List<KeyValuePair<string, string>>();
-                message.TemplateName = "Maintenance";
+                message.TemplateName = "QuickEmail";
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$message}", quickEmail.Message));
                 flag = await _emailService.CustomerRelatedMails(message);
               

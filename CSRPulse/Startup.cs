@@ -47,6 +47,8 @@ namespace CSRPulse
             services.AddScoped<IMaintenanceService, MaintenanceService>();
             services.AddScoped<IQuickEmailService, QuickEmailService>();
             services.AddScoped<IRoleServices, RoleServices>();
+
+            services.AddScoped<IUOMService, UOMService>();
             services.AddScoped<IStateServices, StateServices>();
             services.AddScoped<IDistrictServices, DistrictServices>();
             services.AddScoped<IBlockServices, BlockServices>();

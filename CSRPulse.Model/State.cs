@@ -22,8 +22,7 @@ namespace CSRPulse.Model
      
         public decimal? Longitude { get; set; }
         
-        public decimal? Latitude { get; set; }
-        public bool IsActive { get; set; }    
+        public decimal? Latitude { get; set; }       
 
         public bool RecordExist { get; set; }
     }

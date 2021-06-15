@@ -24,9 +24,6 @@ namespace CSRPulse.Model
         [Display(Name = "Icon Class :")]
         public string IconClass { get; set; }
 
-        [Display(Name = "Active :")]
-        public bool IsActive { get; set; }
-
         public string Area { get; set; }
 
         public string Help { get; set; }
