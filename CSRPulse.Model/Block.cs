@@ -20,8 +20,7 @@ namespace CSRPulse.Model
         [Required(ErrorMessage = "Please enter Code")]
         [StringLength(5)]
         public string BlockCode { get; set; }
-        public int BlockType { get; set; }     
-        public bool IsActive { get; set; }
+        public int BlockType { get; set; }            
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }

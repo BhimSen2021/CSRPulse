@@ -26,8 +26,7 @@ namespace CSRPulse.Model
         [Required]
         [StringLength(6)]
         public string VillageCode { get; set; }
-        public Common.EnumLocationType LocationType { get; set; }
-        public bool IsActive { get; set; }
+        public Common.EnumLocationType LocationType { get; set; }       
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }

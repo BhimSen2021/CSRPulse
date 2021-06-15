@@ -21,8 +21,7 @@ namespace CSRPulse.Model
         public string DistrictCode { get; set; }
         [StringLength(4)]
         [Display(Name = "Short Name")]
-        public string DistrictShort { get; set; }
-        public bool IsActive { get; set; }
+        public string DistrictShort { get; set; }     
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
     }
