@@ -22,7 +22,9 @@ namespace CSRPulse.Model
         public int StateId { get; set; }
         [Required]
         [StringLength(50)]
+        [Display(Name = "Village")]
         public string VillageName { get; set; }
+        [Display(Name = "Village Code")]
         [Required]
         [StringLength(6)]
         public string VillageCode { get; set; }

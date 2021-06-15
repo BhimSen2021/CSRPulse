@@ -7,7 +7,7 @@ namespace CSRPulse.Services
 {
   public interface IDistrictServices
     {
-        Task<List<Model.District>> GetDistrictList();
+        Task<List<Model.District>> GetDistrictList(int? stateId);
         Task<bool> CreateDistrict(Model.District district);
         Task<bool> UpdateDistrict(Model.District district);
         Task<Model.District> GetDistrictById(int districtId);

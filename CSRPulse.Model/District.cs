@@ -10,6 +10,7 @@ namespace CSRPulse.Model
         public int DistrictId { get; set; }
         [Required(ErrorMessage = "Please select State")]
         [Range(1,Int64.MaxValue)]
+        [Display(Name = "State")]
         public int? StateId { get; set; }
         [Required(ErrorMessage = "Please enter District")]
         [Display(Name ="District")]

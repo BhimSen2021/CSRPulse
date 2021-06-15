@@ -1,0 +1,66 @@
+﻿@using CSRPulse.Model
+@model Village
+
+<div class="card mb-1">
+
+    <div class="row search">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 align-middle">
+            <h4 class="desc" style="color:#0bb70b;">
+                <i class="mdi mdi-table-search fs-3" style="color:#d4d4d4;" aria-hidden="true"></i>@Html.Label("Search")
+            </h4>
+        </div>
+        <hr style="background-color:#fff !important;">
+        <form data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-village-list" data-ajax-mode="replace" asp-action="GetVillageList" asp-controller="Village">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 text-secondary pr-0">
+                        <i class="mdi mdi-filter"></i> Filter By :
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 pr-sm-1">
+                        <label asp-for="StateId" class="form-label" for="StateId"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-8 col-xs-8">
+
+                        <select asp-for="StateId" asp-items="@ViewBag.ddlState" onchange="BindDistrict(this)" aria-required="true" class="custom-select">
+                            <option disabled="" label="State" selected="" value="">State</option>
+                        </select><br />
+                        <span asp-validation-for="StateId" class="invalid"></span>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 pr-sm-1">
+                        <label asp-for="DistrictId" class="form-label" for="DistrictId"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-8 col-xs-8">
+
+                        <select asp-for="DistrictId" asp-items="@ViewBag.ddlDistrict" onchange="BindBlock(this)" aria-required="true" class="custom-select">
+                            <option disabled="" label="District" selected="" value="">District</option>
+                        </select><br />
+                        <span asp-validation-for="DistrictId" class="invalid"></span>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 pr-sm-1">
+                        <label asp-for="BlockId" class="form-label" for="BlockId"></label>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-8 col-xs-8">
+
+                        <select asp-for="BlockId" asp-items="@ViewBag.ddlBlock" aria-required="true" class="custom-select">
+                            <option disabled="" label="Block" selected="" value="">Block</option>
+                        </select><br />
+                        <span asp-validation-for="BlockId" class="invalid"></span>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12 text-end">
+                        <button type="submit" value="Search" title="Click here, to search records" class="btn btn-sm btn-warning toggle-tooltip">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+    </div>
+
+
+
+

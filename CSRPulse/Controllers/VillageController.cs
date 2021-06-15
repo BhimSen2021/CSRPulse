@@ -23,13 +23,29 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("VillageController/Index");
             try
             {
-                var result = await _villageServices.GetVillageList();
-                return View(result);
+                BindDropdowns();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<PartialViewResult> GetVillageList(Village village)
+        {
+            _logger.LogInformation("VillageController/GetVillageList");
+            try
+            {
+                var result = await _villageServices.GetVillageList(village.StateId,village.DistrictId,village.BlockId);
+                return PartialView("_VillageList",result);
             }
             catch (Exception ex)
             {
@@ -101,7 +117,7 @@ namespace CSRPulse.Controllers
                 BindDropdowns();
                 var uDetail = await _villageServices.GetVillageById(rid);
                 ViewBag.ddlDistrict = GetDistrict(uDetail.StateId, null);
-                ViewBag.ddlBlock = GetBlock(uDetail.StateId, uDetail.BlockId, null);
+                ViewBag.ddlBlock = GetBlock(uDetail.StateId, uDetail.DistrictId, null);
                 return View(uDetail);
             }
             catch (Exception ex)
@@ -121,7 +137,7 @@ namespace CSRPulse.Controllers
                 ModelState.Remove("IsActive");
                 BindDropdowns();
                 ViewBag.ddlDistrict = GetDistrict(village.StateId, null);
-                ViewBag.ddlBlock = GetBlock(village.StateId, village.BlockId,null);
+                ViewBag.ddlBlock = GetBlock(village.StateId, village.DistrictId, null);
                 if (ModelState.IsValid)
                 {
                     village.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;

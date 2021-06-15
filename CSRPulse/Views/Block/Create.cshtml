@@ -30,7 +30,7 @@
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 
                     <div class="mb-3">
-                        <label asp-for="StateId" for="MobileNo" class="form-label">State</label>
+                        <label asp-for="StateId" for="MobileNo" class="form-label"></label>
                         <select asp-for="StateId" asp-items="@ViewBag.ddlState" onchange="BindDistrict(this)" aria-required="true" class="form-select">
                             <option disabled="" label="State" selected="" value="">State</option>
                         </select>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="DistrictId" for="MobileNo" class="form-label">District</label>
+                        <label asp-for="DistrictId" for="MobileNo" class="form-label"></label>
                         <select asp-for="DistrictId" aria-required="true" class="form-select">
                             <option disabled="" label="District" selected="" value="">District</option>
                         </select>
@@ -46,14 +46,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="BlockName" for="MobileNo" class="form-label">Block</label>
+                        <label asp-for="BlockName" for="MobileNo" class="form-label"></label>
                         <input type="text" asp-for="BlockName" class="form-control" maxlength="100" placeholder="Enter Block (max 100 characters)" autocomplete="off">
                         <span asp-validation-for="BlockName" class="invalid"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="BlockCode" for="BlockCode" class="form-label">Short Name</label>
-                        <input type="text" asp-for="BlockCode" class="form-control" maxlength="2" placeholder="Enter state code (max 2 characters)" autocomplete="off">
+                        <label asp-for="BlockCode" for="BlockCode" class="form-label"></label>
+                        <input type="text" asp-for="BlockCode" class="form-control" maxlength="2" placeholder="Enter block code (max 2 characters)" autocomplete="off">
                         <span asp-validation-for="BlockCode" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">
@@ -71,24 +71,21 @@
             if ($("#StateId").val() != "") {
                 var StateId = 0;
                 StateId = $("#StateId").val();
-
                 $("#DistrictId").html("");
-       
+                $("#DistrictId").append($("<option disabled selected></option>").val("").html("District"));
                 if (StateId > 0) {
                 jQuery.post("@Url.Action("BindDistrict", "Block")", {
                     StateId: StateId
                 }).done(function (data) {
                     debugger;
                     if (data != "") {
-                        $("#DistrictId").html("");
+
                         $.each(data, function (key, value) {
-                            $("#DistrictId").append($("<option></option>").val(value.Value).html(value.Text));
+                            $("#DistrictId").append($("<option></option>").val(value.value).html(value.text));
                         });
                     }
                 });
-            } else {
-                    $("#DistrictId").append($("<option></option>").val("").html('District'));
-            }
+            } 
         }
     }
 </script>

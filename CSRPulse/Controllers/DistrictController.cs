@@ -23,13 +23,14 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("DistrictController/Index");
             try
             {
-                var result = await _districtServices.GetDistrictList();
-                return View(result);
+                BindDropdowns();
+              //  var result = await _districtServices.GetDistrictList();
+                return View();
             }
             catch (Exception ex)
             {
@@ -38,6 +39,21 @@ namespace CSRPulse.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<PartialViewResult> GetDistrictList(District district)
+        {
+            _logger.LogInformation("DistrictController/GetDistrictList");
+            try
+            {
+                var result = await _districtServices.GetDistrictList(district.StateId);
+                return PartialView("_DistrictList",result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
         [HttpGet]
         public IActionResult Create()
         {

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Village>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-controller="Village" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Village</a>
+        </div>
+        <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>Village Name</th>
+                    <th>Village Code</th>
+                    <th>State</th>
+                    <th>District</th>
+                    <th>Block</th>
+                    <th width="5%">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var village in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(village) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this village.">  @Html.ActionLink(village.VillageName, "Edit", "Village", new { rid = village.VillageId })</span></td>
+                            <td>@village.VillageCode</td>
+                            <td>@village.StateName</td>
+                            <td>@village.DistrictName</td>
+                            <td>@village.BlockName</td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@village.VillageId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (village.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@village.VillageId" data-on-label="Yes" data-off-label="No" class="mb-0 d-village"></label>
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -38,11 +38,13 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<Model.Block>> GetBlockList()
+        public async Task<List<Model.Block>> GetBlockList(int? stateId, int? districtId)
         {
             try
             {
-                var getBlocks = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Block>().Include(s => s.State).Include(d=> d.District));
+                var getBlocks = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Block>(x => (stateId.HasValue ? x.StateId == stateId : (1 > 0))
+                && (districtId.HasValue ? x.DistrictId == districtId : (1 > 0))
+                ).Include(s => s.State).Include(d => d.District));
                 var disList = _mapper.Map<List<Model.Block>>(getBlocks);
                 return disList;
             }
@@ -77,7 +79,7 @@ namespace CSRPulse.Services
                 var getBlocks = await _genericRepository.GetByIDAsync<DTOModel.Block>(block.BlockId);
                 if (getBlocks != null)
                 {
-                    if (getBlocks.BlockName == block.BlockName && getBlocks.BlockCode == block.BlockCode &&  getBlocks.StateId==block.StateId && getBlocks.DistrictId==block.DistrictId)
+                    if (getBlocks.BlockName == block.BlockName && getBlocks.BlockCode == block.BlockCode && getBlocks.StateId == block.StateId && getBlocks.DistrictId == block.DistrictId)
                         return true;
                     //else
                     //{

@@ -31,27 +31,27 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                     <div class="mb-3">
-                        <label asp-for="StateId" for="MobileNo" class="form-label">State</label>
+                        <label asp-for="StateId" for="MobileNo" class="form-label"></label>
                         <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
                             <option disabled="" label="State" selected="" value="">State</option>
                         </select>
                         <span asp-validation-for="StateId" class="invalid"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="DistrictName" for="MobileNo" class="form-label">District</label>
+                        <label asp-for="DistrictName" for="MobileNo" class="form-label"></label>
                         <input type="text" asp-for="DistrictName" class="form-control" maxlength="100" placeholder="Enter District (max 50 characters)" autocomplete="off">
                         <span asp-validation-for="DistrictName" class="invalid"></span>
                     </div>
 
 
                     <div class="mb-3">
-                        <label asp-for="DistrictShort" for="UserName" class="form-label">Short Name</label>
+                        <label asp-for="DistrictShort" for="UserName" class="form-label"></label>
                         <input type="text" asp-for="DistrictShort" class="form-control" maxlength="4" placeholder="Enter short name (max 10 characters)" autocomplete="off">
                         <span asp-validation-for="DistrictShort" class="invalid"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="DistrictCode" for="DistrictCode" class="form-label">Short Name</label>
-                        <input type="text" asp-for="DistrictCode" class="form-control" maxlength="2" placeholder="Enter state code (max 2 characters)" autocomplete="off">
+                        <label asp-for="DistrictCode" for="DistrictCode" class="form-label"></label>
+                        <input type="text" asp-for="DistrictCode" class="form-control" maxlength="2" placeholder="Enter district code (max 2 characters)" autocomplete="off">
                         <span asp-validation-for="DistrictCode" class="invalid"></span>
                     </div>
 
