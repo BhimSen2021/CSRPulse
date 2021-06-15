@@ -38,11 +38,11 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<Model.District>> GetDistrictList()
+        public async Task<List<Model.District>> GetDistrictList(int? stateId)
         {
             try
             {
-                var getDistricts = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.District>().Include(s => s.State));
+                var getDistricts = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.District>(x => stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)).Include(s => s.State));
                 var disList = _mapper.Map<List<Model.District>>(getDistricts);
                 return disList;
             }
@@ -77,7 +77,7 @@ namespace CSRPulse.Services
                 var getDistricts = await _genericRepository.GetByIDAsync<DTOModel.District>(district.DistrictId);
                 if (getDistricts != null)
                 {
-                    if (getDistricts.DistrictName == district.DistrictName && getDistricts.DistrictCode == district.DistrictCode && getDistricts.DistrictShort == district.DistrictShort && getDistricts.StateId==district.StateId)
+                    if (getDistricts.DistrictName == district.DistrictName && getDistricts.DistrictCode == district.DistrictCode && getDistricts.DistrictShort == district.DistrictShort && getDistricts.StateId == district.StateId)
                         return true;
                     //else
                     //{

@@ -38,11 +38,12 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<Model.Village>> GetVillageList()
+        public async Task<List<Model.Village>> GetVillageList(int? stateId, int? districtId, int? blockId)
         {
             try
             {
-                var getVillages = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Village>().Include(s => s.State).Include(d => d.District).Include(b=> b.Block));
+                var getVillages = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Village>(x => (stateId.HasValue ? x.StateId == stateId : (1 > 0))
+                && (districtId.HasValue ? x.DistrictId == districtId : (1 > 0)) && (blockId.HasValue ? x.BlockId == blockId : (1 > 0))).Include(s => s.State).Include(d => d.District).Include(b => b.Block));
                 var disList = _mapper.Map<List<Model.Village>>(getVillages);
                 return disList;
             }

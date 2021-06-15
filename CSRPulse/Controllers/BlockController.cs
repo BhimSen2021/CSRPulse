@@ -23,13 +23,13 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("BlockController/Index");
             try
             {
-                var result = await _blockServices.GetBlockList();
-                return View(result);
+                BindDropdowns();
+                return View();
             }
             catch (Exception ex)
             {
@@ -38,6 +38,21 @@ namespace CSRPulse.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetBlockList(Block block)
+        {
+            _logger.LogInformation("BlockController/Index");
+            try
+            {
+                var result = await _blockServices.GetBlockList(block.StateId,block.DistrictId);
+                return PartialView("_BlockList",result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
         [HttpGet]
         public IActionResult Create()
         {
@@ -150,7 +165,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation($"BlockController/BindDistrict/stateId={stateId}");
             try
             {
-                return Json(GetDistrict(stateId,null));
+                return Json(GetDistrict(stateId, null));
             }
             catch (Exception ex)
             {
@@ -178,8 +193,8 @@ namespace CSRPulse.Controllers
         [NonAction]
         void BindDropdowns()
         {
-            var stateList = _ddlService.GetStateAsync(null,null);
-            ViewBag.ddlState = new SelectList(stateList, "id", "value");           
+            var stateList = _ddlService.GetStateAsync(null, null);
+            ViewBag.ddlState = new SelectList(stateList, "id", "value");
         }
     }
 }

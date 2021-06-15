@@ -7,7 +7,7 @@ namespace CSRPulse.Services
 {
   public interface IBlockServices
     {
-        Task<List<Model.Block>> GetBlockList();
+        Task<List<Model.Block>> GetBlockList(int? stateId, int? districtId);
         Task<bool> CreateBlock(Model.Block block);
         Task<bool> UpdateBlock(Model.Block block);
         Task<Model.Block> GetBlockById(int blockId);

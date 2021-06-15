@@ -137,3 +137,32 @@ textarea {
         -moz-transform: translate3d(50px, 0px, 0px);
     }
 }
+
+.search {
+    background: #fff;
+    padding: 20px;
+    border-radius: 3px;
+    box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+    margin-right: -15px;
+    margin-left: -15px;
+    font-family: 'Roboto',sans-serif !important;
+}
+
+    .search .desc {
+        font-size: 16px;
+        color: #999;
+        display: block;
+        margin-top: 10px;
+        margin-left: 5px;
+        font-family: 'Roboto',sans-serif !important;
+    }
+
+
+
+    .search .custom-select {
+        border: none !important;
+        border-bottom: solid 2px #ccc !important;
+        padding: 5px !important;
+        border-radius: 0 !important;
+        font-family: 'Roboto',sans-serif !important;
+    }
