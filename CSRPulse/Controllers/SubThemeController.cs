@@ -1,6 +1,8 @@
 ﻿using CSRPulse.Model;
 using CSRPulse.Services;
+using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,20 +11,37 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class SubThemeController :  BaseController<UoMController>
+    public class SubThemeController : BaseController<UoMController>
     {
         private readonly ISubThemeService _subThemeService;
-        public SubThemeController(ISubThemeService subThemeService)
+        private readonly IDropdownBindService _ddlService;
+        public SubThemeController(ISubThemeService subThemeService, IDropdownBindService dropdownBindService)
         {
             _subThemeService = subThemeService;
+            _ddlService = dropdownBindService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("SubThemeController/Index");
             try
             {
-                var result = await _subThemeService.GetSubThemesAsync();
-                return View(result);
+                BindDropdowns();              
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+        [HttpGet]
+        public async Task<PartialViewResult> GetSubThemeList(SubTheme subTheme)
+        {
+            _logger.LogInformation("SubThemeController/GetSubThemeList");
+            try
+            {
+                var result = await _subThemeService.GetSubThemesAsync(subTheme.ThemeId);
+                return PartialView("_SubThemeList", result);
             }
             catch (Exception ex)
             {
@@ -34,6 +53,7 @@ namespace CSRPulse.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            BindDropdowns();
             return View(new SubTheme());
         }
 
@@ -58,6 +78,7 @@ namespace CSRPulse.Controllers
                         return RedirectToAction(nameof(Index));
                     }
                 }
+                BindDropdowns();
                 return View(subTheme);
             }
             catch (Exception ex)
@@ -71,6 +92,7 @@ namespace CSRPulse.Controllers
         {
             try
             {
+                BindDropdowns();
                 var uDetail = await _subThemeService.GetSubThemeByIdAsync(SubThemeId);
                 return View(uDetail);
             }
@@ -115,5 +137,11 @@ namespace CSRPulse.Controllers
             }
         }
 
+        [NonAction]
+        void BindDropdowns()
+        {
+            var themeList = _ddlService.GetTheme(null);
+            ViewBag.ddlTheme = new SelectList(themeList, "id", "value");
+        }
     }
 }

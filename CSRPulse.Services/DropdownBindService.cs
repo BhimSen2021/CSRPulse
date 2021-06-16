@@ -71,7 +71,7 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public IEnumerable<SelectListModel> GetBlock(int? stateId, int? districtId,int? blockId)
+        public IEnumerable<SelectListModel> GetBlock(int? stateId, int? districtId, int? blockId)
         {
             try
             {
@@ -86,5 +86,35 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+
+        public IEnumerable<SelectListModel> GetTheme(int? themeId)
+        {
+            try
+            {
+                var theme = _genericRepository.Get<DTOModel.Theme>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)));
+                var themeList = _mapper.Map<List<SelectListModel>>(theme);
+                return themeList.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<SelectListModel> GetSubTheme(int? themeId, int? subThemeId)
+        {
+            try
+            {
+                var subTheme = _genericRepository.Get<DTOModel.SubTheme>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (subThemeId.HasValue ? x.SubThemeId == subThemeId.Value : (1 > 0)));
+                var subThemeList = _mapper.Map<List<SelectListModel>>(subTheme);
+                return subThemeList.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

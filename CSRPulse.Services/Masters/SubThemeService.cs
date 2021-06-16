@@ -69,6 +69,18 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+        public async Task<List<SubTheme>> GetSubThemesAsync(int themeId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.SubTheme>(x => x.ThemeId == themeId);
+                return _mapper.Map<List<SubTheme>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public async Task<bool> UpdateSubThemeAsync(SubTheme theme)
         {

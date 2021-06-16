@@ -16,5 +16,8 @@ namespace CSRPulse.Services.IServices
 
         IEnumerable<SelectListModel> GetDistrict(int? stateId, int? districtId);
         IEnumerable<SelectListModel> GetBlock(int? stateId, int? districtId, int? blockId);
+
+        IEnumerable<SelectListModel> GetTheme(int? themeId);
+        IEnumerable<SelectListModel> GetSubTheme(int? themeId, int? subThemeId);
     }
 }

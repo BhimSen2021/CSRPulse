@@ -1,0 +1,67 @@
+﻿@model CSRPulse.Model.SubTheme
+@{
+    ViewData["Title"] = "Add New SubTheme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item active">SubTheme</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Add New SubTheme</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-area="" asp-controller="SubTheme" asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="mb-3">
+                                <label asp-for="ThemeId" class="form-label required"></label>
+                                <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Theme" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="ThemeId" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="SubThemeName" class="form-label required"></label>
+                                <input type="text" asp-for="SubThemeName" class="form-control" maxlength="200" placeholder="Enter SubTheme Name (max 200 characters)" autocomplete="off">
+                                <span asp-validation-for="SubThemeName" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="SubThemeCode" class="form-label"></label>
+                                <input type="text" asp-for="SubThemeCode" class="form-control" maxlength="3" placeholder="Enter SubTheme Code (max 3 characters)" autocomplete="off">
+                                <span asp-validation-for="SubThemeCode" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <input asp-for="IsActive" type="checkbox" id="@Model.SubThemeId" data-switch="success" checked="checked" />
+                                <label for="@Model.SubThemeId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="SubTheme" asp-action="Index" class="btn btn-light"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

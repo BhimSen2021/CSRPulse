@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SubTheme>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-controller="SubTheme" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New SubTheme</a>
+        </div>
+        <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>SubTheme Name</th>
+                    <th>SubTheme Code</th>                  
+                    <th width="5%">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var subtheme in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(subtheme) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this district."> @Html.ActionLink(subtheme.SubThemeName, "Edit", "SubTheme", new { subThemeId = subtheme.SubThemeId })</span></td>                           
+                            <td>@subtheme.SubThemeCode</td>                           
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@subtheme.SubThemeId" data-switch="success" disabled @if (subtheme.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@subtheme.SubThemeId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

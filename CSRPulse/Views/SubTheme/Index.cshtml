@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "SubTheme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item active">Theme</li>
+                </ol>
+            </div>
+            <h4 class="page-title">SubTheme List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @{await Html.RenderPartialAsync("_Filter");}
+</div>
+<div class="row" id="div-subtheme-list">
+    
+</div>
+

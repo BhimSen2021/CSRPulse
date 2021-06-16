@@ -9,6 +9,7 @@ namespace CSRPulse.Services
         Task<SubTheme> CreateSubThemeAsync(SubTheme theme);
         Task<SubTheme> GetSubThemeByIdAsync(int SubThemeId);
         Task<List<SubTheme>> GetSubThemesAsync();
+        Task<List<SubTheme>> GetSubThemesAsync(int themeId);
         Task<bool> UpdateSubThemeAsync(SubTheme theme);
     }
 }

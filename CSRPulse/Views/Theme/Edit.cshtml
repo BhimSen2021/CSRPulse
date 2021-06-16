@@ -28,8 +28,8 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="ThemeId" />
                     <div class="row">
-                        <div class="col-6">
-                            <div class="mb-3">
+                        <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="mb-3">                                
                                 <label asp-for="ThemeName" class="form-label required"></label>
                                 <input type="text" asp-for="ThemeName" class="form-control" maxlength="50" placeholder="Enter Theme Name (max 50 characters)" autocomplete="off">
                                 <span asp-validation-for="ThemeName" class="invalid"></span>
@@ -52,8 +52,8 @@
 
 
                             <div class="mb-2 text-end">
-                                <a asp-area="" asp-controller="Theme" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply"></i> Back to list </a>
-                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit"></i> Update </button>
+                                <a asp-area="" asp-controller="Theme" asp-action="Index" class="btn btn-light"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
                             </div>
                         </div>
 
