@@ -9,7 +9,7 @@
                 <tr>
                     <th width="5%">#</th>
                     <th>SubTheme Name</th>
-                    <th>SubTheme Code</th>                  
+                    <th>SubTheme Code</th>
                     <th width="5%">Active</th>
                 </tr>
             </thead>
@@ -23,11 +23,11 @@
                                 <span>@(Model.ToList().IndexOf(subtheme) +1)</span>
                             </td>
 
-                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this district."> @Html.ActionLink(subtheme.SubThemeName, "Edit", "SubTheme", new { subThemeId = subtheme.SubThemeId })</span></td>                           
-                            <td>@subtheme.SubThemeCode</td>                           
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this district."> @Html.ActionLink(subtheme.SubThemeName, "Edit", "SubTheme", new { subThemeId = subtheme.SubThemeId })</span></td>
+                            <td>@subtheme.SubThemeCode</td>
                             <td>
                                 <div>
-                                    <input type="checkbox" id="switch_@subtheme.SubThemeId" data-switch="success" disabled @if (subtheme.IsActive == true) { <text> checked="checked" </text> } />
+                                    <input type="checkbox" id="switch_@subtheme.SubThemeId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (subtheme.IsActive == true) { <text> checked="checked" </text> } />
                                     <label for="switch_@subtheme.SubThemeId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                 </div>
                             </td>

@@ -116,5 +116,19 @@ namespace CSRPulse.Services
             }
         }
 
+        public IEnumerable<SelectListModel> GetActivity(int? themeId, int? activityId)
+        {
+            try
+            {
+                var activity = _genericRepository.Get<DTOModel.Activity>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (activityId.HasValue ? x.ActivityId == activityId.Value : (1 > 0)));
+
+                var activityList = _mapper.Map<List<SelectListModel>>(activity);
+                return activityList.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

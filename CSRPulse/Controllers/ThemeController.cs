@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class ThemeController : BaseController<UoMController>
+    public class ThemeController : BaseController<ThemeController>
     {
         private readonly IThemeService _themeService;
         public ThemeController(IThemeService themeService)
@@ -114,6 +114,15 @@ namespace CSRPulse.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
+        }
+
+        [HttpPost]
+        public JsonResult ActiveDeActive(int id, bool isChecked)
+        {
+            _logger.LogInformation("UoMController/ActiveDeActive");
+            var result = _themeService.ActiveDeActive(id, isChecked);
+            return Json(result);
+
         }
 
     }

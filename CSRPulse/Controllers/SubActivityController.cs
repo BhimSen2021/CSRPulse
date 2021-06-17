@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class SubThemeController : BaseController<SubThemeController>
+    public class SubActivityController : BaseController<SubActivityController>
     {
-        private readonly ISubThemeService _subThemeService;
+        private readonly ISubActivityService _subActivityService;
         private readonly IDropdownBindService _ddlService;
-        public SubThemeController(ISubThemeService subThemeService, IDropdownBindService dropdownBindService)
+        public SubActivityController(ISubActivityService subActivityService, IDropdownBindService dropdownBindService)
         {
-            _subThemeService = subThemeService;
+            _subActivityService = subActivityService;
             _ddlService = dropdownBindService;
         }
         public IActionResult Index()
         {
-            _logger.LogInformation("SubThemeController/Index");
+            _logger.LogInformation("SubActivityController/Index");
             try
             {
-                BindDropdowns();              
+                BindDropdowns();
                 return View();
             }
             catch (Exception ex)
@@ -35,13 +35,13 @@ namespace CSRPulse.Controllers
             }
         }
         [HttpGet]
-        public async Task<PartialViewResult> GetSubThemeList(SubTheme subTheme)
+        public async Task<PartialViewResult> GetSubActivityList(SubActivity subActivity)
         {
-            _logger.LogInformation("SubThemeController/GetSubThemeList");
+            _logger.LogInformation("SubActivityController/GetSubActivityList");
             try
             {
-                var result = await _subThemeService.GetSubThemesAsync(subTheme.ThemeId);
-                return PartialView("_SubThemeList", result);
+                var result = await _subActivityService.GetSubActivityAsync(subActivity.ThemeId, subActivity.ActivityId);
+                return PartialView("_SubActivityList", result);
             }
             catch (Exception ex)
             {
@@ -54,32 +54,32 @@ namespace CSRPulse.Controllers
         public IActionResult Create()
         {
             BindDropdowns();
-            return View(new SubTheme());
+            return View(new SubActivity());
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Create(SubTheme subTheme)
+        public async Task<IActionResult> Create(SubActivity subActivity)
         {
             try
             {
-                _logger.LogInformation("SubThemeController/Create");
+                _logger.LogInformation("SubActivityController/Create");
                 if (ModelState.IsValid)
                 {
-                    subTheme.CreatedBy = userDetail.CreatedBy;
-                    var result = await _subThemeService.CreateSubThemeAsync(subTheme);
+                    subActivity.CreatedBy = userDetail.CreatedBy;
+                    var result = await _subActivityService.CreateSubActivityAsync(subActivity);
                     if (result.IsExist)
                     {
-                        ModelState.AddModelError("", "SubTheme name already exists.");
+                        ModelState.AddModelError("", "SubActivity name already exists.");
                     }
                     if (result.ThemeId > 0)
                     {
-                        TempData["Message"] = "SubTheme created successfully.";
+                        TempData["Message"] = "SubActivity created successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                 }
                 BindDropdowns();
-                return View(subTheme);
+                return View(subActivity);
             }
             catch (Exception ex)
             {
@@ -88,13 +88,13 @@ namespace CSRPulse.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(int SubThemeId)
+        public async Task<IActionResult> Edit(int subActivityId)
         {
             try
             {
                 BindDropdowns();
-                var uDetail = await _subThemeService.GetSubThemeByIdAsync(SubThemeId);
-                return View(uDetail);
+                var aDetail = await _subActivityService.GetSubActivityIdAsync(subActivityId);
+                return View(aDetail);
             }
             catch (Exception)
             {
@@ -104,31 +104,31 @@ namespace CSRPulse.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(SubTheme subTheme)
+        public async Task<IActionResult> Edit(SubActivity subActivity)
         {
             try
             {
-                _logger.LogInformation("SubThemeController/Edit");
+                _logger.LogInformation("SubActivityController/Edit");
                 if (ModelState.IsValid)
                 {
-                    subTheme.UpdatedBy = userDetail.CreatedBy;
-                    subTheme.UpdatedOn = DateTime.Now;
-                    var result = await _subThemeService.UpdateSubThemeAsync(subTheme);
-                    if (subTheme.IsExist)
+                    subActivity.UpdatedBy = userDetail.CreatedBy;
+                    subActivity.UpdatedOn = DateTime.Now;
+                    var result = await _subActivityService.UpdateSubActivityAsync(subActivity);
+                    if (subActivity.IsExist)
                     {
-                        ModelState.AddModelError("", "SubTheme name already exists");
+                        ModelState.AddModelError("", "SubActivity name already exists");
                     }
                     else if (result)
                     {
-                        TempData["Message"] = "SubTheme Updated Successfully.";
+                        TempData["Message"] = "SubActivity Updated Successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        TempData["Error"] = "SubTheme Updation Failed.";
+                        TempData["Error"] = "SubActivity Updation Failed.";
                     }
                 }
-                return View(subTheme);
+                return View(subActivity);
             }
             catch (Exception ex)
             {
@@ -144,11 +144,21 @@ namespace CSRPulse.Controllers
             ViewBag.ddlTheme = new SelectList(themeList, "id", "value");
         }
 
+        [HttpGet]
+        public JsonResult BindActivityDropdown(int themeId)
+        {
+            _logger.LogInformation("SubActivityController/ActiveDeActive");
+            var selectListModels = _ddlService.GetActivity(themeId, null).ToList();
+            return Json(new SelectList(selectListModels, "id", "value"));
+
+        }
+
+
         [HttpPost]
         public JsonResult ActiveDeActive(int id, bool isChecked)
         {
-            _logger.LogInformation("UoMController/ActiveDeActive");
-            var result = _subThemeService.ActiveDeActive(id, isChecked);
+            _logger.LogInformation("SubActivityController/ActiveDeActive");
+            var result = _subActivityService.ActiveDeActive(id, isChecked);
             return Json(result);
 
         }

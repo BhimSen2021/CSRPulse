@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "SubTheme";
+    ViewData["Title"] = "SubActivity";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,10 +11,10 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
-                    <li class="breadcrumb-item active">Theme</li>
+                    <li class="breadcrumb-item active">SubActivity</li>
                 </ol>
             </div>
-            <h4 class="page-title">SubTheme List</h4>
+            <h4 class="page-title">SubActivity List</h4>
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
 <div class="row">
     @{await Html.RenderPartialAsync("_Filter");}
 </div>
-<div class="row" id="div-subtheme-list">
+<div class="row" id="div-subactivity-list">
 
 </div>
 
@@ -47,19 +47,18 @@
 
 @section Scripts{
     <script type="text/javascript">
-        function openpopup(cnt) {          
+        function openpopup(cnt) {
             var id = cnt.id.split('_')[1];
             $('.btnconfirm').attr('id', id + '_' + cnt.checked);
 
         }
         function ActiveDeActive(obj) {
-            debugger;
             var id = obj.id.split('_')[0];
-            var isChecked = obj.id.split('_')[1];           
+            var isChecked = obj.id.split('_')[1];
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/SubTheme/ActiveDeActive',
+                url: '@Url.Content("~/")' +"/Activity/ActiveDeActive",
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {
@@ -75,6 +74,30 @@
                 }
             });
         }
+
+        $(document).ready(function () {
+            $('#ThemeId').change(function () {
+                debugger;
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'JSON',
+                    url: '@Url.Content("~/")' + "SubActivity/BindActivityDropdown",
+                    data: { themeId: $('#ThemeId').val()},
+                    success: function (data) {
+                        var items = '';
+                        $('#ActivityId').empty();
+                        $.each(data, function(i, activity) {
+                            items += "<option value='" + activity.value + "'>" + activity.text+"</option>"
+                        });
+                        $('#ActivityId').html(items);
+                    },
+                    error: function (responce) {
+                        commonMessage('error', 'error occurred on bind subActivity dropdown.');
+                    }
+                });
+            });
+
+        });
     </script>
 }
 

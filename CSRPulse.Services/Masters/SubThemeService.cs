@@ -112,5 +112,20 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+        public bool ActiveDeActive(int id, bool IsActive)
+        {
+            try
+            {
+                var model = _genericRepository.GetByID<DTOModel.SubTheme>(id);
+                model.IsActive = IsActive;
+                _genericRepository.Update(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace CSRPulse.Services
 
         Task<bool> UpdateUOMAsync(Uom uom);
         Task<Uom> GetUOMByIdAsync(int UOMId);
+
+        bool ActiveDeActive(int id, bool IsActive);
     }
 }

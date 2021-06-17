@@ -51,7 +51,7 @@
                                     </td>
                                     <td>
                                         <div>
-                                            <input type="checkbox" id="switch_@theme.ThemeId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" disabled @if (theme.IsActive == true) { <text> checked="checked" </text> } />
+                                            <input type="checkbox" id="switch_@theme.ThemeId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (theme.IsActive == true) { <text> checked="checked" </text> } />
                                             <label for="switch_@theme.ThemeId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                         </div>
                                     </td>
@@ -70,3 +70,54 @@
         </div>
     </div>
 </div>
+
+<div id="info-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="info-header-modalLabel">Confirmation</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                Do you want to perform this action ?.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
+                <button type="button" onclick="ActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts{
+    <script type="text/javascript">
+        function openpopup(cnt) {
+            var id = cnt.id.split('_')[1];
+            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+        }
+        function ActiveDeActive(obj) {
+            debugger;
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];           
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Theme/ActiveDeActive',
+                data: { id: id, isChecked: isChecked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'Status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'Status changing failed.');
+                    }
+                },
+                error: function (responce) {
+                    commonMessage('error', 'Status changing failed.');
+                }
+            });
+        }
+    </script>
+}

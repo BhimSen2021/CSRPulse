@@ -51,6 +51,8 @@ namespace CSRPulse
             services.AddScoped<IUOMService, UOMService>();
             services.AddScoped<IThemeService, ThemeService>();
             services.AddScoped<ISubThemeService, SubThemeService>();
+            services.AddScoped<IActivityService, ActivityService>();
+            services.AddScoped<ISubActivityService, SubActivityService>();
 
             services.AddScoped<IStateServices, StateServices>();
             services.AddScoped<IDistrictServices, DistrictServices>();

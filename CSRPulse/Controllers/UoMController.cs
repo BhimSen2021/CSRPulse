@@ -116,5 +116,14 @@ namespace CSRPulse.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult ActiveDeActive(int id, bool isChecked)
+        {
+            _logger.LogInformation("UoMController/ActiveDeActive");
+            var result = _uOMService.ActiveDeActive(id, isChecked);
+            return Json(result);
+
+        }
+
     }
 }
