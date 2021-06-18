@@ -130,5 +130,62 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+        public IEnumerable<SelectListModel> GetSubActivity(int? themeId, int? activityId)
+        {
+            try
+            {
+                var subActivity = _genericRepository.Get<DTOModel.SubActivity>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (activityId.HasValue ? x.ActivityId == activityId.Value : (1 > 0)));
+
+                var subActivityList = _mapper.Map<List<SelectListModel>>(subActivity);
+                return subActivityList.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<SelectListModel> GetUoM(int? uomId)
+        {
+            try
+            {
+                var uoms = _genericRepository.Get<DTOModel.Uom>(x => (uomId.HasValue ? x.Uomid == uomId.Value : (1 > 0)));
+                var uomList = _mapper.Map<List<SelectListModel>>(uoms);
+                return uomList.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<SelectListModel> GetIndicatorResponseType()
+        {
+            try
+            {
+                var indicatorResponseTypes = _genericRepository.Get<DTOModel.IndicatorResponseType>(x => x.IsActive == true);
+                var selectLists = _mapper.Map<List<SelectListModel>>(indicatorResponseTypes);
+                return selectLists.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<SelectListModel> GetIndicatorType()
+        {
+            try
+            {
+                var indicatorTypes = _genericRepository.Get<DTOModel.IndicatorType>(x => x.IsActive == true);
+                var selectLists = _mapper.Map<List<SelectListModel>>(indicatorTypes);
+                return selectLists.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

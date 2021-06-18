@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Indicator>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-controller="Indicator" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Indicator</a>
+        </div>
+        <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(m=>m.IndicatorName)</th>
+                    <th>@Html.DisplayNameFor(m => m.IndicatorCode)</th>
+                    <th width="5%">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var indicator in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(indicator) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this subactivity."> @Html.ActionLink(indicator.IndicatorName, "Edit", "Indicator", new { indicatorId = indicator.IndicatorId })</span></td>
+                            <td>@indicator.IndicatorCode</td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@indicator.IndicatorId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (indicator.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@indicator.IndicatorId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

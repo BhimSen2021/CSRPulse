@@ -29,6 +29,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<District> District { get; set; }
         public virtual DbSet<EmailConfiguration> EmailConfiguration { get; set; }
         public virtual DbSet<Indicator> Indicator { get; set; }
+        public virtual DbSet<IndicatorResponseType> IndicatorResponseType { get; set; }
+        public virtual DbSet<IndicatorType> IndicatorType { get; set; }
         public virtual DbSet<MailProcess> MailProcess { get; set; }
         public virtual DbSet<MailSendStatus> MailSendStatus { get; set; }
         public virtual DbSet<MailSubject> MailSubject { get; set; }
@@ -47,11 +49,13 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserRights> UserRights { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
+        public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -66,6 +70,7 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Activity>(entity =>
@@ -249,6 +254,24 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.Uomid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Indicator_UOM");
+            });
+
+            modelBuilder.Entity<IndicatorResponseType>(entity =>
+            {
+                entity.Property(e => e.ResponseTypeId).ValueGeneratedNever();
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ResponseType).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<IndicatorType>(entity =>
+            {
+                entity.Property(e => e.IndicatorTypeId).ValueGeneratedNever();
+
+                entity.Property(e => e.IndicatorType1).IsUnicode(false);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<MailSendStatus>(entity =>

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "SubActivity";
+    ViewData["Title"] = "Indicator";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,10 +11,10 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
-                    <li class="breadcrumb-item active">SubActivity</li>
+                    <li class="breadcrumb-item active">Indicator</li>
                 </ol>
             </div>
-            <h4 class="page-title">SubActivity List</h4>
+            <h4 class="page-title">Indicator List</h4>
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
 <div class="row">
     @{await Html.RenderPartialAsync("_Filter");}
 </div>
-<div class="row" id="div-subactivity-list"> </div>
+<div class="row" id="div-incicator-list"> </div>
 
 <div id="info-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -57,7 +57,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/SubActivity/ActiveDeActive',
+                url: '/Indicator/ActiveDeActive',
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {

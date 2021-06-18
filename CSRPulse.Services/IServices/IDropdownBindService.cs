@@ -21,5 +21,10 @@ namespace CSRPulse.Services.IServices
         IEnumerable<SelectListModel> GetSubTheme(int? themeId, int? subThemeId);
 
         IEnumerable<SelectListModel> GetActivity(int? themeId, int? activityId);
+        IEnumerable<SelectListModel> GetSubActivity(int? themeId, int? activityId);
+        IEnumerable<SelectListModel> GetUoM(int? uomId);
+
+        IEnumerable<SelectListModel> GetIndicatorResponseType();
+        IEnumerable<SelectListModel> GetIndicatorType();
     }
 }

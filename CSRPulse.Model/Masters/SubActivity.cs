@@ -9,10 +9,10 @@ namespace CSRPulse.Model
     {
         [Key]
         public int SubActivityId { get; set; }
-        [Required, Display(Name = "SubActivity Name")]
+        [Required, Display(Name = "Sub Activity Name")]
         [StringLength(200)]
         public string SubActivityName { get; set; }
-        [StringLength(3), Display(Name = "SubActivity Code")]
+        [StringLength(3), Display(Name = "Sub Activity Code")]
         public string SubActivityCode { get; set; }
         [Required, Display(Name = "Activity Name")]
         public int ActivityId { get; set; }

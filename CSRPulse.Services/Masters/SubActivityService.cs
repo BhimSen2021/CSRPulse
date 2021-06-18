@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
 namespace CSRPulse.Services
 {
     public class SubActivityService : BaseService, ISubActivityService
@@ -39,15 +42,23 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<SubActivity> GetSubActivityIdAsync(int subActivityId)
+        public SubActivity GetSubActivityId(int subActivityId)
         {
             try
             {
-                var result = await _genericRepository.GetByIDAsync<DTOModel.SubActivity>(subActivityId);
+                var subActivity = new SubActivity();
+                var result = _genericRepository.GetIQueryable<DTOModel.SubActivity>(s => s.SubActivityId == subActivityId).Include(t => t.Theme).Include(a => a.Activity).FirstOrDefault();
+
                 if (result != null)
-                    return _mapper.Map<SubActivity>(result);
-                else
-                    return new SubActivity();
+                {
+                    subActivity = _mapper.Map<SubActivity>(result);
+                    subActivity.ThemeId = result.Theme.ThemeId;
+                    subActivity.ThemeName = result.Theme.ThemeName;
+                    subActivity.ActivityId = result.Activity.ActivityId;
+                    subActivity.ActivityName = result.Activity.ActivityName;
+                }
+
+                return subActivity;
             }
             catch (Exception)
             {
@@ -95,7 +106,7 @@ namespace CSRPulse.Services
                     {
                         result.ThemeId = activity.ThemeId;
                         result.SubActivityName = activity.SubActivityName;
-                        result.SubActivityCode= activity.SubActivityCode;
+                        result.SubActivityCode = activity.SubActivityCode;
                         result.IsActive = activity.IsActive;
                         result.UpdatedOn = activity.UpdatedOn;
                         result.UpdatedBy = activity.UpdatedBy;
@@ -115,7 +126,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var model = _genericRepository.GetByID<DTOModel.Activity>(id);
+                var model = _genericRepository.GetByID<DTOModel.SubActivity>(id);
                 model.IsActive = isActive;
                 _genericRepository.Update(model);
                 return true;

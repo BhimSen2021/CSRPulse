@@ -110,6 +110,18 @@ namespace CSRPulse.Services
             .ForMember(d => d.id, o => o.MapFrom(s => s.SubActivityId))
             .ForMember(d => d.value, o => o.MapFrom(s => s.SubActivityName));
 
+            CreateMap<DTOModel.Uom, SelectListModel>()
+           .ForMember(d => d.id, o => o.MapFrom(s => s.Uomid))
+           .ForMember(d => d.value, o => o.MapFrom(s => s.UnitName));
+
+            CreateMap<DTOModel.IndicatorResponseType, SelectListModel>()
+           .ForMember(d => d.id, o => o.MapFrom(s => s.ResponseTypeId))
+           .ForMember(d => d.value, o => o.MapFrom(s => s.ResponseType));
+
+            CreateMap<DTOModel.IndicatorType, SelectListModel>()
+          .ForMember(d => d.id, o => o.MapFrom(s => s.IndicatorTypeId))
+          .ForMember(d => d.value, o => o.MapFrom(s => s.IndicatorType1));
+
             #endregion
 
             CreateMap<DTOModel.State, State>().ReverseMap();
@@ -128,7 +140,7 @@ namespace CSRPulse.Services
             .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
            .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName))
             .ForMember(d => d.BlockName, o => o.MapFrom(s => s.Block.BlockName));
-            
+
             CreateMap<Village, DTOModel.Village>()
                 .ForMember(d => d.LocationType, o => o.MapFrom(s => (int)s.LocationType));
         }

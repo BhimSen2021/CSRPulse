@@ -10,8 +10,8 @@ namespace CSRPulse.Services
         Task<SubActivity> CreateSubActivityAsync(SubActivity subActivity);
         Task<List<SubActivity>> GetSubActivityAsync(int themeId, int activityId);
         Task<List<SubActivity>> GetSubActivityAsync();
-        Task<SubActivity> GetSubActivityIdAsync(int subActivityId);
+        SubActivity GetSubActivityId(int subActivityId);
         Task<bool> UpdateSubActivityAsync(SubActivity activity);
-       
+
     }
 }

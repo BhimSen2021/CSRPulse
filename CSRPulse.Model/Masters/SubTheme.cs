@@ -14,10 +14,10 @@ namespace CSRPulse.Model
         public int ThemeId { get; set; }
         public string ThemeName { get; set; }
 
-        [Required, Display(Name = "SubTheme Name")]
+        [Required, Display(Name = "Sub Theme Name")]
         [StringLength(200)]
         public string SubThemeName { get; set; }
-        [StringLength(3), Display(Name = "SubTheme Code")]
+        [StringLength(3), Display(Name = "Sub Theme Code")]
         public string SubThemeCode { get; set; }
     }
 }

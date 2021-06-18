@@ -45,7 +45,7 @@ namespace CSRPulse.Data.Models
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         [ForeignKey(nameof(ActivityId))]
         [InverseProperty("Indicator")]

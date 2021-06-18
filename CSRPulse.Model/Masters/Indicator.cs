@@ -13,15 +13,15 @@ namespace CSRPulse.Model
         public int ThemeId { get; set; }
         public string ThemeName { get; set; }
 
-        [Display(Name = "SubTheme Name")]
+        [Display(Name = "Sub Theme Name")]
         public int? SubThemeId { get; set; }
         public string SubThemeName { get; set; }
 
         [Display(Name = "Activity Name")]
-        public int? ActivityId { get; set; }
+        public int ActivityId { get; set; }
         public string ActivityName { get; set; }
 
-        [Display(Name = "SubActivity Name")]
+        [Display(Name = "Sub Activity Name")]
         public int? SubActivityId { get; set; }
         public string SubActivityName { get; set; }
 

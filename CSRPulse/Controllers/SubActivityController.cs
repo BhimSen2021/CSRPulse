@@ -88,12 +88,11 @@ namespace CSRPulse.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(int subActivityId)
+        public IActionResult Edit(int subActivityId)
         {
             try
-            {
-                BindDropdowns();
-                var aDetail = await _subActivityService.GetSubActivityIdAsync(subActivityId);
+            {              
+                var aDetail = _subActivityService.GetSubActivityId(subActivityId);
                 return View(aDetail);
             }
             catch (Exception)
@@ -152,7 +151,6 @@ namespace CSRPulse.Controllers
             return Json(new SelectList(selectListModels, "id", "value"));
 
         }
-
 
         [HttpPost]
         public JsonResult ActiveDeActive(int id, bool isChecked)

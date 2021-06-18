@@ -1,0 +1,140 @@
+﻿@model Indicator
+@{
+    ViewData["Title"] = "Indicator";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item active">Indicator</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Indicator</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-area="" asp-controller="Indicator" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IndicatorId" />
+                    <div class="row">
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="ThemeId" class="form-label required"></label>
+                            <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Theme" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="ThemeId" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="SubThemeId" class="form-label"></label>
+                            <select asp-for="SubThemeId" asp-items="@ViewBag.ddlsubTheme" aria-required="true" class="form-select">
+                                <option label="Select SubTheme" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="SubThemeId" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="ActivityId" class="form-label required"></label>
+                            <select asp-for="ActivityId" asp-items="@ViewBag.ddlActivity" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Activity" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="ActivityId" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="SubActivityId" class="form-label"></label>
+                            <select asp-for="SubActivityId" asp-items="@ViewBag.ddlSubActivity" aria-required="true" class="form-select">
+                                <option label="Select SubActivity" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="SubActivityId" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="IndicatorType" class="form-label required"></label>
+                            <select asp-for="IndicatorType" asp-items="@ViewBag.ddlIndicatorType" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Indicator Type" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="IndicatorType" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="ResponseType" class="form-label required"></label>
+                            <select asp-for="ResponseType" asp-items="@ViewBag.ddlIndResponceType" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Response Type" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="ResponseType" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="UomId" class="form-label required"></label>
+                            <select asp-for="UomId" asp-items="@ViewBag.ddlUom" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Unit of Mesurement" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="UomId" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="IndicatorName" class="form-label required"></label>
+                            <input type="text" asp-for="IndicatorName" class="form-control" maxlength="500" placeholder="Enter Indicator Name (max 500 characters)" autocomplete="off">
+                            <span asp-validation-for="IndicatorName" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="IndicatorShortName" class="form-label required"></label>
+                            <input type="text" asp-for="IndicatorShortName" class="form-control" maxlength="60" placeholder="Enter Indicator Short Name (max 60 characters)" autocomplete="off">
+                            <span asp-validation-for="IndicatorShortName" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="IndicatorCode" class="form-label"></label>
+                            <input type="text" asp-for="IndicatorCode" class="form-control" maxlength="50" placeholder="Enter Indicator Code (max 50 characters)" autocomplete="off">
+                            <span asp-validation-for="IndicatorCode" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-2 col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-3">
+                            <label asp-for="IsCumulative" class="form-label"></label>
+                            <input asp-for="IsCumulative" type="checkbox" id="IsCumulative" data-switch="info" />
+                            <label for="IsCumulative" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                            <span asp-validation-for="IsCumulative" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-2 col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-3">
+                            <label asp-for="KeyIndicator" class="form-label"></label>
+                            <input asp-for="KeyIndicator" type="checkbox" id="KeyIndicator" data-switch="warning" />
+                            <label for="KeyIndicator" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                            <span asp-validation-for="KeyIndicator" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-2 col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-3">
+                            <label asp-for="IsActive" class="form-label"></label>
+                            <input asp-for="IsActive" type="checkbox" id="@Model.IndicatorId" data-switch="success" checked="checked" />
+                            <label for="@Model.IndicatorId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                            <span asp-validation-for="IsActive" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" maxlength="2000" placeholder="Enter Indicator Code (max 2000 characters)" autocomplete="off"></textarea>
+                            <span asp-validation-for="IndicatorCode" class="invalid"></span>
+                        </div>
+
+                        <div class="mb-2 text-end">
+                            <a asp-area="" asp-controller="Indicator" asp-action="Index" class="btn btn-light"><i class="dripicons-reply m-1"></i> Back to list </a>
+                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-file-document m-1"></i> Update </button>
+                        </div>
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>
