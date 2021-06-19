@@ -9,7 +9,7 @@ namespace CSRPulse.Services
         bool ActiveDeActive(int id, bool isActive);
         Task<Indicator> CreateIndicatorAsync(Indicator indicator);
         Task<List<Indicator>> GetIndicatorAsync();
-        Task<List<Indicator>> GetIndicatorAsync(int themeId, int activityId);
+        Task<List<Indicator>> GetIndicatorAsync(Indicator indicator);
         Task<Indicator> GetIndicatorIdAsync(int indicatorId);
         Task<bool> UpdateIndicatorAsync(Indicator activity);
     }

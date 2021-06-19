@@ -74,7 +74,7 @@
                             <span asp-validation-for="ResponseType" class="invalid"></span>
                         </div>
 
-                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                             <label asp-for="UomId" class="form-label required"></label>
                             <select asp-for="UomId" asp-items="@ViewBag.ddlUom" aria-required="true" class="form-select">
                                 <option disabled="" label="Select Unit of Mesurement" selected="" value=""></option>
@@ -99,6 +99,11 @@
                             <input type="text" asp-for="IndicatorCode" class="form-control" maxlength="50" placeholder="Enter Indicator Code (max 50 characters)" autocomplete="off">
                             <span asp-validation-for="IndicatorCode" class="invalid"></span>
                         </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" maxlength="2000" placeholder="Enter Indicator Code (max 2000 characters)" autocomplete="off"></textarea>
+                            <span asp-validation-for="IndicatorCode" class="invalid"></span>
+                        </div>
 
                         <div class="col-xxl-2 col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-3">
                             <label asp-for="IsCumulative" class="form-label"></label>
@@ -121,15 +126,9 @@
                             <span asp-validation-for="IsActive" class="invalid"></span>
                         </div>
 
-                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                            <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" maxlength="2000" placeholder="Enter Indicator Code (max 2000 characters)" autocomplete="off"></textarea>
-                            <span asp-validation-for="IndicatorCode" class="invalid"></span>
-                        </div>
-
                         <div class="mb-2 text-end">
-                            <a asp-area="" asp-controller="Indicator" asp-action="Index" class="btn btn-light"><i class="dripicons-reply m-1"></i> Back to list </a>
-                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                            <a asp-area="" asp-controller="Indicator" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
                         </div>
                     </div> <!-- end card -->
                 </form>

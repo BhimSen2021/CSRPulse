@@ -40,7 +40,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("SubThemeController/GetSubThemeList");
             try
             {
-                var result = await _subThemeService.GetSubThemesAsync(subTheme.ThemeId);
+                var result = await _subThemeService.GetSubThemesAsync(subTheme);
                 return PartialView("_SubThemeList", result);
             }
             catch (Exception ex)

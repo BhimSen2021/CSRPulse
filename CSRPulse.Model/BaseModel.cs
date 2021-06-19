@@ -9,7 +9,7 @@ namespace CSRPulse.Model
     public class BaseModel
     {
         public bool IsDeleted { get; set; }
-        [Display(Name = "Is Active")]
+        [Display(Name = "Active")]
         public bool IsActive { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; } = DateTime.Now;

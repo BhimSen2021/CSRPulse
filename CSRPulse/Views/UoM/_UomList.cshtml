@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Uom>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-area="" asp-controller="UoM" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New UoM</a>
+        </div>
+        <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.UnitName)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var uom in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(uom) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this role.">  @Html.ActionLink(uom.UnitName, "Edit", "UoM", new { uomId = uom.UOMId })</span></td>
+
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@uom.UOMId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (uom.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@uom.UOMId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

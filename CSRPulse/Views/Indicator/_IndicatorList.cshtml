@@ -2,13 +2,13 @@
 <div class="card">
     <div class="card-body">
         <div class="text-end">
-            <a asp-controller="Indicator" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Indicator</a>
+            <a asp-controller="Indicator" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Indicator</a>
         </div>
         <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
             <thead class="thead-light">
                 <tr>
                     <th width="5%">#</th>
-                    <th>@Html.DisplayNameFor(m=>m.IndicatorName)</th>
+                    <th>@Html.DisplayNameFor(m => m.IndicatorName)</th>
                     <th>@Html.DisplayNameFor(m => m.IndicatorCode)</th>
                     <th width="5%">Active</th>
                 </tr>
@@ -23,7 +23,11 @@
                                 <span>@(Model.ToList().IndexOf(indicator) +1)</span>
                             </td>
 
-                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this subactivity."> @Html.ActionLink(indicator.IndicatorName, "Edit", "Indicator", new { indicatorId = indicator.IndicatorId })</span></td>
+                            <td>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this indicator."> @Html.ActionLink(indicator.IndicatorName, "Edit", "Indicator", new { indicatorId = indicator.IndicatorId })</span>@if (indicator.IsCumulative)
+                                {<text>&nbsp;&nbsp;<i class="uil-sigma text-danger font-20" style="vertical-align:middle" data-bs-toggle="tooltip" data-bs-placement="top" title="Cumulative type Indicator"></i> </text>}@if (indicator.KeyIndicator)
+                                {<text><i class="uil-key-skeleton text-dark" style="vertical-align:middle" data-bs-toggle="tooltip" data-bs-placement="top" title="Key Indicator"></i> </text>}
+                            </td>
                             <td>@indicator.IndicatorCode</td>
                             <td>
                                 <div>
@@ -37,10 +41,18 @@
                 else
                 {
                     <tr>
-                        <td colspan="4">No Records Found</td>
+                        <td colspan="5">No Records Found</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip()
+        })
+        Basicdatatable();
+    });
+</script>

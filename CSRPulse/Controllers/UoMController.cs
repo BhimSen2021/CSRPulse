@@ -16,13 +16,28 @@ namespace CSRPulse.Controllers
         {
             _uOMService = uOMService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("UoMController/Index");
             try
+            {                
+                return View();
+            }
+            catch (Exception ex)
             {
-                var result = await _uOMService.GetUOMsAsync();
-                return View(result);
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<PartialViewResult> GetUoMList(Uom uom)
+        {
+            _logger.LogInformation("UoMController/GetUoMList");
+            try
+            {
+                var result = await _uOMService.GetUOMsAsync(uom);
+                return PartialView("_UomList", result);
             }
             catch (Exception ex)
             {

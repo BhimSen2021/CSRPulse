@@ -40,7 +40,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("IndicatorController/GetIndicatorList");
             try
             {
-                var result = await _indicatorService.GetIndicatorAsync(indicator.ThemeId, indicator.ActivityId);
+                var result = await _indicatorService.GetIndicatorAsync(indicator);
                 return PartialView("_IndicatorList", result);
             }
             catch (Exception ex)

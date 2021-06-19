@@ -72,6 +72,19 @@ namespace CSRPulse.Services
             }
         }
 
+        public async Task<List<Uom>> GetUOMsAsync(Uom uom)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.Uom>(x => x.IsActive == uom.IsActive);
+                return _mapper.Map<List<Uom>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateUOMAsync(Uom uom)
         {
             try
@@ -107,7 +120,7 @@ namespace CSRPulse.Services
             {
                 var model = _genericRepository.GetByID<DTOModel.Uom>(id);
                 model.IsActive = IsActive;
-               _genericRepository.Update(model);
+                _genericRepository.Update(model);
                 return true;
             }
             catch (Exception)

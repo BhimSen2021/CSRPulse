@@ -78,11 +78,11 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public async Task<List<SubActivity>> GetSubActivityAsync(int themeId, int activityId)
+        public async Task<List<SubActivity>> GetSubActivityAsync(SubActivity subActivity)
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.SubActivity>(x => x.ThemeId == themeId && x.ActivityId == activityId);
+                var result = await _genericRepository.GetAsync<DTOModel.SubActivity>(x => x.ThemeId == subActivity.ThemeId && x.ActivityId == subActivity.ActivityId && x.IsActive== subActivity.IsActive);
                 return _mapper.Map<List<SubActivity>>(result);
             }
             catch (Exception)

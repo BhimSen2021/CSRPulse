@@ -16,13 +16,28 @@ namespace CSRPulse.Controllers
         {
             _themeService = themeService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("ThemeController/Index");
             try
             {
-                var result = await _themeService.GetThemesAsync();
-                return View(result);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<PartialViewResult> GetThemeList(Theme theme)
+        {
+            _logger.LogInformation("ThemeController/GetThemeList");
+            try
+            {
+                var result = await _themeService.GetThemesAsync(theme);
+                return PartialView("_ThemeList", result);
             }
             catch (Exception ex)
             {

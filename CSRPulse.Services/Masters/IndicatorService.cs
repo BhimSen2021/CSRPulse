@@ -73,11 +73,11 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public async Task<List<Indicator>> GetIndicatorAsync(int themeId, int activityId)
+        public async Task<List<Indicator>> GetIndicatorAsync(Indicator indicator)
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.Indicator>(x => x.ThemeId == themeId && x.ActivityId == activityId);
+                var result = await _genericRepository.GetAsync<DTOModel.Indicator>(x => x.ThemeId == indicator.ThemeId && x.ActivityId == indicator.ActivityId && x.IsActive == indicator.IsActive);
                 return _mapper.Map<List<Indicator>>(result);
             }
             catch (Exception)

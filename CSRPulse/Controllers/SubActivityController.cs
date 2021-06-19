@@ -40,7 +40,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("SubActivityController/GetSubActivityList");
             try
             {
-                var result = await _subActivityService.GetSubActivityAsync(subActivity.ThemeId, subActivity.ActivityId);
+                var result = await _subActivityService.GetSubActivityAsync(subActivity);
                 return PartialView("_SubActivityList", result);
             }
             catch (Exception ex)

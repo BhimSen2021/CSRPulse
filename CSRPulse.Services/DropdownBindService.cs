@@ -31,7 +31,7 @@ namespace CSRPulse.Services
 
         public IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId)
         {
-            var dtoDist = _genericRepository.Get<DTOModel.State>(x => stateId.HasValue ? x.StateId == stateId : (1 > 0));
+            var dtoDist = _genericRepository.Get<DTOModel.State>(x => stateId.HasValue ? x.StateId == stateId : (1 > 0) && x.IsActive == true);
             var districtList = _mapper.Map<List<SelectListModel>>(dtoDist);
             return districtList.ToList();
 
@@ -50,7 +50,7 @@ namespace CSRPulse.Services
 
         public IEnumerable<SelectListModel> GetRole(int? roleid)
         {
-            var dtoRole = _genericRepository.Get<DTOModel.Role>(x => roleid.HasValue ? x.RoleId == roleid.Value : (1 > 0));
+            var dtoRole = _genericRepository.Get<DTOModel.Role>(x => roleid.HasValue ? x.RoleId == roleid.Value : (1 > 0) && x.IsActive == true);
             var roleList = _mapper.Map<List<SelectListModel>>(dtoRole);
             return roleList.ToList();
 
@@ -61,7 +61,7 @@ namespace CSRPulse.Services
             try
             {
 
-                var dtoDistrict = _genericRepository.Get<DTOModel.District>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)));
+                var dtoDistrict = _genericRepository.Get<DTOModel.District>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)) && x.IsActive == true);
                 var districtList = _mapper.Map<List<SelectListModel>>(dtoDistrict);
                 return districtList.ToList();
             }
@@ -76,7 +76,7 @@ namespace CSRPulse.Services
             try
             {
 
-                var dtoBlock = _genericRepository.Get<DTOModel.Block>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)) && (blockId.HasValue ? x.BlockId == blockId.Value : (1 > 0)));
+                var dtoBlock = _genericRepository.Get<DTOModel.Block>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)) && (blockId.HasValue ? x.BlockId == blockId.Value : (1 > 0)) && x.IsActive == true);
                 var blockList = _mapper.Map<List<SelectListModel>>(dtoBlock);
                 return blockList.ToList();
             }
@@ -92,7 +92,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var theme = _genericRepository.Get<DTOModel.Theme>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)));
+                var theme = _genericRepository.Get<DTOModel.Theme>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && x.IsActive == true);
                 var themeList = _mapper.Map<List<SelectListModel>>(theme);
                 return themeList.ToList();
             }
@@ -106,7 +106,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var subTheme = _genericRepository.Get<DTOModel.SubTheme>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (subThemeId.HasValue ? x.SubThemeId == subThemeId.Value : (1 > 0)));
+                var subTheme = _genericRepository.Get<DTOModel.SubTheme>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (subThemeId.HasValue ? x.SubThemeId == subThemeId.Value : (1 > 0)) && x.IsActive == true);
                 var subThemeList = _mapper.Map<List<SelectListModel>>(subTheme);
                 return subThemeList.ToList();
             }
@@ -120,7 +120,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var activity = _genericRepository.Get<DTOModel.Activity>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (activityId.HasValue ? x.ActivityId == activityId.Value : (1 > 0)));
+                var activity = _genericRepository.Get<DTOModel.Activity>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (activityId.HasValue ? x.ActivityId == activityId.Value : (1 > 0)) && x.IsActive == true);
 
                 var activityList = _mapper.Map<List<SelectListModel>>(activity);
                 return activityList.ToList();
@@ -135,7 +135,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var subActivity = _genericRepository.Get<DTOModel.SubActivity>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (activityId.HasValue ? x.ActivityId == activityId.Value : (1 > 0)));
+                var subActivity = _genericRepository.Get<DTOModel.SubActivity>(x => (themeId.HasValue ? x.ThemeId == themeId.Value : (1 > 0)) && (activityId.HasValue ? x.ActivityId == activityId.Value : (1 > 0)) && x.IsActive == true);
 
                 var subActivityList = _mapper.Map<List<SelectListModel>>(subActivity);
                 return subActivityList.ToList();
@@ -150,7 +150,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var uoms = _genericRepository.Get<DTOModel.Uom>(x => (uomId.HasValue ? x.Uomid == uomId.Value : (1 > 0)));
+                var uoms = _genericRepository.Get<DTOModel.Uom>(x => (uomId.HasValue ? x.Uomid == uomId.Value : (1 > 0)) && x.IsActive == true);
                 var uomList = _mapper.Map<List<SelectListModel>>(uoms);
                 return uomList.ToList();
             }

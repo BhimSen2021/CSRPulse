@@ -68,11 +68,11 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public async Task<List<Activity>> GetActivityAsync(int themeId)
+        public async Task<List<Activity>> GetActivityAsync(Activity activity)
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.Activity>(x => x.ThemeId == themeId);
+                var result = await _genericRepository.GetAsync<DTOModel.Activity>(x => x.ThemeId == activity.ThemeId && x.IsActive== activity.IsActive);
                 return _mapper.Map<List<Activity>>(result);
             }
             catch (Exception)

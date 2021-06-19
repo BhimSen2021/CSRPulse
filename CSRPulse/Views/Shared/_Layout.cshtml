@@ -15,7 +15,6 @@
     <link rel="shortcut icon" href="~/assets/images/favicon.ico" asp-append-version="true">
 
     <!-- App css -->
-
     <link href="~/assets/css/icons.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/css/app-creative.css" rel="stylesheet" type="text/css" id="light-style" />
     <link href="~/assets/css/app-creative-dark.css" rel="stylesheet" type="text/css" id="dark-style" />
@@ -46,6 +45,8 @@
 
     <!-- Rich text editor -->
     <script src="~/assets/js/vendor/quill.min.js" asp-append-version="true"></script>
+
+    <!-- Multi select -->
     <script src="~/js/Multiselect.js" asp-append-version="true"></script>
     <script>
         $(document)
@@ -125,6 +126,10 @@
                     delay: 10000
                 });
             }
+
+            $(function () {
+                $('[data-bs-toggle="tooltip"]').tooltip()
+            })
         });
 
     function commonMessage(msgType, msg) {

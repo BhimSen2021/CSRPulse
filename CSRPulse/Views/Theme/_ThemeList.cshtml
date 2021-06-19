@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Theme>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-area="" asp-controller="Theme" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Theme</a>
+        </div>
+        <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.ThemeName)</th>
+                    <th>@Html.DisplayNameFor(model => model.ThemeCode)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var theme in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(theme) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this theme.">  @Html.ActionLink(theme.ThemeName, "Edit", "Theme", new { ThemeId = theme.ThemeId })</span></td>
+                            <td>
+                                @Html.DisplayFor(model => theme.ThemeCode)
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@theme.ThemeId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (theme.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@theme.ThemeId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

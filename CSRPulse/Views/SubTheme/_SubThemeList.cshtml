@@ -2,14 +2,14 @@
 <div class="card">
     <div class="card-body">
         <div class="text-end">
-            <a asp-controller="SubTheme" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New SubTheme</a>
+            <a asp-controller="SubTheme" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Sub Theme</a>
         </div>
         <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
             <thead class="thead-light">
                 <tr>
                     <th width="5%">#</th>
-                    <th>SubTheme Name</th>
-                    <th>SubTheme Code</th>
+                    <th>@Html.DisplayNameFor(m => m.SubThemeName)</th>
+                    <th>@Html.DisplayNameFor(m => m.SubThemeCode)</th>                  
                     <th width="5%">Active</th>
                 </tr>
             </thead>
@@ -44,3 +44,8 @@
         </table>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

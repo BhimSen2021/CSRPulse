@@ -8,7 +8,7 @@ namespace CSRPulse.Services
     {
         Task<Activity> CreateActivityAsync(Activity activity);
         Task<List<Activity>> GetActivityAsync();
-        Task<List<Activity>> GetActivityAsync(int themeId);
+        Task<List<Activity>> GetActivityAsync(Activity activity);
         Task<Activity> GetActivityByIdAsync(int activityId);
         Task<bool> UpdateActivityAsync(Activity activity);
         bool ActiveDeActive(int id, bool isActive);

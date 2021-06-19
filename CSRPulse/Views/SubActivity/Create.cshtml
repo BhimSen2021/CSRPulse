@@ -11,10 +11,10 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
-                    <li class="breadcrumb-item active">SubActivity</li>
+                    <li class="breadcrumb-item active">Sub Activity</li>
                 </ol>
             </div>
-            <h4 class="page-title">Add New SubActivity</h4>
+            <h4 class="page-title">Add New Sub Activity</h4>
         </div>
     </div>
 </div>
@@ -46,12 +46,12 @@
 
                             <div class="mb-3">
                                 <label asp-for="SubActivityName" class="form-label required"></label>
-                                <input type="text" asp-for="SubActivityName" class="form-control" maxlength="200" placeholder="Enter SubActivity Name (max 200 characters)" autocomplete="off">
+                                <input type="text" asp-for="SubActivityName" class="form-control" maxlength="200" placeholder="Enter Sub Activity Name (max 200 characters)" autocomplete="off">
                                 <span asp-validation-for="SubActivityName" class="invalid"></span>
                             </div>
                             <div class="mb-3">
                                 <label asp-for="SubActivityCode" class="form-label"></label>
-                                <input type="text" asp-for="SubActivityCode" class="form-control" maxlength="3" placeholder="Enter SubActivity Code (max 3 characters)" autocomplete="off">
+                                <input type="text" asp-for="SubActivityCode" class="form-control" maxlength="3" placeholder="Enter Sub Activity Code (max 3 characters)" autocomplete="off">
                                 <span asp-validation-for="SubActivityCode" class="invalid"></span>
                             </div>
                             <div class="mb-3">
@@ -62,8 +62,8 @@
                             </div>
 
                             <div class="mb-2 text-end">
-                                <a asp-area="" asp-controller="SubActivity" asp-action="Index" class="btn btn-light"><i class="dripicons-reply m-1"></i> Back to list </a>
-                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                                <a asp-area="" asp-controller="SubActivity" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
                             </div>
                         </div>
 

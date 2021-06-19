@@ -9,7 +9,6 @@
             var menuItem = Model.Where(x => x.ParentMenuId == hd.MenuId).OrderBy(o => o.SequenceNo);
             if (menuItem.Count() > 0)
             {
-
                 <li class="side-nav-item">
                     <a data-bs-toggle="collapse" href="#sidebar_@hd.MenuId" aria-expanded="false" aria-controls="sidebar_@hd.MenuId" class="side-nav-link">
                         <i class="@hd.IconClass"></i>
@@ -20,16 +19,47 @@
                         <ul class="side-nav-second-level">
                             @foreach (var menu in menuItem)
                             {
-                                var childControllerName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[0];
-                                var childActionName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[1];
-                                if (menu.Url == "#" || menu.Url == null)
+                                var menuItem2 = Model.Where(x => x.ParentMenuId == menu.MenuId).OrderBy(o => o.SequenceNo);
+                                if (menuItem2.Count() > 0)
                                 {
-                                    <li><a href="#">@menu.MenuName</a></li>
+                                    <li class="side-nav-item">
+                                        <a data-bs-toggle="collapse" href="#sidebar_@menu.MenuId" aria-expanded="false" aria-controls="sidebar_@menu.MenuId">                                           
+                                            <span> @menu.MenuName </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="sidebar_@menu.MenuId">
+                                            <ul class="side-nav-third-level">
+                                                @foreach (var cmenu in menuItem2)
+                                                {
+                                                    var cLevel3 = cmenu.Url == "#" ? "" : cmenu.Url.Split(new char[] { '/' })[0];
+                                                    var aLevel3 = cmenu.Url == "#" ? "" : cmenu.Url.Split(new char[] { '/' })[1];
+                                                    if (cmenu.Url == "#" || cmenu.Url == null)
+                                                    {
+                                                        <li><a href="#">@cmenu.MenuName</a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li><a asp-area="@cmenu.Area" asp-controller="@cLevel3" asp-action="@aLevel3">@cmenu.MenuName</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </li>
                                 }
                                 else
                                 {
-                                    <li><a asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName">@menu.MenuName</a></li>
+                                    var childControllerName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[0];
+                                    var childActionName = menu.Url == "#" ? "" : menu.Url.Split(new char[] { '/' })[1];
+                                    if (menu.Url == "#" || menu.Url == null)
+                                    {
+                                        <li><a href="#">@menu.MenuName</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a asp-area="@menu.Area" asp-controller="@childControllerName" asp-action="@childActionName">@menu.MenuName</a></li>
+                                    }
                                 }
+
                             }
                         </ul>
                     </div>
@@ -41,21 +71,21 @@
                 var controllerName = hd.Url == "#" ? "" : hd.Url.Split(new char[] { '/' })[0];
                 var actionName = hd.Url == "#" ? "" : hd.Url.Split(new char[] { '/' })[1];
                 <li class="side-nav-item">
-                    @if (hd.Url == "#" || hd.Url==null)
+                    @if (hd.Url == "#" || hd.Url == null)
                     {
-                    <a href="#" class="side-nav-link">
-                        <i class="@hd.IconClass"></i>
-                        <span> @hd.MenuName </span>
-                    </a>
+                        <a href="#" class="side-nav-link">
+                            <i class="@hd.IconClass"></i>
+                            <span> @hd.MenuName </span>
+                        </a>
                     }
                     else
                     {
-                    <a asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName" class="side-nav-link">
-                        <i class="@hd.IconClass"></i>
-                        <span> @hd.MenuName </span>
-                    </a> 
+                        <a asp-area="@hd.Area" asp-controller="@controllerName" asp-action="@actionName" class="side-nav-link">
+                            <i class="@hd.IconClass"></i>
+                            <span> @hd.MenuName </span>
+                        </a>
                     }
-                    
+
                 </li>
             }
         }

@@ -10,7 +10,7 @@ namespace CSRPulse.Services
     {
         Task<Uom> CreateUOMAsync(Uom uom);
         Task<List<Uom>> GetUOMsAsync();
-
+        Task<List<Uom>> GetUOMsAsync(Uom uom);
         Task<bool> UpdateUOMAsync(Uom uom);
         Task<Uom> GetUOMByIdAsync(int UOMId);
 
