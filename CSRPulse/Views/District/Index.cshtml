@@ -20,34 +20,10 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
-        
-            @{await Html.RenderPartialAsync("_Filter");}
-       
-        <div id="div-district-list">
-
-        </div>
-    </div>
+    @{await Html.RenderPartialAsync("_Filter");}
 </div>
-
-<div id="info-header-modal" class="modal fade" tabindex="-1" district="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-info">
-                <h4 class="modal-title" id="info-header-modalLabel">Confirmation</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                Do you want to perform this action ?.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
-                <button type="button" onclick="DistrictActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+<div id="div-district-list"></div>
+<partial name="_Confirmation" />
 
 @section Scripts{
     <script type="text/javascript">
@@ -58,28 +34,25 @@
             $('.btnconfirm').attr('id', id + '_' + cnt.checked);
 
         }
-        function DistrictActiveDeActive(IsActive) {
-            debugger;
-            var userId = IsActive.id.split('_')[0];
-            var isChecked = IsActive.id.split('_')[1];
-            debugger;
+        function ActiveDeActive(obj) {
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/District/DistrictActiveDeActive',
-                data: { userId: userId, IsActive: isChecked },
+                url: '/District/ActiveDeActive',
+                data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {
-                        commonMessage('success', 'District status changed successfully.');
+                        commonMessage('success', 'Status changed successfully.');
                     }
 
                     else {
-                        commonMessage('warning', 'District status changing failed.');
+                        commonMessage('warning', 'Status changing failed.');
                     }
-
                 },
                 error: function (responce) {
-                    commonMessage('error', 'District status changing failed.');
+                    commonMessage('error', 'Status changing failed.');
                 }
             });
         }

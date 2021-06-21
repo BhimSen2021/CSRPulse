@@ -5,24 +5,24 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-   public class District:BaseModel
+    public class District : BaseModel
     {
         public int DistrictId { get; set; }
         [Required(ErrorMessage = "Please select State")]
-        [Range(1,Int64.MaxValue)]
-        [Display(Name = "State")]
+        [Range(1, Int64.MaxValue)]
+        [Display(Name = "State Name")]
         public int? StateId { get; set; }
         [Required(ErrorMessage = "Please enter District")]
-        [Display(Name ="District")]
+        [Display(Name = "District Name")]
         [StringLength(200)]
         public string DistrictName { get; set; }
-        [Required(ErrorMessage ="Please enter District Code") ]
-        [StringLength(3)]
+        [Required(ErrorMessage = "Please enter District Code")]
+        [StringLength(3, MinimumLength = 3)]
         [Display(Name = "District Code")]
         public string DistrictCode { get; set; }
         [StringLength(4)]
         [Display(Name = "Short Name")]
-        public string DistrictShort { get; set; }     
+        public string DistrictShort { get; set; }
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
     }

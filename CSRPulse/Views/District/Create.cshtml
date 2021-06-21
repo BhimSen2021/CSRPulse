@@ -19,20 +19,17 @@
     </div>
 </div>
 
-
-
 <div class="card">
     <div class="card-body">
         <form method="post" asp-controller="District" asp-action="Create">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-
+                <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
                     <div class="mb-3">
                         <label asp-for="StateId" for="MobileNo" class="form-label"></label>
                         <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
-                            <option disabled="" label="State" selected="" value="">State</option>
+                            <option disabled="" label="Select State" selected="" value=""></option>
                         </select>
                         <span asp-validation-for="StateId" class="invalid"></span>
                     </div>
@@ -52,11 +49,12 @@
                     </div>
                     <div class="mb-3">
                         <label asp-for="DistrictCode" for="DistrictCode" class="form-label"></label>
-                        <input type="text" asp-for="DistrictCode" class="form-control" maxlength="2" placeholder="Enter district code (max 2 characters)" autocomplete="off">
+                        <input type="text" asp-for="DistrictCode" class="form-control" maxlength="3" placeholder="Enter district code (max 2 characters)" autocomplete="off">
                         <span asp-validation-for="DistrictCode" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">
-                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-file-document"></i> Create </button>
+                        <a asp-area="" asp-controller="District" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                        <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
                     </div>
                 </div>
 

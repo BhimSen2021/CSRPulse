@@ -38,11 +38,11 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<Model.District>> GetDistrictList(int? stateId)
+        public async Task<List<Model.District>> GetDistrictList(Model.District district)
         {
             try
             {
-                var getDistricts = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.District>(x => stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)).Include(s => s.State));
+                var getDistricts = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.District>(x => district.StateId.HasValue ? x.StateId == district.StateId.Value : (1 > 0) && x.IsActive == district.IsActive).Include(s => s.State));
                 var disList = _mapper.Map<List<Model.District>>(getDistricts);
                 return disList;
             }
@@ -79,16 +79,7 @@ namespace CSRPulse.Services
                 {
                     if (getDistricts.DistrictName == district.DistrictName && getDistricts.DistrictCode == district.DistrictCode && getDistricts.DistrictShort == district.DistrictShort && getDistricts.StateId == district.StateId)
                         return true;
-                    //else
-                    //{
-                    //    var recordExist = _genericRepository.GetIQueryable<DTOModel.District>(x => x.DistrictName == district.DistrictName || x.DistrictShort == district.DistrictShort || x.DistrictCode == district.DistrictCode).FirstOrDefault();
-
-                    //    if (recordExist != null)
-                    //    {
-                    //        district.RecordExist = true;
-                    //        return false;
-                    //    }
-                    //}
+                   
                     getDistricts.DistrictName = district.DistrictName;
                     getDistricts.DistrictShort = district.DistrictShort;
                     getDistricts.DistrictCode = district.DistrictCode;
@@ -118,6 +109,21 @@ namespace CSRPulse.Services
             {
 
                 throw;
+            }
+        }
+
+        public bool ActiveDeActive(int id, bool IsActive)
+        {
+            try
+            {
+                var model = _genericRepository.GetByID<DTOModel.District>(id);
+                model.IsActive = IsActive;
+                _genericRepository.Update(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

@@ -45,7 +45,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("DistrictController/GetDistrictList");
             try
             {
-                var result = await _districtServices.GetDistrictList(district.StateId);
+                var result = await _districtServices.GetDistrictList(district);
                 return PartialView("_DistrictList",result);
             }
             catch (Exception ex)
@@ -101,14 +101,7 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-
-        //[HttpPost]
-        //public JsonResult UserActiveDeActive(int userId, bool IsActive)
-        //{
-        //    _logger.LogInformation("DistrictController/UserActiveDeActive");
-        //    var result = _districtServices.UserActiveDeActive(userId, IsActive);
-        //    return Json(result);
-        //}
+              
         public async Task<IActionResult> Edit(int rid)
         {
             try
@@ -162,6 +155,15 @@ namespace CSRPulse.Controllers
         {
             var stateList = _ddlService.GetStateAsync(null,null);
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
+        }
+
+        [HttpPost]
+        public JsonResult ActiveDeActive(int id, bool isChecked)
+        {
+            _logger.LogInformation("UoMController/ActiveDeActive");
+            var result = _districtServices.ActiveDeActive(id, isChecked);
+            return Json(result);
+
         }
     }
 }

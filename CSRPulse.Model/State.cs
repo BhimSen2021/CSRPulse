@@ -10,10 +10,10 @@ namespace CSRPulse.Model
         public int StateId { get; set; }
         [Required]
         [StringLength(200)]
-        [Display(Name ="State")]
+        [Display(Name ="State Name")]
         public string StateName { get; set; }
         [Required]
-        [StringLength(2)]
+        [StringLength(2, MinimumLength = 2)]
         [Display(Name = "State Code")]
         public string StateCode { get; set; }
         [StringLength(4)]

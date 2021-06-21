@@ -78,16 +78,7 @@ namespace CSRPulse.Services
                 {
                     if (getStates.StateName == state.StateName && getStates.StateCode == state.StateCode && getStates.StateShort == state.StateShort)
                         return true;
-                    //else
-                    //{
-                    //    var recordExist = _genericRepository.GetIQueryable<DTOModel.State>(x => x.StateName == state.StateName || x.StateShort == state.StateShort || x.StateCode == state.StateCode).FirstOrDefault();
-
-                    //    if (recordExist != null)
-                    //    {
-                    //        state.RecordExist = true;
-                    //        return false;
-                    //    }
-                    //}
+                    
                     getStates.StateName = state.StateName;
                     getStates.StateShort = state.StateShort;
                     getStates.StateCode = state.StateCode;
@@ -116,6 +107,34 @@ namespace CSRPulse.Services
             {
 
                 throw;
+            }
+        }
+
+        public async Task<List<Model.State>> GetStatesAsync(Model.State state)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.State>(x => x.IsActive == state.IsActive);
+                return _mapper.Map<List<Model.State>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool ActiveDeActive(int id, bool IsActive)
+        {
+            try
+            {
+                var model = _genericRepository.GetByID<DTOModel.State>(id);
+                model.IsActive = IsActive;
+                _genericRepository.Update(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

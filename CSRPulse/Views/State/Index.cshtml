@@ -18,110 +18,41 @@
         </div>
     </div>
 </div>
-
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-end">
-                    <a asp-controller="State" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New State</a>
-                </div>
-                <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
-                    <thead class="thead-light">
-                        <tr>
-                            <th width="5%">#</th>
-                            <th>State Name</th>
-                            <th>State Code</th>
-                            <th>Short Name</th>
-                            <th width="5%">Active</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Count() > 0)
-                        {
-                            @foreach (var role in Model)
-                            {
-                        <tr>
-                            <td>
-                                <span>@(Model.ToList().IndexOf(role) +1)</span>
-                            </td>
-
-                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this role.">  @Html.ActionLink(role.StateName, "Edit", "State", new { rid = role.StateId })</span></td>
-                            <td>@role.StateCode</td>
-                            <td>@role.StateShort</td>
-                            <td>
-                                <div>
-                                    <input type="checkbox" id="switch_@role.StateId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (role.IsActive == true) { <text> checked="checked" </text> } />
-                                    <label for="switch_@role.StateId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                </div>
-                            </td>
-                        </tr>
-
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="6">No Records Found</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    @{await Html.RenderPartialAsync("_Filter");}
 </div>
 
-<div id="info-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-info">
-                <h4 class="modal-title" id="info-header-modalLabel">Confirmation</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                Do you want to perform this action ?.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
-                <button type="button" onclick="StateActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<div class="row" id="div-state-list"> </div>
+<partial name="_Confirmation" />
 
 
 @section Scripts{
     <script type="text/javascript">
-
         function openpopup(cnt) {
-            debugger;
             var id = cnt.id.split('_')[1];
             $('.btnconfirm').attr('id', id + '_' + cnt.checked);
 
         }
-        function StateActiveDeActive(IsActive) {
+        function ActiveDeActive(obj) {
             debugger;
-            var userId = IsActive.id.split('_')[0];
-            var isChecked = IsActive.id.split('_')[1];
-            debugger;
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/State/StateActiveDeActive',
-                data: { userId: userId, IsActive: isChecked },
+                url: '/State/ActiveDeActive',
+                data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {
-                        commonMessage('success', 'State status changed successfully.');
+                        commonMessage('success', 'Status changed successfully.');
                     }
 
                     else {
-                        commonMessage('warning', 'State status changing failed.');
+                        commonMessage('warning', 'Status changing failed.');
                     }
-
                 },
                 error: function (responce) {
-                    commonMessage('error', 'State status changing failed.');
+                    commonMessage('error', 'Status changing failed.');
                 }
             });
         }

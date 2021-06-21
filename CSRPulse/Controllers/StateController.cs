@@ -20,13 +20,28 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation("StateController/Index");
             try
+            {              
+                return View();
+            }
+            catch (Exception ex)
             {
-                var result = await _stateServices.GetStateList();
-                return View(result);
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<PartialViewResult> GetStateList(State state)
+        {
+            _logger.LogInformation("StateController/GetStateList");
+            try
+            {
+                var result = await _stateServices.GetStatesAsync(state);
+                return PartialView("_StateList", result);
             }
             catch (Exception ex)
             {
@@ -81,13 +96,7 @@ namespace CSRPulse.Controllers
             }
         }
 
-        //[HttpPost]
-        //public JsonResult UserActiveDeActive(int userId, bool IsActive)
-        //{
-        //    _logger.LogInformation("StateController/UserActiveDeActive");
-        //    var result = _stateServices.UserActiveDeActive(userId, IsActive);
-        //    return Json(result);
-        //}
+       
         public async Task<IActionResult> Edit(int rid)
         {
             try
@@ -132,6 +141,15 @@ namespace CSRPulse.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
+        }
+
+        [HttpPost]
+        public JsonResult ActiveDeActive(int id, bool isChecked)
+        {
+            _logger.LogInformation("UoMController/ActiveDeActive");
+            var result = _stateServices.ActiveDeActive(id, isChecked);
+            return Json(result);
+
         }
     }
 }

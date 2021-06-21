@@ -1,46 +1,36 @@
-﻿@using CSRPulse.Model
-@model District
+﻿@model District
 
-<div class="card mb-1">
-
-    <div class="row search">
-
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 align-middle">
-            <h4 class="desc" style="color:#0bb70b;">
-                <i class="mdi mdi-table-search fs-3" style="color:#d4d4d4;" aria-hidden="true"></i>@Html.Label("Search")
-            </h4>
-        </div>
-        <hr style="background-color:#fff !important;">
+<div class="card bg-transparent">
+    <div class="card-body">
         <form data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-district-list" data-ajax-mode="replace" asp-action="GetDistrictList" asp-controller="District">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="row">
-                    <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 text-secondary pr-0">
-                        <i class="mdi mdi-filter"></i> Filter By :
-                    </div>
-                    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 pr-sm-1">
-                        <label asp-for="StateId" class="form-label" for="StateId"></label>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-8 col-xs-8">
-
-                        <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="custom-select">
-                            <option disabled="" label="State" selected="" value="">State</option>
-                        </select><br />
-                        <span asp-validation-for="StateId" class="invalid"></span>
-                    </div>
-                    <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12 text-end">
-                        <button type="submit" value="Search" title="Click here, to search records" class="btn btn-sm btn-warning toggle-tooltip">
-                            <i class="fa fa-search"></i> Search
-                        </button>
-                    </div>
-
-                </div>
+            <div class="col-md-2 col-form-label">
+                <i class="mdi mdi-filter"></i> <label>Filter By :</label>
             </div>
 
+            <div class="row">
+                <label asp-for="StateId" class="col-md-2 col-form-label"></label>
+                <div class="col-md-4">
+                    <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
+                        <option disabled="" label="Select State" selected="" value=""></option>
+                    </select>
+                    <span asp-validation-for="StateId" class="invalid"></span>
+                </div>
+
+                <label asp-for="IsActive" class="col-md-1 col-form-label"></label>
+                <div class="col-md-2 col-form-label">
+                    <div>
+                        <input asp-for="IsActive" type="checkbox" id="IsActive" data-switch="success" checked />
+                        <label for="IsActive" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                    </div>
+                </div>
+
+                <div class="col-md-3 text-end">
+                    <button type="submit" value="Search" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to search records" class="btn btn-warning btn-sm rounded-pill text-white">
+                        <i class="dripicons-search me-2"></i> Search
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
-    </div>
-
-
-
+</div>
 
