@@ -10,7 +10,7 @@ namespace CSRPulse.Model
         [Key]
         public int SubActivityId { get; set; }
         [Required, Display(Name = "Sub Activity Name")]
-        [StringLength(200)]
+        [StringLength(200, MinimumLength =2,  ErrorMessage = "Sub Activity name should be contain atleast 2 characters.")]
         public string SubActivityName { get; set; }
         [StringLength(3), Display(Name = "Sub Activity Code")]
         public string SubActivityCode { get; set; }

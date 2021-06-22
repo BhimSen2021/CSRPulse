@@ -30,7 +30,7 @@ namespace CSRPulse.Model
         public string UnitName { get; set; }
 
         [Required, Display(Name = "Indicator Name")]
-        [StringLength(500)]
+        [StringLength(500, MinimumLength =2,ErrorMessage = "Indicator name should be contain atleast 2 characters.")]
         public string IndicatorName { get; set; }
 
         [Required, Display(Name = "Indicator Short Name")]

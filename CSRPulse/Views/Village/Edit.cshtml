@@ -11,12 +11,17 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>
                     <li class="breadcrumb-item active">Village</li>
-                    <li class="breadcrumb-item active">Edit Village</li>
                 </ol>
             </div>
             <h4 class="page-title">Edit Village</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
         </div>
     </div>
 </div>
@@ -31,17 +36,16 @@
             <input type="hidden" asp-for="VillageId" />
             <div class="row mb-3">
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-
-                    <label asp-for="StateId" for="StateId" class="form-label"></label>
-                    <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" onchange="BindDistrict(this)" class="form-select">
-                        <option disabled="" label="State" selected="" value="">State</option>
+                    <label asp-for="StateId" class="form-label required"></label>
+                    <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
+                        <option disabled="" label="Select State" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="StateId" class="invalid"></span>
                 </div>
                 <div class="col-6">
-                    <label asp-for="DistrictId" for="DistrictId" class="form-label"></label>
-                    <select asp-for="DistrictId" asp-items="@ViewBag.ddlDistrict" aria-required="true" onchange="BindBlock(this)" class="form-select">
-                        <option disabled="" label="District" selected="" value="">District</option>
+                    <label asp-for="DistrictId" class="form-label required"></label>
+                    <select asp-for="DistrictId" asp-items="@ViewBag.ddlDistrict" aria-required="true" class="form-select">
+                        <option disabled="" label="Select District" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="DistrictId" class="invalid"></span>
                 </div>
@@ -49,87 +53,41 @@
             </div>
             <div class="row mb-3">
                 <div class="col-6">
-                    <label asp-for="BlockId" for="BlockId" class="form-label"></label>
+                    <label asp-for="BlockId" class="form-label required"></label>
                     <select asp-for="BlockId" asp-items="@ViewBag.ddlBlock" aria-required="true" class="form-select">
-                        <option disabled="" label="Block" selected="" value="">Block</option>
+                        <option disabled="" label="Select Block" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="BlockId" class="invalid"></span>
                 </div>
                 <div class="col-6">
-                    <label asp-for="VillageName" for="VillageName" class="form-label"></label>
-                    <input type="text" asp-for="VillageName" class="form-control" maxlength="100" placeholder="Enter Village (max 50 characters)" autocomplete="off">
+                    <label asp-for="VillageName" class="form-label required"></label>
+                    <input type="text" asp-for="VillageName" class="form-control" maxlength="50" placeholder="Enter Village (max 50 characters)" autocomplete="off">
                     <span asp-validation-for="VillageName" class="invalid"></span>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-6">
-                    <label asp-for="VillageCode" for="VillageCode" class="form-label"></label>
-                    <input type="text" asp-for="VillageCode" class="form-control" maxlength="2" placeholder="Enter village code (max 2 characters)" autocomplete="off">
+                    <label asp-for="VillageCode" class="form-label required"></label>
+                    <input type="text" asp-for="VillageCode" class="form-control" maxlength="6" placeholder="Enter village code (6 digits number)" autocomplete="off">
                     <span asp-validation-for="VillageCode" class="invalid"></span>
                 </div>
                 <div class="col-6">
-                    <label asp-for="LocationType" for="LocationType" class="form-label"></label>
+                    <label asp-for="LocationType" class="form-label required"></label>
                     <select asp-for="LocationType" asp-items="@Html.GetEnumSelectList<EnumLocationType>()" aria-required="true" class="form-select">
-                        <option disabled="" label="LocationType" selected="" value="">LocationType</option>
+                        <option disabled="" label="Location Type" selected="" value=""></option>
 
                     </select>
-                    <span asp-validation-for="VillageId" class="invalid"></span>
+                    <span asp-validation-for="LocationType" class="invalid"></span>
                 </div>
             </div>
             <div class="mb-2 text-end">
-                <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-file-document-edit"></i> Update </button>
+                <a asp-area="" asp-controller="Village" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
             </div>
 
         </form>
     </div> <!-- end card body-->
 </div>
-
-<script>
-        function BindDistrict(e) {
-            if ($("#StateId").val() != "") {
-                var StateId = 0;
-                StateId = $("#StateId").val();
-                $("#DistrictId").html("");
-                $("#DistrictId").append($("<option disabled selected label='District'></option>").val("").html("District"));
-                $("#BlockId").html("");
-                $("#BlockId").append($("<option disabled selected></option>").val("").html("Block"));
-                if (StateId > 0) {
-                jQuery.post("@Url.Action("BindDistrict", "Village")", {
-                    StateId: StateId
-                }).done(function (data) {
-                    debugger;
-                    if (data != "") {
-                        $.each(data, function (key, value) {
-                            $("#DistrictId").append($("<option></option>").val(value.value).html(value.text));
-                        });
-                    }
-                });
-            }
-        }
-    }
-
-            function BindBlock(e) {
-                if ($("#StateId").val() != "" && $("#DistrictId").val() != "") {
-                var StateId = 0;
-                StateId = $("#StateId").val();
-                    var DistrictId = 0;
-                    DistrictId = $("#DistrictId").val();
-                    $("#BlockId").html("");
-                    $("#BlockId").append($("<option disabled selected></option>").val("").html("Block"));
-
-                    if (StateId > 0 && DistrictId>0) {
-                jQuery.post("@Url.Action("BindBlock", "Village")", {
-                    StateId: StateId,
-                    DistrictId: DistrictId
-                }).done(function (data) {
-                    debugger;
-                    if (data != "") {
-                        $.each(data, function (key, value) {
-                            $("#BlockId").append($("<option></option>").val(value.value).html(value.text));
-                        });
-                    }
-                });
-            }
-        }
-    }
-</script>
+@section Scripts{
+    <script src="~/scripts/Village.js" asp-append-version="true"></script>
+}

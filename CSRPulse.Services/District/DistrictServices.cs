@@ -42,7 +42,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var getDistricts = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.District>(x => district.StateId.HasValue ? x.StateId == district.StateId.Value : (1 > 0) && x.IsActive == district.IsActive).Include(s => s.State));
+                var getDistricts = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.District>(x => x.StateId == district.StateId && x.IsActive == district.IsActive).Include(s => s.State));
                 var disList = _mapper.Map<List<Model.District>>(getDistricts);
                 return disList;
             }
@@ -79,7 +79,7 @@ namespace CSRPulse.Services
                 {
                     if (getDistricts.DistrictName == district.DistrictName && getDistricts.DistrictCode == district.DistrictCode && getDistricts.DistrictShort == district.DistrictShort && getDistricts.StateId == district.StateId)
                         return true;
-                   
+
                     getDistricts.DistrictName = district.DistrictName;
                     getDistricts.DistrictShort = district.DistrictShort;
                     getDistricts.DistrictCode = district.DistrictCode;

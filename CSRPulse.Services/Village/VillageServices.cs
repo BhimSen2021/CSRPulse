@@ -38,12 +38,11 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<Model.Village>> GetVillageList(int? stateId, int? districtId, int? blockId)
+        public async Task<List<Model.Village>> GetVillageList(Model.Village village)
         {
             try
             {
-                var getVillages = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Village>(x => (stateId.HasValue ? x.StateId == stateId : (1 > 0))
-                && (districtId.HasValue ? x.DistrictId == districtId : (1 > 0)) && (blockId.HasValue ? x.BlockId == blockId : (1 > 0))).Include(s => s.State).Include(d => d.District).Include(b => b.Block));
+                var getVillages = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Village>(x => x.StateId == village.StateId && x.DistrictId == village.DistrictId && x.BlockId == village.BlockId && x.IsActive == village.IsActive).Include(s => s.State).Include(d => d.District).Include(b => b.Block));
                 var disList = _mapper.Map<List<Model.Village>>(getVillages);
                 return disList;
             }
@@ -80,16 +79,7 @@ namespace CSRPulse.Services
                 {
                     if (getVillages.VillageName == village.VillageName && getVillages.VillageCode == village.VillageCode && getVillages.StateId == village.StateId && getVillages.DistrictId == village.DistrictId && getVillages.BlockId == village.BlockId)
                         return true;
-                    //else
-                    //{
-                    //    var recordExist = _genericRepository.GetIQueryable<DTOModel.Village>(x => x.VillageName == village.VillageName || x.VillageShort == village.VillageShort || x.VillageCode == village.VillageCode).FirstOrDefault();
-
-                    //    if (recordExist != null)
-                    //    {
-                    //        village.RecordExist = true;
-                    //        return false;
-                    //    }
-                    //}
+                   
                     getVillages.VillageName = village.VillageName;
                     getVillages.VillageCode = village.VillageCode;
                     getVillages.StateId = village.StateId;
@@ -121,6 +111,20 @@ namespace CSRPulse.Services
             {
 
                 throw;
+            }
+        }
+        public bool ActiveDeActive(int id, bool IsActive)
+        {
+            try
+            {
+                var model = _genericRepository.GetByID<DTOModel.Village>(id);
+                model.IsActive = IsActive;
+                _genericRepository.Update(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

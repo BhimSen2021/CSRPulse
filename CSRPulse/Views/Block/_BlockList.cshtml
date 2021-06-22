@@ -2,16 +2,16 @@
 <div class="card">
     <div class="card-body">
         <div class="text-end">
-            <a asp-controller="Block" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Block</a>
+            <a asp-controller="Block" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Block</a>
         </div>
         <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
             <thead class="thead-light">
                 <tr>
                     <th width="5%">#</th>
-                    <th>Block Name</th>
-                    <th>Block Code</th>
-                    <th>State</th>
-                    <th>District</th>
+                    <th>@Html.DisplayNameFor(m=>m.BlockName)</th>
+                    <th>@Html.DisplayNameFor(m => m.BlockCode)</th>
+                    <th>@Html.DisplayNameFor(m => m.StateName)</th>
+                    <th>@Html.DisplayNameFor(m => m.DistrictName)</th>
                     <th width="5%">Active</th>
                 </tr>
             </thead>
@@ -49,3 +49,8 @@
         </table>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

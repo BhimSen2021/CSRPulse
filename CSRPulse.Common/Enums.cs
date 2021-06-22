@@ -23,8 +23,8 @@ namespace CSRPulse.Common
 
     public enum EnumLocationType
     {
-        Type1 = 1,
-        Type2 = 2
+        Village = 1,
+        Town = 2
     }
 
     public enum IndResponseType

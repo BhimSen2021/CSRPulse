@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CSRPulse.Model
 {
@@ -10,7 +7,7 @@ namespace CSRPulse.Model
         [Key]
         public int ActivityId { get; set; }
         [Required, Display(Name = "Activity Name")]
-        [StringLength(200)]
+        [StringLength(200, MinimumLength =2, ErrorMessage = "Activity name should be contain atleast 2 characters.")]
         public string ActivityName { get; set; }
         [StringLength(3), Display(Name = "Activity Code")]
         public string ActivityCode { get; set; }

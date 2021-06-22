@@ -5,26 +5,26 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-   public class Block:BaseModel
+    public class Block : BaseModel
     {
         public int BlockId { get; set; }
-        [Required(ErrorMessage = "Please select District")]
+        [Required]
         [Range(1, Int64.MaxValue)]
         [Display(Name = "District Name")]
-        public int ? DistrictId { get; set; }
-        [Required(ErrorMessage = "Please select State")]
+        public int? DistrictId { get; set; }
+        [Required]
         [Range(1, Int64.MaxValue)]
         [Display(Name = "State Name")]
         public int? StateId { get; set; }
-        [Required(ErrorMessage = "Please enter Block")]
-        [StringLength(50)]
+        [Required]
+        [StringLength(50, MinimumLength =2,ErrorMessage = "Block name should be contain atleast 2 characters.")]
         [Display(Name = "Block Name")]
         public string BlockName { get; set; }
-        [Required(ErrorMessage = "Please enter Code")]
-        [StringLength(5, MinimumLength = 5)]
+        [Required]
+        [StringLength(5, MinimumLength = 5, ErrorMessage = "Block code must be contain 5 digits number")]
         [Display(Name = "Block Code")]
         public string BlockCode { get; set; }
-        public int BlockType { get; set; }            
+        public int BlockType { get; set; }
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }

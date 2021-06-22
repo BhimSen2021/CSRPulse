@@ -44,7 +44,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("VillageController/GetVillageList");
             try
             {
-                var result = await _villageServices.GetVillageList(village.StateId,village.DistrictId,village.BlockId);
+                var result = await _villageServices.GetVillageList(village);
                 return PartialView("_VillageList",result);
             }
             catch (Exception ex)
@@ -101,14 +101,7 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-
-        //[HttpPost]
-        //public JsonResult UserActiveDeActive(int userId, bool IsActive)
-        //{
-        //    _logger.LogInformation("VillageController/UserActiveDeActive");
-        //    var result = _villageServices.UserActiveDeActive(userId, IsActive);
-        //    return Json(result);
-        //}
+       
         public async Task<IActionResult> Edit(int rid)
         {
             _logger.LogInformation("VillageController/Edit");
@@ -227,6 +220,15 @@ namespace CSRPulse.Controllers
         {
             var stateList = _ddlService.GetStateAsync(null, null);
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
+        }
+
+        [HttpPost]
+        public JsonResult ActiveDeActive(int id, bool isChecked)
+        {
+            _logger.LogInformation("VillageController/ActiveDeActive");
+            var result = _villageServices.ActiveDeActive(id, isChecked);
+            return Json(result);
+
         }
     }
 }

@@ -97,11 +97,11 @@ namespace CSRPulse.Controllers
         }
 
        
-        public async Task<IActionResult> Edit(int rid)
+        public async Task<IActionResult> Edit(int stateId)
         {
             try
             {
-                var uDetail = await _stateServices.GetStateById(rid);
+                var uDetail = await _stateServices.GetStateById(stateId);
                 return View(uDetail);
             }
             catch (Exception)

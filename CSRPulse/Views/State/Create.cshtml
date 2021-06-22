@@ -10,11 +10,17 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Add New State</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>
+                    <li class="breadcrumb-item active">State</li>
                 </ol>
             </div>
             <h4 class="page-title">State</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
         </div>
     </div>
 </div>
@@ -29,20 +35,20 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                     <div class="mb-3">
-                        <label asp-for="StateName" for="MobileNo" class="form-label"></label>
+                        <label asp-for="StateName" class="form-label required"></label>
                         <input type="text" asp-for="StateName" class="form-control" maxlength="100" placeholder="Enter State (max 100 characters)" autocomplete="off">
                         <span asp-validation-for="StateName" class="invalid"></span>
                     </div>
 
 
                     <div class="mb-3">
-                        <label asp-for="StateShort" for="UserName" class="form-label"> </label>
+                        <label asp-for="StateShort" class="form-label"> </label>
                         <input type="text" asp-for="StateShort" class="form-control" maxlength="4" placeholder="Enter short name (max 4 characters)" autocomplete="off">
                         <span asp-validation-for="StateShort" class="invalid"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="StateCode" for="StateCode" class="form-label"> </label>
-                        <input type="text" asp-for="StateCode" class="form-control" maxlength="2" placeholder="Enter state code (max 2 characters)" autocomplete="off">
+                        <label asp-for="StateCode" class="form-label required"> </label>
+                        <input type="text" asp-for="StateCode" onkeypress="return onlyNumber(event)" class="form-control" maxlength="2" placeholder="Enter state code (max 2 digits number)" autocomplete="off">
                         <span asp-validation-for="StateCode" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">

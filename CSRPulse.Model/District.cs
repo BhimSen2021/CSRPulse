@@ -12,12 +12,12 @@ namespace CSRPulse.Model
         [Range(1, Int64.MaxValue)]
         [Display(Name = "State Name")]
         public int? StateId { get; set; }
-        [Required(ErrorMessage = "Please enter District")]
+        [Required]
         [Display(Name = "District Name")]
-        [StringLength(200)]
+        [StringLength(200), MinLength(2, ErrorMessage = "District name should be contain atleast 2 characters.")]
         public string DistrictName { get; set; }
-        [Required(ErrorMessage = "Please enter District Code")]
-        [StringLength(3, MinimumLength = 3)]
+        [Required]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "District code must be contain 3 digits number")]
         [Display(Name = "District Code")]
         public string DistrictCode { get; set; }
         [StringLength(4)]

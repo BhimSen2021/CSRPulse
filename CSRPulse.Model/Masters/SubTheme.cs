@@ -15,7 +15,7 @@ namespace CSRPulse.Model
         public string ThemeName { get; set; }
 
         [Required, Display(Name = "Sub Theme Name")]
-        [StringLength(200)]
+        [StringLength(200, MinimumLength =2, ErrorMessage = "Sub Theme name should be contain atleast 2 characters.")]
         public string SubThemeName { get; set; }
         [StringLength(3), Display(Name = "Sub Theme Code")]
         public string SubThemeCode { get; set; }

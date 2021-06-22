@@ -9,7 +9,8 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>
                     <li class="breadcrumb-item active">Village</li>
                 </ol>
             </div>
@@ -19,115 +20,40 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
-        @{await Html.RenderPartialAsync("_Filter");}
-
-        <div id="div-village-list">
-
-        </div>
-    </div>
+    @{await Html.RenderPartialAsync("_Filter");}
 </div>
-
-<div id="info-header-modal" class="modal fade" tabindex="-1" village="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-info">
-                <h4 class="modal-title" id="info-header-modalLabel">Confirmation</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                Do you want to perform this action ?.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
-                <button type="button" onclick="VillageActiveDeActive(this)" class="btnconfirm btn btn-info" data-bs-dismiss="modal">Yes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+<div id="div-village-list"> </div>
+<partial name="_Confirmation" />
 
 @section Scripts{
+    <script src="~/scripts/Village.js" asp-append-version="true"></script>
     <script type="text/javascript">
-
         function openpopup(cnt) {
-            debugger;
             var id = cnt.id.split('_')[1];
             $('.btnconfirm').attr('id', id + '_' + cnt.checked);
 
         }
-        function VillageActiveDeActive(IsActive) {
-            debugger;
-            var userId = IsActive.id.split('_')[0];
-            var isChecked = IsActive.id.split('_')[1];
-            debugger;
+        function ActiveDeActive(obj) {
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/Village/VillageActiveDeActive',
-                data: { userId: userId, IsActive: isChecked },
+                url: '/Village/ActiveDeActive',
+                data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {
-                        commonMessage('success', 'Village status changed successfully.');
+                        commonMessage('success', 'Status changed successfully.');
                     }
 
                     else {
-                        commonMessage('warning', 'Village status changing failed.');
+                        commonMessage('warning', 'Status changing failed.');
                     }
-
                 },
                 error: function (responce) {
-                    commonMessage('error', 'Village status changing failed.');
+                    commonMessage('error', 'Status changing failed.');
                 }
             });
         }
-
-         function BindDistrict(e) {
-            if ($("#StateId").val() != "") {
-                var StateId = 0;
-                StateId = $("#StateId").val();
-                $("#DistrictId").html("");
-                $("#DistrictId").append($("<option disabled selected label='District'></option>").val("").html("District"));
-                $("#BlockId").html("");
-                $("#BlockId").append($("<option disabled selected></option>").val("").html("Block"));
-                if (StateId > 0) {
-                jQuery.post("@Url.Action("BindDistrict", "Village")", {
-                    StateId: StateId
-                }).done(function (data) {
-                    debugger;
-                    if (data != "") {
-                        $.each(data, function (key, value) {
-                            $("#DistrictId").append($("<option></option>").val(value.value).html(value.text));
-                        });
-                    }
-                });
-            }
-        }
-    }
-
-            function BindBlock(e) {
-                if ($("#StateId").val() != "" && $("#DistrictId").val() != "") {
-                var StateId = 0;
-                StateId = $("#StateId").val();
-                    var DistrictId = 0;
-                    DistrictId = $("#DistrictId").val();
-                    $("#BlockId").html("");
-                    $("#BlockId").append($("<option disabled selected></option>").val("").html("Block"));
-
-                    if (StateId > 0 && DistrictId>0) {
-                jQuery.post("@Url.Action("BindBlock", "Village")", {
-                    StateId: StateId,
-                    DistrictId: DistrictId
-                }).done(function (data) {
-                    debugger;
-                    if (data != "") {
-                        $.each(data, function (key, value) {
-                            $("#BlockId").append($("<option></option>").val(value.value).html(value.text));
-                        });
-                    }
-                });
-            }
-        }
-    }
     </script>
 }

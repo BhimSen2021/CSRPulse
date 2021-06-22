@@ -10,11 +10,17 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Master</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Thematics</a></li>
                     <li class="breadcrumb-item active">Activity</li>
                 </ol>
             </div>
             <h4 class="page-title">Edit Activity</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
         </div>
     </div>
 </div>
@@ -39,6 +45,7 @@
                             </div>
 
                             <div class="mb-3">
+                                <label asp-for="ActivityName" class="form-label required"></label>
                                 <input type="text" asp-for="ActivityName" class="form-control" maxlength="200" placeholder="Enter Activity Name (max 200 characters)" autocomplete="off">
                                 <span asp-validation-for="ActivityName" class="invalid"></span>
                             </div>

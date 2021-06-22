@@ -7,10 +7,11 @@ namespace CSRPulse.Services
 {
   public interface IVillageServices
     {
-        Task<List<Model.Village>> GetVillageList(int? stateId, int? districtId, int? blockId);
+        Task<List<Model.Village>> GetVillageList(Model.Village village);
         Task<bool> CreateVillage(Model.Village village);
         Task<bool> UpdateVillage(Model.Village village);
         Task<Model.Village> GetVillageById(int villageId);
         Task<bool> RecordExist(Model.Village village);
+        bool ActiveDeActive(int id, bool IsActive);
     }
 }

@@ -44,7 +44,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("BlockController/Index");
             try
             {
-                var result = await _blockServices.GetBlockList(block.StateId,block.DistrictId);
+                var result = await _blockServices.GetBlockList(block);
                 return PartialView("_BlockList",result);
             }
             catch (Exception ex)
@@ -101,13 +101,7 @@ namespace CSRPulse.Controllers
             }
         }
 
-        //[HttpPost]
-        //public JsonResult UserActiveDeActive(int userId, bool IsActive)
-        //{
-        //    _logger.LogInformation("BlockController/UserActiveDeActive");
-        //    var result = _blockServices.UserActiveDeActive(userId, IsActive);
-        //    return Json(result);
-        //}
+       
         public async Task<IActionResult> Edit(int rid)
         {
             _logger.LogInformation("BlockController/Edit");
@@ -195,6 +189,15 @@ namespace CSRPulse.Controllers
         {
             var stateList = _ddlService.GetStateAsync(null, null);
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
+        }
+
+        [HttpPost]
+        public JsonResult ActiveDeActive(int id, bool isChecked)
+        {
+            _logger.LogInformation("BlockController/ActiveDeActive");
+            var result = _blockServices.ActiveDeActive(id, isChecked);
+            return Json(result);
+
         }
     }
 }
