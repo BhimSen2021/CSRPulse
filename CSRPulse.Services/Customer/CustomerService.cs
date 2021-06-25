@@ -30,6 +30,8 @@ namespace CSRPulse.Services
 
                 var results = _genericRepository.GetIQueryable<DTOModel.CustomerLicenseActivation>(x => x.IsDeleted == false);
 
+                var result4 = _genericRepository.GetIQueryable<DTOModel.CustomerLicenseActivation>(x => x.IsDeleted == false);
+
                 foreach (var c in result)
                 {
 
@@ -60,17 +62,22 @@ namespace CSRPulse.Services
             try
             {
                 var customer = new Customer();
-                var result = await _genericRepository.GetIQueryable<DTOModel.Customer>(c => c.CustomerId == customerId).Include(a => a.CustomerLicenseActivation).Include(p => p.CustomerPayment).FirstOrDefaultAsync();
+                var result = await _genericRepository.GetByIDAsync<DTOModel.Customer>(customerId);
+                if (result != null)
+                {
+                    customer = _mapper.Map<Customer>(result);
+                    
+                    var cPayment = _mapper.Map<List<CustomerPayment>>(result.CustomerPayment);
+                    var cActivation = _mapper.Map<List<CustomerLicenseActivation>>(result.CustomerLicenseActivation);
 
+                    customer.CustomerPaymentList = cPayment;
+                    customer.CustomerLicenseList = cActivation;
 
-                customer = _mapper.Map<DTOModel.Customer, Customer>(result);
-                var cPayment = _mapper.Map<List<CustomerPayment>>(result.CustomerPayment);
-                var cActivation = _mapper.Map<List<CustomerLicenseActivation>>(result.CustomerLicenseActivation);
-
-                customer.CustomerPaymentList = cPayment;
-                customer.CustomerLicenseList = cActivation;
-
-                return customer;
+                    return customer;
+                }
+                else
+                    return customer;
+               
             }
             catch (Exception)
             {

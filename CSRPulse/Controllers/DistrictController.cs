@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Text;
 
 namespace CSRPulse.Controllers
 {
@@ -15,11 +18,15 @@ namespace CSRPulse.Controllers
     public class DistrictController : BaseController<DistrictController>
     {
         private readonly IDistrictServices _districtServices;
+        private readonly IStateServices _stateServices;
         private readonly IDropdownBindService _ddlService;
-        public DistrictController(IDistrictServices districtServices, IDropdownBindService ddlService)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public DistrictController(IDistrictServices districtServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment, IStateServices stateServices)
         {
             _districtServices = districtServices;
             _ddlService = ddlService;
+            _webHostEnvironment = webHostEnvironment;
+            _stateServices = stateServices;
         }
 
         [HttpGet]
@@ -29,7 +36,7 @@ namespace CSRPulse.Controllers
             try
             {
                 BindDropdowns();
-              //  var result = await _districtServices.GetDistrictList();
+                //  var result = await _districtServices.GetDistrictList();
                 return View();
             }
             catch (Exception ex)
@@ -46,7 +53,7 @@ namespace CSRPulse.Controllers
             try
             {
                 var result = await _districtServices.GetDistrictList(district);
-                return PartialView("_DistrictList",result);
+                return PartialView("_DistrictList", result);
             }
             catch (Exception ex)
             {
@@ -101,7 +108,7 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-              
+
         public async Task<IActionResult> Edit(int rid)
         {
             try
@@ -153,7 +160,7 @@ namespace CSRPulse.Controllers
         [NonAction]
         void BindDropdowns()
         {
-            var stateList = _ddlService.GetStateAsync(null,null);
+            var stateList = _ddlService.GetStateAsync(null, null);
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
         }
 
@@ -163,7 +170,33 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("UoMController/ActiveDeActive");
             var result = _districtServices.ActiveDeActive(id, isChecked);
             return Json(result);
-
         }
+
+        public async Task<IActionResult> ExportTemplate()
+        {
+            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\StateTemplate.csv");
+
+            if (!System.IO.File.Exists(filepath))
+                return Content($"Template not found.");
+
+            return await DownloadFile(filepath);
+        }
+
+        public async Task<FileResult> ExportRefTemplate()
+        {        
+            var statelist = await _stateServices.GetStateList();
+            
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("{0},{1},{2},{3}", "StateId",  "StateName ", "StateShort", Environment.NewLine);
+
+            foreach (var item in statelist)
+            {
+                sb.AppendFormat("{0},{1},{2},{3}", item.StateId, item.StateName, item.StateShort, Environment.NewLine);
+            }
+
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "RefTemplate_District.csv");
+        }
+
     }
 }

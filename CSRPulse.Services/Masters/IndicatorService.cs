@@ -77,7 +77,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.Indicator>(x => x.ThemeId == indicator.ThemeId && x.ActivityId == indicator.ActivityId && x.IsActive == indicator.IsActive);
+                var result = await _genericRepository.GetAsync<DTOModel.Indicator>(x => x.ThemeId == indicator.ThemeId && x.ActivityId == indicator.ActivityId && (indicator.IsActiveFilter.HasValue ? x.IsActive == indicator.IsActiveFilter.Value : 1 > 0));
                 return _mapper.Map<List<Indicator>>(result);
             }
             catch (Exception)

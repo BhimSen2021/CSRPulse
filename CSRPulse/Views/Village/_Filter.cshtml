@@ -9,37 +9,39 @@
                 <i class="mdi mdi-filter"></i> <label>Filter By :</label>
             </div>
             <div class="row">
-                <label asp-for="StateId" class="col-md-1 col-form-label">State</label>
-                <div class="col-md-2">
+                <label asp-for="StateId" class="col-md-1 col-form-label m-0">State</label>
+                <div class="col-md-3 mb-2">
                     <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
-                        <option disabled="" label="Select Theme" selected="" value="">Select State</option>
+                        <option disabled="" label="Select State" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="StateId" class="invalid"></span>
                 </div>
                 <label asp-for="DistrictId" class="col-md-1 col-form-label">District</label>
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <select asp-for="DistrictId" asp-items="@(new SelectList(string.Empty,"id","value"))" aria-required="true" class="form-select">
                         <option disabled="" label="Select District" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="DistrictId" class="invalid"></span>
                 </div>
 
-                 <label asp-for="BlockId" class="col-md-1 col-form-label">Block</label>
-                <div class="col-md-2">
+                <label asp-for="BlockId" class="col-md-1 col-form-label">Block</label>
+                <div class="col-md-3 mb-2">
                     <select asp-for="BlockId" asp-items="@(new SelectList(string.Empty,"id","value"))" aria-required="true" class="form-select">
                         <option disabled="" label="Select Block" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="BlockId" class="invalid"></span>
                 </div>
 
-                <label asp-for="IsActive" class="col-md-1 col-form-label"></label>
-                <div class="col-md-1 col-form-label">
-                    <div>
-                        <input asp-for="IsActive" type="checkbox" id="IsActive" data-switch="success" checked />
-                        <label for="IsActive" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                    </div>
+                <label asp-for="IsActiveFilter" class="col-md-1 col-form-label"></label>
+                <div class="col-md-3 mb-2">
+                    <select asp-for="IsActiveFilter" aria-required="true" class="form-select">
+                        <option label="All" selected="" value=""></option>
+                        <option label="Yes" value="true"></option>
+                        <option label="No" value="false"></option>
+                    </select>
+                    <span asp-validation-for="IsActiveFilter" class="invalid"></span>
                 </div>
-                <div class="col-md-1 text-end text-nowrap">
+                <div class="col-md-8 text-end text-nowrap">
                     <button type="submit" value="Search" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to search records" class="btn btn-warning btn-sm rounded-pill text-white">
                         <i class="dripicons-search me-1"></i>Search
                     </button>

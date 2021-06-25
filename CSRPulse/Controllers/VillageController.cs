@@ -8,18 +8,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Text;
 
 namespace CSRPulse.Controllers
 {
     [Route("[Controller]/[action]")]
     public class VillageController : BaseController<VillageController>
     {
+        private readonly IBlockServices _blockServices;
         private readonly IVillageServices _villageServices;
         private readonly IDropdownBindService _ddlService;
-        public VillageController(IVillageServices villageServices, IDropdownBindService ddlService)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public VillageController(IBlockServices blockServices,IVillageServices villageServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment)
         {
+            _blockServices = blockServices;
             _villageServices = villageServices;
             _ddlService = ddlService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -228,7 +235,33 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("VillageController/ActiveDeActive");
             var result = _villageServices.ActiveDeActive(id, isChecked);
             return Json(result);
+        }
 
+        public async Task<IActionResult> ExportTemplate()
+        {
+            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\VillageTemplate.csv");
+            if (!System.IO.File.Exists(filepath))
+                return Content($"Template not found.");
+
+            return await DownloadFile(filepath);
+        }
+
+        public async Task<FileResult> ExportRefTemplate()
+        {
+            var model = new Block();
+            model.IsActive = true;
+            var blocklist = await _blockServices.GetBlockList(model);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("{0}, {1}, {2}, {3}, {4}, {5}", "StateId", "StateName", "DistrictId", "DistrictName", "BlockId", "BlockName", Environment.NewLine);
+
+            foreach (var item in blocklist)
+            {
+                sb.AppendFormat("{0}, {1}, {2}, {3}, {4}, {5}", item.StateId, item.StateName, item.DistrictId, item.DistrictName, item.BlockId, item.BlockName, Environment.NewLine);
+            }
+
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "RefTemplate_Village.csv");
         }
     }
 }

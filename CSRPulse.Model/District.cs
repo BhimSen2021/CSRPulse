@@ -8,7 +8,7 @@ namespace CSRPulse.Model
     public class District : BaseModel
     {
         public int DistrictId { get; set; }
-        [Required(ErrorMessage = "Please select State")]
+        //[Required(ErrorMessage = "Please select State")]
         [Range(1, Int64.MaxValue)]
         [Display(Name = "State Name")]
         public int? StateId { get; set; }
@@ -25,5 +25,7 @@ namespace CSRPulse.Model
         public string DistrictShort { get; set; }
         public bool RecordExist { get; set; }
         public string StateName { get; set; }
+        [Display(Name = "Active")]
+        public bool? IsActiveFilter { get; set; }
     }
 }

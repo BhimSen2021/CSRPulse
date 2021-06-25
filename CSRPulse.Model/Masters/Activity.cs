@@ -15,5 +15,7 @@ namespace CSRPulse.Model
         [Required, Display(Name = "Theme Name")]
         public int ThemeId { get; set; }
         public string ThemeName { get; set; }
+        [Display(Name = "Active")]
+        public bool? IsActiveFilter { get; set; }
     }
 }

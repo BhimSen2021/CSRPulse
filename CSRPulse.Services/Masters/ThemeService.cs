@@ -75,7 +75,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.Theme>(x => x.IsActive == theme.IsActive);
+                var result = await _genericRepository.GetAsync<DTOModel.Theme>(x => (theme.IsActiveFilter.HasValue ? x.IsActive == theme.IsActiveFilter.Value : 1 > 0));
                 return _mapper.Map<List<Theme>>(result);
             }
             catch (Exception)

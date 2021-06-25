@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using CSRPulse.Attributes;
 using System;
 using CSRPulse.Model;
+using System.Collections.Generic;
 
 namespace CSRPulse.Controllers
 {
@@ -17,7 +18,6 @@ namespace CSRPulse.Controllers
     public abstract class BaseController<T> : Controller where T : BaseController<T>
     {
         private ILogger<T> logger;
-
         protected ILogger<T> _logger => logger ??= HttpContext.RequestServices.GetService<ILogger<T>>();
 
         protected UserDetail userDetail
@@ -25,13 +25,9 @@ namespace CSRPulse.Controllers
             get
             {
                 UserDetail userDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
-
                 return userDetail;
-
             }
         }
-
-
 
         public ActionResult DownloadFile(string fileName, string fullPath, string sContentType)
         {
@@ -117,9 +113,45 @@ namespace CSRPulse.Controllers
                 otp += character;
             }
             return otp;
-
         }
 
+        public async Task<IActionResult> DownloadFile(string filepath)
+        {
+            if (!System.IO.File.Exists(filepath))
+                return Content($"Template not found.");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filepath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, GetContentType(filepath), Path.GetFileName(filepath));
+        }
+
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
+        }
 
     }
 }

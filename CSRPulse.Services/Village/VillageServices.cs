@@ -42,7 +42,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var getVillages = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Village>(x => x.StateId == village.StateId && x.DistrictId == village.DistrictId && x.BlockId == village.BlockId && x.IsActive == village.IsActive).Include(s => s.State).Include(d => d.District).Include(b => b.Block));
+                var getVillages = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Village>(x => x.StateId == village.StateId && x.DistrictId == village.DistrictId && x.BlockId == village.BlockId && (village.IsActiveFilter.HasValue ? x.IsActive == village.IsActiveFilter.Value : 1 > 0)).Include(s => s.State).Include(d => d.District).Include(b => b.Block));
                 var disList = _mapper.Map<List<Model.Village>>(getVillages);
                 return disList;
             }
@@ -79,7 +79,7 @@ namespace CSRPulse.Services
                 {
                     if (getVillages.VillageName == village.VillageName && getVillages.VillageCode == village.VillageCode && getVillages.StateId == village.StateId && getVillages.DistrictId == village.DistrictId && getVillages.BlockId == village.BlockId)
                         return true;
-                   
+
                     getVillages.VillageName = village.VillageName;
                     getVillages.VillageCode = village.VillageCode;
                     getVillages.StateId = village.StateId;

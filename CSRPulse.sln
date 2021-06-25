@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.Services", "CSRPul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse", "CSRPulse\CSRPulse.csproj", "{B771DBCC-B857-4C32-8835-7D775868CFF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse.ExportImport", "CSRPulse.ExportImport\CSRPulse.ExportImport.csproj", "{87885117-3615-41DD-924B-2754E429F9A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B771DBCC-B857-4C32-8835-7D775868CFF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B771DBCC-B857-4C32-8835-7D775868CFF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B771DBCC-B857-4C32-8835-7D775868CFF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87885117-3615-41DD-924B-2754E429F9A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87885117-3615-41DD-924B-2754E429F9A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87885117-3615-41DD-924B-2754E429F9A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87885117-3615-41DD-924B-2754E429F9A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

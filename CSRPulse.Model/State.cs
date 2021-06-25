@@ -25,5 +25,7 @@ namespace CSRPulse.Model
         public decimal? Latitude { get; set; }
 
         public bool RecordExist { get; set; }
+        [Display(Name = "Active")]
+        public bool? IsActiveFilter { get; set; }
     }
 }

@@ -22,8 +22,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
-                    <thead class="thead-light">
+                <table id="basic-datatable" class="table table-centered table-striped dt-responsive nowrap w-100 dataTable no-footer dtr-inline">
+                    <thead>
                         <tr>
                             <th style="width:5%">
                                 @Html.DisplayName("#")
@@ -32,7 +32,7 @@
                                 @Html.DisplayName("Customer Code")
                             </th>
                             <th width="45%">
-                                @Html.DisplayNameFor(model => model.CustomerName)
+                                @Html.DisplayName("Customer Name")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.CurrentPlan)

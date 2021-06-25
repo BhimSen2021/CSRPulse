@@ -21,7 +21,7 @@
     </div>
     <div class="col">
         <div class="alert alert-secondary" role="alert">
-            <strong>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
         </div>
     </div>
 </div>
@@ -61,14 +61,14 @@
                 </div>
                 <div class="col-6">
                     <label asp-for="VillageName" class="form-label required"></label>
-                    <input type="text" asp-for="VillageName" class="form-control" maxlength="50" placeholder="Enter Village (max 50 characters)" autocomplete="off">
+                    <input type="text" asp-for="VillageName" class="form-control" maxlength="50" placeholder="Enter Village Name (max 50 characters)" autocomplete="off">
                     <span asp-validation-for="VillageName" class="invalid"></span>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-6">
                     <label asp-for="VillageCode" class="form-label required"></label>
-                    <input type="text" asp-for="VillageCode" class="form-control" maxlength="6" placeholder="Enter village code (6 digits number)" autocomplete="off">
+                    <input type="text" asp-for="VillageCode" class="form-control" maxlength="6" placeholder="Enter Village Code (6 digits number)" autocomplete="off">
                     <span asp-validation-for="VillageCode" class="invalid"></span>
                 </div>
                 <div class="col-6">

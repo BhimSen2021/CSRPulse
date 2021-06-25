@@ -11,6 +11,8 @@ namespace CSRPulse.Model
         public int UOMId { get; set; }
         [Required, Display(Name = "Unit Name")]
         [StringLength(50)]
-        public string UnitName { get; set; }      
+        public string UnitName { get; set; }
+        [Display(Name = "Active")]
+        public bool? IsActiveFilter { get; set; }
     }
 }

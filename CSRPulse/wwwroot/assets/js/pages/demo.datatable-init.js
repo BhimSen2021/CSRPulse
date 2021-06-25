@@ -10,7 +10,8 @@ $(document).ready(function () {
         },
         drawCallback: function () {
             $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
-        }
+        },
+        "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
     });
 
 });
@@ -26,6 +27,10 @@ function Basicdatatable() {
         },
         drawCallback: function () {
             $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
-        }
+        },
+        "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
     });
+
+    // Enable tooltip
+    $('[data-bs-toggle="tooltip"]').tooltip();    
 }

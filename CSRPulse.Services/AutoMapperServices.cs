@@ -32,19 +32,20 @@ namespace CSRPulse.Services
            .ForMember(d => d.DataBaseName, o => o.MapFrom(s => s.DataBaseName))
            .ForMember(d => d.IsDeleted, o => o.MapFrom(s => s.IsDeleted))
            .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
-           //.ForMember(d => d.CustomerUniqueId, o => o.MapFrom(s => s.CustomerUniqueId))
+           .ForMember(d => d.CustomerUniqueId, o => o.MapFrom(s => s.CustomerUniqueId))
            .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
-           .ReverseMap()
            .ForAllOtherMembers(i => i.Ignore());
 
 
             CreateMap<StartingNumber, DTOModel.StartingNumber>();
-            CreateMap<CustomerPayment, DTOModel.CustomerPayment>().ReverseMap();
-            CreateMap<CustomerLicenseActivation, DTOModel.CustomerLicenseActivation>().ReverseMap();
+            CreateMap<DTOModel.CustomerPayment, CustomerPayment>().ReverseMap();
+            CreateMap<DTOModel.CustomerLicenseActivation, CustomerLicenseActivation>().ReverseMap();
+
             CreateMap<DTOModel.User, UserDetail>()
                 .ForMember(d => d.RoleName, o => o.MapFrom(s => s.Role.RoleName)).ReverseMap();
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
+
             CreateMap<DTOModel.User, User>().ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId)).ReverseMap();
 
             CreateMap<DTOModel.Role, Model.Role>()
@@ -54,6 +55,7 @@ namespace CSRPulse.Services
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
                 .ForMember(d => d.Seniorty, o => o.MapFrom(s => s.Seniorty))
                 .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+
             CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
 
             #region Email Mapper
@@ -74,8 +76,31 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Theme, Theme>().ReverseMap();
             CreateMap<DTOModel.SubTheme, SubTheme>().ReverseMap();
             CreateMap<DTOModel.Indicator, Indicator>().ReverseMap();
-
             #endregion
+
+            #region Location Mapper
+
+            CreateMap<DTOModel.State, State>().ReverseMap();
+
+            CreateMap<DTOModel.District, District>()
+                .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName));
+            CreateMap<District, DTOModel.District>();
+
+
+            CreateMap<DTOModel.Block, Block>()
+              .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
+             .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName));
+            CreateMap<Block, DTOModel.Block>();
+
+            CreateMap<DTOModel.Village, Village>()
+            .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
+           .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName))
+            .ForMember(d => d.BlockName, o => o.MapFrom(s => s.Block.BlockName));
+
+            CreateMap<Village, DTOModel.Village>()
+                .ForMember(d => d.LocationType, o => o.MapFrom(s => (int)s.LocationType));
+            #endregion
+
             #region Dropdown Mapper
             CreateMap<DTOModel.State, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
@@ -124,25 +149,7 @@ namespace CSRPulse.Services
 
             #endregion
 
-            CreateMap<DTOModel.State, State>().ReverseMap();
 
-            CreateMap<DTOModel.District, District>()
-                .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName));
-            CreateMap<District, DTOModel.District>();
-
-
-            CreateMap<DTOModel.Block, Block>()
-              .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
-             .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName));
-            CreateMap<Block, DTOModel.Block>();
-
-            CreateMap<DTOModel.Village, Village>()
-            .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
-           .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName))
-            .ForMember(d => d.BlockName, o => o.MapFrom(s => s.Block.BlockName));
-
-            CreateMap<Village, DTOModel.Village>()
-                .ForMember(d => d.LocationType, o => o.MapFrom(s => (int)s.LocationType));
         }
     }
 }

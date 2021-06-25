@@ -20,7 +20,7 @@
     </div>
     <div class="col">
         <div class="alert alert-secondary" role="alert">
-            <strong>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
         </div>
     </div>
 </div>
@@ -43,19 +43,19 @@
 
                     <div class="mb-3">
                         <label asp-for="DistrictName" class="form-label required"></label>
-                        <input type="text" asp-for="DistrictName" class="form-control" maxlength="100" placeholder="Enter District (max 100 characters)" autocomplete="off">
+                        <input type="text" asp-for="DistrictName" class="form-control" maxlength="100" placeholder="Enter District Name (max 100 characters)" autocomplete="off">
                         <span asp-validation-for="DistrictName" class="invalid"></span>
                     </div>
 
 
                     <div class="mb-3">
                         <label asp-for="DistrictShort" for="UserName" class="form-label"> </label>
-                        <input type="text" asp-for="DistrictShort" class="form-control" maxlength="4" placeholder="Enter short name (max 4 characters)" autocomplete="off">
+                        <input type="text" asp-for="DistrictShort" class="form-control" maxlength="4" placeholder="Enter Short Name (max 4 characters)" autocomplete="off">
                         <span asp-validation-for="DistrictShort" class="invalid"></span>
                     </div>
                     <div class="mb-3">
                         <label asp-for="DistrictCode" class="form-label required"></label>
-                        <input type="text" asp-for="DistrictCode" onkeypress="return onlyNumber(event)" class="form-control" maxlength="3" placeholder="Enter district code (max 3 digits number)" autocomplete="off">
+                        <input type="text" asp-for="DistrictCode" onkeypress="return onlyNumber(event)" class="form-control" maxlength="3" placeholder="Enter District Code (max 3 digits number)" autocomplete="off">
                         <span asp-validation-for="DistrictCode" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">

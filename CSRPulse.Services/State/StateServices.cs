@@ -78,7 +78,7 @@ namespace CSRPulse.Services
                 {
                     if (getStates.StateName == state.StateName && getStates.StateCode == state.StateCode && getStates.StateShort == state.StateShort)
                         return true;
-                    
+
                     getStates.StateName = state.StateName;
                     getStates.StateShort = state.StateShort;
                     getStates.StateCode = state.StateCode;
@@ -114,7 +114,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var result = await _genericRepository.GetAsync<DTOModel.State>(x => x.IsActive == state.IsActive);
+                var result = await _genericRepository.GetAsync<DTOModel.State>(x => (state.IsActiveFilter.HasValue ? x.IsActive == state.IsActiveFilter.Value : 1 > 0));
                 return _mapper.Map<List<Model.State>>(result);
             }
             catch (Exception)

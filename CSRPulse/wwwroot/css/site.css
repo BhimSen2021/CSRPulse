@@ -19,6 +19,11 @@ textarea {
     color: #fa6767;
 }
 
+.table-striped > tbody > tr:nth-of-type(odd) {
+    --bs-table-accent-bg: var(--bs-table-striped-bg);
+    color: #333;
+}
+
 
 /*!
         // 3. Loader
@@ -166,3 +171,5 @@ textarea {
         border-radius: 0 !important;
         font-family: 'Roboto',sans-serif !important;
     }
+
+

@@ -42,8 +42,8 @@ namespace CSRPulse.Services
         {
             try
             {
-                var getBlocks = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Block>(x => (block.StateId.HasValue ? x.StateId == block.StateId: (1 > 0))
-                && (block.DistrictId.HasValue ? x.DistrictId == block.DistrictId : (1 > 0)) && block.IsActive == x.IsActive
+                var getBlocks = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.Block>(x => (block.StateId.HasValue ? x.StateId == block.StateId : (1 > 0))
+                && (block.DistrictId.HasValue ? x.DistrictId == block.DistrictId : (1 > 0)) && (block.IsActiveFilter.HasValue ? x.IsActive == block.IsActiveFilter.Value : 1 > 0)
                 ).Include(s => s.State).Include(d => d.District));
                 var disList = _mapper.Map<List<Model.Block>>(getBlocks);
                 return disList;
@@ -81,7 +81,7 @@ namespace CSRPulse.Services
                 {
                     if (getBlocks.BlockName == block.BlockName && getBlocks.BlockCode == block.BlockCode && getBlocks.StateId == block.StateId && getBlocks.DistrictId == block.DistrictId)
                         return true;
-                   
+
                     getBlocks.BlockName = block.BlockName;
                     getBlocks.BlockCode = block.BlockCode;
                     getBlocks.StateId = block.StateId.Value;

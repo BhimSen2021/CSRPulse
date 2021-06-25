@@ -56,5 +56,7 @@ namespace CSRPulse.Model
         public string IsFormulaText { get; set; }
         [StringLength(2000)]
         public string IsFormulaValue { get; set; }
+        [Display(Name = "Active")]
+        public bool? IsActiveFilter { get; set; }
     }
 }

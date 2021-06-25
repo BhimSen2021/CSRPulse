@@ -16,15 +16,17 @@
                     <span asp-validation-for="ThemeId" class="invalid"></span>
                 </div>
 
-                <label asp-for="IsActive" class="col-md-1 col-form-label"></label>
-                <div class="col-md-2 col-form-label">
-                    <div>
-                        <input asp-for="IsActive" type="checkbox" id="IsActive" data-switch="success" checked />
-                        <label for="IsActive" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                    </div>
+                <label asp-for="IsActiveFilter" class="col-md-1 col-form-label"></label>
+                <div class="col-md-3">
+                    <select asp-for="IsActiveFilter" aria-required="true" class="form-select">
+                        <option label="All" selected="" value=""></option>
+                        <option label="Yes" value="true"></option>
+                        <option label="No" value="false"></option>
+                    </select>
+                    <span asp-validation-for="IsActiveFilter" class="invalid"></span>
                 </div>
 
-                <div class="col-md-4 text-end">
+                <div class="col-md-3 text-end">
                     <button type="submit" value="Search" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to search records" class="btn btn-warning btn-sm rounded-pill text-white">
                         <i class="dripicons-search me-2"></i> Search
                     </button>

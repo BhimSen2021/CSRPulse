@@ -20,7 +20,7 @@
     </div>
     <div class="col">
         <div class="alert alert-secondary" role="alert">
-            <strong>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
         </div>
     </div>
 </div>
@@ -36,19 +36,19 @@
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                     <div class="mb-3">
                         <label asp-for="StateName" class="form-label required"></label>
-                        <input type="text" asp-for="StateName" class="form-control" maxlength="100" placeholder="Enter State (max 100 characters)" autocomplete="off">
+                        <input type="text" asp-for="StateName" class="form-control" maxlength="100" placeholder="Enter State Name (max 100 characters)" autocomplete="off">
                         <span asp-validation-for="StateName" class="invalid"></span>
                     </div>
 
 
                     <div class="mb-3">
                         <label asp-for="StateShort" class="form-label"> </label>
-                        <input type="text" asp-for="StateShort" class="form-control" maxlength="4" placeholder="Enter short name (max 4 characters)" autocomplete="off">
+                        <input type="text" asp-for="StateShort" class="form-control" maxlength="4" placeholder="Enter Short Name (max 4 characters)" autocomplete="off">
                         <span asp-validation-for="StateShort" class="invalid"></span>
                     </div>
                     <div class="mb-3">
                         <label asp-for="StateCode" class="form-label required"> </label>
-                        <input type="text" asp-for="StateCode" onkeypress="return onlyNumber(event)" class="form-control" maxlength="2" placeholder="Enter state code (max 2 digits number)" autocomplete="off">
+                        <input type="text" asp-for="StateCode" onkeypress="return onlyNumber(event)" class="form-control" maxlength="2" placeholder="Enter State Code (max 2 digits number)" autocomplete="off">
                         <span asp-validation-for="StateCode" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">
