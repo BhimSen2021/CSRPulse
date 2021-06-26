@@ -8,4 +8,8 @@
     <PackageReference Include="NPOI" Version="2.5.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CSRPulse.Common\CSRPulse.Common.csproj" />
+  </ItemGroup>
+
 </Project>

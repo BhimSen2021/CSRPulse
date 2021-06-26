@@ -39,6 +39,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("VillageController/Index");
             try
             {
+               
                 BindDropdowns();
                 return View();
             }

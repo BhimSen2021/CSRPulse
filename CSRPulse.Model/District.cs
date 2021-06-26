@@ -24,6 +24,8 @@ namespace CSRPulse.Model
         [Display(Name = "Short Name")]
         public string DistrictShort { get; set; }
         public bool RecordExist { get; set; }
+
+        [Display(Name = "State Name")]
         public string StateName { get; set; }
         [Display(Name = "Active")]
         public bool? IsActiveFilter { get; set; }
