@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 
+
 namespace CSRPulse.ExportImport
 {
     public class Export : BaseExcel, IExport
@@ -34,8 +35,7 @@ namespace CSRPulse.ExportImport
                             headerRow.Height = 500;
                             XSSFCell cell = (XSSFCell)headerRow.CreateCell(column.Ordinal);
                             cell.SetCellValue(column.ColumnName);
-                            cell.CellStyle = workbook.CreateCellStyle();
-                            //hFont.IsBold = true;
+                            cell.CellStyle = workbook.CreateCellStyle();                           
                             cell.CellStyle.Alignment = HorizontalAlignment.Center;
                             cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                             cell.CellStyle.SetFont(hFont);
@@ -54,11 +54,12 @@ namespace CSRPulse.ExportImport
                         }
                     }
                     workbook.Write(file);
+
                     return true;
                 }
             }
             catch (Exception)
-            {               
+            {
                 return false;
             }
         }

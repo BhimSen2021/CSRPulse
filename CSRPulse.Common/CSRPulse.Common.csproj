@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="ExtensionMethods.cs~RF80a87d36.TMP" />
+  </ItemGroup>
+
 </Project>

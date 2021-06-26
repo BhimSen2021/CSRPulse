@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSRPulse.Common\CSRPulse.Common.csproj" />
+    <ProjectReference Include="..\CSRPulse.ExportImport\CSRPulse.ExportImport.csproj" />
     <ProjectReference Include="..\CSRPulse.Services\CSRPulse.Services.csproj" />
   </ItemGroup>
 
@@ -39,6 +40,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="wwwroot\TempFiles\" />
   </ItemGroup>
 
   <ItemGroup>
