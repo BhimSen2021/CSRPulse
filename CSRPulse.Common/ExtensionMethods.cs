@@ -87,5 +87,19 @@ namespace CSRPulse.Common
             }
             return FinYear.Trim();
         }
+
+        public static DataTable PrepairExportTable(DataTable dataTable, List<string> takeColumns)
+        {
+            for (int i = 0; i < dataTable.Columns.Count; i++)
+            {
+                if (!takeColumns.Contains(dataTable.Columns[i].ColumnName))
+                {
+                    dataTable.Columns.Remove(dataTable.Columns[i].ColumnName);
+                    dataTable.AcceptChanges();
+                    i--;
+                }
+            }
+            return dataTable;
+        }
     }
 }

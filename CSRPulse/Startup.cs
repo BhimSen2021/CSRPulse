@@ -12,6 +12,8 @@ using System;
 using Microsoft.AspNetCore.Http;
 using CSRPulse.Model;
 using DNTCaptcha.Core;
+using CSRPulse.ExportImport.Interfaces;
+using CSRPulse.ExportImport;
 
 namespace CSRPulse
 {
@@ -32,6 +34,7 @@ namespace CSRPulse
             #region R E G I S T E R  C O M P O N E N T  F O R  D I 
 
             services.AddAutoMapper(typeof(AutoMapperServices));
+            services.AddScoped<IExport, Export>();
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>();
             services.AddScoped<IPlanService, PlanService>();

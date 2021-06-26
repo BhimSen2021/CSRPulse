@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Text;
+using CSRPulse.ExportImport.Interfaces;
+using System.Data;
 
 namespace CSRPulse.Controllers
 {
@@ -21,12 +23,14 @@ namespace CSRPulse.Controllers
         private readonly IStateServices _stateServices;
         private readonly IDropdownBindService _ddlService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public DistrictController(IDistrictServices districtServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment, IStateServices stateServices)
+        private readonly IExport _export;
+        public DistrictController(IDistrictServices districtServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment, IStateServices stateServices, IExport export)
         {
             _districtServices = districtServices;
             _ddlService = ddlService;
             _webHostEnvironment = webHostEnvironment;
             _stateServices = stateServices;
+            _export = export;
         }
 
         [HttpGet]
@@ -174,7 +178,7 @@ namespace CSRPulse.Controllers
 
         public async Task<IActionResult> ExportTemplate()
         {
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\StateTemplate.csv");
+            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\DistrictTemplate.xlsx");
 
             if (!System.IO.File.Exists(filepath))
                 return Content($"Template not found.");
@@ -182,21 +186,39 @@ namespace CSRPulse.Controllers
             return await DownloadFile(filepath);
         }
 
-        public async Task<FileResult> ExportRefTemplate()
-        {        
+        public async Task<IActionResult> ExportRefTemplate()
+        {
             var statelist = await _stateServices.GetStateList();
-            
-            StringBuilder sb = new StringBuilder();
+            List<string> takeColumns = new List<string> { "StateId", "StateName" };
+            var statedt = Common.ExtensionMethods.ToDataTable<State>(statelist);
 
-            sb.AppendFormat("{0},{1},{2},{3}", "StateId",  "StateName ", "StateShort", Environment.NewLine);
 
-            foreach (var item in statelist)
+            var dt = Common.ExtensionMethods.PrepairExportTable(statedt, takeColumns);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+
+            var fname = string.Format(@"{0}.xlsx", DateTime.Now.Ticks);
+
+            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"TempFiles\" + fname);
+
+            if (_export.ExportToExcel(ds, filepath, "RefrenceCode_District"))
             {
-                sb.AppendFormat("{0},{1},{2},{3}", item.StateId, item.StateName, item.StateShort, Environment.NewLine);
-            }
+                if (!System.IO.File.Exists(filepath))
+                    return Content($"Tempfile path not found.");
 
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "RefTemplate_District.csv");
+                var res = await DownloadFile(filepath);
+
+                Common.ExtensionMethods.DeleteFile(filepath);
+                return res;
+
+            }
+            else
+            {
+                return Content($"District refrence code file downloding filed.");
+            }
         }
 
+        
     }
 }

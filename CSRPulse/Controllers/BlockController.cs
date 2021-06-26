@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Text;
+using System.Data;
+using CSRPulse.ExportImport.Interfaces;
 
 namespace CSRPulse.Controllers
 {
@@ -21,12 +23,14 @@ namespace CSRPulse.Controllers
         private readonly IBlockServices _blockServices;
         private readonly IDropdownBindService _ddlService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public BlockController(IDistrictServices districtServices, IBlockServices blockServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment)
+        private readonly IExport _export;
+        public BlockController(IDistrictServices districtServices, IBlockServices blockServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment, IExport export)
         {
             _districtServices = districtServices;
             _blockServices = blockServices;
             _ddlService = ddlService;
             _webHostEnvironment = webHostEnvironment;
+            _export = export;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@ namespace CSRPulse.Controllers
             try
             {
                 var result = await _blockServices.GetBlockList(block);
-                return PartialView("_BlockList",result);
+                return PartialView("_BlockList", result);
             }
             catch (Exception ex)
             {
@@ -108,7 +112,7 @@ namespace CSRPulse.Controllers
             }
         }
 
-       
+
         public async Task<IActionResult> Edit(int rid)
         {
             _logger.LogInformation("BlockController/Edit");
@@ -209,29 +213,46 @@ namespace CSRPulse.Controllers
 
         public async Task<IActionResult> ExportTemplate()
         {
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\BlockTemplate.csv");
+            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\BlockTemplate.xlsx");
             if (!System.IO.File.Exists(filepath))
                 return Content($"Template not found.");
 
             return await DownloadFile(filepath);
         }
 
-        public async Task<FileResult> ExportRefTemplate()
+        public async Task<IActionResult> ExportRefTemplate()
         {
             var model = new District();
             model.IsActive = true;
             var districtlist = await _districtServices.GetDistrictList(model);
 
-            StringBuilder sb = new StringBuilder();
+            List<string> takeColumns = new List<string> { "StateId", "StateName", "DistrictId", "DistrictName" };
+            var districtdt = Common.ExtensionMethods.ToDataTable<District>(districtlist);
+            var dt = Common.ExtensionMethods.PrepairExportTable(districtdt, takeColumns);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
 
-            sb.AppendFormat("{0},{1},{2},{3},{4}", "StateId", "StateName", "DistrictId", "DistrictName", Environment.NewLine);
 
-            foreach (var item in districtlist)
+            var fname = string.Format(@"{0}.xlsx", DateTime.Now.Ticks);
+
+            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"TempFiles\" + fname);
+
+            if (_export.ExportToExcel(ds, filepath, "RefrenceCode_Block"))
             {
-                sb.AppendFormat("{0},{1},{2},{3},{4}", item.StateId, item.StateName ,item.DistrictId, item.DistrictName, Environment.NewLine);
+                if (!System.IO.File.Exists(filepath))
+                    return Content($"Tempfile path not found.");
+
+                var res = await DownloadFile(filepath);
+
+                Common.ExtensionMethods.DeleteFile(filepath);
+                return res;
+
+            }
+            else
+            {
+                return Content($"Block refrence code file downloding filed.");
             }
 
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "RefTemplate_Block.csv");
         }
     }
 }
