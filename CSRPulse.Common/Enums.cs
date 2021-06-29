@@ -44,5 +44,12 @@ namespace CSRPulse.Common
         Outcome = 5
 
     }
+    public enum Plans
+    {
+        Basic = 1,
+        Standard = 2,
+        Professional = 3
+
+    }
 
 }

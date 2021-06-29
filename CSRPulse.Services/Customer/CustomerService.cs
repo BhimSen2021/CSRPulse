@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CSRPulse.Services
 {
@@ -29,8 +30,6 @@ namespace CSRPulse.Services
                 var result = await _genericRepository.GetAsync<DTOModel.Customer>();
 
                 var results = _genericRepository.GetIQueryable<DTOModel.CustomerLicenseActivation>(x => x.IsDeleted == false);
-
-                var result4 = _genericRepository.GetIQueryable<DTOModel.CustomerLicenseActivation>(x => x.IsDeleted == false);
 
                 foreach (var c in result)
                 {
@@ -61,13 +60,15 @@ namespace CSRPulse.Services
         {
             try
             {
-                var customer = new Customer();
-                var result = await _genericRepository.GetByIDAsync<DTOModel.Customer>(customerId);
+                var customer = new Customer();         
+
+                var result = await _genericRepository.GetIQueryable<DTOModel.Customer>(x => x.CustomerId == customerId).Include(p => p.CustomerPayment).Include(a => a.CustomerLicenseActivation).FirstOrDefaultAsync();
                 if (result != null)
                 {
                     customer = _mapper.Map<Customer>(result);
-                    
+
                     var cPayment = _mapper.Map<List<CustomerPayment>>(result.CustomerPayment);
+
                     var cActivation = _mapper.Map<List<CustomerLicenseActivation>>(result.CustomerLicenseActivation);
 
                     customer.CustomerPaymentList = cPayment;
@@ -77,7 +78,7 @@ namespace CSRPulse.Services
                 }
                 else
                     return customer;
-               
+
             }
             catch (Exception)
             {

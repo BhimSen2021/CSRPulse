@@ -21,9 +21,9 @@ namespace CSRPulse.Areas.Admin.Controllers
             _customerService = customerService;
         }
         
-        public async Task<IActionResult> CustomerListAsync()
+        public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Admin/Customer/CustomerList");
+            _logger.LogInformation("Admin/Customer/Index");
             try
             {
           

@@ -24,7 +24,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-end">
-                    <a asp-area="Admin" asp-controller="Registration" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create User</a>
+                    <a asp-area="Admin" asp-controller="Registration" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus-circle ms-1"></i> Create User</a>
                 </div>
                 <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
                     <thead class="thead-light">
@@ -47,6 +47,8 @@
                                         <span>@(Model.ToList().IndexOf(user) +1)</span>
                                     </td>
                                     <td class="table-user">
+                                        @if (user.ImageName == null)
+                                            user.ImageName = "sample-profile.png";
                                         <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
                                         @user.FullName
                                     </td>
