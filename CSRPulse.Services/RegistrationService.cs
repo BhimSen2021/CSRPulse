@@ -217,9 +217,10 @@ namespace CSRPulse.Services
                         Password = signUp.Password,
                         MobileNo = signUp.MobileNo,
                         ImageName = signUp.ImageName,
-                        IsActive = true,
-                        CreatedBy = 1,
-                        CreatedOn = System.DateTime.Now
+                        DepartmentId = signUp.DepartmentId,
+                        IsActive = signUp.IsActive,
+                        CreatedBy = signUp.CreatedBy,
+                        CreatedOn = signUp.CreatedOn
                     };
 
                     await _genericRepository.InsertAsync(user);

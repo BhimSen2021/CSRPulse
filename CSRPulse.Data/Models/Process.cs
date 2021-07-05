@@ -9,12 +9,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    public partial class UserRoles
+    public partial class Process
     {
         [Key]
-        public int UserRoleId { get; set; }
-        public int UserId { get; set; }
-        public int RoleId { get; set; }
-        public bool IsDeleted { get; set; }
+        public int ProcessId { get; set; }
+        [Required]
+        [StringLength(500)]
+        public string ProcessName { get; set; }
+        public int? FinalStatus { get; set; }
+        public bool IsActive { get; set; }
     }
 }

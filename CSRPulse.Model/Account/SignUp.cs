@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace CSRPulse.Model
 {
-    public class SignUp
+    public class SignUp:BaseModel
     {
         [Display(Name = "Full Name"), Required(ErrorMessage = "Please Enter Full Name")]
-        [StringLength(100)]
+        [StringLength(100), MinLength(2, ErrorMessage = "Full name should be contain atleast 2 characters.")]
         public string FullName { get; set; }
 
         [Display(Name = "Email address"), Required(ErrorMessage = "Please Enter Email address")]
@@ -24,7 +24,8 @@ namespace CSRPulse.Model
         public string MobileNo { get; set; }
 
         [Display(Name = "User Name"), Required(ErrorMessage = "Please Enter User Name")]
-        [StringLength(50)]
+       
+        [StringLength(50), MinLength(2, ErrorMessage = "User name should be contain atleast 2 characters.")]
         public string UserName { get; set; }
 
         [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Password")]
@@ -43,7 +44,11 @@ namespace CSRPulse.Model
 
         public int UserID { get; set; }
         [Display(Name ="Role")]
-        [Range(1,Int32.MaxValue,ErrorMessage ="Please select Role.")]
         public int RoleId { get; set; }
+       
+        [Display(Name = "Department Name")]
+        public int? DepartmentId { get; set; }
+        [Display(Name = "Department Name")]
+        public string DepartmentName { get; set; }
     }
 }

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Designation>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-area="" asp-controller="Designation" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus-circle me-1"></i> Add New Designation</a>
+        </div>
+        <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.DesignationName)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var designation in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(designation) +1)</span>
+                            </td>
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this designation.">  @Html.ActionLink(designation.DesignationName, "Edit", "Designation", new { designationId = designation.DesignationId })</span></td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@designation.DesignationId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (designation.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@designation.DesignationId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

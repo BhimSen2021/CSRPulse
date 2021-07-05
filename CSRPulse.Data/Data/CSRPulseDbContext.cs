@@ -26,6 +26,9 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayment { get; set; }
+        public virtual DbSet<Department> Department { get; set; }
+        public virtual DbSet<Designation> Designation { get; set; }
+        public virtual DbSet<DesignationHistory> DesignationHistory { get; set; }
         public virtual DbSet<District> District { get; set; }
         public virtual DbSet<EmailConfiguration> EmailConfiguration { get; set; }
         public virtual DbSet<Indicator> Indicator { get; set; }
@@ -37,6 +40,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Maintenance> Maintenance { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
+        public virtual DbSet<Process> Process { get; set; }
+        public virtual DbSet<ProcessWorkFlow> ProcessWorkFlow { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
@@ -52,10 +57,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -161,6 +164,39 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CustomerPayment_CustomerPayment");
+            });
+
+            modelBuilder.Entity<Department>(entity =>
+            {
+                entity.Property(e => e.DepartmentName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Designation>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DesignationName).IsUnicode(false);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            });
+
+            modelBuilder.Entity<DesignationHistory>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Formdate).HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Designation)
+                    .WithMany(p => p.DesignationHistory)
+                    .HasForeignKey(d => d.DesignationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DesignationHistory_Designation");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.DesignationHistory)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DesignationHistory_User");
             });
 
             modelBuilder.Entity<District>(entity =>
@@ -327,6 +363,31 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
             });
 
+            modelBuilder.Entity<Process>(entity =>
+            {
+                entity.Property(e => e.ProcessName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProcessWorkFlow>(entity =>
+            {
+                entity.HasKey(e => e.WorkflowId)
+                    .HasName("PK_tbl_WorkFlowDetail");
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Purpose).IsUnicode(false);
+
+                entity.HasOne(d => d.Receiver)
+                    .WithMany(p => p.ProcessWorkFlowReceiver)
+                    .HasForeignKey(d => d.ReceiverId)
+                    .HasConstraintName("FK_ProcessWorkFlow_User1");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.ProcessWorkFlowSender)
+                    .HasForeignKey(d => d.SenderId)
+                    .HasConstraintName("FK_ProcessWorkFlow_User");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
@@ -438,6 +499,16 @@ namespace CSRPulse.Data.Data
 
                 entity.Property(e => e.UserName).IsUnicode(false);
 
+                entity.HasOne(d => d.Department)
+                    .WithMany(p => p.User)
+                    .HasForeignKey(d => d.DepartmentId)
+                    .HasConstraintName("FK_User_Department");
+
+                entity.HasOne(d => d.Designation)
+                    .WithMany(p => p.User)
+                    .HasForeignKey(d => d.DesignationId)
+                    .HasConstraintName("FK_User_Designation");
+
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.RoleId)
@@ -474,18 +545,6 @@ namespace CSRPulse.Data.Data
             {
                 entity.HasKey(e => e.UserRoleId)
                     .HasName("PK_UserRole");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.UserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRole_Role");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRole_User");
             });
 
             modelBuilder.Entity<UserType>(entity =>

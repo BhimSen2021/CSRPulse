@@ -187,5 +187,13 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+        public IEnumerable<SelectListModel> GetDepartments()
+        {
+            var departments = _genericRepository.Get<DTOModel.Department>(x => x.IsActive == true);
+            var selectLists = _mapper.Map<List<SelectListModel>>(departments);
+            return selectLists.ToList();
+
+        }
     }
 }

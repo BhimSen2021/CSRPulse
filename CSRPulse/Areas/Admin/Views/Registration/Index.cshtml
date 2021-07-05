@@ -31,6 +31,7 @@
                         <tr>
                             <th width="5%">#</th>
                             <th>Full Name</th>
+                            <th>Department</th>
                             <th>User Name</th>
                             <th>Email Id</th>
                             <th>Phone No</th>
@@ -52,12 +53,13 @@
                                         <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
                                         @user.FullName
                                     </td>
+                                    <td>@user.DepartmentName</td>
                                     <td>@user.UserName</td>
                                     <td>@user.EmailID</td>
                                     <td>@user.MobileNo</td>
                                     <td>
                                         <div>
-                                            <input type="checkbox" id="switch_@user.UserID" data-switch="success" @if (user.IsActive == true) { <text> checked="checked" </text> } onchange="UserActiveDeActive(this)" />
+                                            <input type="checkbox" id="switch_@user.UserID" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (user.IsActive == true) { <text> checked="checked" </text> } />
                                             <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                         </div>
                                     </td>
@@ -67,7 +69,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="6">No Records Found</td>
+                                <td colspan="7">No Records Found</td>
                             </tr>
                         }
                     </tbody>
@@ -76,7 +78,39 @@
         </div>
     </div>
 </div>
+<partial name="_Confirmation" />
+
 @section Scripts{
+    <script type="text/javascript">
+        function openpopup(cnt) {
+            var id = cnt.id.split('_')[1];
+            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+        }
+        function ActiveDeActive(obj) {
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Admin/Registration/UserActiveDeActive',
+                data: { id: id, isChecked: isChecked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'Status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'Status changing failed.');
+                    }
+                },
+                error: function (responce) {
+                    commonMessage('error', 'Status changing failed.');
+                }
+            });
+        }
+    </script>
+
     <script type="text/javascript">
         function UserActiveDeActive(IsActive) {
             var userId = IsActive.id.split('_')[1];
@@ -87,12 +121,13 @@
                 url: '/Admin/Registration/UserActiveDeActive',
                 data: { userId: userId, IsActive: IsActive.checked },
                 success: function (responce) {
-                    if (responce) {commonMessage('success', 'User status changed successfully.');
+                    if (responce) {
+                        commonMessage('success', 'User status changed successfully.');
                     }
 
                     else {
                         commonMessage('warning', 'User status changing failed.');
-                    }                       
+                    }
 
                 },
                 error: function (responce) {

@@ -31,37 +31,41 @@
                 <div class="col-xl-4 text-center">
                     <img id="myImg" src="~/assets/images/users/sample-profile.png" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" title="Click to select image" style="cursor:pointer" />
                     <i style="margin-left:-25px; vertical-align:bottom; font-size:24px;" class="uil-camera-change text-muted"></i>
-                    @*<input id="UserImg" title="Upload image" type="file" name="UserImg" accept=".png,.jpg,.jpeg" style="display: none" />*@
                     <input asp-for="ImagePhoto" style="display:none">
-                    @*<button id="btnCP" type="button" class="btn btn-outline-success rounded-pill btn-sm mb-3"><i class="uil-camera-change"></i> Change picture</button>*@
                     <div asp-validation-summary="ModelOnly" class="text-start invalid"></div>
                     <div class="mb-3 mt-5 text-start">
-                        @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "form-label", @for = "FullName" })
+                        @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "form-label required" })
                         <input type="text" asp-for="FullName" class="form-control" maxlength="50" placeholder="Enter full name (max 50 characters)" autocomplete="off">
                         <span asp-validation-for="FullName" class="invalid"></span>
                     </div>
                     <div class="text-start mb-3">
-                        @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "form-label", @for = "EmailId" })
+                        @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "form-label required"})
                         <input type="text" asp-for="EmailId" class="form-control" required placeholder="Enter email id (max 50 characters)" autocomplete="off">
                         <span asp-validation-for="EmailId" class="invalid"></span>
                     </div>
-
+                    <div class="text-start mb-3">
+                        @Html.LabelFor(model => model.DepartmentId, htmlAttributes: new { @class = "form-label" })
+                        <select asp-for="DepartmentId" asp-items="@ViewBag.ddlDepartment" aria-required="true" class="form-select">
+                            <option disabled="" label="Select Department" selected="" value=""></option>
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="invalid"></span>
+                    </div>
                 </div> <!-- end card-body -->
                 <div class="col-1">
                 </div>
                 <div class="col-xl-5">
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.MobileNo, htmlAttributes: new { @class = "form-label", @for = "MobileNo" })
+                        @Html.LabelFor(model => model.MobileNo, htmlAttributes: new { @class = "form-label required ", @for = "MobileNo" })
                         <input type="text" asp-for="MobileNo" class="form-control" maxlength="10" pattern="[0-9]{10}" placeholder="Enter mobile number" autocomplete="off">
                         <span asp-validation-for="MobileNo" class="invalid"></span>
                     </div>
                     <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
+                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label required"})
                         <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter user name (max 50 characters)" autocomplete="off">
                         <span asp-validation-for="UserName" class="invalid"></span>
                     </div>
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label", @for = "Password" })
+                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label required"})
                         <div class="input-group input-group-merge">
                             <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" autocomplete="off">
                             <div class="input-group-text" data-password="false">
@@ -72,7 +76,7 @@
                         <span asp-validation-for="Password" class="invalid"></span>
                     </div>
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "form-label", @for = "ConfirmPassword" })
+                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "form-label required"})
                         <div class="input-group input-group-merge">
                             <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Enter Confirm password" autocomplete="off">
                             <div class="input-group-text" data-password="false">
@@ -82,7 +86,7 @@
                         <span asp-validation-for="ConfirmPassword" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">
-                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-account-circle"></i> Submit </button>
+                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-account-circle me-1"></i> Submit </button>
                     </div>
                 </div>
 
