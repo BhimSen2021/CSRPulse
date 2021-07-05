@@ -11,6 +11,7 @@ using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CSRPulse.Areas.Admin.Controllers
 {
@@ -21,12 +22,14 @@ namespace CSRPulse.Areas.Admin.Controllers
         private readonly IRegistrationService _registrationService;
         private readonly IAccountService _accountService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IDropdownBindService _ddlService;
 
-        public RegistrationController(IRegistrationService registrationService, IAccountService accountService, IWebHostEnvironment webHostEnvironment) : base()
+        public RegistrationController(IRegistrationService registrationService, IAccountService accountService, IWebHostEnvironment webHostEnvironment, IDropdownBindService dropdownBindService) : base()
         {
             _registrationService = registrationService;
             _accountService = accountService;
             _webHostEnvironment = webHostEnvironment;
+            _ddlService = dropdownBindService;
         }
 
         [HttpGet]
@@ -49,6 +52,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            BindDropdowns();
             return View(new SignUp());
         }
 
@@ -70,6 +74,9 @@ namespace CSRPulse.Areas.Admin.Controllers
                     else
                         singUp.ImageName = "sample-profile.png";
 
+                    singUp.CreatedBy = userDetail.UserID;
+                    singUp.CreatedOn = DateTime.Now;
+                    singUp.IsActive = true;
                     var result = await _registrationService.RegistrationAsync(singUp);
                     if (singUp.RecordExist)
                     {
@@ -81,6 +88,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                         return RedirectToAction(nameof(Index));
                     }
                 }
+                BindDropdowns();
                 return View(singUp);
             }
             catch (Exception ex)
@@ -91,10 +99,10 @@ namespace CSRPulse.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult UserActiveDeActive(int userId, bool IsActive)
+        public JsonResult UserActiveDeActive(int id, bool isChecked)
         {
             _logger.LogInformation("Admin/RegistrationController/UserActiveDeActive");
-            var result = _registrationService.UserActiveDeActive(userId, IsActive);
+            var result = _registrationService.UserActiveDeActive(id, isChecked);
             return Json(result);
         }
         private async Task<string> UploadImage(string folderPath, IFormFile file)
@@ -106,6 +114,13 @@ namespace CSRPulse.Areas.Admin.Controllers
             string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
             await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
             return folderPath;
+        }
+
+        [NonAction]
+        void BindDropdowns()
+        {
+            var listModels = _ddlService.GetDepartments();
+            ViewBag.ddlDepartment = new SelectList(listModels, "id", "value");
         }
 
     }

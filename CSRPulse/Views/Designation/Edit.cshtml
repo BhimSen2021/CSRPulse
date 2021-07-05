@@ -1,0 +1,63 @@
+﻿@model Designation
+@{
+    ViewData["Title"] = "Designation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item active">Designation</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Designation</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-controller="Designation" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="DesignationId" />
+                    <div class="row">
+                        <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="mb-3">
+                                <label asp-for="DesignationName" class="form-label required"></label>
+                                <input type="text" asp-for="DesignationName" class="form-control" maxlength="256" placeholder="Enter Designation Name (max 256 characters)" autocomplete="off">
+                                <span asp-validation-for="DesignationName" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <div>
+                                    <input asp-for="IsActive" type="checkbox" id="@Model.DesignationId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" />
+                                    <label for="@Model.DesignationId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="Designation" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

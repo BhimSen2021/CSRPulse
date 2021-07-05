@@ -1,4 +1,5 @@
 ﻿@model Customer
+@using CSRPulse.Common
 @{
     ViewData["Title"] = "Customer Details";
 }
@@ -20,48 +21,48 @@
     <div class="card-body">
         <div class="row mb-3">
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil-shield-check"></i>  @Html.DisplayName("Customer Code"):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayName("Customer Code")<i class="uil-shield-check ms-1"></i></h5>
                 <p>@Html.DisplayFor(model => model.CustomerCode)</p>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil-user"></i>  @Html.DisplayName("Customer Name"):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayName("Customer Name")<i class="uil-user ms-1"></i></h5>
                 <p>@Html.DisplayFor(model => model.CustomerName)</p>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil-envelopes"></i> @Html.DisplayNameFor(model => model.Email):</strong></p>
+                <p class="mt-2 mb-1">@Html.DisplayNameFor(model => model.Email)<i class="uil-envelopes ms-1"></i></p>
                 <p>@Html.DisplayFor(model => model.Email)</p>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil uil-phone"></i> @Html.DisplayName("Phone No"):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayName("Phone No")<i class="uil uil-phone ms-1"></i> </h5>
                 <p>@Html.DisplayFor(model => model.Telephone)</p>
             </div>
 
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil-globe"></i> @Html.DisplayNameFor(model => model.Website):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayNameFor(model => model.Website)<i class="uil-globe ms-1"></i> </h5>
                 <p>@Html.DisplayFor(model => model.Website)</p>
             </div>
 
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil-server"></i> @Html.DisplayName("Database Name"):</strong></p>
+                <p class="mt-2 mb-1">@Html.DisplayName("Database Name")<i class="uil-server ms-1"></i> </p>
                 <p>@Html.DisplayFor(model => model.DataBaseName)</p>
             </div>
 
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil uil-location"></i> @Html.DisplayNameFor(model => model.Country):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayNameFor(model => model.Country)<i class="uil uil-location ms-1"></i> </h5>
                 <p>@Html.DisplayFor(model => model.Country)</p>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil uil-location"></i> @Html.DisplayNameFor(model => model.City):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayNameFor(model => model.City)<i class="uil uil-location ms-1"></i> </h5>
                 <p>@Html.DisplayFor(model => model.City)</p>
             </div>
 
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil uil-location"></i> @Html.DisplayName("Address "):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayName("Address")<i class="uil uil-location ms-1"></i> </h5>
                 <p>@Html.DisplayFor(model => model.Address)</p>
                 <p>@Html.DisplayFor(model => model.Address2)</p>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                <p class="mt-2 mb-1"><strong><i class="uil uil-location"></i> @Html.DisplayNameFor(model => model.PostalCode):</strong></p>
+                <h5 class="mt-2 mb-1">@Html.DisplayNameFor(model => model.PostalCode)<i class="uil uil-location ms-1"></i> </h5>
                 <p>@Html.DisplayFor(model => model.PostalCode)</p>
             </div>
         </div>
@@ -82,7 +83,11 @@
                                 @Html.DisplayNameFor(model => model.CustomerLicense.LicenceActID)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.CustomerLicense.PlanID)
+                                @Html.DisplayNameFor(model => model.CustomerLicense.PaymentId)
+                            </th>
+                            <th>
+                               
+                                @Html.DisplayName("Plan")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.CustomerLicense.ActivationCount)
@@ -96,7 +101,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.CustomerLicenseList.Count > 0)
+                        @if (Model.CustomerLicenseList != null && Model.CustomerLicenseList.Count > 0)
                         {
                             foreach (var item in Model.CustomerLicenseList.OrderByDescending(l => l.LicenceActID))
                             {
@@ -106,7 +111,11 @@
                                         @Html.DisplayFor(modelItem => item.LicenceActID)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.PlanID)
+                                        @Html.DisplayFor(modelItem => item.PaymentId)
+                                    </td>
+                                    <td>
+                                        @Enum.GetName(typeof(Plans),item.PlanID)
+                                        @*@Html.DisplayFor(modelItem => item.PlanID)*@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ActivationCount)
@@ -124,7 +133,7 @@
                         else
                         {
                             <tr class="text-center">
-                                <td colspan="6">No records found.</td>
+                                <td colspan="7">No records found.</td>
                             </tr>
                         }
                     </tbody>
@@ -158,12 +167,12 @@
                                 @Html.DisplayNameFor(model => model.CustomerPayment.PaymentDate)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.CustomerPayment.IsSuccess)
+                                @Html.DisplayName("Status")
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.CustomerLicenseList.Count > 0)
+                        @if (Model.CustomerPaymentList != null && Model.CustomerPaymentList.Count > 0)
                         {
                             foreach (var item in Model.CustomerPaymentList.OrderByDescending(p => p.PaymentID))
                             {
@@ -183,7 +192,10 @@
                                         @Html.DisplayFor(modelItem => item.PaymentDate)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.IsSuccess)
+                                        @if (item.IsSuccess)
+                                        {<span class="badge badge-success-lighten rounded-pill">Success</span>}
+                                        else
+                                        {<span class="badge badge-danger-lighten rounded-pill">Failed</span>}
                                     </td>
                                 </tr>
                             }
@@ -196,6 +208,9 @@
                         }
                     </tbody>
                 </table>
+            </div>
+            <div class="mb-2 text-end">
+                <a asp-area="Admin" asp-controller="Customer" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply ms-1"></i> Back to list </a>
             </div>
         </div>
 

@@ -40,6 +40,9 @@ namespace CSRPulse.Model
         public DateTime? LastLogin { get; set; }
         public string RoleName { get; set; }
         public int RoleId { get; set; }
+        public string DepartmentName { get; set; }
+        public int DepartmentId { get; set; }
+
         public IFormFile ImagePhoto { get; set; }     
 
         public bool RecordExist { get; set; }

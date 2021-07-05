@@ -13,9 +13,6 @@ namespace CSRPulse.Services
     {
         public AutoMapperServices()
         {
-            CreateMap<DTOModel.Plan, Plan>().ReverseMap();
-            CreateMap<Plan, Plan>();
-            CreateMap<UserTypeModel, DTOModel.UserType>();
 
             CreateMap<DTOModel.Customer, Customer>()
            .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
@@ -36,8 +33,6 @@ namespace CSRPulse.Services
            .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
            .ForAllOtherMembers(i => i.Ignore());
 
-
-            CreateMap<StartingNumber, DTOModel.StartingNumber>();
             CreateMap<DTOModel.CustomerPayment, CustomerPayment>().ReverseMap();
             CreateMap<DTOModel.CustomerLicenseActivation, CustomerLicenseActivation>().ReverseMap();
 
@@ -46,7 +41,10 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
 
-            CreateMap<DTOModel.User, User>().ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId)).ReverseMap();
+            CreateMap<DTOModel.User, User>().ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId))
+                .ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Department.DepartmentName))
+                .ForMember(d => d.DepartmentId, o => o.MapFrom(s => s.Department.DepartmentId))
+                .ReverseMap();
 
             CreateMap<DTOModel.Role, Model.Role>()
                 .ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId))
@@ -58,16 +56,7 @@ namespace CSRPulse.Services
 
             CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
 
-            #region Email Mapper
-            CreateMap<Common.EmailMessage, DTOModel.MailSendStatus>()
-                .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
-                .ForMember(d => d.ToEmails, o => o.MapFrom(s => s.To))
-                .ForMember(d => d.CcEmails, o => o.MapFrom(s => s.CC))
-                 .ForMember(d => d.BccEmails, o => o.MapFrom(s => s.Bcc))
-                .ForMember(d => d.MailContent, o => o.MapFrom(s => s.Body))
-                .ForMember(d => d.SubjectId, o => o.MapFrom(s => s.SubjectId))
-            .ForAllOtherMembers(d => d.Ignore());
-            #endregion
+            #region M A S T E R S
 
             #region Thematic Mapper
             CreateMap<DTOModel.Uom, Uom>().ReverseMap();
@@ -100,6 +89,44 @@ namespace CSRPulse.Services
             CreateMap<Village, DTOModel.Village>()
                 .ForMember(d => d.LocationType, o => o.MapFrom(s => (int)s.LocationType));
             #endregion
+
+            CreateMap<DTOModel.Plan, Plan>().ReverseMap();
+            CreateMap<Plan, Plan>();
+            CreateMap<UserTypeModel, DTOModel.UserType>();
+            CreateMap<StartingNumber, DTOModel.StartingNumber>();
+            CreateMap<DTOModel.Department, Department>();
+
+            CreateMap<DTOModel.Process, Process>()
+                .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
+                .ForMember(d => d.ProcessName, o => o.MapFrom(s => s.ProcessName))
+                .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
+                .ForMember(d => d.FinalStatus, o => o.MapFrom(s => s.FinalStatus)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+
+            CreateMap<DTOModel.Designation, Model.Designation>()
+                .ForMember(d => d.DesignationId, o => o.MapFrom(s => s.DesignationId))
+                .ForMember(d => d.DesignationName, o => o.MapFrom(s => s.DesignationName))
+                .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
+                .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy))
+                .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
+                .ForMember(d => d.UpdatedBy, o => o.MapFrom(s => s.UpdatedBy))
+                .ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+
+            #endregion
+
+            #region Email Mapper
+            CreateMap<Common.EmailMessage, DTOModel.MailSendStatus>()
+                .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
+                .ForMember(d => d.ToEmails, o => o.MapFrom(s => s.To))
+                .ForMember(d => d.CcEmails, o => o.MapFrom(s => s.CC))
+                 .ForMember(d => d.BccEmails, o => o.MapFrom(s => s.Bcc))
+                .ForMember(d => d.MailContent, o => o.MapFrom(s => s.Body))
+                .ForMember(d => d.SubjectId, o => o.MapFrom(s => s.SubjectId))
+            .ForAllOtherMembers(d => d.Ignore());
+            #endregion
+
+
+
+
 
             #region Dropdown Mapper
             CreateMap<DTOModel.State, SelectListModel>()
@@ -146,6 +173,10 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.IndicatorType, SelectListModel>()
           .ForMember(d => d.id, o => o.MapFrom(s => s.IndicatorTypeId))
           .ForMember(d => d.value, o => o.MapFrom(s => s.IndicatorType1));
+
+            CreateMap<DTOModel.Department, SelectListModel>()
+         .ForMember(d => d.id, o => o.MapFrom(s => s.DepartmentId))
+         .ForMember(d => d.value, o => o.MapFrom(s => s.DepartmentName));
 
             #endregion
 

@@ -17,7 +17,7 @@ namespace CSRPulse.Model
         public int PaymentMode { get; set; }
         [Display(Name = "Paymane Date")]
         public DateTime PaymentDate { get; set; }
-        [Display(Name = "Is Success")]
+        [Display(Name = "Success")]
         public bool IsSuccess { get; set; }
     }
 }

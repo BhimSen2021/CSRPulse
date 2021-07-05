@@ -39,6 +39,9 @@ namespace CSRPulse
             services.AddScoped<IGenericRepository, GenericRepository>();
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IDepartmentServices, DepartmentServices>();
+            services.AddScoped<IDesignationServices, DesignationServices>();
+            services.AddScoped<IProcessServices, ProcessServices>();
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

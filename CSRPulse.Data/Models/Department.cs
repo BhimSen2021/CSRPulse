@@ -9,27 +9,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    public partial class Role
+    public partial class Department
     {
-        public Role()
+        public Department()
         {
             User = new HashSet<User>();
         }
 
         [Key]
-        public int RoleId { get; set; }
+        public int DepartmentId { get; set; }
         [Required]
-        [StringLength(256)]
-        public string RoleName { get; set; }
-        [Required]
-        [StringLength(10)]
-        public string RoleShortName { get; set; }
-        public int? Seniorty { get; set; }
-        [Required]
-        public bool? IsActive { get; set; }
-        public int? ReportTo { get; set; }
+        [StringLength(250)]
+        public string DepartmentName { get; set; }
+        public bool IsActive { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime CreatedOn { get; set; }
+        public int CreatedBy { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? UpdatedOn { get; set; }
+        public int? UpdatedBy { get; set; }
 
-        [InverseProperty("Role")]
+        [InverseProperty("Department")]
         public virtual ICollection<User> User { get; set; }
     }
 }

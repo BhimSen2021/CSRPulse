@@ -272,9 +272,10 @@ namespace CSRPulse.Services
 
         public async Task<List<User>> GetUserAsync()
         {
-            var result = await _genericRepository.GetAsync<DTOModel.User>();
             try
             {
+                var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.User>().Include(d => d.Department));
+               
                 return _mapper.Map<List<User>>(result);
             }
             catch (Exception)
@@ -301,7 +302,6 @@ namespace CSRPulse.Services
             bool flag;
             try
             {
-
                 var custData = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserName == custCode).FirstOrDefault();
                 if (custData != null)
                 {
