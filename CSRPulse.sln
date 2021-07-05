@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.Services", "CSRPul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse", "CSRPulse\CSRPulse.csproj", "{B771DBCC-B857-4C32-8835-7D775868CFF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRPulse.ExportImport", "CSRPulse.ExportImport\CSRPulse.ExportImport.csproj", "{87885117-3615-41DD-924B-2754E429F9A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSRPulse.ExportImport", "CSRPulse.ExportImport\CSRPulse.ExportImport.csproj", "{87885117-3615-41DD-924B-2754E429F9A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Import Process Approver List";
+    ViewBag.Title = "Import District";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,15 +16,15 @@
     }
 </style>
 
-<div class="advance-search" style="">
+<div class="row">
    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  d-none" id="dv-Import-Section">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="dv-Import-Section">
 
         <div class="panel panel-default">
 
             <div class="panel-body" id="dv-import">
 
-                @{ Html.RenderPartial("_Import");}
+                @{await Html.RenderPartialAsync("_ImportFilter");}
 
                 <hr />
 
@@ -51,7 +51,7 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
 
-                        var url = "@Url.Action("_ImportedDataAsGridFormat", "ImportProcessApproverList")";
+                        var url = "@Url.Action("_ImportedDataAsGridFormat", "District")";
                         var response = xhr.responseText.substring(1, xhr.responseText.length - 1);
                         //alert(response);
                         if (response == "nofileFound") {

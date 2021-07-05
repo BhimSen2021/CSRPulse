@@ -219,6 +219,10 @@ namespace CSRPulse.Controllers
             }
         }
 
+        public ViewResult Import()
+        {
+            return View();
+        }
         
     }
 }
