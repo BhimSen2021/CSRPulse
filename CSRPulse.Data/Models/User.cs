@@ -32,9 +32,10 @@ namespace CSRPulse.Data.Models
         [Key]
         public int UserId { get; set; }
         public int UserTypeId { get; set; }
-        public int? DepartmentId { get; set; }
-        public int? DesignationId { get; set; }
+        public int DepartmentId { get; set; }
+        public int DesignationId { get; set; }
         public int RoleId { get; set; }
+        public int? PartnerId { get; set; }
         [Required]
         [StringLength(50)]
         public string UserName { get; set; }

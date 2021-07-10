@@ -39,6 +39,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<MailSubject> MailSubject { get; set; }
         public virtual DbSet<Maintenance> Maintenance { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Process> Process { get; set; }
         public virtual DbSet<ProcessWorkFlow> ProcessWorkFlow { get; set; }
@@ -57,6 +58,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -356,6 +358,31 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.Url).IsUnicode(false);
             });
 
+            modelBuilder.Entity<Partner>(entity =>
+            {
+                entity.Property(e => e.ComCity).IsUnicode(false);
+
+                entity.Property(e => e.CommAddress).IsUnicode(false);
+
+                entity.Property(e => e.CommMobile).IsUnicode(false);
+
+                entity.Property(e => e.CommPhone).IsUnicode(false);
+
+                entity.Property(e => e.Email).IsUnicode(false);
+
+                entity.Property(e => e.PartnerName).IsUnicode(false);
+
+                entity.Property(e => e.RegAddress).IsUnicode(false);
+
+                entity.Property(e => e.RegCity).IsUnicode(false);
+
+                entity.Property(e => e.RegMobile).IsUnicode(false);
+
+                entity.Property(e => e.RegPhone).IsUnicode(false);
+
+                entity.Property(e => e.Website).IsUnicode(false);
+            });
+
             modelBuilder.Entity<Plan>(entity =>
             {
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
@@ -502,11 +529,13 @@ namespace CSRPulse.Data.Data
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.DepartmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User_Department");
 
                 entity.HasOne(d => d.Designation)
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.DesignationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User_Designation");
 
                 entity.HasOne(d => d.Role)

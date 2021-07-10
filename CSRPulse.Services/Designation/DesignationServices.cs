@@ -23,7 +23,6 @@ namespace CSRPulse.Services
             try
             {
                 var model = _mapper.Map<DTOModel.Designation>(designation);
-
                 var res = await _genericRepository.InsertAsync(model);
                 if (res > 0)
                     return true;

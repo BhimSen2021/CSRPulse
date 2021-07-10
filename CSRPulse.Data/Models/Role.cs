@@ -25,6 +25,8 @@ namespace CSRPulse.Data.Models
         [StringLength(10)]
         public string RoleShortName { get; set; }
         public int? Seniorty { get; set; }
+        [StringLength(500)]
+        public string Details { get; set; }
         [Required]
         public bool? IsActive { get; set; }
         public int? ReportTo { get; set; }

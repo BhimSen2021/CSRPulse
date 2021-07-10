@@ -29,14 +29,14 @@
             <div class="row">
                 <div class="col-6">
                     <div class="mb-3">
-                        <label asp-for="RoleName" for="MobileNo" class="form-label">Role</label>
+                        <label asp-for="RoleName" class="form-label">Role</label>
                         <input type="text" asp-for="RoleName" class="form-control" maxlength="50" placeholder="Enter Role (max 50 characters)" autocomplete="off">
                         <span asp-validation-for="RoleName" class="invalid"></span>
                     </div>
 
 
                     <div class="mb-3">
-                        <label asp-for="RoleShortName" for="UserName" class="form-label">Short Name</label>
+                        <label asp-for="RoleShortName" class="form-label">Short Name</label>
                         <input type="text" asp-for="RoleShortName" class="form-control" maxlength="10" placeholder="Enter short name (max 10 characters)" autocomplete="off">
                         <span asp-validation-for="RoleShortName" class="invalid"></span>
                     </div>

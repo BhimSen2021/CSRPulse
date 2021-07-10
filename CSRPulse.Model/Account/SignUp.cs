@@ -43,12 +43,19 @@ namespace CSRPulse.Model
         public bool RecordExist { get; set; }
 
         public int UserID { get; set; }
-        [Display(Name ="Role")]
+        [Display(Name ="Role"), Required(ErrorMessage = "Please Select Role")]
         public int RoleId { get; set; }
        
-        [Display(Name = "Department Name")]
-        public int? DepartmentId { get; set; }
-        [Display(Name = "Department Name")]
+        [Display(Name = "Department"), Required(ErrorMessage = "Please Select Department")]
+        public int DepartmentId { get; set; }
+        [Display(Name = "Department")]
         public string DepartmentName { get; set; }
+
+        [Display(Name = "Designation"), Required(ErrorMessage = "Please Select Designation")]
+        public int DesignationId { get; set; }
+
+        public int OldDesignationId { get; set; }
+        [Display(Name = "Partner")]
+        public int? PartnerId { get; set; }
     }
 }

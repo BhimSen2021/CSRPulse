@@ -23,6 +23,7 @@
                                 <span>@(Model.ToList().IndexOf(process) +1)</span>
                             </td>
                             <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Process.">  @Html.ActionLink(process.ProcessName, "Edit", "Process", new { processId = process.ProcessId })</span></td>
+                            <td>@process.FinalStatus</td>
                             <td>
                                 <div>
                                     <input type="checkbox" id="switch_@process.ProcessId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (process.IsActive == true) { <text> checked="checked" </text> } />

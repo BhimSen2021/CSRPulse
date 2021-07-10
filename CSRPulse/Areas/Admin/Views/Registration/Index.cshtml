@@ -51,7 +51,8 @@
                                         @if (user.ImageName == null)
                                             user.ImageName = "sample-profile.png";
                                         <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
-                                        @user.FullName
+                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this user.">  @Html.ActionLink(user.FullName, "Edit", "Registration", new { userId = user.UserID })</span>
+                                       
                                     </td>
                                     <td>@user.DepartmentName</td>
                                     <td>@user.UserName</td>

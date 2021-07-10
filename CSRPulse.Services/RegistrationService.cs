@@ -7,7 +7,7 @@ using CSRPulse.Data.Repositories;
 using AutoMapper;
 using DTOModel = CSRPulse.Data.Models;
 using System.Linq;
-
+using CSRPulse.Model;
 
 namespace CSRPulse.Services
 {
@@ -209,7 +209,7 @@ namespace CSRPulse.Services
 
                     var user = new DTOModel.User()
                     {
-                        RoleId = signUp.RoleId == 0 ? 99 : signUp.RoleId, // For Administrator
+                        RoleId = signUp.RoleId,
                         UserTypeId = 1, // For Internal User
                         UserName = signUp.UserName,
                         FullName = signUp.FullName,
@@ -218,12 +218,15 @@ namespace CSRPulse.Services
                         MobileNo = signUp.MobileNo,
                         ImageName = signUp.ImageName,
                         DepartmentId = signUp.DepartmentId,
+                        DesignationId = signUp.DesignationId,
+                        PartnerId = signUp.PartnerId,
                         IsActive = signUp.IsActive,
                         CreatedBy = signUp.CreatedBy,
                         CreatedOn = signUp.CreatedOn
                     };
 
-                    await _genericRepository.InsertAsync(user);
+                    await _genericRepository.InsertAsync(user);                   
+
                     transaction.Commit();
                     return user.UserId;
                 }
@@ -247,6 +250,71 @@ namespace CSRPulse.Services
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public async Task<SignUp> GetUserById(int userId)
+        {
+            try
+            {
+                var uData = await _genericRepository.GetByIDAsync<DTOModel.User>(userId);
+                if (uData != null)
+                {
+                    var signUp = new SignUp()
+                    {
+                        UserID = uData.UserId,
+                        UserName = uData.UserName,
+                        FullName  = uData.FullName,
+                        ImageName = uData.ImageName,
+                        EmailId = uData.EmailId,
+                        MobileNo = uData.MobileNo,
+                        Password = uData.Password,
+                        ConfirmPassword = uData.Password,
+                        RoleId = uData.RoleId,
+                        DepartmentId = uData.DepartmentId,
+                        DesignationId = uData.DesignationId,
+                        PartnerId = uData.PartnerId
+                    };
+
+                    return signUp;
+                }
+                else
+                    return new SignUp();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateUser(Model.SignUp signUp)
+        {
+            try
+            {                
+                var dData = await _genericRepository.GetByIDAsync<DTOModel.User>(signUp.UserID);
+                if (dData != null)
+                {
+
+                    dData.FullName = signUp.FullName;
+                    dData.ImageName = signUp.ImageName;
+                    dData.Password = signUp.Password;                   
+                    dData.EmailId = signUp.EmailId;
+                    dData.MobileNo = signUp.MobileNo;
+                    dData.Password = signUp.Password;
+                    dData.RoleId = signUp.RoleId;
+                    dData.DepartmentId = signUp.DepartmentId;
+                    dData.DesignationId = signUp.DesignationId;
+                    dData.PartnerId = signUp.PartnerId;                    
+                    _genericRepository.Update(dData);
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

@@ -10,8 +10,8 @@ namespace CSRPulse.Model
         [Key]
         public int DepartmentId { get; set; }
         [Required]
-        [StringLength(200), MinLength(2, ErrorMessage = "Department name should be contain atleast 2 characters.")]
-        [Display(Name = "Department Name")]
+        [StringLength(200), MinLength(2, ErrorMessage = "Department should be contain atleast 2 characters.")]
+        [Display(Name = "Department")]
         public string DepartmentName { get; set; }
         public bool RecordExist { get; set; }
         [Display(Name = "Active")]

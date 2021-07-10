@@ -1,6 +1,10 @@
-﻿@model CSRPulse.Model.SignUp
+﻿@model SignUp
 @{
     ViewData["Title"] = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,23 +19,26 @@
                     <li class="breadcrumb-item active">Edit User</li>
                 </ol>
             </div>
-            <h4 class="page-title">Create an Account</h4>
+            <h4 class="page-title">Edit User</h4>
         </div>
     </div>
 </div>
 
 <div class="card">
     <div class="card-body">
-        <form method="post" asp-area="Admin" asp-controller="Registration" asp-action="Create" enctype="multipart/form-data">
+        <form method="post" asp-area="Admin" asp-controller="Registration" asp-action="Edit" enctype="multipart/form-data">
+
             @Html.AntiForgeryToken()
-          
+
             <div class="row">
-                <h4 class="text-muted text-start mb-3">Please fill in this form to create an account.</h4>
+                <h4 class="text-muted text-start mb-3">Please update in this form to update account details.</h4>
                 <div class="col-xl-4 text-center">
-                    <img id="myImg" src="~/assets/images/users/sample-profile.png" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to select image" style="cursor:pointer" />
+                    <img id="myImg" src="~/assets/images/users/@Model.ImageName" asp-append-version="true" alt="Profile" class="rounded-circle avatar-xl img-thumbnail" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to select image" style="cursor:pointer" />
                     <i style="margin-left:-25px; vertical-align:bottom; font-size:24px;" class="uil-camera-change text-muted"></i>
                     <input asp-for="ImagePhoto" style="display:none">
+                    <input type="hidden" asp-for="ImageName" />
                     <div asp-validation-summary="ModelOnly" class="text-start invalid"></div>
+                    <input type="hidden" asp-for="UserID" />
                     <div class="mb-3 mt-5 text-start">
                         @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "form-label required" })
                         <input type="text" asp-for="FullName" class="form-control" maxlength="50" placeholder="Enter full name (max 50 characters)" autocomplete="off">
@@ -64,14 +71,16 @@
                 <div class="col-xl-5">
                     <div class="text-start mb-3">
                         @Html.LabelFor(model => model.DesignationId, htmlAttributes: new { @class = "form-label required" })
+                        <span class="float-end" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to see designation history"><i class="dripicons-information" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success"></i></span>
                         <select asp-for="DesignationId" asp-items="@ViewBag.ddlDesignation" aria-required="true" class="form-select">
                             <option disabled="" label="Select Designation" selected="" value=""></option>
                         </select>
                         <span asp-validation-for="DesignationId" class="invalid"></span>
+                        <input type="hidden" asp-for="OldDesignationId" value="@Model.DesignationId"/>
                     </div>
 
                     <div class="text-start mb-3">
-                        @Html.LabelFor(model => model.PartnerId, htmlAttributes: new { @class = "form-label" })
+                        @Html.LabelFor(model => model.PartnerId, htmlAttributes: new { @class = "form-label" })<span class="small text-warning float-end"><i>(If you want to create a partner type user then select partner )</i></span>
                         <select asp-for="PartnerId" asp-items="@ViewBag.ddlPartner" aria-required="true" class="form-select">
                             <option disabled="" label="Select Partner" selected="" value=""></option>
                         </select>
@@ -85,13 +94,13 @@
                     </div>
                     <div class="form-group mb-3">
                         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label required" })
-                        <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter user name (max 50 characters)" autocomplete="off">
+                        <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter user name (max 50 characters)" autocomplete="off" disabled>
                         <span asp-validation-for="UserName" class="invalid"></span>
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label required" })
                         <div class="input-group input-group-merge">
-                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" autocomplete="off">
+                            <input type="password" asp-for="Password" value="@Model.Password" class="form-control" placeholder="Enter password" autocomplete="off">
                             <div class="input-group-text" data-password="false">
                                 <span class="password-eye"></span>
                             </div>
@@ -102,7 +111,7 @@
                     <div class="mb-3">
                         @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "form-label required" })
                         <div class="input-group input-group-merge">
-                            <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Enter Confirm password" autocomplete="off">
+                            <input type="password" asp-for="ConfirmPassword" value="@Model.ConfirmPassword" class="form-control" placeholder="Enter Confirm password" autocomplete="off">
                             <div class="input-group-text" data-password="false">
                                 <span class="password-eye"></span>
                             </div>
@@ -110,7 +119,8 @@
                         <span asp-validation-for="ConfirmPassword" class="invalid"></span>
                     </div>
                     <div class="mb-2 text-end">
-                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-account-circle me-1"></i> Submit </button>
+                        <a asp-area="Admin" asp-controller="Registration" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                        <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
                     </div>
                 </div>
 
@@ -118,6 +128,7 @@
         </form>
     </div> <!-- end card body-->
 </div>
+<partial name="_DesignationHistory" view-data="ViewData"/>
 
 @section Scripts {
     <script type="text/javascript">

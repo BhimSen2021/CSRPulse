@@ -1,0 +1,204 @@
+﻿@model Partner
+@using CSRPulse.Common
+@{
+    ViewData["Title"] = "Partner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item active">Partner</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Partner</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-controller="Partner" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="PartnerId" />
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label asp-for="PartnerType" class="form-label required"></label>
+                                <select asp-for="PartnerType" asp-items="@Html.GetEnumSelectList<PartnerType>()" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Type" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="PartnerType" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label required"></label>
+                                <input type="text" asp-for="Email" class="form-control" maxlength="50" placeholder="Enter Email (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="Email" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="DateOfEst" class="form-label required"></label>
+                                @Html.EditorFor(model => model.DateOfEst, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                <span asp-validation-for="DateOfEst" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="PartnerDetails" class="form-label"></label>
+                                <textarea asp-for="PartnerDetails" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="PartnerDetails" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="text-muted">REGISTRATION ADDRESS</h6>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RegAddress" class="form-label required"></label>
+                                <input type="text" asp-for="RegAddress" class="form-control" maxlength="256" placeholder="Enter Address (max 256 characters)" autocomplete="off">
+                                <span asp-validation-for="RegAddress" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RegState" class="form-label required"></label>
+                                <select asp-for="RegState" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select State" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="RegState" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="RegCity" class="form-label required"></label>
+                                <input type="text" asp-for="RegCity" class="form-control" maxlength="50" placeholder="Enter City (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="RegCity" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RegPin" class="form-label required"></label>
+                                <input type="text" asp-for="RegPin" class="form-control" onkeypress="return onlyNumber(event)" maxlength="6" placeholder="Enter PIN Code (max 6 digits number)" autocomplete="off">
+                                <span asp-validation-for="RegPin" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="RegPhone" class="form-label"></label>
+                                <input type="text" asp-for="RegPhone" maxlength="12" onkeypress="return onlyNumber(event)" placeholder="Enter Phone No(10-12 digits number)" class="form-control" autocomplete="off">
+                                <span asp-validation-for="RegPhone" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="RegMobile" class="form-label"></label>
+                                <input type="text" asp-for="RegMobile" maxlength="10" onkeypress="return onlyNumber(event)" placeholder="Enter Mobile No(10 digits number)" class="form-control" autocomplete="off">
+                                <span asp-validation-for="RegMobile" class="invalid"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label asp-for="PartnerName" class="form-label required"></label>
+                                <input type="text" asp-for="PartnerName" class="form-control" maxlength="256" placeholder="Enter Partner Name (max 256 characters)" autocomplete="off">
+                                <span asp-validation-for="PartnerName" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Website" class="form-label"></label>
+                                <input type="text" asp-for="Website" class="form-control" maxlength="50" placeholder="Enter Web Site (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="Website" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="DealingWithUsSince" class="form-label"></label>
+                                @Html.EditorFor(model => model.DealingWithUsSince, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                <span asp-validation-for="DealingWithUsSince" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="MissionVision" class="form-label"></label>
+                                <textarea asp-for="MissionVision" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="MissionVision" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <div class=""><h6 class="text-muted">COMMUNICATION ADDRESS</h6></div>
+                                <div class="float-end">
+                                    <div class="form-check form-checkbox-info">
+                                        <input type="checkbox" class="form-check-input" id="customCheckcolor3" onchange="CopyRegToCom(this)">
+                                        <label class="form-check-label text-info" for="customCheckcolor3">Same As Registration</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="CommAddress" class="form-label"></label>
+                                <input type="text" asp-for="CommAddress" class="form-control" maxlength="256" placeholder="Enter Address (max 256 characters)" autocomplete="off">
+                                <span asp-validation-for="CommAddress" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ComState" class="form-label"></label>
+                                <select asp-for="ComState" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select State" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="ComState" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ComCity" class="form-label"></label>
+                                <input type="text" asp-for="ComCity" class="form-control" maxlength="50" placeholder="Enter City (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="ComCity" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ComPin" class="form-label"></label>
+                                <input type="text" asp-for="ComPin" class="form-control" onkeypress="return onlyNumber(event)" maxlength="6" placeholder="Enter PIN Code (max 6 digits number)" autocomplete="off">
+                                <span asp-validation-for="ComPin" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CommPhone" class="form-label"></label>
+                                <input type="text" asp-for="CommPhone" maxlength="12" onkeypress="return onlyNumber(event)" placeholder="Enter Phone No(10-12 digits number)" class="form-control" autocomplete="off">
+                                <span asp-validation-for="CommPhone" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CommMobile" class="form-label"></label>
+                                <input type="text" asp-for="CommMobile" maxlength="10" onkeypress="return onlyNumber(event)" placeholder="Enter Mobile No(10 digits number)" class="form-control" autocomplete="off">
+                                <span asp-validation-for="CommMobile" class="invalid"></span>
+                            </div>
+
+                        </div>
+                    </div> <!-- end card -->
+                    <div class="row">
+                        <div class="mb-2 text-end">
+                            <a asp-area="" asp-controller="Partner" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        function CopyRegToCom(obj) {
+            if ($(obj).is(":checked")) {
+                $('#CommAddress').val($('#RegAddress').val());
+                $('#ComState').val($('#RegState').val());
+                $('#ComCity').val($('#RegCity').val());
+                $('#ComPin').val($('#RegPin').val());
+                $('#CommPhone').val($('#RegPhone').val());
+                $('#CommMobile').val($('#RegMobile').val());
+
+            } else {
+
+            }
+        }
+
+    </script>
+}

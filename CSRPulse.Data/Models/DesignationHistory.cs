@@ -19,6 +19,7 @@ namespace CSRPulse.Data.Models
         public DateTime Formdate { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? Todate { get; set; }
+        public bool IsDeleted { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }

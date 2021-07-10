@@ -10,7 +10,7 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
                     <li class="breadcrumb-item active">Role</li>
                 </ol>
             </div>
@@ -23,15 +23,16 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="text-end">
+                @*<div class="text-end">
                     <a asp-area="Customer" asp-controller="Role" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Role</a>
-                </div>
+                </div>*@
                 <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
                     <thead class="thead-light">
                         <tr>
                             <th width="5%">#</th>
                             <th>Role Name</th>
                             <th>Short Name</th>
+                            <th>Details</th>
                             <th width="5%">Active</th>
                         </tr>
                     </thead>
@@ -40,20 +41,22 @@
                         {
                             @foreach (var role in Model)
                             {
-                                <tr>
-                                    <td>
-                                        <span>@(Model.ToList().IndexOf(role) +1)</span>
-                                    </td>
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(role) +1)</span>
+                            </td>
 
-                                    <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this role.">  @Html.ActionLink(role.RoleName, "Edit", "Role", new { rid = role.RoleId })</span></td>      
-                                    <td>@role.RoleShortName</td>
-                                    <td>
-                                        <div>
-                                            <input type="checkbox" id="switch_@role.RoleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (role.IsActive == true) { <text> checked="checked" </text> } />
-                                            <label for="switch_@role.RoleId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                        </div>
-                                    </td>
-                                </tr>
+                            @*<td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this role.">  @Html.ActionLink(role.RoleName, "Edit", "Role", new { rid = role.RoleId })</span></td>*@
+                            <td>@role.RoleName</td>
+                            <td>@role.RoleShortName</td>
+                            <td>@role.Details</td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@role.RoleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (role.IsActive == true) { <text> checked="checked" </text> } disabled/>
+                                    <label for="switch_@role.RoleId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
 
                             }
                         }
