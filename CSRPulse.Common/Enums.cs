@@ -42,14 +42,17 @@ namespace CSRPulse.Common
         Impact = 3,
         Input = 4,
         Outcome = 5
-
     }
     public enum Plans
     {
         Basic = 1,
         Standard = 2,
         Professional = 3
-
     }
 
+    public enum PartnerType
+    {
+        NGO = 1,
+        Auditor = 2
+    }
 }

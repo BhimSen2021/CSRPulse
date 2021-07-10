@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSRPulse.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace CSRPulse.Services.IServices
         bool SendOTP(string email, string OTP, string companyName);
 
         Task<int> RegistrationAsync(Model.SignUp signUp);
+        Task<SignUp> GetUserById(int userId);
+        Task<bool> UpdateUser(SignUp signUp);
         bool UserActiveDeActive(int userId, bool IsActive);
 
     }

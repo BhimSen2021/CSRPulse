@@ -1,6 +1,8 @@
 ﻿using CSRPulse.Model;
 using CSRPulse.Services;
+using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,19 +11,19 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    public class ProcessController : BaseController<ProcessController>
+    public class PartnerController : BaseController<PartnerController>
     {
-        private readonly IProcessServices _processServices;
-
-        public ProcessController(IProcessServices processServices)
+        private readonly IPartnerService _partnerService;
+        private readonly IDropdownBindService _ddlService;
+        public PartnerController(IPartnerService partnerService, IDropdownBindService dropdownBindService)
         {
-            _processServices = processServices;
+            _partnerService = partnerService;
+            _ddlService = dropdownBindService;
         }
-
         [HttpGet]
         public IActionResult Index()
         {
-            _logger.LogInformation("ProcessController/Index");
+            _logger.LogInformation("PartnerController/Index");
             try
             {
                 return View();
@@ -34,13 +36,13 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public async Task<PartialViewResult> GetProcessList(Process process)
+        public async Task<PartialViewResult> GetPartnerList(Partner partner)
         {
-            _logger.LogInformation("ProcessController/GetProcessList");
+            _logger.LogInformation("PartnerController/GetPartnerList");
             try
             {
-                var result = await _processServices.GetProcessAsync(process);
-                return PartialView("_ProcessList", result);
+                var result = await _partnerService.GetPartnerAsync(partner);
+                return PartialView("_PartnerList", result);
             }
             catch (Exception ex)
             {
@@ -52,34 +54,38 @@ namespace CSRPulse.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Process());
+            BindDropdowns();
+            return View(new Partner());
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Create(Process process)
+        public async Task<IActionResult> Create(Partner partner)
         {
             try
             {
-                _logger.LogInformation("ProcessController/Create");
+                _logger.LogInformation("PartnerController/Create");
                 if (ModelState.IsValid)
                 {
-                    if (await _processServices.RecordExist(process))
+                    if (await _partnerService.RecordExist(partner))
                     {
-                        ModelState.AddModelError("", "Process already exists");
+                        ModelState.AddModelError("", "Partner already exists");
                     }
                     else
                     {
-                        var result = await _processServices.CreateProcess(process);
+                        partner.IsActive = true;
+                        partner.CreatedBy = userDetail.UserID;
+                        var result = await _partnerService.CreatePartner(partner);
 
                         if (result)
                         {
-                            TempData["Message"] = "Process Created Successfully.";
+                            TempData["Message"] = "Partner Created Successfully.";
                             return RedirectToAction(nameof(Index));
                         }
                     }
                 }
-                return View(process);
+                BindDropdowns();
+                return View(partner);
             }
             catch (Exception ex)
             {
@@ -87,11 +93,13 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-        public async Task<IActionResult> Edit(int processId)
+
+        public async Task<IActionResult> Edit(int partnerId)
         {
             try
             {
-                var dDetail = await _processServices.GetProcessById(processId);
+                BindDropdowns();
+                   var dDetail = await _partnerService.GetPartnerById(partnerId);
                 return View(dDetail);
             }
             catch (Exception)
@@ -102,29 +110,26 @@ namespace CSRPulse.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(Process process)
+        public async Task<IActionResult> Edit(Partner partner)
         {
             try
             {
-                _logger.LogInformation("ProcessController/Edit");
+                _logger.LogInformation("PartnerController/Edit");
                 if (ModelState.IsValid)
                 {
-                    if (await _processServices.RecordExist(process))
+                    var result = await _partnerService.UpdatePartner(partner);
+                    if (result)
                     {
-                        ModelState.AddModelError("", "Process already exists");
+                        TempData["Message"] = "Partner Updated Successfully.";
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        var result = await _processServices.UpdateProcess(process);
-                        if (result)
-                        {
-                            TempData["Message"] = "Process Updated Successfully.";
-                            return RedirectToAction(nameof(Index));
-                        }
+                        TempData["Error"] = "Partner Updation Failed.";
                     }
 
                 }
-                return View(process);
+                return View(partner);
             }
             catch (Exception ex)
             {
@@ -132,13 +137,22 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
+
         [HttpPost]
         public JsonResult ActiveDeActive(int id, bool isChecked)
         {
-            _logger.LogInformation("Process/ActiveDeActive");
-            var result = _processServices.ActiveDeActive(id, isChecked);
+            _logger.LogInformation("Partner/ActiveDeActive");
+            var result = _partnerService.ActiveDeActive(id, isChecked);
             return Json(result);
-
         }
+
+        [NonAction]
+        void BindDropdowns()
+        {
+            var stateList = _ddlService.GetStateAsync(null, null);
+            ViewBag.ddlState = new SelectList(stateList, "id", "value");
+        }
+
+
     }
 }

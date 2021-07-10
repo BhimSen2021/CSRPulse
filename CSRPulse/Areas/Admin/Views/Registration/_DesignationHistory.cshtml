@@ -1,0 +1,54 @@
+﻿@*@model IEnumerable<DesignationHistory>*@
+@{
+
+    var historyList = (List<DesignationHistory>)ViewData["history"];
+
+}
+
+<div id="info-header-modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="info-header-modalLabel">Designation History</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover table-centered mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Designation</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Revert</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (historyList != null)
+                        {
+                            @foreach (var item in historyList.OrderByDescending(x=>x.DesignationHistoryId))
+                            {
+                                <tr>
+                                    <td>
+                                        <span>@(historyList.IndexOf(item) +1)</span>
+                                    </td>
+                                    <td>@item.Designation</td>
+                                    <td>@item.Formdate</td>
+                                    <td>@item.Todate</td>
+                                    <td class="text-center">
+                                        @if (item.Todate == null && historyList.Count > 1)
+                                        {
+                                            <span class="font-20" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to revert this designation.">@Html.ActionLink("", "RevertDesignation", "Registration", new { hId = item.DesignationHistoryId, uId = item.UserId }, new { @class = "uil-history" })</span>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

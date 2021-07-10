@@ -30,7 +30,7 @@ namespace CSRPulse.Services
            .ForMember(d => d.IsDeleted, o => o.MapFrom(s => s.IsDeleted))
            .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
            .ForMember(d => d.CustomerUniqueId, o => o.MapFrom(s => s.CustomerUniqueId))
-           .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
+           .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId)).ReverseMap()
            .ForAllOtherMembers(i => i.Ignore());
 
             CreateMap<DTOModel.CustomerPayment, CustomerPayment>().ReverseMap();
@@ -111,6 +111,14 @@ namespace CSRPulse.Services
                 .ForMember(d => d.UpdatedBy, o => o.MapFrom(s => s.UpdatedBy))
                 .ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
 
+
+            CreateMap<DTOModel.DesignationHistory, DesignationHistory>().ReverseMap();
+
+            CreateMap<DTOModel.DesignationHistory, DesignationHistory>()
+               .ForMember(d => d.Designation, o => o.MapFrom(s => s.Designation.DesignationName));
+            CreateMap<DesignationHistory, DTOModel.DesignationHistory>();
+
+            CreateMap<DTOModel.Partner, Partner>().ReverseMap();
             #endregion
 
             #region Email Mapper
@@ -123,10 +131,6 @@ namespace CSRPulse.Services
                 .ForMember(d => d.SubjectId, o => o.MapFrom(s => s.SubjectId))
             .ForAllOtherMembers(d => d.Ignore());
             #endregion
-
-
-
-
 
             #region Dropdown Mapper
             CreateMap<DTOModel.State, SelectListModel>()
@@ -177,6 +181,14 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Department, SelectListModel>()
          .ForMember(d => d.id, o => o.MapFrom(s => s.DepartmentId))
          .ForMember(d => d.value, o => o.MapFrom(s => s.DepartmentName));
+
+            CreateMap<DTOModel.Designation, SelectListModel>()
+      .ForMember(d => d.id, o => o.MapFrom(s => s.DesignationId))
+      .ForMember(d => d.value, o => o.MapFrom(s => s.DesignationName));
+
+            CreateMap<DTOModel.Partner, SelectListModel>()
+      .ForMember(d => d.id, o => o.MapFrom(s => s.PartnerId))
+      .ForMember(d => d.value, o => o.MapFrom(s => s.PartnerName));
 
             #endregion
 

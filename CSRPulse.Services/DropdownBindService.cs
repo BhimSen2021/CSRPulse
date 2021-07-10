@@ -195,5 +195,19 @@ namespace CSRPulse.Services
             return selectLists.ToList();
 
         }
+        public IEnumerable<SelectListModel> GetDesignations(int? designationId)
+        {
+            var dtoRole = _genericRepository.Get<DTOModel.Designation>(x => designationId.HasValue ? x.DesignationId == designationId.Value : (1 > 0) && x.IsActive == true);
+            var roleList = _mapper.Map<List<SelectListModel>>(dtoRole);
+            return roleList.ToList();
+        }
+
+        public IEnumerable<SelectListModel> GetPartners(int? partnerId)
+        {
+            var dtoRole = _genericRepository.Get<DTOModel.Partner>(x => partnerId.HasValue ? x.PartnerId == partnerId.Value : (1 > 0) && x.IsActive == true);
+            var roleList = _mapper.Map<List<SelectListModel>>(dtoRole);
+            return roleList.ToList();
+        }
+
     }
 }

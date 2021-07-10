@@ -27,5 +27,9 @@ namespace CSRPulse.Services.IServices
         IEnumerable<SelectListModel> GetIndicatorResponseType();
         IEnumerable<SelectListModel> GetIndicatorType();
         IEnumerable<SelectListModel> GetDepartments();
+
+        IEnumerable<SelectListModel> GetDesignations(int? designationId);
+
+        IEnumerable<SelectListModel> GetPartners(int? partnerId);
     }
 }
