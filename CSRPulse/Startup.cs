@@ -67,6 +67,11 @@ namespace CSRPulse
             services.AddScoped<IVillageServices, VillageServices>();
             services.Configure<SMTPConfig>(Configuration.GetSection("SMTPConfig"));
 
+            services.AddScoped<IImport, Import>();
+            services.AddScoped<IDistrictServices, DistrictServices>();
+            services.AddScoped<IDistrictImportRepository, DistrictImportRepository>();
+            services.AddScoped<IExcelService, ExcelService>();
+
             #endregion
 
             services.AddSession(option =>

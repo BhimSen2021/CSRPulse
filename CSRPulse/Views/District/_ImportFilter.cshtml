@@ -1,14 +1,12 @@
 ﻿
-<form data-ajax="true" data-ajax-method="GET" enctype="multipart/form-data">
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<form data-ajax="true" data-ajax-method="post" asp-controller="District" asp-action="_ImportDistrictData" enctype="multipart/form-data" data-ajax-success="onsuccess">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-1 mt-2">
 
         <div class="row">
-            <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 col-xs-12 required">
-
+            <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 col-xs-12 required mt-2">
                 Select File
-
-            </div>
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
                 <div class="input-group image-preview">
 
@@ -20,13 +18,13 @@
                             <span class="glyphicon glyphicon-remove"></span> Clear
                         </button>
                         <!-- image-preview-input -->
-                        <div class="btn btn-default image-preview-input">
+                        <span class="btn btn-default image-preview-input">
                             <span class="glyphicon glyphicon-folder-open"></span>
                             <span class="image-preview-input-title">Browse</span>
                             @Html.TextBox("file", "", new { type = "file", @class = "", @name = "input-file-preview" })
 
 
-                        </div>
+                        </span>
                     </span>
 
 
@@ -41,7 +39,7 @@
 
                 <button type="submit" id="submitform" class="btn btn-success pull-center"
                         data-toggle="tooltip"
-                        title="Click here, to validate your input file.">
+                        title="Click here, to validate your file.">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     Validate Data
                 </button>
@@ -50,7 +48,7 @@
 
             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
 
-                <button type="button" id="btnSave" class="btn btn-info pull-center hide"
+                <button type="button" id="btnSave" class="btn btn-info pull-center d-none"
                         data-toggle="tooltip" title="Click here, to update manual sheet data.">
 
                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -65,24 +63,6 @@
 </form>
 
 
-<script>
-    $(document).ready(function () {
-        $('#btnSave').click(function () {
-
-            var saveURL = "@Url.Action("SubmitFileData", "District")";
-            $.post(saveURL).done(function (data) {
-                if (data.errorCode == -1)
-                    $("#validation-hdr").html(data.error).addClass('alert alert-danger');
-                if (data.errorCode == 0) {
-                    $("#validation-hdr").html(data.msg).addClass('alert alert-success');
-                    $("#btnSave").addClass('hide');
-                }
-                $('#waitLoading').css('display', 'none');
-                $('.modal-backdrop').hide();
-            });
-        });
-    });
-</script>
 
 
 

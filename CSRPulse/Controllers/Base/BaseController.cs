@@ -11,6 +11,7 @@ using CSRPulse.Attributes;
 using System;
 using CSRPulse.Model;
 using System.Collections.Generic;
+using CSRPulse.Common;
 
 namespace CSRPulse.Controllers
 {
@@ -152,6 +153,8 @@ namespace CSRPulse.Controllers
                 {".csv", "text/csv"}
             };
         }
+
+        public Dictionary<string, string> GetErrorMessage() => ImportValidationMessage.ImportErrMsg();
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -101,5 +102,97 @@ namespace CSRPulse.Common
             }
             return dataTable;
         }
+
+        public static List<T> GetDistinctCellValues<T>(DataTable dtSource, string sourceColName)
+        {
+            try
+            {
+                return (from row in dtSource.AsEnumerable()
+                        where (!CheckNullOrEmpty<T>(row.Field<T>(sourceColName)))
+                        select row.Field<T>(sourceColName)).Distinct().ToList<T>();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+        public static bool CheckNullOrEmpty<T>(T value)
+        {
+            if (typeof(T) == typeof(string))
+                return (string.IsNullOrEmpty(value as string) || ((value as string).Trim().Length == 0));
+
+            return value == null || value.Equals(default(T));
+        }
+
+        public static string SetUniqueFileName(this string fileName, string fileExtension)
+        {
+            string renamedFileName = fileName + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Millisecond.ToString();
+            return renamedFileName + fileExtension;
+        }
+
+        public static List<U> FindDuplicates<T, U>(this List<T> list, Func<T, U> keySelector)
+        {
+            return list.GroupBy(keySelector)
+                .Where(group => group.Count() > 1)
+                .Select(group => group.Key).ToList();
+        }
+
+
+
+        public static DataTable LinqQueryToDataTable(this IEnumerable<dynamic> v)
+        {
+            //We really want to know if there is any data at all
+            var firstRecord = v.FirstOrDefault();
+            if (firstRecord == null)
+                return null;
+
+            /*Okay, we have some data. Time to work.*/
+
+            //So dear record, what do you have?
+            PropertyInfo[] infos = firstRecord.GetType().GetProperties();
+
+            //Our table should have the columns to support the properties
+            DataTable table = new DataTable();
+
+            //Add, add, add the columns
+            foreach (var info in infos)
+            {
+
+                Type propType = info.PropertyType;
+
+                if (propType.IsGenericType
+                    && propType.GetGenericTypeDefinition() == typeof(Nullable<>)) //Nullable types should be handled too
+                {
+                    table.Columns.Add(info.Name, Nullable.GetUnderlyingType(propType));
+                }
+                else
+                {
+                    table.Columns.Add(info.Name, info.PropertyType);
+                }
+            }
+
+            //Hmm... we are done with the columns. Let's begin with rows now.
+            DataRow row;
+
+            foreach (var record in v)
+            {
+                row = table.NewRow();
+                for (int i = 0; i < table.Columns.Count; i++)
+                {
+                    row[i] = infos[i].GetValue(record) != null ? infos[i].GetValue(record) : DBNull.Value;
+                }
+
+                table.Rows.Add(row);
+            }
+
+            //Table is ready to serve.
+            table.AcceptChanges();
+
+            return table;
+        }
+
     }
 }

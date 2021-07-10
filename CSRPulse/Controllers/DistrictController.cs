@@ -13,6 +13,11 @@ using System.IO;
 using System.Text;
 using CSRPulse.ExportImport.Interfaces;
 using System.Data;
+using static CSRPulse.Common.FileHelper;
+using CSRPulse.Common;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using CSRPulse.Models;
 
 namespace CSRPulse.Controllers
 {
@@ -223,6 +228,166 @@ namespace CSRPulse.Controllers
         {
             return View();
         }
-        
+
+
+
+        [HttpPost]
+        public ActionResult _ImportDistrictData(IFormFile file)
+        {
+            _logger.LogInformation("DistrictController/_ImportDistrictData");
+            try
+            {
+                string fileName = string.Empty; string filePath = string.Empty;
+                int error = 0, warning = 0, duplicateEntries = 0;
+                List<DistrictImport> importDistrictSave = new List<DistrictImport>();
+                List<string> columnName = new List<string>();
+                List<string> missingHeaders;
+                string msg = string.Empty;
+                DistrictImportModel districtImpModel = new DistrictImportModel();
+                List<DistrictImport> DistrictForm = new List<DistrictImport>();
+                if (file.Length > 0)
+                {
+
+                    string fileExtension = Path.GetExtension(file.FileName);
+                    fileName = Path.GetFileName(file.FileName);
+
+                    var contentType = Path.GetExtension(file.FileName);
+                    var dicValue = GetDictionaryValueByKeyName(".xlsx");
+                    if ((fileExtension == ".xlsx" || fileExtension == ".xlx"))
+                    {
+                        #region Upload File At temp location===
+                        fileName = ExtensionMethods.SetUniqueFileName(Path.GetFileNameWithoutExtension(file.FileName),
+                               Path.GetExtension(file.FileName));
+
+                        filePath = @"Templates\Location\";
+                        var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+                        string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
+
+                        using (FileStream stream = new FileStream(Path.Combine(uploadedFilePath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        #endregion
+                        var objDistrict = _districtServices.ReadDistrictExcelData(sPhysicalPath, false, out msg, out error, out warning, out importDistrictSave, out missingHeaders, out columnName);
+                        if (error > 0 && msg == "Rows")
+                        {
+                            //TempData["error"] = -3;
+                            districtImpModel.NoOfErrors = 1;
+                            districtImpModel.Message = "No record found, Please check the sheet and reupload.";
+                            return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_DistrictImportGridView", districtImpModel, true) });
+                        }
+                        else
+                        {
+                            duplicateEntries = objDistrict.GroupBy(x => new { x.DistrictCode }).Sum(g => g.Count() - 1);
+                            var getDuplicateRows = ExtensionMethods.FindDuplicates(objDistrict.ToList(), x => new { x.DistrictCode });
+                            objDistrict.Join(getDuplicateRows, (x) => new { x.DistrictCode }, (y) => new { y.DistrictCode }, (x, y) =>
+                            {
+                                x.isDuplicatedRow = ((x.DistrictCode == y.DistrictCode) ? true : false);
+                                return x;
+                            }).ToList();
+
+                            if (error == 0 && duplicateEntries > 0)
+                                error = duplicateEntries;
+                            else
+                                error += duplicateEntries;
+
+                            var json = JsonConvert.SerializeObject(objDistrict);
+                            DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(json, (typeof(DataTable)));
+
+                            if (msg != "Headers")
+                            {
+                                dataTable.Columns["StateId"].SetOrdinal(0);
+                                dataTable.Columns["DistrictCode"].SetOrdinal(1);
+                                dataTable.Columns["DistrictName"].SetOrdinal(2);
+                                dataTable.Columns["DistrictShort"].SetOrdinal(3);
+                                dataTable.Columns["State"].SetOrdinal(4);
+                                dataTable.Columns["District"].SetOrdinal(5);
+                                dataTable.Columns["error"].SetOrdinal(6);
+                                dataTable.Columns["warning"].SetOrdinal(7);
+                                dataTable.Columns["isDuplicatedRow"].SetOrdinal(8);
+                            }
+
+                            districtImpModel.ErrorMsgCollection = GetErrorMessage();
+                            if (dataTable != null)
+                            {
+                                districtImpModel.DistrictInput = dataTable;
+                            }
+                            else
+                                districtImpModel.DistrictData = DistrictForm;
+
+                            var errors = error;
+                            var msgs = msg;
+
+                            districtImpModel.NoOfErrors = errors != 0 ? (int)errors : 0;
+                            districtImpModel.Message = msgs != null ? Convert.ToString(msgs) : "";
+                            if (districtImpModel.Message != "Headers")
+                            {
+                                HttpContext.Session.SetComplexData("DistrictSave", importDistrictSave);
+                                if (districtImpModel.Message == "noRecord")
+                                {
+                                    districtImpModel.Message = "No record found, Please check the sheet and reupload.";
+                                }
+                                else
+                                {
+                                    if (districtImpModel.NoOfErrors > 0)
+                                        districtImpModel.Message = string.Format("{0} error(s) found ,Please check the sheet and reupload.", districtImpModel.NoOfErrors.ToString());
+                                    else
+                                        districtImpModel.Message = "Sheet validated successfully, Click on Upload button to upload your data.";
+                                }
+                            }
+                            else
+                            {
+                                var list = missingHeaders;
+                                var missingheader = String.Join(",", list);
+                                if (list.Count > 1)
+                                    districtImpModel.Message = string.Format("{0} header(s) are missing", missingheader);
+                                else
+                                    districtImpModel.Message = string.Format("{0} header(s) is missing", missingheader);
+                            }
+                            return Json(new { status = "success", htmlData = ConvertViewToString("_DistrictImportGridView", districtImpModel, true) });
+                        }
+                    }
+                    else
+                    {
+                        districtImpModel.NoOfErrors = 1;
+                        districtImpModel.Message = "Invalid file format.";
+                        return Json(new { status = "success", htmlData = ConvertViewToString("_DistrictImportGridView", districtImpModel, true) });
+                    }
+
+                }
+                return Json("success");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error: " + ex.Message + " ,StackTrace: " + ex.StackTrace + " ,DateTimeStamp :" + DateTime.Now);
+                throw ex;
+            }
+        }
+
+        public JsonResult Save()
+        {
+            _logger.LogInformation("DistrictImportController/SubmitFileData");
+            try
+            {
+                var importDataList = HttpContext.Session.GetComplexData<List<DistrictImport>>("DistrictSave");
+                var result = _districtServices.ImportDistrictData(importDataList);
+                if (result)
+                {
+                    HttpContext.Session.Remove("DistrictData");
+                    HttpContext.Session.Remove("DistrictSave");
+                    HttpContext.Session.Remove("error");
+                    HttpContext.Session.Remove("msg");
+                    HttpContext.Session.Remove("missingHeaders");
+                }
+                return Json(new { errorCode = 0, msg = "District data has been imported sucessfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error: " + ex.Message + " ,StackTrace: " + ex.StackTrace + " ,DateTimeStamp :" + DateTime.Now);
+                return Json(new { errorCode = -1, error = ex.Message });
+
+            }
+
+        }
     }
 }
