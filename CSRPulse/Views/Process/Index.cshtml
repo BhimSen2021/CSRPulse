@@ -18,42 +18,42 @@
         </div>
     </div>
 </div>
+
 <div class="row">
-    @{await Html.RenderPartialAsync("_Filter");}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+                    <thead class="thead-light">
+                        <tr>
+                            <th width="5%">#</th>
+                            <th>@Html.DisplayNameFor(model => model.ProcessName)</th>
+                            <th width="10%">@Html.DisplayNameFor(model => model.FinalStatus)</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var process in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span>@(Model.ToList().IndexOf(process) +1)</span>
+                                    </td>
+                                    <td>@process.ProcessName</td>
+                                    <td>@process.FinalStatus</td>                                    
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No Records Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class="row" id="div-process-list"> </div>
-<partial name="_Confirmation" />
-
-
-@section Scripts{
-    <script type="text/javascript">
-        function openpopup(cnt) {
-            var id = cnt.id.split('_')[1];
-            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
-
-        }
-        function ActiveDeActive(obj) {
-            var id = obj.id.split('_')[0];
-            var isChecked = obj.id.split('_')[1];
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: '/Process/ActiveDeActive',
-                data: { id: id, isChecked: isChecked },
-                success: function (responce) {
-                    if (responce) {
-                        commonMessage('success', 'Status changed successfully.');
-                    }
-
-                    else {
-                        commonMessage('warning', 'Status changing failed.');
-                    }
-                },
-                error: function (responce) {
-                    commonMessage('error', 'Status changing failed.');
-                }
-            });
-        }
-    </script>
-}

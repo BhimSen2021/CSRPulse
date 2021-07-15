@@ -32,7 +32,7 @@
                         if (item.ToString() != "State" && item.ToString() != "District" && item.ToString() != "Block" && item.ToString() != "error" && item.ToString() != "warning" && item.ToString() != "isDuplicatedRow")
                         {
                             <th>
-                                @ExtensionMethods.MakeHeader(Convert.ToString(item))
+                                @ExtensionMethods.AddSpacesToSentence(Convert.ToString(item))
                             </th>
                         }
                     }

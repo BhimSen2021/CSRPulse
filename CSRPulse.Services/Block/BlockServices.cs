@@ -168,6 +168,12 @@ namespace CSRPulse.Services
                 if (isValidHeaderList)
                 {
                     DeleteTempFile(fileFullPath);
+                    if (dtExcel.Rows.Count > 10000)
+                    {
+                        error = error + 1;
+                        message = "MAXROW";
+                        return objModel;
+                    }
                     DataTable dt = dtExcel.Copy();
                     var colum = GetHeader(dt);
 

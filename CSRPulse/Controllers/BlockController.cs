@@ -310,6 +310,12 @@ namespace CSRPulse.Controllers
                             blockImpModel.Message = "No record found, Please check the sheet and reupload.";
                             return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });
                         }
+                        else if (error > 0 && msg == "MAXROW")
+                        {
+                            blockImpModel.NoOfErrors = 1;
+                            blockImpModel.Message = "Found more than 10,000 records, You can not validate more than 10,000 blocks a single sheet.";
+                            return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });
+                        }
                         else
                         {
                             duplicateEntries = objBlock.GroupBy(x => new { x.BlockCode }).Sum(g => g.Count() - 1);

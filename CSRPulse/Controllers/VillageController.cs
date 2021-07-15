@@ -338,6 +338,12 @@ namespace CSRPulse.Controllers
                             villageImpModel.Message = "No record found, Please check the sheet and reupload.";
                             return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
                         }
+                        else if(error > 0 && msg == "MAXROW")
+                        {
+                            villageImpModel.NoOfErrors = 1;
+                            villageImpModel.Message = "Found more than 10,000 records, You can not validate more than 10,000 villages a single sheet.";
+                            return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
+                        }
                         else
                         {
                             duplicateEntries = objVillage.GroupBy(x => new { x.VillageCode }).Sum(g => g.Count() - 1);

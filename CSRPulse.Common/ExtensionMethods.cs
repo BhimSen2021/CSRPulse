@@ -194,35 +194,12 @@ namespace CSRPulse.Common
             return table;
         }
 
-        public static string MakeHeader(string txt)
+        public static string AddSpacesToSentence(string str)
         {
-            switch (txt)
-            {
-                case "StateId":
-                    return "State Id";
-                case "DistrictId":
-                    return "District Id";
-                case "DistrictCode":
-                    return "District Code";
-                case "DistrictName":
-                    return "District Name";
-                case "BlockId":
-                    return "Block Id";
-                case "BlockCode":
-                    return "Block Code";
-                case "BlockName":
-                    return "Block Name";
-                case "VillageId":
-                    return "Village Id";
-                case "VillageCode":
-                    return "Village Code";
-                case "VillageName":
-                    return "Village Name";
-
-                default:
-                    return "NULL";
-            }
-        }
-
+            if (!string.IsNullOrEmpty(str))
+                return string.Concat(str.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
+            else
+                return str;
+        }       
     }
 }

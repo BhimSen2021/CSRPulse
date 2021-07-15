@@ -19,12 +19,13 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             _logger.LogInformation("ProcessController/Index");
             try
             {
-                return View();
+                var result = await _processServices.GetProcessAsync(new Process());
+                return View(result);
             }
             catch (Exception ex)
             {

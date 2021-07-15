@@ -247,7 +247,6 @@ namespace CSRPulse.Controllers
                 List<DistrictImport> DistrictForm = new List<DistrictImport>();
                 if (file.Length > 0)
                 {
-
                     string fileExtension = Path.GetExtension(file.FileName);
                     fileName = Path.GetFileName(file.FileName);
 
@@ -276,6 +275,13 @@ namespace CSRPulse.Controllers
                             districtImpModel.Message = "No record found, Please check the sheet and reupload.";
                             return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_DistrictImportGridView", districtImpModel, true) });
                         }
+                        else if (error > 0 && msg == "MAXROW")
+                        {
+                            districtImpModel.NoOfErrors = 1;
+                            districtImpModel.Message = "Found more than 10,000 records, You can not validate more than 10,000 districts a single sheet.";
+                            return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_BlockImportGridView", districtImpModel, true) });
+                        }
+
                         else
                         {
                             duplicateEntries = objDistrict.GroupBy(x => new { x.DistrictCode }).Sum(g => g.Count() - 1);
