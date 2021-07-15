@@ -55,4 +55,11 @@ namespace CSRPulse.Common
         NGO = 1,
         Auditor = 2
     }
+
+    public enum ProcessLevel
+    {
+        Initiator=1,
+        Forwarder=2,
+        FinalApproval=3
+    }
 }

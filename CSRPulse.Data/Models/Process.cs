@@ -11,6 +11,11 @@ namespace CSRPulse.Data.Models
 {
     public partial class Process
     {
+        public Process()
+        {
+            ProcessSetup = new HashSet<ProcessSetup>();
+        }
+
         [Key]
         public int ProcessId { get; set; }
         [Required]
@@ -18,5 +23,8 @@ namespace CSRPulse.Data.Models
         public string ProcessName { get; set; }
         public int? FinalStatus { get; set; }
         public bool IsActive { get; set; }
+
+        [InverseProperty("Process")]
+        public virtual ICollection<ProcessSetup> ProcessSetup { get; set; }
     }
 }
