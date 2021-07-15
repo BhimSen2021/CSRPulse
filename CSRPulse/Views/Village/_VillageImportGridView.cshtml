@@ -1,4 +1,4 @@
-﻿@model CSRPulse.Models.DistrictImportModel
+﻿@model CSRPulse.Models.VillageImportModel
 @using CSRPulse.Common
 @using System.Data;
 @{
@@ -21,15 +21,15 @@
     @validationResultMsg
 </div>
 
-<div id="tblDistrictGrid" style="max-width:93%;min-width:100%;min-height:600px;max-height:600px;overflow-x:scroll;overflow-y:scroll;">
-    <table class="table dt-responsive w-100 table-bordered">
+<div id="tblBlockGrid" style="max-width:93%;min-width:100%;min-height:600px;max-height:600px;overflow-x:scroll;overflow-y:scroll;">
+    <table class="table table-sm table-centered mb-0">
         <thead>
             <tr>
-                @if (Model != null && Model.DistrictInput != null && Model.DistrictInput.Columns.Count > 0)
+                @if (Model != null && Model.VillageInput != null && Model.VillageInput.Columns.Count > 0)
                 {
-                    foreach (var item in Model.DistrictInput.Columns)
+                    foreach (var item in Model.VillageInput.Columns)
                     {
-                        if (item.ToString() != "State" && item.ToString() != "District" && item.ToString() != "error" && item.ToString() != "warning" && item.ToString() != "isDuplicatedRow")
+                        if (item.ToString() != "State" && item.ToString() != "District" && item.ToString() != "Block" && item.ToString() != "Village" && item.ToString() != "error" && item.ToString() != "warning" && item.ToString() != "isDuplicatedRow")
                         {
                             <th>
                                 @ExtensionMethods.MakeHeader(Convert.ToString(item))
@@ -41,25 +41,25 @@
         </thead>
         <tbody>
             @{
-                if (Model != null && Model.DistrictInput != null && Model.DistrictInput.Rows.Count > 0)
+                if (Model != null && Model.VillageInput != null && Model.VillageInput.Rows.Count > 0)
                 {
                     Dictionary<string, string> dicErrorMsg = Model.ErrorMsgCollection;
                     string str1 = string.Empty;
                     var title = string.Empty;
                     try
                     {
-                        foreach (DataRow dr in Model.DistrictInput.Rows)
+                        foreach (DataRow dr in Model.VillageInput.Rows)
                         {
                             int err = 0;
                             string[] arrError = dr["error"].ToString().Split('|').ToArray();
                             if (!Convert.ToBoolean(dr["isDuplicatedRow"]))
                             {
                                 <tr>
-                                    @foreach (DataColumn dc in Model.DistrictInput.Columns)
+                                    @foreach (DataColumn dc in Model.VillageInput.Columns)
                                     {
-                                        if (dc.ToString() != "State" && dc.ToString() != "District" && dc.ToString() != "error" && dc.ToString() != "warning" && dc.ToString() != "isDuplicatedRow")
+                                        if (dc.ToString() != "State" && dc.ToString() != "District" && dc.ToString() != "Block" && dc.ToString() != "Village" && dc.ToString() != "error" && dc.ToString() != "warning" && dc.ToString() != "isDuplicatedRow")
                                         {
-                                            if (dc.ToString() == "StateId" || dc.ToString() == "DistrictName" || dc.ToString() == "DistrictCode" || dc.ToString() == "DistrictShort")
+                                            if (dc.ToString() == "StateId" || dc.ToString() == "DistrictId" || dc.ToString() == "BlockId" || dc.ToString() == "VillageName" || dc.ToString() == "VillageCode")
                                             {
                                                 title = (arrError[err].Length > 0) ? string.Format(dicErrorMsg[arrError[err]], dc.ToString()) : "";
                                             }
@@ -67,9 +67,9 @@
                                             {
                                                 title = (arrError[err].Length > 0) ? string.Format(dicErrorMsg[arrError[err]]) : "";
                                             }
-                                            var errorClass = (arrError[err].Length > 0) ? "error1" : null;
+                                            var errorClass = (arrError[err].Length > 0) ? "bg-danger" : null;
                                             str1 = dr[dc].ToString();
-                                            <td data-toggle="tooltip" title="@title" class="@errorClass"> @str1</td>
+                                            <td data-bs-toggle="tooltip" data-bs-placement="top" title="@title" class="@errorClass"> @str1</td>
                                         }
                                         err++;
                                     }
@@ -77,13 +77,13 @@
                             }
                             else
                             {
-                                <tr title="Duplicate Row Found" class="error1 toggle-tooltip">
-                                    @foreach (DataColumn dc in Model.DistrictInput.Columns)
+                                <tr data-bs-toggle="tooltip" data-bs-placement="top" title="Duplicate Row Found" class="table-warning">
+                                    @foreach (DataColumn dc in Model.VillageInput.Columns)
                                     {
 
-                                        if (dc.ToString() != "State" && dc.ToString() != "District" && dc.ToString() != "error" && dc.ToString() != "warning" && dc.ToString() != "isDuplicatedRow")
+                                        if (dc.ToString() != "State" && dc.ToString() != "District" && dc.ToString() != "Block" && dc.ToString() != "Village" && dc.ToString() != "error" && dc.ToString() != "warning" && dc.ToString() != "isDuplicatedRow")
                                         {
-                                            if (dc.ToString() == "StateId" || dc.ToString() == "DistrictName" || dc.ToString() == "DistrictCode" || dc.ToString() == "DistrictShort")
+                                            if (dc.ToString() == "StateId" || dc.ToString() == "DistrictId" || dc.ToString() == "BlockId" || dc.ToString() == "VillageName" || dc.ToString() == "VillageCode")
                                             {
                                                 title = (arrError[err].Length > 0) ? string.Format(dicErrorMsg[arrError[err]], dc.ToString()) : "";
                                             }
@@ -91,9 +91,9 @@
                                             {
                                                 title = (arrError[err].Length > 0) ? string.Format(dicErrorMsg[arrError[err]]) : "";
                                             }
-                                            var errorClass = (arrError[err].Length > 0) ? "error1" : null;
+                                            var errorClass = (arrError[err].Length > 0) ? "bg-warning" : null;
                                             str1 = dr[dc].ToString();
-                                            <td toggle-tooltip="tooltip" title="@title" class="@errorClass"> @str1</td>
+                                            <td data-bs-toggle="tooltip" data-bs-placement="top" title="@title" class="@errorClass"> @str1</td>
                                         }
                                         err++;
                                     }
@@ -111,3 +111,8 @@
     </table>
 
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Tooltip();
+    });
+</script>

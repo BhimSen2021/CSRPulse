@@ -194,5 +194,35 @@ namespace CSRPulse.Common
             return table;
         }
 
+        public static string MakeHeader(string txt)
+        {
+            switch (txt)
+            {
+                case "StateId":
+                    return "State Id";
+                case "DistrictId":
+                    return "District Id";
+                case "DistrictCode":
+                    return "District Code";
+                case "DistrictName":
+                    return "District Name";
+                case "BlockId":
+                    return "Block Id";
+                case "BlockCode":
+                    return "Block Code";
+                case "BlockName":
+                    return "Block Name";
+                case "VillageId":
+                    return "Village Id";
+                case "VillageCode":
+                    return "Village Code";
+                case "VillageName":
+                    return "Village Name";
+
+                default:
+                    return "NULL";
+            }
+        }
+
     }
 }

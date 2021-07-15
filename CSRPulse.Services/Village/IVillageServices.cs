@@ -13,5 +13,8 @@ namespace CSRPulse.Services
         Task<Model.Village> GetVillageById(int villageId);
         Task<bool> RecordExist(Model.Village village);
         bool ActiveDeActive(int id, bool IsActive);
+
+        IEnumerable<dynamic> ReadVillageExcelData(string fileFullPath, bool isHeader, out string message, out int error, out int warning, out List<Model.VillageImport> importVillageSave, out List<string> missingHeaders, out List<string> columnName);
+        bool ImportVillageData(List<Model.VillageImport> blockData);
     }
 }

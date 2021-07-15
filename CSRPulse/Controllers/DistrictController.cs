@@ -330,7 +330,7 @@ namespace CSRPulse.Controllers
                                 else
                                 {
                                     if (districtImpModel.NoOfErrors > 0)
-                                        districtImpModel.Message = string.Format("{0} error(s) found ,Please check the sheet and reupload.", districtImpModel.NoOfErrors.ToString());
+                                        districtImpModel.Message = string.Format("{0} error(s) found ,check and correct the sheet data and re-validate the sheet.", districtImpModel.NoOfErrors.ToString());
                                     else
                                         districtImpModel.Message = "Sheet validated successfully, Click on Upload button to upload your data.";
                                 }

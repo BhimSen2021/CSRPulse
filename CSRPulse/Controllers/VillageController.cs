@@ -13,6 +13,11 @@ using System.IO;
 using System.Text;
 using CSRPulse.ExportImport.Interfaces;
 using System.Data;
+using Microsoft.AspNetCore.Http;
+using static CSRPulse.Common.FileHelper;
+using CSRPulse.Common;
+using Newtonsoft.Json;
+using CSRPulse.Models;
 
 namespace CSRPulse.Controllers
 {
@@ -167,7 +172,6 @@ namespace CSRPulse.Controllers
             }
         }
 
-
         public JsonResult BindDistrict(int stateId)
         {
             _logger.LogInformation($"VillageController/BindDistrict/stateId={stateId}");
@@ -282,6 +286,175 @@ namespace CSRPulse.Controllers
                 return Content($"Village refrence code file downloding filed.");
             }
         
+        }
+
+        public ViewResult Import()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult _ImportVillageData(IFormFile file)
+        {
+            _logger.LogInformation("VillageController/_ImportVillageData");
+            try
+            {
+                string fileName = string.Empty; string filePath = string.Empty;
+                int error = 0, warning = 0, duplicateEntries = 0;
+                List<VillageImport> importVillageSave = new List<VillageImport>();
+                List<string> columnName = new List<string>();
+                List<string> missingHeaders;
+                string msg = string.Empty;
+                VillageImportModel villageImpModel = new VillageImportModel();
+                List<VillageImport> VillageForm = new List<VillageImport>();
+                if (file.Length > 0)
+                {
+
+                    string fileExtension = Path.GetExtension(file.FileName);
+                    fileName = Path.GetFileName(file.FileName);
+
+                    var contentType = Path.GetExtension(file.FileName);
+                    var dicValue = GetDictionaryValueByKeyName(".xlsx");
+                    if ((fileExtension == ".xlsx" || fileExtension == ".xlx"))
+                    {
+                        #region Upload File At temp location===
+                        fileName = ExtensionMethods.SetUniqueFileName(Path.GetFileNameWithoutExtension(file.FileName),
+                               Path.GetExtension(file.FileName));
+
+                        filePath = @"Templates\Location\";
+                        var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+                        string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
+
+                        using (FileStream stream = new FileStream(Path.Combine(uploadedFilePath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        #endregion
+                        var objVillage = _villageServices.ReadVillageExcelData(sPhysicalPath, false, out msg, out error, out warning, out importVillageSave, out missingHeaders, out columnName);
+                        if (error > 0 && msg == "Rows")
+                        {
+                            //TempData["error"] = -3;
+                            villageImpModel.NoOfErrors = 1;
+                            villageImpModel.Message = "No record found, Please check the sheet and reupload.";
+                            return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
+                        }
+                        else
+                        {
+                            duplicateEntries = objVillage.GroupBy(x => new { x.VillageCode }).Sum(g => g.Count() - 1);
+
+                            var getDuplicateRows = ExtensionMethods.FindDuplicates(objVillage.ToList(), x => new { x.VillageCode });
+
+                            objVillage.Join(getDuplicateRows, (x) => new { x.VillageCode }, (y) => new { y.VillageCode }, (x, y) =>
+                            {
+                                x.isDuplicatedRow = ((x.VillageCode == y.VillageCode) ? true : false);
+                                return x;
+                            }).ToList();
+
+                            if (error == 0 && duplicateEntries > 0)
+                                error = duplicateEntries;
+                            else
+                                error += duplicateEntries;
+
+                            var json = JsonConvert.SerializeObject(objVillage);
+                            DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(json, (typeof(DataTable)));
+
+                            if (msg != "Headers")
+                            {
+                                dataTable.Columns["StateId"].SetOrdinal(0);
+                                dataTable.Columns["DistrictId"].SetOrdinal(1);
+                                dataTable.Columns["BlockId"].SetOrdinal(2);
+                                dataTable.Columns["VillageCode"].SetOrdinal(3);
+                                dataTable.Columns["VillageName"].SetOrdinal(4);
+                                dataTable.Columns["State"].SetOrdinal(5);
+                                dataTable.Columns["District"].SetOrdinal(6);
+                                dataTable.Columns["Block"].SetOrdinal(7);
+                                dataTable.Columns["Village"].SetOrdinal(8);
+                                dataTable.Columns["error"].SetOrdinal(9);
+                                dataTable.Columns["warning"].SetOrdinal(10);
+                                dataTable.Columns["isDuplicatedRow"].SetOrdinal(11);
+                            }
+
+                            villageImpModel.ErrorMsgCollection = GetErrorMessage();
+                            if (dataTable != null)
+                            {
+                                villageImpModel.VillageInput = dataTable;
+                            }
+                            else
+                                villageImpModel.VillageData = VillageForm;
+
+                            var errors = error;
+                            var msgs = msg;
+
+                            villageImpModel.NoOfErrors = errors != 0 ? (int)errors : 0;
+                            villageImpModel.Message = msgs != null ? Convert.ToString(msgs) : "";
+                            if (villageImpModel.Message != "Headers")
+                            {
+                                HttpContext.Session.SetComplexData("VillageSave", importVillageSave);
+                                if (villageImpModel.Message == "noRecord")
+                                {
+                                    villageImpModel.Message = "No record found, Please check the sheet and reupload.";
+                                }
+                                else
+                                {
+                                    if (villageImpModel.NoOfErrors > 0)
+                                        villageImpModel.Message = string.Format("{0} error(s) found ,Please check and correct the sheet data and re-validate the sheet.", villageImpModel.NoOfErrors.ToString());
+                                    else
+                                        villageImpModel.Message = "Sheet validated successfully, Click on Upload button to upload your data.";
+                                }
+                            }
+                            else
+                            {
+                                var list = missingHeaders;
+                                var missingheader = String.Join(",", list);
+                                if (list.Count > 1)
+                                    villageImpModel.Message = string.Format("{0} header(s) are missing", missingheader);
+                                else
+                                    villageImpModel.Message = string.Format("{0} header(s) is missing", missingheader);
+                            }
+                            return Json(new { status = "success", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
+                        }
+                    }
+                    else
+                    {
+                        villageImpModel.NoOfErrors = 1;
+                        villageImpModel.Message = "Invalid file format.";
+                        return Json(new { status = "success", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
+                    }
+
+                }
+                return Json("success");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error: " + ex.Message + " ,StackTrace: " + ex.StackTrace + " ,DateTimeStamp :" + DateTime.Now);
+                throw ex;
+            }
+        }
+
+        public JsonResult Save()
+        {
+            _logger.LogInformation("VillageImportController/SubmitFileData");
+            try
+            {
+                var importDataList = HttpContext.Session.GetComplexData<List<VillageImport>>("VillageSave");
+                var result = _villageServices.ImportVillageData(importDataList);
+                if (result)
+                {
+                    HttpContext.Session.Remove("VillageData");
+                    HttpContext.Session.Remove("VillageSave");
+                    HttpContext.Session.Remove("error");
+                    HttpContext.Session.Remove("msg");
+                    HttpContext.Session.Remove("missingHeaders");
+                }
+                return Json(new { errorCode = 0, msg = "Village data has been imported sucessfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error: " + ex.Message + " ,StackTrace: " + ex.StackTrace + " ,DateTimeStamp :" + DateTime.Now);
+                return Json(new { errorCode = -1, error = ex.Message });
+
+            }
+
         }
     }
 }

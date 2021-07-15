@@ -31,6 +31,8 @@ namespace CSRPulse.Common
             dicErrMessage.Add("MAXMIN3", "Value should not be less than 3 and more than 3 characters including spaces.");
             dicErrMessage.Add("MAXMIN200", "Value should not be less than 4 and more than 200 characters including spaces.");
             dicErrMessage.Add("MAXMIN4", "Value should not be less than 3 and more than 4 characters including spaces.");
+            dicErrMessage.Add("MAXMIN5", "Value must be contain 5 characters.");
+            dicErrMessage.Add("MAXMIN6", "Value must be contain 6 characters.");
             dicErrMessage.Add("IIS", "{0} Item(s) imported successfully.");
             dicErrMessage.Add("IE", "Invalid email format.");
             return dicErrMessage;

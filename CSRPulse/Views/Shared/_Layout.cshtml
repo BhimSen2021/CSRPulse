@@ -52,7 +52,7 @@
 
     <!-- Site Js -->
     <script src="~/js/site.js" asp-append-version="true"></script>
-    
+
     <script>
         $(document)
             .ajaxStart(function () {
@@ -179,6 +179,10 @@
                 });
             });
         })(jQuery);
+
+        function Tooltip() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        }
     </script>
 </body>
 </html>

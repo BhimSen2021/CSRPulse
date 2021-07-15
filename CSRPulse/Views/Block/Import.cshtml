@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Import Block";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .modal-backdrop {
+        /* bug fix - no overlay */
+        display: none;
+    }
+
+    .error1 {
+        background-color: #fa2d46 !important;
+        color: white !important;
+    }
+</style>
+
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="dv-Import-Section">
+
+        <div class="panel panel-default">
+
+            <div class="panel-body" id="dv-import">
+
+                @{await Html.RenderPartialAsync("_ImportFilter");}
+
+                <hr />
+
+                <div id="xss" style="height:auto;">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function onsuccess(data) {
+
+        if (data.status == "nofileFound") {
+
+            $("#xss").html(data.htmlData);
+            $('#waitLoading').css('display', 'none');
+            $('.modal-backdrop').hide();
+
+        }
+        if (data.status == "inValidFileFormat") {
+
+            $("#xss").html(data.htmlData);
+            $('#waitLoading').css('display', 'none');
+            $('.modal-backdrop').hide();
+
+        }
+        if (data.status == "noRecordFound") {
+
+            $("#xss").html(data.htmlData);
+            $('#waitLoading').css('display', 'none');
+            $('.modal-backdrop').hide();
+
+        }
+        if (data.status == "success") {
+
+            $("#xss").html(data.htmlData);
+            $('#waitLoading').css('display', 'none');
+            $('.modal-backdrop').hide();
+        }
+    }
+</script>
+<script>
+        $('#btnSave').click(function () {
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '@Url.Action("Save", "Block")',
+                success: function (data) {
+                    if (data.errorCode == -1)
+                        $("#validation-hdr").html(data.error).addClass('alert alert-danger');
+                    if (data.errorCode == 0) {
+                        $("#validation-hdr").html(data.msg).addClass('alert alert-success');
+                        $("#btnSave").addClass('d-none');
+                    }
+                    $('#waitLoading').css('display', 'd-none');
+                    $('.modal-backdrop').hide();
+                }
+            });
+        });
+
+</script>

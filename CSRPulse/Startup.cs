@@ -74,6 +74,10 @@ namespace CSRPulse
             services.AddScoped<IImport, Import>();
             services.AddScoped<IDistrictServices, DistrictServices>();
             services.AddScoped<IDistrictImportRepository, DistrictImportRepository>();
+            services.AddScoped<IBlockServices, BlockServices>();
+            services.AddScoped<IBlockImportRepository, BlockImportRepository>();
+            services.AddScoped<IVillageServices, VillageServices>();
+            services.AddScoped<IVillageImportRepository, VillageImportRepository>();
             services.AddScoped<IExcelService, ExcelService>();
 
             #endregion

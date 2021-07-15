@@ -194,7 +194,7 @@ namespace CSRPulse.Services
 
                             MergeDistrictSheetDataWithDBValues(dataWithHeader, dsImportFieldValueDB.Tables[0], dsImportFieldValueDB.Tables[1]);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             dataWithHeader.Columns.Add("StateId", typeof(int));
                             dataWithHeader.Columns.Add("DistrictCode", typeof(int));

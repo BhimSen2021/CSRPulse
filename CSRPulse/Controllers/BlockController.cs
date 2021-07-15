@@ -13,6 +13,11 @@ using System.IO;
 using System.Text;
 using System.Data;
 using CSRPulse.ExportImport.Interfaces;
+using static CSRPulse.Common.FileHelper;
+using CSRPulse.Common;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using CSRPulse.Models;
 
 namespace CSRPulse.Controllers
 {
@@ -251,6 +256,172 @@ namespace CSRPulse.Controllers
             else
             {
                 return Content($"Block refrence code file downloding filed.");
+            }
+
+        }
+
+        public ViewResult Import()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult _ImportBlockData(IFormFile file)
+        {
+            _logger.LogInformation("BlockController/_ImportBlockData");
+            try
+            {
+                string fileName = string.Empty; string filePath = string.Empty;
+                int error = 0, warning = 0, duplicateEntries = 0;
+                List<BlockImport> importBlockSave = new List<BlockImport>();
+                List<string> columnName = new List<string>();
+                List<string> missingHeaders;
+                string msg = string.Empty;
+                BlockImportModel blockImpModel = new BlockImportModel();
+                List<BlockImport> BlockForm = new List<BlockImport>();
+                if (file.Length > 0)
+                {
+
+                    string fileExtension = Path.GetExtension(file.FileName);
+                    fileName = Path.GetFileName(file.FileName);
+
+                    var contentType = Path.GetExtension(file.FileName);
+                    var dicValue = GetDictionaryValueByKeyName(".xlsx");
+                    if ((fileExtension == ".xlsx" || fileExtension == ".xlx"))
+                    {
+                        #region Upload File At temp location===
+                        fileName = ExtensionMethods.SetUniqueFileName(Path.GetFileNameWithoutExtension(file.FileName),
+                               Path.GetExtension(file.FileName));
+
+                        filePath = @"Templates\Location\";
+                        var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+                        string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
+
+                        using (FileStream stream = new FileStream(Path.Combine(uploadedFilePath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        #endregion
+                        var objBlock = _blockServices.ReadBlockExcelData(sPhysicalPath, false, out msg, out error, out warning, out importBlockSave, out missingHeaders, out columnName);
+                        if (error > 0 && msg == "Rows")
+                        {
+                            //TempData["error"] = -3;
+                            blockImpModel.NoOfErrors = 1;
+                            blockImpModel.Message = "No record found, Please check the sheet and reupload.";
+                            return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });
+                        }
+                        else
+                        {
+                            duplicateEntries = objBlock.GroupBy(x => new { x.BlockCode }).Sum(g => g.Count() - 1);
+
+                            var getDuplicateRows = ExtensionMethods.FindDuplicates(objBlock.ToList(), x => new { x.BlockCode });
+
+                            objBlock.Join(getDuplicateRows, (x) => new { x.BlockCode }, (y) => new { y.BlockCode }, (x, y) =>
+                            {
+                                x.isDuplicatedRow = ((x.BlockCode == y.BlockCode) ? true : false);
+                                return x;
+                            }).ToList();
+
+                            if (error == 0 && duplicateEntries > 0)
+                                error = duplicateEntries;
+                            else
+                                error += duplicateEntries;
+
+                            var json = JsonConvert.SerializeObject(objBlock);
+                            DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(json, (typeof(DataTable)));
+
+                            if (msg != "Headers")
+                            {
+                                dataTable.Columns["StateId"].SetOrdinal(0);
+                                dataTable.Columns["DistrictId"].SetOrdinal(1);
+                                dataTable.Columns["BlockCode"].SetOrdinal(2);
+                                dataTable.Columns["BlockName"].SetOrdinal(3);                               
+                                dataTable.Columns["State"].SetOrdinal(4);
+                                dataTable.Columns["District"].SetOrdinal(5);
+                                dataTable.Columns["error"].SetOrdinal(6);
+                                dataTable.Columns["warning"].SetOrdinal(7);
+                                dataTable.Columns["isDuplicatedRow"].SetOrdinal(8);
+                            }
+
+                            blockImpModel.ErrorMsgCollection = GetErrorMessage();
+                            if (dataTable != null)
+                            {
+                                blockImpModel.BlockInput = dataTable;
+                            }
+                            else
+                                blockImpModel.BlockData = BlockForm;
+
+                            var errors = error;
+                            var msgs = msg;
+
+                            blockImpModel.NoOfErrors = errors != 0 ? (int)errors : 0;
+                            blockImpModel.Message = msgs != null ? Convert.ToString(msgs) : "";
+                            if (blockImpModel.Message != "Headers")
+                            {
+                                HttpContext.Session.SetComplexData("BlockSave", importBlockSave);
+                                if (blockImpModel.Message == "noRecord")
+                                {
+                                    blockImpModel.Message = "No record found, Please check the sheet and reupload.";
+                                }
+                                else
+                                {
+                                    if (blockImpModel.NoOfErrors > 0)
+                                        blockImpModel.Message = string.Format("{0} error(s) found ,Please check and correct the sheet data and re-validate the sheet.", blockImpModel.NoOfErrors.ToString());
+                                    else
+                                        blockImpModel.Message = "Sheet validated successfully, Click on Upload button to upload your data.";
+                                }
+                            }
+                            else
+                            {
+                                var list = missingHeaders;
+                                var missingheader = String.Join(",", list);
+                                if (list.Count > 1)
+                                    blockImpModel.Message = string.Format("{0} header(s) are missing", missingheader);
+                                else
+                                    blockImpModel.Message = string.Format("{0} header(s) is missing", missingheader);
+                            }
+                            return Json(new { status = "success", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });
+                        }
+                    }
+                    else
+                    {
+                        blockImpModel.NoOfErrors = 1;
+                        blockImpModel.Message = "Invalid file format.";
+                        return Json(new { status = "success", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });
+                    }
+
+                }
+                return Json("success");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error: " + ex.Message + " ,StackTrace: " + ex.StackTrace + " ,DateTimeStamp :" + DateTime.Now);
+                throw ex;
+            }
+        }
+
+        public JsonResult Save()
+        {
+            _logger.LogInformation("BlockImportController/SubmitFileData");
+            try
+            {
+                var importDataList = HttpContext.Session.GetComplexData<List<BlockImport>>("BlockSave");
+                var result = _blockServices.ImportBlockData(importDataList);
+                if (result)
+                {
+                    HttpContext.Session.Remove("BlockData");
+                    HttpContext.Session.Remove("BlockSave");
+                    HttpContext.Session.Remove("error");
+                    HttpContext.Session.Remove("msg");
+                    HttpContext.Session.Remove("missingHeaders");
+                }
+                return Json(new { errorCode = 0, msg = "Block data has been imported sucessfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error: " + ex.Message + " ,StackTrace: " + ex.StackTrace + " ,DateTimeStamp :" + DateTime.Now);
+                return Json(new { errorCode = -1, error = ex.Message });
+
             }
 
         }
