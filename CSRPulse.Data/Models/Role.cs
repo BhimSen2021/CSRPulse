@@ -13,6 +13,10 @@ namespace CSRPulse.Data.Models
     {
         public Role()
         {
+            ProcessSetupPrimaryRole = new HashSet<ProcessSetup>();
+            ProcessSetupQuaternaryRole = new HashSet<ProcessSetup>();
+            ProcessSetupSecondoryRole = new HashSet<ProcessSetup>();
+            ProcessSetupTertiaryRole = new HashSet<ProcessSetup>();
             User = new HashSet<User>();
         }
 
@@ -31,6 +35,14 @@ namespace CSRPulse.Data.Models
         public bool? IsActive { get; set; }
         public int? ReportTo { get; set; }
 
+        [InverseProperty(nameof(ProcessSetup.PrimaryRole))]
+        public virtual ICollection<ProcessSetup> ProcessSetupPrimaryRole { get; set; }
+        [InverseProperty(nameof(ProcessSetup.QuaternaryRole))]
+        public virtual ICollection<ProcessSetup> ProcessSetupQuaternaryRole { get; set; }
+        [InverseProperty(nameof(ProcessSetup.SecondoryRole))]
+        public virtual ICollection<ProcessSetup> ProcessSetupSecondoryRole { get; set; }
+        [InverseProperty(nameof(ProcessSetup.TertiaryRole))]
+        public virtual ICollection<ProcessSetup> ProcessSetupTertiaryRole { get; set; }
         [InverseProperty("Role")]
         public virtual ICollection<User> User { get; set; }
     }
