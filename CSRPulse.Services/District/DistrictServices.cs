@@ -166,7 +166,7 @@ namespace CSRPulse.Services
                 if (isValidHeaderList)
                 {
                     DeleteTempFile(fileFullPath);
-                    if (dtExcel.Rows.Count > 10000)
+                    if (dtExcel.Rows.Count > 1000)
                     {
                         error = error + 1;
                         message = "MAXROW";

@@ -278,7 +278,7 @@ namespace CSRPulse.Controllers
                         else if (error > 0 && msg == "MAXROW")
                         {
                             districtImpModel.NoOfErrors = 1;
-                            districtImpModel.Message = "Found more than 10,000 records, You can not validate more than 10,000 districts a single sheet.";
+                            districtImpModel.Message = "Found more than 1,000 records, You can not validate more than 1,000 districts a single sheet.";
                             return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_BlockImportGridView", districtImpModel, true) });
                         }
 
