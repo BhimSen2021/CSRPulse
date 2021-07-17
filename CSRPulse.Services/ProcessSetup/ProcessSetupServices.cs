@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Services
 {
-    public class ProcessSetupServices : BaseService
+    public class ProcessSetupServices : BaseService, IProcessSetupServices
     {
         private readonly IGenericRepository _genericRepository;
         private readonly IMapper _mapper;
@@ -32,7 +32,6 @@ namespace CSRPulse.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -60,7 +59,6 @@ namespace CSRPulse.Services
                 var pData = await _genericRepository.GetByIDAsync<DTOModel.ProcessSetup>(processSetup.SetupId);
                 if (pData != null)
                 {
-
                     pData.ProcessId = processSetup.ProcessId;
                     pData.RevisionNo = processSetup.RevisionNo;
                     pData.PrimaryRoleId = processSetup.PrimaryRoleId;
@@ -71,7 +69,7 @@ namespace CSRPulse.Services
                     pData.Sequence = processSetup.Sequence;
                     pData.Skip = processSetup.Skip;
                     pData.Updatedby = processSetup.UpdatedBy;
-                    pData.UpdatedDate = processSetup.UpdatedOn;
+                    pData.UpdatedOn = processSetup.UpdatedOn;
 
                     _genericRepository.Update(pData);
                     return true;
@@ -81,10 +79,42 @@ namespace CSRPulse.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
+        public async Task<bool> InsertProcessSetupHistory(ProcessSetupHistory setupHistory)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.ProcessSetupHistory>(setupHistory);
+                var res = await _genericRepository.InsertAsync(model);
+                if (res > 0)
+                    return true;
+                else
+                    return false;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ProcessSetupHistory> GetProcessSetupHistoryBySetupId(int setupId)
+        {
+            try
+            {
+                var history = await _genericRepository.GetByIDAsync<DTOModel.ProcessSetupHistory>(setupId);
+                if (history != null)
+                    return _mapper.Map<ProcessSetupHistory>(history);
+                else
+                    return new ProcessSetupHistory();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

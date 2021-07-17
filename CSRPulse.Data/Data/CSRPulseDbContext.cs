@@ -59,13 +59,9 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserType> UserType { get; set; }
         public virtual DbSet<Village> Village { get; set; }
 
-        public static string CustomeDataBase
-        {
-            get; set;
-        }
+        public static string CustomeDataBase { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -80,7 +76,6 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -421,6 +416,7 @@ namespace CSRPulse.Data.Data
                 entity.HasOne(d => d.Process)
                     .WithMany(p => p.ProcessSetup)
                     .HasForeignKey(d => d.ProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProcessSetup_Process");
 
                 entity.HasOne(d => d.QuaternaryRole)

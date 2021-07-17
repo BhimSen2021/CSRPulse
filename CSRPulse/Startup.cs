@@ -80,6 +80,8 @@ namespace CSRPulse
             services.AddScoped<IVillageImportRepository, VillageImportRepository>();
             services.AddScoped<IExcelService, ExcelService>();
 
+            services.AddScoped<IProcessSetupServices, ProcessSetupServices>();
+            
             #endregion
 
             services.AddSession(option =>

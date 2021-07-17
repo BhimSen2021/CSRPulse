@@ -12,8 +12,8 @@ namespace CSRPulse.Data.Models
     public partial class ProcessSetupHistory
     {
         [Key]
-        [Column("ID")]
-        public int Id { get; set; }
+        [Column("PSHistoryId")]
+        public int PshistoryId { get; set; }
         public int? RevisionNo { get; set; }
         public int ProcessId { get; set; }
         public int? PrimaryRoleId { get; set; }
@@ -29,10 +29,10 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "datetime")]
         public DateTime? EndDate { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public int? Updatedby { get; set; }
         [StringLength(2)]
         public string Flag { get; set; }

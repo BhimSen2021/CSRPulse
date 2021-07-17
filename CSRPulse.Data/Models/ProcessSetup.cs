@@ -13,7 +13,7 @@ namespace CSRPulse.Data.Models
     {
         [Key]
         public int SetupId { get; set; }
-        public int? ProcessId { get; set; }
+        public int ProcessId { get; set; }
         public int? RevisionNo { get; set; }
         public int PrimaryRoleId { get; set; }
         public int? SecondoryRoleId { get; set; }
@@ -21,14 +21,14 @@ namespace CSRPulse.Data.Models
         public int? QuaternaryRoleId { get; set; }
         public int LevelId { get; set; }
         public int? Sequence { get; set; }
-        public bool? Skip { get; set; }
+        public bool Skip { get; set; }
         public bool IsDeleted { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
         public int? Updatedby { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
         [InverseProperty(nameof(User.ProcessSetupCreatedByNavigation))]
