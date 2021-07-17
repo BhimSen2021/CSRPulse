@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Process Work Flow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Process Work Flow</a></li>
+                </ol>
+            </div>
+            <h4 class="page-title">Process Work Flow</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @{await Html.RenderPartialAsync("_Filter");}
+</div>
+<div id="div-workflow-list"></div>

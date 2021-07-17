@@ -1,0 +1,22 @@
+﻿@model ProcessSetupModel
+
+<div class="card bg-transparent">
+    <div class="card-body">
+        <form data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-workflow-list" data-ajax-mode="replace" asp-action="GetProcessWorkFlow" asp-controller="ProcessWorkFlow">
+            <div class="col-md-2 col-form-label">
+                <i class="mdi mdi-filter"></i> <label>Filter By :</label>
+            </div>
+
+            <div class="row">
+                <label asp-for="ProcessId" class="col-md-2 col-form-label"></label>
+                <div class="col-md-4">
+                    <select asp-for="ProcessId" asp-items="@ViewBag.ddlProcess" aria-required="true" class="form-select">
+                        <option label="Select" disabled selected="" value=""></option>
+                    </select>
+                    <span asp-validation-for="ProcessId" class="invalid"></span>
+                </div>                              
+            </div>
+        </form>
+    </div>
+</div>
+
