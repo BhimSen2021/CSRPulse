@@ -30,7 +30,7 @@ namespace CSRPulse.Controllers
             return View();
         }
 
-        public PartialViewResult GetProcessWorkFlow(int processId)
+        public async Task<PartialViewResult> GetProcessWorkFlow(int processId)
         {
             List<ProcessSetupModel> setupModels = new List<ProcessSetupModel>
             {
@@ -45,7 +45,7 @@ namespace CSRPulse.Controllers
                     }
             };
 
-            //    var getProcess =await _processSetupServices.GetProcessSetupById(processId);
+            var getProcess = await _processSetupServices.GetProcessSetupById(processId);
             return PartialView("_WorkFlowList", setupModels);
         }
     }

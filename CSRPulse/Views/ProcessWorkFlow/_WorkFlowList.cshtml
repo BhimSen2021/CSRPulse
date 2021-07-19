@@ -1,43 +1,48 @@
 ﻿@model IEnumerable<ProcessSetupModel>
 
-    <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateWorkFlow">
-        <div class="card">
-            <div class="card-body">
-                <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
-                    <thead class="thead-light">
-                        <tr>
-                            <th width="5%">#</th>
-                            <th>@Html.DisplayNameFor(m => m.Skip)</th>
-                            <th>@Html.DisplayNameFor(m => m.PrimaryRole)</th>
-                            <th>@Html.DisplayNameFor(m => m.SecondaryRole)</th>
-                            <th>@Html.DisplayNameFor(m => m.LevelName)</th>
-                            <th>@Html.DisplayNameFor(m => m.Sequence)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Count() > 0)
-                        {
-                            var newModel = Model.ToList();
-                            @for (int i = 0; i < newModel.Count; i++)
-                            {
-                                <tr>
-                                    <td><span>@(i + 1)</span></td>
-                                    <td>@newModel[i].Skip</td>
-                                    <td>@newModel[i].PrimaryRole</td>
-                                    <td>@newModel[i].SecondaryRole</td>
-                                    <td>@newModel[i].LevelName</td>
-                                    <td>@newModel[i].Sequence</td>
-                                </tr>
-                            }
-                        }
-                        else
+<form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateWorkFlow">
+    <div class="card">
+        <div class="card-body">
+            <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+                <thead class="thead-light">
+                    <tr>
+                        <th width="5%">#</th>
+                        <th>@Html.DisplayNameFor(m => m.Skip)</th>
+                        <th>@Html.DisplayNameFor(m => m.PrimaryRole)</th>
+                        <th>@Html.DisplayNameFor(m => m.SecondaryRole)</th>
+                        <th>@Html.DisplayNameFor(m => m.LevelName)</th>
+                        <th>@Html.DisplayNameFor(m => m.Sequence)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count() > 0)
+                    {
+                        var newModel = Model.ToList();
+                        @for (int i = 0; i < newModel.Count; i++)
                         {
                             <tr>
-                                <td colspan="6">No Records Found</td>
+                                <td><span>@(i + 1)</span></td>
+                                <td>@newModel[i].Skip</td>
+                                <td>@newModel[i].PrimaryRole</td>
+                                <td>@newModel[i].SecondaryRole</td>
+                                <td>@newModel[i].LevelName</td>
+                                <td>@newModel[i].Sequence</td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">No Records Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-        </form>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>
