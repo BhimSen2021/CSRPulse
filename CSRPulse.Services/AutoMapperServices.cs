@@ -190,6 +190,9 @@ namespace CSRPulse.Services
       .ForMember(d => d.id, o => o.MapFrom(s => s.PartnerId))
       .ForMember(d => d.value, o => o.MapFrom(s => s.PartnerName));
 
+            CreateMap<DTOModel.Process, SelectListModel>()
+                .ForMember(d => d.id, o => o.MapFrom(s => s.ProcessId))
+                .ForMember(d => d.value, o => o.MapFrom(s => s.ProcessName));
             #endregion
 
 

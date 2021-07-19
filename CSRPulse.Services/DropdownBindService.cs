@@ -87,7 +87,6 @@ namespace CSRPulse.Services
             }
         }
 
-
         public IEnumerable<SelectListModel> GetTheme(int? themeId)
         {
             try
@@ -209,5 +208,11 @@ namespace CSRPulse.Services
             return roleList.ToList();
         }
 
+        public IEnumerable<SelectListModel> GetProcess(int? processId)
+        {
+            var dtoProcess = _genericRepository.Get<DTOModel.Process>(x => processId.HasValue ? x.ProcessId == processId.Value : (1 > 0) && x.IsActive == true);
+            var processList = _mapper.Map<List<SelectListModel>>(dtoProcess);
+            return processList.ToList();
+        }
     }
 }

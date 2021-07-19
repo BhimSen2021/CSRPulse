@@ -1,4 +1,4 @@
-﻿
+﻿@model CSRPulse.Models.ProcessSetupModel
 @{
     ViewData["Title"] = "Process Work Flow";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -20,6 +20,6 @@
 </div>
 
 <div class="row">
-    @{await Html.RenderPartialAsync("_Filter");}
+    @{await Html.RenderPartialAsync("_Filter",Model);}
 </div>
 <div id="div-workflow-list"></div>

@@ -31,5 +31,7 @@ namespace CSRPulse.Services.IServices
         IEnumerable<SelectListModel> GetDesignations(int? designationId);
 
         IEnumerable<SelectListModel> GetPartners(int? partnerId);
+
+        IEnumerable<SelectListModel> GetProcess(int? processId);
     }
 }
