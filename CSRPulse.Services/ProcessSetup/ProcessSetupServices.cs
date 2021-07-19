@@ -25,15 +25,11 @@ namespace CSRPulse.Services
             {
                 var processId = processes.Select(p => p.ProcessId).FirstOrDefault();
                 var model = _mapper.Map<List<DTOModel.ProcessSetup>>(processes);
-                var setupHistories = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(processes);
 
                 var isExist = await _genericRepository.ExistsAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
                 if (!isExist)
                 {
-                    await _genericRepository.AddMultipleEntityAsync(model);
-
-                    // Add records in history tables
-                    return await _genericRepository.AddMultipleEntityAsync(setupHistories);
+                    return await _genericRepository.AddMultipleEntityAsync(model);
                 }
                 else
                     return false;
@@ -68,11 +64,11 @@ namespace CSRPulse.Services
                 var oldSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
                 if (oldSetup != null)
                 {
-                    var pId_rId = oldSetup.Select(x => new
-                    {
-                        processId = x.ProcessId,
-                        RevisionNo = x.RevisionNo ?? 1
-                    }).FirstOrDefault();
+                    //var pId_rId = oldSetup.Select(x => new
+                    //{
+                    //    processId = x.ProcessId,
+                    //    RevisionNo = x.RevisionNo ?? 1
+                    //}).FirstOrDefault();
 
                     // Update history
                     //var oldSetupHistory = await _genericRepository.GetAsync<DTOModel.ProcessSetupHistory>(x => x.ProcessId == pId_rId.processId && x.RevisionNo == pId_rId.RevisionNo);
@@ -87,6 +83,8 @@ namespace CSRPulse.Services
                     await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProcessSetup>(oldSetup);
                     await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetup>(model);
                     await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetupHistory>(hModel);
+
+                    return true;
                 }
 
                 return false;
@@ -102,11 +100,8 @@ namespace CSRPulse.Services
             try
             {
                 var model = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(setupHistories);
-                var res = await _genericRepository.InsertAsync(model);
-                if (res > 0)
-                    return true;
-                else
-                    return false;
+
+                return await _genericRepository.AddMultipleEntityAsync(model);
 
             }
             catch (Exception)

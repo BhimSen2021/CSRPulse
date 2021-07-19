@@ -410,7 +410,7 @@ namespace CSRPulse.Data.Repositories
             }
         }
         public Task UpdateAsync<TEntity>(TEntity entityToUpdate) where TEntity : class
-        {
+        {          
             throw new NotImplementedException();
         }
         public virtual DbParameter GetParameter()
