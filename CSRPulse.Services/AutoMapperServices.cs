@@ -119,6 +119,12 @@ namespace CSRPulse.Services
             CreateMap<DesignationHistory, DTOModel.DesignationHistory>();
 
             CreateMap<DTOModel.Partner, Partner>().ReverseMap();
+
+            CreateMap<DTOModel.ProcessSetup, ProcessSetup>().ReverseMap();
+            CreateMap<DTOModel.ProcessSetupHistory, ProcessSetupHistory>().ReverseMap();
+
+            CreateMap<DTOModel.ProcessSetup, ProcessSetupHistory>().ReverseMap();
+
             #endregion
 
             #region Email Mapper
