@@ -4,6 +4,7 @@ using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,8 @@ namespace CSRPulse.Controllers
 
         public PartialViewResult GetProcessWorkFlow(int processId)
         {
-            List<ProcessSetupModel> setupModels = new List<ProcessSetupModel>
+            _logger.LogInformation("ProcessWorkFlow/GetProcessWorkFlow");
+            List <ProcessSetupModel> setupModels = new List<ProcessSetupModel>
             {
 
                     new ProcessSetupModel
@@ -47,6 +49,20 @@ namespace CSRPulse.Controllers
 
             //    var getProcess =await _processSetupServices.GetProcessSetupById(processId);
             return PartialView("_WorkFlowList", setupModels);
+        }
+
+       public async  Task<IActionResult> UpdateSkillValue(IEnumerable<ProcessSetupModel> processSetups) {
+            _logger.LogInformation("ProcessWorkFlow/UpdateSkillValue");
+            try
+            {
+                return new EmptyResult();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+
+                throw;
+            }
         }
     }
 }
