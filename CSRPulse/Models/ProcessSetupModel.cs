@@ -8,16 +8,19 @@ namespace CSRPulse.Models
 {
     public class ProcessSetupModel
     {
+        //public int SetupId { get; set; }
+        [Display(Name = "Process")]
         public int ProcessId { get; set; }
+        public int RevisionNo { get; set; }
+        public List<ProcessSetup> processSetupList { get; set; }
+        //public bool Skip { get; set; }
+        //[Display(Name ="Primary Role")]
+        //public string PrimaryRole { get; set; }
+        //[Display(Name ="Secondary Role")]
+        //public string SecondaryRole { get; set; }
+        //[Display(Name ="Level Name")]
+        //public string  LevelName { get; set; }
 
-        public bool Skip { get; set; }
-        [Display(Name ="Primary Role")]
-        public string PrimaryRole { get; set; }
-        [Display(Name ="Secondary Role")]
-        public string SecondaryRole { get; set; }
-        [Display(Name ="Level Name")]
-        public string  LevelName { get; set; }
-
-        public int Sequence { get; set; }
+        //public int Sequence { get; set; }
     }
 }
