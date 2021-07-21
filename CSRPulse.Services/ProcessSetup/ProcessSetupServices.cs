@@ -32,7 +32,17 @@ namespace CSRPulse.Services
                     return await _genericRepository.AddMultipleEntityAsync(model);
                 }
                 else
-                    return false;
+                {
+                    var oldSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
+                    if (oldSetup != null && oldSetup.ToList().Count > 0)
+                    {
+                        var hModel = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(oldSetup);
+                        await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetupHistory>(hModel);
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProcessSetup>(oldSetup);
+                        return await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                return false;
             }
             catch (Exception)
             {

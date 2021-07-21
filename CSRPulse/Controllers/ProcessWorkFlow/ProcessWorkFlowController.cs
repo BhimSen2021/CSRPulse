@@ -38,18 +38,23 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("ProcessWorkFlow/GetProcessWorkFlow");
 
             ViewBag.ddlRole = new SelectList(_dropdownBindService.GetRole(null), "id", "value");
+            var setupModel = new ProcessSetupModel();
 
             var processes = await _processSetupServices.GetProcessSetupById(processId);
-            ProcessSetupModel setupModel = new ProcessSetupModel();
+
+            if (processes != null && processes.Count > 0)
+                setupModel.RevisionNo = GetRevisionNo(processes, processId);
+            else
+                setupModel.RevisionNo = 1;
             setupModel.ProcessId = processId;
-            setupModel.RevisionNo = 1;
-            setupModel.processSetupList = MakeProcesRecords(processes, processId);
+
+            setupModel.processSetupList = MakeProcesRecords(processes, processId, setupModel.RevisionNo);
             return PartialView("_WorkFlowList", setupModel);
         }
 
-        public async Task<IActionResult> UpdateSkillValue(IEnumerable<ProcessSetupModel> processSetups)
+        public async Task<IActionResult> UpdateSkipValue(IEnumerable<ProcessSetupModel> processSetups)
         {
-            _logger.LogInformation("ProcessWorkFlow/UpdateSkillValue");
+            _logger.LogInformation("ProcessWorkFlow/UpdateSkipValue");
             try
             {
                 var getProcess = await _processSetupServices.GetProcessSetupById(1);
@@ -68,7 +73,15 @@ namespace CSRPulse.Controllers
             try
             {
                 var listProces = processes.processSetupList.Where(s => s.PrimaryRoleId > 0).ToList();
-                var getProcess = await _processSetupServices.UpdateProcessSetup(listProces);
+
+                listProces.ToList().ForEach(h =>
+                {
+                    h.CreatedOn = DateTime.Now;
+                    h.CreatedBy = userDetail.UserID;
+                    h.RevisionNo = (h.RevisionNo == 1 ? 1 : h.RevisionNo + 1);
+                });
+              
+                var getProcess = await _processSetupServices.CreateProcessSetup(listProces);
                 return new EmptyResult();
             }
             catch (Exception ex)
@@ -79,18 +92,25 @@ namespace CSRPulse.Controllers
             }
         }
 
-        private List<ProcessSetup> MakeProcesRecords(List<ProcessSetup> processSetups, int processId)
+        private List<ProcessSetup> MakeProcesRecords(List<ProcessSetup> processSetups, int processId, int revisionNo)
         {
             for (int i = processSetups.Count; i < 6; i++)
             {
                 processSetups.Add(new ProcessSetup
                 {
                     ProcessId = processId,
+                    RevisionNo = revisionNo,
                     Sequence = (i + 1)
 
                 });
             }
             return processSetups;
+        }
+
+
+        private int GetRevisionNo(List<ProcessSetup> processSetups, int processId)
+        {
+            return processSetups.Where(w => w.ProcessId == processId).Select(r => r.RevisionNo).FirstOrDefault();
         }
     }
 }

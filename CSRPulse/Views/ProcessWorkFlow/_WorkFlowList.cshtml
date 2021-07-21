@@ -25,27 +25,27 @@
                         <tbody>
                             @if (Model.processSetupList != null)
                             {
-                                @for (int i = 0; i < Model.processSetupList.Count; i++)
+                                var processList = Model.processSetupList.Where(s => s.SetupId > 0).ToList();
+                                @for (int i = 0; i < processList.Count; i++)
                                 {
-                                    if (Model.processSetupList[i].SetupId > 0)
-                                    {
+                                    
                                         <tr>
                                             <td><span>@(i + 1)</span></td>
                                             <td>
-                                                <input type="hidden" asp-for="@Model.processSetupList[i].SetupId" />
-                                                <input type="hidden" asp-for="@Model.processSetupList[i].ProcessId" />
+                                                <input type="hidden" asp-for="@processList[i].SetupId" />
+                                                <input type="hidden" asp-for="@processList[i].ProcessId" />
 
-                                                @if (i != 0 && i != (Model.processSetupList.Count - 1))
+                                                @if (i != 0 && i != (processList.Count - 1))
                                                 {
-                                                    <input type="checkbox" asp-for="@Model.processSetupList[i].Skip" />
+                                                    <input type="checkbox" asp-for="@processList[i].Skip" />
                                                 }
                                             </td>
-                                            <td>@Model.processSetupList[i].PrimaryRole</td>
-                                            <td>@Model.processSetupList[i].SecondoryRole</td>
-                                            <td>@Model.processSetupList[i].LevelId</td>
-                                            <td>@Model.processSetupList[i].Sequence</td>
+                                            <td>@processList[i].PrimaryRoleId</td>
+                                            <td>@processList[i].SecondoryRoleId</td>
+                                            <td>@processList[i].LevelId</td>
+                                            <td>@processList[i].Sequence</td>
                                         </tr>
-                                    }
+                                   
 
                                 }
                             }
@@ -74,10 +74,10 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-1  text-info">
-                        <label class="h5">Process: </label>
+                        <label class="h4">Process: </label>
                     </div>
-                    <div class="col-md-10 h5">
-                        <label id="lblProcess"></label>
+                    <div class="col-md-10 h4">
+                        <label id="lblProcess" class="text-muted"></label>
                     </div>
                 </div>
 
@@ -100,7 +100,13 @@
                                 {
                                     var display = i > 0 ? "display:none" : "block";
                                     <tr>
-                                        <td><span>@(i + 1)</span></td>
+                                        <td>
+                                            <span>@(i + 1)</span>
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].SetupId" />
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].ProcessId" />
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].Sequence" />
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].RevisionNo" />
+                                        </td>
                                         <td>
                                             <select asp-for="@Model.processSetupList[i].PrimaryRoleId" asp-items="@ViewBag.ddlRole" aria-required="true" class="form-select">
                                                 <option label="Select Primary Role" selected="" value=""></option>
