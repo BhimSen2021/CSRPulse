@@ -37,8 +37,18 @@ namespace CSRPulse.Services
                     if (oldSetup != null && oldSetup.ToList().Count > 0)
                     {
                         var hModel = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(oldSetup);
+                        hModel.ToList().ForEach(h =>
+                        {
+                            h.StartDate = h.CreatedOn;
+                            h.EndDate = DateTime.Now;
+                            h.CreatedOn = DateTime.Now;
+                        });
+
                         await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetupHistory>(hModel);
                         await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProcessSetup>(oldSetup);
+
+                        model.ToList().ForEach(h => { h.SetupId = 0; h.RevisionNo = (h.RevisionNo + 1); });
+
                         return await _genericRepository.AddMultipleEntityAsync(model);
                     }
                 }
@@ -54,6 +64,7 @@ namespace CSRPulse.Services
             try
             {
                 var processSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
+                                
                 if (processSetup != null)
                     return _mapper.Map<List<ProcessSetup>>(processSetup);
                 else
@@ -74,19 +85,6 @@ namespace CSRPulse.Services
                 var oldSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
                 if (oldSetup != null)
                 {
-                    //var pId_rId = oldSetup.Select(x => new
-                    //{
-                    //    processId = x.ProcessId,
-                    //    RevisionNo = x.RevisionNo ?? 1
-                    //}).FirstOrDefault();
-
-                    // Update history
-                    //var oldSetupHistory = await _genericRepository.GetAsync<DTOModel.ProcessSetupHistory>(x => x.ProcessId == pId_rId.processId && x.RevisionNo == pId_rId.RevisionNo);
-                    //oldSetupHistory.ToList().ForEach(h =>
-                    //{
-                    //    h.EndDate = DateTime.Now;
-                    //});
-
                     var model = _mapper.Map<List<DTOModel.ProcessSetup>>(processes);
                     var hModel = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(processes);
 

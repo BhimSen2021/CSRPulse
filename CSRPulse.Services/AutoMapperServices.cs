@@ -123,7 +123,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.ProcessSetup, ProcessSetup>().ReverseMap();
             CreateMap<DTOModel.ProcessSetupHistory, ProcessSetupHistory>().ReverseMap();
 
-            CreateMap<DTOModel.ProcessSetup, ProcessSetupHistory>()
+            CreateMap<DTOModel.ProcessSetup, DTOModel.ProcessSetupHistory>()
             .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
             .ForMember(d => d.RevisionNo, o => o.MapFrom(s => s.RevisionNo))
             .ForMember(d => d.PrimaryRoleId, o => o.MapFrom(s => s.PrimaryRoleId))
@@ -131,9 +131,10 @@ namespace CSRPulse.Services
             .ForMember(d => d.TertiaryRoleId, o => o.MapFrom(s => s.TertiaryRoleId))
             .ForMember(d => d.QuaternaryRoleId, o => o.MapFrom(s => s.QuaternaryRoleId))
             .ForMember(d => d.LevelId, o => o.MapFrom(s => s.LevelId))
-            .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy))
-            .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn)).ReverseMap()
-            .ForAllOtherMembers(d => d.Ignore());
+            .ForMember(d => d.Sequence, o => o.MapFrom(s => s.Sequence))
+            .ForMember(d => d.Skip, o => o.MapFrom(s => s.Skip))
+            .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy));
+            
 
             #endregion
 

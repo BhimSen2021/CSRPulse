@@ -325,7 +325,7 @@ namespace CSRPulse.Data.Repositories
             }
             return flag;
         }
-        public async Task<bool> RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList) where TEntity : class
+        public virtual async Task<bool> RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList) where TEntity : class
         {
             var flag = false;
             if (removeEntityList == null)
@@ -492,18 +492,11 @@ namespace CSRPulse.Data.Repositories
         public Task DeleteAsync<TEntity>(TEntity entityToDelete) where TEntity : class
         {
             throw new NotImplementedException();
-        }
-
-        Task<bool> IGenericRepository.RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList)
-        {
-            throw new NotImplementedException();
-        } 
+        }       
 
         public IDatabaseTransaction BeginTransaction()
         {
             return new EntityDatabaseTransaction(_dbContext);
-        }
-
-       
+        }       
     }
 }

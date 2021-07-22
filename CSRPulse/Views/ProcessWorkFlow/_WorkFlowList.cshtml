@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <div class="col-md text-end">
                         <a asp-controller="ProcessWorkFlow" asp-action="UpdateSkipValue" class="btn btn-success btn-sm btn-rounded mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to update process"><i class="uil-check me-1"></i>Update Skip Value</a>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#info-header-modal" class="btn btn-danger btn-sm btn-rounded mb-3" data-bs-placement="top" title="Click here, to edit and add new process"><i class="mdi mdi-plus-circle me-1"></i>Add Process</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#info-header-modal" class="btn btn-danger btn-sm btn-rounded mb-3" data-bs-placement="top" title="Click here, to edit and add new process"><i class="mdi mdi-plus-circle me-1"></i>Add/Edit Process</a>
                     </div>
                     <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
                         <thead class="thead-light">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateProcessWorkflow">
+                <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateProcessWorkflow" data-ajax-success="onSuccess">
                     <table class="table table-centered mb-0">
                         <thead class="thead-light">
                             <tr>
@@ -164,4 +164,12 @@
         Basicdatatable();
         $('#lblProcess').text($('#ProcessId').text());
     });
+    function onSuccess(data) {
+        if (data.success == true) {
+            commonMessage('success', 'Process Workflow Setup Successfully.');
+        }
+        else {            
+            commonMessage('warning', 'Process Workflow Setup failed!');
+        }
+    }
 </script>

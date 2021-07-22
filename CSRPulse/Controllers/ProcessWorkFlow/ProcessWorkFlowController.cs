@@ -77,12 +77,13 @@ namespace CSRPulse.Controllers
                 listProces.ToList().ForEach(h =>
                 {
                     h.CreatedOn = DateTime.Now;
-                    h.CreatedBy = userDetail.UserID;
-                    h.RevisionNo = (h.RevisionNo == 1 ? 1 : h.RevisionNo + 1);
+                    h.CreatedBy = userDetail.UserID;                    
                 });
-              
-                var getProcess = await _processSetupServices.CreateProcessSetup(listProces);
-                return new EmptyResult();
+
+                var result = await _processSetupServices.CreateProcessSetup(listProces);
+
+                return Json(new { success = result, htmlData = ConvertViewToString("_WorkFlowList", processes, true) });
+               
             }
             catch (Exception ex)
             {

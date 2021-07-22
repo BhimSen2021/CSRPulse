@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+   
     $('#StateId').change(function () {      
         $.ajax({
             type: 'GET',
