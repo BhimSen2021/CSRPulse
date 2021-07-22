@@ -52,13 +52,23 @@ namespace CSRPulse.Controllers
             return PartialView("_WorkFlowList", setupModel);
         }
 
-        public async Task<IActionResult> UpdateSkipValue(IEnumerable<ProcessSetupModel> processSetups)
+        public async Task<IActionResult> UpdateSkipValue(ProcessSetupModel processSetup)
         {
             _logger.LogInformation("ProcessWorkFlow/UpdateSkipValue");
             try
             {
-                var getProcess = await _processSetupServices.GetProcessSetupById(1);
-                return new EmptyResult();
+                bool result = false;
+                if (processSetup.processSetupList!=null)
+                {
+                    foreach (var process in processSetup.processSetupList)
+                    {
+                        process.UpdatedBy = userDetail.UserID;
+                        process.UpdatedOn = DateTime.Now;
+                        result = await _processSetupServices.UpdateProcessSetup(process);
+                    }
+                }
+
+                return Json(new { success = result, htmlData = ConvertViewToString("_WorkFlowList", processSetup, true) });
             }
             catch (Exception ex)
             {
@@ -105,7 +115,7 @@ namespace CSRPulse.Controllers
 
                 });
             }
-            return processSetups;
+            return processSetups.OrderBy(s=>s.Sequence).ToList();
         }
 
 

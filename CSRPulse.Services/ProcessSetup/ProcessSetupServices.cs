@@ -7,16 +7,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSRPulse.Services
 {
     public class ProcessSetupServices : BaseService, IProcessSetupServices
     {
         private readonly IGenericRepository _genericRepository;
+        private readonly IProcessSetupRepository _processSetupRepository;
         private readonly IMapper _mapper;
-        public ProcessSetupServices(IGenericRepository generic, IMapper mapper)
+        public ProcessSetupServices(IGenericRepository generic, IProcessSetupRepository processSetupRepository, IMapper mapper)
         {
             _genericRepository = generic;
+            _processSetupRepository = processSetupRepository;
             _mapper = mapper;
         }
         public async Task<bool> CreateProcessSetup(List<ProcessSetup> processes)
@@ -63,10 +66,36 @@ namespace CSRPulse.Services
         {
             try
             {
-                var processSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
-                                
-                if (processSetup != null)
-                    return _mapper.Map<List<ProcessSetup>>(processSetup);
+                var models = await _processSetupRepository.GetProcessSetupById(processId).OrderBy(s => s.Sequence).ToListAsync();
+
+                if (models!=null)
+                {
+                   return models.Select(a => new ProcessSetup()
+                    {
+                        SetupId = a.SetupId,
+                        ProcessId = a.ProcessId,
+                        RevisionNo = a.RevisionNo ?? 1,
+                        PrimaryRoleId = a.PrimaryRoleId ?? 99,
+                        PrimaryRole = a.PrimaryRole,
+                        SecondoryRoleId = a.SecondoryRoleId,
+                        SecondoryRole = a.SecondoryRole,
+                        TertiaryRoleId = a.TertiaryRoleId,
+                        TertiaryRole = a.TertiaryRole,
+                        QuaternaryRoleId = a.QuaternaryRoleId,
+                        QuaternaryRole = a.QuaternaryRole,
+                        LevelId = a.LevelId,
+                        Skip = a.Skip,
+                        Sequence = a.Sequence ?? 1
+
+                    }).ToList();
+                }
+
+               
+
+                //var processSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
+
+                //if (processSetup != null)
+                //    return _mapper.Map<List<ProcessSetup>>(processSetup);
                 else
                     return new List<ProcessSetup>();
 
@@ -77,21 +106,17 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<bool> UpdateProcessSetup(List<ProcessSetup> processes)
+        public async Task<bool> UpdateProcessSetup(ProcessSetup processes)
         {
             try
             {
-                var processId = processes.Select(p => p.ProcessId).FirstOrDefault();
-                var oldSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
-                if (oldSetup != null)
+                var model = await _genericRepository.GetByIDAsync<DTOModel.ProcessSetup>(processes.SetupId);
+                if (model != null)
                 {
-                    var model = _mapper.Map<List<DTOModel.ProcessSetup>>(processes);
-                    var hModel = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(processes);
-
-                    await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProcessSetup>(oldSetup);
-                    await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetup>(model);
-                    await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetupHistory>(hModel);
-
+                    model.Skip = processes.Skip;
+                    model.UpdatedOn = processes.UpdatedOn;
+                    model.Updatedby = processes.UpdatedBy;
+                    _genericRepository.Update<DTOModel.ProcessSetup>(model);
                     return true;
                 }
 

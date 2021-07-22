@@ -409,8 +409,23 @@ namespace CSRPulse.Data.Repositories
                 throw fail;
             }
         }
-        public Task UpdateAsync<TEntity>(TEntity entityToUpdate) where TEntity : class
-        {          
+        public Task UpdateMultipleEntity<TEntity>(IEnumerable<TEntity> entityList) where TEntity : class
+        {
+            if (entityList == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            try
+            {
+                
+                _dbContext.Entry(entityList).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             throw new NotImplementedException();
         }
         public virtual DbParameter GetParameter()
@@ -497,6 +512,8 @@ namespace CSRPulse.Data.Repositories
         public IDatabaseTransaction BeginTransaction()
         {
             return new EntityDatabaseTransaction(_dbContext);
-        }       
+        }
+
+       
     }
 }
