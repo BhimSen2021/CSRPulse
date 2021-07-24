@@ -1,43 +1,201 @@
-﻿@model IEnumerable<ProcessSetupModel>
+﻿@model ProcessSetupModel
+@using CSRPulse.Common
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateSkipValue" data-ajax-success="onUpdated">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md text-end">
+                        <button class="btn btn-success btn-sm btn-rounded mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to update process"><i class="uil-check me-1"></i>Update Skip Value</button>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#info-header-modal" class="btn btn-danger btn-sm btn-rounded mb-3" data-bs-placement="top" title="Click here, to edit and add new process"><i class="mdi mdi-plus-circle me-1"></i>Add/Edit Process</a>
+                    </div>
+                    <table class="table table-hover table-centered mb-0">
+                        <thead>
+                            <tr>
+                                <th width="5%">Sequence</th>
+                                <th>Skip</th>
+                                <th>Primary Role</th>
+                                <th>Secondory Role</th>
+                                <th>Tertiary Role</th>
+                                <th>Quaternary Role</th>
+                                <th>Level Name</th>
 
-    <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateWorkFlow">
-        <div class="card">
-            <div class="card-body">
-                <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
-                    <thead class="thead-light">
-                        <tr>
-                            <th width="5%">#</th>
-                            <th>@Html.DisplayNameFor(m => m.Skip)</th>
-                            <th>@Html.DisplayNameFor(m => m.PrimaryRole)</th>
-                            <th>@Html.DisplayNameFor(m => m.SecondaryRole)</th>
-                            <th>@Html.DisplayNameFor(m => m.LevelName)</th>
-                            <th>@Html.DisplayNameFor(m => m.Sequence)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Count() > 0)
-                        {
-                            var newModel = Model.ToList();
-                            @for (int i = 0; i < newModel.Count; i++)
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.processSetupList != null)
+                            {
+                                var fList = Model.processSetupList.Where(s => s.SetupId > 0);
+                                @for (int i = 0; i < Model.processSetupList.Count; i++)
+                                {
+                                    if (Model.processSetupList[i].SetupId > 0)
+                                    {
+                                        <tr>
+                                            <td>@Model.processSetupList[i].Sequence</td>
+                                            <td>
+                                                <input type="hidden" id="hdn_SetupId_'+@i+'" asp-for="@Model.processSetupList[i].SetupId" />
+                                                <input type="hidden" id="hdn_ProcessId_'+@i+'" asp-for="@Model.processSetupList[i].ProcessId" />
+                                                <input type="hidden" id="hdn_Sequence_'+@i+'" asp-for="@Model.processSetupList[i].Sequence" />
+                                                <input type="hidden" id="hdn_RevisionNo_'+@i+'" asp-for="@Model.processSetupList[i].RevisionNo" />
+
+                                                @if (i != 0 && i != (fList.ToList().Count - 1))
+                                                {
+                                                    <input type="checkbox" asp-for="@Model.processSetupList[i].Skip" />
+                                                }
+                                            </td>
+                                            <td>@Model.processSetupList[i].PrimaryRole</td>
+                                            <td>@Model.processSetupList[i].SecondoryRole</td>
+                                            <td>@Model.processSetupList[i].TertiaryRole</td>
+                                            <td>@Model.processSetupList[i].QuaternaryRole</td>
+                                            <td>@Enum.GetName(typeof(ProcessLevel), Model.processSetupList[i].LevelId)</td>
+
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
                             {
                                 <tr>
-                                    <td><span>@(i + 1)</span></td>
-                                    <td>@newModel[i].Skip</td>
-                                    <td>@newModel[i].PrimaryRole</td>
-                                    <td>@newModel[i].SecondaryRole</td>
-                                    <td>@newModel[i].LevelName</td>
-                                    <td>@newModel[i].Sequence</td>
+                                    <td colspan="7">No Records Found</td>
                                 </tr>
                             }
-                        }
-                        else
-                        {
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div id="info-header-modal" class="modal fade" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-full-width">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="info-header-modalLabel">Process Workflow</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-1  text-info">
+                        <label class="h4">Process: </label>
+                    </div>
+                    <div class="col-md-10 h4">
+                        <label id="lblProcess" class="text-muted"></label>
+                    </div>
+                </div>
+
+                <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateProcessWorkflow" data-ajax-success="onSuccess">
+                    <table class="table table-centered mb-0">
+                        <thead class="thead-light">
                             <tr>
-                                <td colspan="6">No Records Found</td>
+                                <th width="5%">#</th>
+                                <th>Primary Role</th>
+                                <th>Secondory Role</th>
+                                <th>Tertiary Role</th>
+                                <th>Quaternary Role</th>
+                                <th>Level Name</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if (Model.processSetupList != null)
+                            {
+                                @for (int i = 0; i < Model.processSetupList.Count; i++)
+                                {
+                                    var display = i > 0 ? "display:none" : "block";
+
+                                    var processLevel = Html.GetEnumSelectList<ProcessLevel>();
+                                    if (i == 0)
+                                    {
+                                        processLevel = processLevel.Where(x => Convert.ToInt32(x.Value) < 2);
+                                    }
+                                    else
+                                    {
+                                        processLevel = processLevel.Where(x => Convert.ToInt32(x.Value) != 1);
+                                    }
+                                    <tr>
+                                        <td>
+                                            <span>@(i + 1)</span>
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].SetupId" />
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].ProcessId" />
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].Sequence" />
+                                            <input type="hidden" asp-for="@Model.processSetupList[i].RevisionNo" />
+                                        </td>
+                                        <td>
+                                            <select asp-for="@Model.processSetupList[i].PrimaryRoleId" asp-items="@ViewBag.ddlRole" aria-required="true" class="form-select">
+                                                <option label="Select Primary Role" selected="" value=""></option>
+                                            </select>
+                                            <span asp-validation-for="@Model.processSetupList[i].PrimaryRoleId" class="invalid"></span>
+                                        </td>
+
+                                        <td>
+                                            <select asp-for="@Model.processSetupList[i].SecondoryRoleId" asp-items="@ViewBag.ddlRole" aria-required="true" class="form-select" style="@display">
+                                                <option label="Select Secondory Role" selected="" value=""></option>
+                                            </select>
+                                            <span asp-validation-for="@Model.processSetupList[i].SecondoryRoleId" class="invalid"></span>
+                                        </td>
+                                        <td>
+                                            <select asp-for="@Model.processSetupList[i].TertiaryRoleId" asp-items="@ViewBag.ddlRole" aria-required="true" class="form-select" style="@display">
+                                                <option label="Select Tertiary Role" selected="" value=""></option>
+                                            </select>
+                                            <span asp-validation-for="@Model.processSetupList[i].TertiaryRoleId" class="invalid"></span>
+                                        </td>
+                                        <td>
+                                            <select asp-for="@Model.processSetupList[i].QuaternaryRoleId" asp-items="@ViewBag.ddlRole" aria-required="true" class="form-select" style="@display">
+                                                <option label="Select Quaternary Role" selected="" value=""></option>
+                                            </select>
+                                            <span asp-validation-for="@Model.processSetupList[i].QuaternaryRoleId" class="invalid"></span>
+                                        </td>
+                                        <td>
+                                            <select asp-for="@Model.processSetupList[i].LevelId" asp-items="@processLevel" aria-required="true" class="form-select">
+                                                <option label="Select Level" selected="" value=""></option>
+                                            </select>
+                                            <span asp-validation-for="@Model.processSetupList[i].LevelId" class="invalid"></span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6">No Records Found</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="mb-3 pt-2 text-end">
+                        <button class="btn btn-info btn-sm btn-rounded" type="submit"><i class="uil-check me-1"></i>Save</button>
+                    </div>
+                </form>
             </div>
         </div>
-        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Tooltip();
+        $('#lblProcess').text($('#ProcessId').text());
+    });
+    function onSuccess(data) {
+        if (data.success == true) {
+            commonMessage('success', 'Process Workflow Setup Successfully.');
+        }
+        else if (data.msg == 0)
+            commonMessage('warning', 'Please set at least one process workflow!');
+        else {
+            commonMessage('warning', 'Process Workflow Setup failed!');
+        }
+    }
+
+    function onUpdated(data) {
+        if (data.success == true) {
+            commonMessage('success', 'Process Workflow Update Successfully.');
+        }
+        else {
+            commonMessage('warning', 'Process Workflow Updation failed!');
+        }
+    }
+
+</script>

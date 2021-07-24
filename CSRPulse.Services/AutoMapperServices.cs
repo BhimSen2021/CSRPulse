@@ -123,7 +123,18 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.ProcessSetup, ProcessSetup>().ReverseMap();
             CreateMap<DTOModel.ProcessSetupHistory, ProcessSetupHistory>().ReverseMap();
 
-            CreateMap<DTOModel.ProcessSetup, ProcessSetupHistory>().ReverseMap();
+            CreateMap<DTOModel.ProcessSetup, DTOModel.ProcessSetupHistory>()
+            .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
+            .ForMember(d => d.RevisionNo, o => o.MapFrom(s => s.RevisionNo))
+            .ForMember(d => d.PrimaryRoleId, o => o.MapFrom(s => s.PrimaryRoleId))
+            .ForMember(d => d.SecondoryRoleId, o => o.MapFrom(s => s.SecondoryRoleId))
+            .ForMember(d => d.TertiaryRoleId, o => o.MapFrom(s => s.TertiaryRoleId))
+            .ForMember(d => d.QuaternaryRoleId, o => o.MapFrom(s => s.QuaternaryRoleId))
+            .ForMember(d => d.LevelId, o => o.MapFrom(s => s.LevelId))
+            .ForMember(d => d.Sequence, o => o.MapFrom(s => s.Sequence))
+            .ForMember(d => d.Skip, o => o.MapFrom(s => s.Skip))
+            .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy));
+            
 
             #endregion
 
@@ -189,19 +200,19 @@ namespace CSRPulse.Services
          .ForMember(d => d.value, o => o.MapFrom(s => s.DepartmentName));
 
             CreateMap<DTOModel.Designation, SelectListModel>()
-      .ForMember(d => d.id, o => o.MapFrom(s => s.DesignationId))
-      .ForMember(d => d.value, o => o.MapFrom(s => s.DesignationName));
+          .ForMember(d => d.id, o => o.MapFrom(s => s.DesignationId))
+          .ForMember(d => d.value, o => o.MapFrom(s => s.DesignationName));
 
             CreateMap<DTOModel.Partner, SelectListModel>()
-      .ForMember(d => d.id, o => o.MapFrom(s => s.PartnerId))
-      .ForMember(d => d.value, o => o.MapFrom(s => s.PartnerName));
+          .ForMember(d => d.id, o => o.MapFrom(s => s.PartnerId))
+          .ForMember(d => d.value, o => o.MapFrom(s => s.PartnerName));
 
             CreateMap<DTOModel.Process, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.ProcessId))
                 .ForMember(d => d.value, o => o.MapFrom(s => s.ProcessName));
             #endregion
 
-
+            
         }
     }
 }

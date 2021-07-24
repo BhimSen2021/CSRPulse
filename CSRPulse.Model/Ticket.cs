@@ -11,4 +11,5 @@ namespace CSRPulse.Model
         public string message { get; set; }
         public int ClosedBy { get; set; }
     }
+        
 }

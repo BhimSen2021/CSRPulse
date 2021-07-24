@@ -36,7 +36,7 @@ namespace CSRPulse.Data.Repositories
         void Delete<TEntity>(TEntity entityToDelete) where TEntity : class;
         Task DeleteAsync<TEntity>(TEntity entityToDelete) where TEntity : class;
         void Update<TEntity>(TEntity entityToUpdate) where TEntity : class;
-        Task UpdateAsync<TEntity>(TEntity entityToUpdate) where TEntity : class;
+        Task UpdateMultipleEntity<TEntity>(IEnumerable<TEntity> entityList) where TEntity : class;
         DbParameter GetParameter();
         Task<DbParameter> GetParameterAsync();
 

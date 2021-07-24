@@ -7,17 +7,11 @@ using System.ComponentModel.DataAnnotations;
 namespace CSRPulse.Models
 {
     public class ProcessSetupModel
-    {
+    {        
+        [Display(Name = "Process")]
         public int ProcessId { get; set; }
-
-        public bool Skip { get; set; }
-        [Display(Name ="Primary Role")]
-        public string PrimaryRole { get; set; }
-        [Display(Name ="Secondary Role")]
-        public string SecondaryRole { get; set; }
-        [Display(Name ="Level Name")]
-        public string  LevelName { get; set; }
-
-        public int Sequence { get; set; }
+        [Display(Name = "Revision No")]
+        public int RevisionNo { get; set; }
+        public List<ProcessSetup> processSetupList { get; set; }       
     }
 }
