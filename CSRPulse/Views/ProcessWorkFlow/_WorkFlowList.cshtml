@@ -25,38 +25,38 @@
                         <tbody>
                             @if (Model.processSetupList != null)
                             {
-                                var fList = Model.processSetupList.Where(s => s.SetupId > 0);                              
+                                var fList = Model.processSetupList.Where(s => s.SetupId > 0);
                                 @for (int i = 0; i < Model.processSetupList.Count; i++)
                                 {
                                     if (Model.processSetupList[i].SetupId > 0)
                                     {
-                            <tr>
-                                <td>@Model.processSetupList[i].Sequence</td>
-                                <td>
-                                    <input type="hidden" asp-for="@Model.processSetupList[i].SetupId" />
-                                    <input type="hidden" asp-for="@Model.processSetupList[i].ProcessId" />
-                                    <input type="hidden" asp-for="@Model.processSetupList[i].Sequence" />
-                                    <input type="hidden" asp-for="@Model.processSetupList[i].RevisionNo" />
+                                        <tr>
+                                            <td>@Model.processSetupList[i].Sequence</td>
+                                            <td>
+                                                <input type="hidden" id="hdn_SetupId_'+@i+'" asp-for="@Model.processSetupList[i].SetupId" />
+                                                <input type="hidden" id="hdn_ProcessId_'+@i+'" asp-for="@Model.processSetupList[i].ProcessId" />
+                                                <input type="hidden" id="hdn_Sequence_'+@i+'" asp-for="@Model.processSetupList[i].Sequence" />
+                                                <input type="hidden" id="hdn_RevisionNo_'+@i+'" asp-for="@Model.processSetupList[i].RevisionNo" />
 
-                                    @if (i != 0 && i != (fList.ToList().Count - 1))
-                                    {
-                                        <input type="checkbox" asp-for="@Model.processSetupList[i].Skip" />
-                                    }
-                                </td>
-                                <td>@Model.processSetupList[i].PrimaryRole</td>
-                                <td>@Model.processSetupList[i].SecondoryRole</td>
-                                <td>@Model.processSetupList[i].TertiaryRole</td>
-                                <td>@Model.processSetupList[i].QuaternaryRole</td>
-                                <td>@Enum.GetName(typeof(ProcessLevel), Model.processSetupList[i].LevelId)</td>
+                                                @if (i != 0 && i != (fList.ToList().Count - 1))
+                                                {
+                                                    <input type="checkbox" asp-for="@Model.processSetupList[i].Skip" />
+                                                }
+                                            </td>
+                                            <td>@Model.processSetupList[i].PrimaryRole</td>
+                                            <td>@Model.processSetupList[i].SecondoryRole</td>
+                                            <td>@Model.processSetupList[i].TertiaryRole</td>
+                                            <td>@Model.processSetupList[i].QuaternaryRole</td>
+                                            <td>@Enum.GetName(typeof(ProcessLevel), Model.processSetupList[i].LevelId)</td>
 
-                            </tr>
+                                        </tr>
                                     }
                                 }
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="6">No Records Found</td>
+                                    <td colspan="7">No Records Found</td>
                                 </tr>
                             }
                         </tbody>
@@ -103,6 +103,16 @@
                                 @for (int i = 0; i < Model.processSetupList.Count; i++)
                                 {
                                     var display = i > 0 ? "display:none" : "block";
+
+                                    var processLevel = Html.GetEnumSelectList<ProcessLevel>();
+                                    if (i == 0)
+                                    {
+                                        processLevel = processLevel.Where(x => Convert.ToInt32(x.Value) < 2);
+                                    }
+                                    else
+                                    {
+                                        processLevel = processLevel.Where(x => Convert.ToInt32(x.Value) != 1);
+                                    }
                                     <tr>
                                         <td>
                                             <span>@(i + 1)</span>
@@ -137,7 +147,7 @@
                                             <span asp-validation-for="@Model.processSetupList[i].QuaternaryRoleId" class="invalid"></span>
                                         </td>
                                         <td>
-                                            <select asp-for="@Model.processSetupList[i].LevelId" asp-items="@Html.GetEnumSelectList<ProcessLevel>()" aria-required="true" class="form-select">
+                                            <select asp-for="@Model.processSetupList[i].LevelId" asp-items="@processLevel" aria-required="true" class="form-select">
                                                 <option label="Select Level" selected="" value=""></option>
                                             </select>
                                             <span asp-validation-for="@Model.processSetupList[i].LevelId" class="invalid"></span>
@@ -172,6 +182,8 @@
         if (data.success == true) {
             commonMessage('success', 'Process Workflow Setup Successfully.');
         }
+        else if (data.msg == 0)
+            commonMessage('warning', 'Please set at least one process workflow!');
         else {
             commonMessage('warning', 'Process Workflow Setup failed!');
         }

@@ -90,12 +90,6 @@ namespace CSRPulse.Services
                     }).ToList();
                 }
 
-               
-
-                //var processSetup = await _genericRepository.GetAsync<DTOModel.ProcessSetup>(x => x.ProcessId == processId);
-
-                //if (processSetup != null)
-                //    return _mapper.Map<List<ProcessSetup>>(processSetup);
                 else
                     return new List<ProcessSetup>();
 
@@ -133,7 +127,6 @@ namespace CSRPulse.Services
             try
             {
                 var model = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(setupHistories);
-
                 return await _genericRepository.AddMultipleEntityAsync(model);
 
             }

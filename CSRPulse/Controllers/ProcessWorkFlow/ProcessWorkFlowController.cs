@@ -1,6 +1,4 @@
-﻿using CSRPulse.Common;
-using CSRPulse.Controllers;
-using CSRPulse.Model;
+﻿using CSRPulse.Model;
 using CSRPulse.Models;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
@@ -58,7 +56,7 @@ namespace CSRPulse.Controllers
             try
             {
                 bool result = false;
-                if (processSetup.processSetupList!=null)
+                if (processSetup.processSetupList != null)
                 {
                     foreach (var process in processSetup.processSetupList)
                     {
@@ -82,18 +80,25 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("ProcessWorkFlow/UpdateSkillValue");
             try
             {
-                var listProces = processes.processSetupList.Where(s => s.PrimaryRoleId > 0).ToList();
-
-                listProces.ToList().ForEach(h =>
+                var listProces = processes.processSetupList.Where(s => s.PrimaryRoleId > 0 && s.LevelId > 0).ToList();
+                if (listProces.Count > 0)
                 {
-                    h.CreatedOn = DateTime.Now;
-                    h.CreatedBy = userDetail.UserID;                    
-                });
+                    listProces.ToList().ForEach(h =>
+                    {
+                        h.CreatedOn = DateTime.Now;
+                        h.CreatedBy = userDetail.UserID;
+                    });
 
-                var result = await _processSetupServices.CreateProcessSetup(listProces);
+                    var result = await _processSetupServices.CreateProcessSetup(listProces);
 
-                return Json(new { success = result, htmlData = ConvertViewToString("_WorkFlowList", processes, true) });
-               
+                    return Json(new { success = result, msg = 1, htmlData = ConvertViewToString("_WorkFlowList", processes, true) });
+                }
+                else
+                {
+                    return Json(new { success = false, msg = 0, htmlData = ConvertViewToString("_WorkFlowList", processes, true) });
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -115,7 +120,7 @@ namespace CSRPulse.Controllers
 
                 });
             }
-            return processSetups.OrderBy(s=>s.Sequence).ToList();
+            return processSetups.OrderBy(s => s.Sequence).ToList();
         }
 
 
