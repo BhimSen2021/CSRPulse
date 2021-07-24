@@ -19,6 +19,5 @@ namespace CSRPulse.Models
         public string  LevelName { get; set; }
 
         public int Sequence { get; set; }
-        public int SetupId { get; set; }
     }
 }
