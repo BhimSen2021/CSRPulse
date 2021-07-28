@@ -134,7 +134,7 @@ namespace CSRPulse.Services
             .ForMember(d => d.Sequence, o => o.MapFrom(s => s.Sequence))
             .ForMember(d => d.Skip, o => o.MapFrom(s => s.Skip))
             .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy));
-            
+
 
             #endregion
 
@@ -210,9 +210,27 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Process, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.ProcessId))
                 .ForMember(d => d.value, o => o.MapFrom(s => s.ProcessName));
+
+            CreateMap<DTOModel.ProcessDocument, SelectListModel>()
+                .ForMember(d => d.id, o => o.MapFrom(s => s.DocumentId))
+                .ForMember(d => d.value, o => o.MapFrom(s => s.DocumentName));
             #endregion
 
-            
+            CreateMap<Model.ProcessDocument, DTOModel.ProcessDocument>().ReverseMap()
+                .ForMember(d => d.DocumentId, o => o.MapFrom(s => s.DocumentId))
+                .ForMember(d => d.DocumentName, o => o.MapFrom(s => s.DocumentName))
+                .ForMember(d => d.ParentDocumentId, o => o.MapFrom(s => s.ParentDocumentId))
+                .ForMember(d => d.DocumentMaxSize, o => o.MapFrom(s => s.DocumentMaxSize))
+                .ForMember(d => d.DocumentType, o => o.MapFrom(s => s.DocumentType))
+                .ForMember(d => d.Mandatory, o => o.MapFrom(s => s.Mandatory))
+                .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
+                .ForMember(d => d.DocumentUpload, o => o.MapFrom(s => s.DocumentUpload))
+                .ForMember(d => d.Remark, o => o.MapFrom(s => s.Remark))
+                .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
+                .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy))
+                .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
+                .ForMember(d => d.ParentDocument, o => o.MapFrom(s => s.ParentDocument.DocumentName))
+                .ForAllOtherMembers(d => d.Ignore());
         }
     }
 }

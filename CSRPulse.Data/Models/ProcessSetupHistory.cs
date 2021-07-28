@@ -12,8 +12,8 @@ namespace CSRPulse.Data.Models
     public partial class ProcessSetupHistory
     {
         [Key]
-        [Column("PSHistoryId")]
-        public int PshistoryId { get; set; }
+        [Column("ID")]
+        public int Id { get; set; }
         public int? RevisionNo { get; set; }
         public int ProcessId { get; set; }
         public int? PrimaryRoleId { get; set; }

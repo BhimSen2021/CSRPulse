@@ -42,6 +42,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Process> Process { get; set; }
+        public virtual DbSet<ProcessDocument> ProcessDocument { get; set; }
         public virtual DbSet<ProcessSetup> ProcessSetup { get; set; }
         public virtual DbSet<ProcessSetupHistory> ProcessSetupHistory { get; set; }
         public virtual DbSet<ProcessWorkFlow> ProcessWorkFlow { get; set; }
@@ -59,9 +60,13 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserType> UserType { get; set; }
         public virtual DbSet<Village> Village { get; set; }
 
-        public static string CustomeDataBase { get; set; }
+        public static string CustomeDataBase
+        {
+            get; set;
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -76,7 +81,6 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Activity>(entity =>
@@ -396,6 +400,40 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.ProcessName).IsUnicode(false);
             });
 
+            modelBuilder.Entity<ProcessDocument>(entity =>
+            {
+                entity.HasKey(e => e.DocumentId)
+                    .HasName("PK__ProcessD__1ABEEF0F9D8C3169");
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DocumentName).IsUnicode(false);
+
+                entity.Property(e => e.Remark).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.ProcessDocumentCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ProcessDo__Creat__764C846B");
+
+                entity.HasOne(d => d.ParentDocument)
+                    .WithMany(p => p.InverseParentDocument)
+                    .HasForeignKey(d => d.ParentDocumentId)
+                    .HasConstraintName("FK_ProcessDocument_ProcessDocument");
+
+                entity.HasOne(d => d.Process)
+                    .WithMany(p => p.ProcessDocument)
+                    .HasForeignKey(d => d.ProcessId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ProcessDo__Proce__7834CCDD");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.ProcessDocumentUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK__ProcessDo__Updat__7740A8A4");
+            });
+
             modelBuilder.Entity<ProcessSetup>(entity =>
             {
                 entity.HasKey(e => e.SetupId)
@@ -434,9 +472,9 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.TertiaryRoleId)
                     .HasConstraintName("FK_ProcessSetup_Role2");
 
-                entity.HasOne(d => d.UpdatedbyNavigation)
-                    .WithMany(p => p.ProcessSetupUpdatedbyNavigation)
-                    .HasForeignKey(d => d.Updatedby)
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.ProcessSetupUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
                     .HasConstraintName("FK_ProcessSetup_User1");
             });
 

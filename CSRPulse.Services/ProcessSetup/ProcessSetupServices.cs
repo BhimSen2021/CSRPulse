@@ -109,7 +109,7 @@ namespace CSRPulse.Services
                 {
                     model.Skip = processes.Skip;
                     model.UpdatedOn = processes.UpdatedOn;
-                    model.Updatedby = processes.UpdatedBy;
+                    model.UpdatedBy = processes.UpdatedBy;
                     _genericRepository.Update<DTOModel.ProcessSetup>(model);
                     return true;
                 }
