@@ -76,5 +76,27 @@ namespace CSRPulse.Model
         [Display(Name = "Active")]
         public bool? IsActiveFilter { get; set; }
 
+        [Display(Name = "Program Type")]
+        public int? ProgramType { get; set; }
+
+        [Display(Name = "Does the Organization have any religious or political objectives?")]
+        public bool? IsReligiousPoliticalObjectives { get; set; }
+        [StringLength(500,ErrorMessage = "Length does not exceed 500 characters.")]      
+        public string ReligiousPoliticalObjectives { get; set; }
+        [Display(Name = "Whether the entire grant proposal falls within the constitutional document?")]
+        public bool? IsConstitutionalDocument { get; set; }
+
+        [Display(Name = "List of Awards/Recognitions given to the Organization")]
+        public List<NgoawardDetail> NgoawardDetail { get; set; }
+        [Display(Name = "Details of the Statutory Auditor")]
+        public List<NgosaturatoryAuditorDetail> NgosaturatoryAuditorDetail { get; set; }
+        [Display(Name = "Details of current key projects of the Organization")]
+        public List<NGOKeyProjects> NGOKeyProjects { get; set; }
+
+        [Display(Name = "Corpus fund and Grant Inflow")]
+        public List<NGOCorpusGrantFund> NgocorpusGrantFund { get; set; }
+
     }
+    
+    
 }

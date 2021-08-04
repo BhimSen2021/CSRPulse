@@ -40,11 +40,12 @@ namespace CSRPulse.Services
                     if (oldSetup != null && oldSetup.ToList().Count > 0)
                     {
                         var hModel = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(oldSetup);
+                        var cdate = DateTime.Now;
                         hModel.ToList().ForEach(h =>
                         {
                             h.StartDate = h.CreatedOn;
-                            h.EndDate = DateTime.Now;
-                            h.CreatedOn = DateTime.Now;
+                            h.EndDate = cdate;
+                            h.CreatedOn = cdate;
                         });
 
                         await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetupHistory>(hModel);
@@ -68,14 +69,14 @@ namespace CSRPulse.Services
             {
                 var models = await _processSetupRepository.GetProcessSetupById(processId).OrderBy(s => s.Sequence).ToListAsync();
 
-                if (models!=null)
+                if (models != null)
                 {
-                   return models.Select(a => new ProcessSetup()
+                    return models.Select(a => new ProcessSetup()
                     {
                         SetupId = a.SetupId,
                         ProcessId = a.ProcessId,
                         RevisionNo = a.RevisionNo ?? 1,
-                        PrimaryRoleId = a.PrimaryRoleId ?? 99,
+                        PrimaryRoleId = a.PrimaryRoleId ?? 1,
                         PrimaryRole = a.PrimaryRole,
                         SecondoryRoleId = a.SecondoryRoleId,
                         SecondoryRole = a.SecondoryRole,
@@ -135,20 +136,53 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public async Task<List<ProcessSetupHistory>> GetProcessSetupHistoryBySetupId(int processId)
+
+        public async Task<List<ProcessSetupHistory>> GetPSHistoryDetails(int processId, int revisionNo)
         {
             try
             {
-                var history = await _genericRepository.GetByIDAsync<List<DTOModel.ProcessSetupHistory>>(processId);
-                if (history != null)
-                    return _mapper.Map<List<ProcessSetupHistory>>(history);
+                var models = await _processSetupRepository.GetPSHistoryDetails(processId, revisionNo).OrderBy(s => s.Sequence).ToListAsync();
+
+                if (models != null)
+                {
+                    return models.Select(a => new ProcessSetupHistory()
+                    {
+                        ProcessId = a.ProcessId,
+                        RevisionNo = a.RevisionNo ?? 1,
+                        PrimaryRoleId = a.PrimaryRoleId ?? 0,
+                        PrimaryRole = a.PrimaryRole,
+                        SecondoryRoleId = a.SecondoryRoleId,
+                        SecondoryRole = a.SecondoryRole,
+                        TertiaryRoleId = a.TertiaryRoleId,
+                        TertiaryRole = a.TertiaryRole,
+                        QuaternaryRoleId = a.QuaternaryRoleId,
+                        QuaternaryRole = a.QuaternaryRole,
+                        LevelId = a.LevelId,
+                        Skip = a.Skip,
+                        Sequence = a.Sequence ?? 1
+
+                    }).ToList();
+                }
+
                 else
                     return new List<ProcessSetupHistory>();
+
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        public async Task<IEnumerable<SelectListModel>> GetRevisionHistoryDropdown(int processId)
+        {
+            var res = await _processSetupRepository.GetRevisionHistoryDropdown(processId).OrderByDescending(r => r.id).ToListAsync();
+            return res.Select(s => new SelectListModel()
+            {
+                id = s.id,
+                value = s.value
+            }).ToList();
+        }
     }
+
 }

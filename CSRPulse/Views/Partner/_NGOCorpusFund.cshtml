@@ -1,0 +1,67 @@
+﻿@model Partner
+@using CSRPulse.Common
+
+<form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" asp-action="SaveCorpusFund" asp-controller="Partner" data-ajax-success="onCorpusFund">
+    <div class="mb-2 text-start">
+        <input type="hidden" asp-for="PartnerId" id="CorpusFundPId" />
+        <button class="btn btn-danger btn-sm" type="submit" name="ButtonType" value="AddCorpusFund"><i class="mdi mdi-plus"></i> Add New</button>
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveCorpusFund"><i class="mdi mdi-file-document-edit"></i> Save</button>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <table class="table table-hover table-sm table-centered mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Corpus Funds</th>
+                        <th>Amount(₹)</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.NgocorpusGrantFund != null)
+                    {
+                        int a = 0;
+                        for (int i = 0; i < Model.NgocorpusGrantFund.Count; i++)
+                        {
+                            if (Model.NgocorpusGrantFund[i].FundType == (int)CorpusGrantFund.CorpusFund)
+                            {
+                                
+                                <tr>
+                                    <td>
+                                        <span>@(a+1)</span>
+                                        <input type="hidden" asp-for="@Model.NgocorpusGrantFund[i].NgocorpusGrantFundId" />
+                                        <input type="hidden" asp-for="@Model.NgocorpusGrantFund[i].PartnerId" />
+                                        <input type="hidden" asp-for="@Model.NgocorpusGrantFund[i].FundType" />
+
+                                    </td>
+                                    <td>
+                                        <select asp-for="@Model.NgocorpusGrantFund[i].YearId" asp-items="@ViewBag.fyYears" aria-required="true" class="form-select">
+                                            <option disabled="" label="Select Type" selected="" value=""></option>
+                                        </select>
+                                        <span asp-validation-for="@Model.NgocorpusGrantFund[i].YearId" class="invalid"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" asp-for="@Model.NgocorpusGrantFund[i].FundsAmount" asp-format="{0:0.00}" class="form-control form-control-sm" maxlength="10" onkeypress="return onlyNumber(event)" autocomplete="off">
+                                        <span asp-validation-for="@Model.NgocorpusGrantFund[i].FundsAmount" class="invalid"></span>
+                                    </td>
+                                </tr>
+                                a = (a + 1);
+                            }
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function onCorpusFund(data) {
+        $("#div-corpusfund-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'Corpus Fund Saved Successfully.');
+        }
+    }
+</script>

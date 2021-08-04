@@ -214,5 +214,23 @@ namespace CSRPulse.Services
             var processList = _mapper.Map<List<SelectListModel>>(dtoProcess);
             return processList.ToList();
         }
+
+        public IEnumerable<SelectListModel> GetModule(int? moduleId)
+        {
+            var modules = _genericRepository.Get<DTOModel.AuditReviewModule>(x => moduleId.HasValue ? x.ModuleId == moduleId.Value : (1 > 0) && x.IsActive == true);
+            var processList = _mapper.Map<List<SelectListModel>>(modules);
+            return processList.ToList();
+        }
+
+        public IEnumerable<SelectListModel> GetFYYear(int startYear = 2018)
+        {
+            var fyYears = new List<SelectListModel>();
+            for (int year = startYear; year <= DateTime.UtcNow.Year; year++)
+            {
+                fyYears.Add(new SelectListModel { id = year, value = "FY - " + year + "-" + (year + 1) });
+            }
+            return fyYears;
+        }
+
     }
 }

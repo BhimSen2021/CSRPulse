@@ -20,7 +20,7 @@ namespace CSRPulse.Data.Repositories
                          from x3 in er3.DefaultIfEmpty()
                          join e5 in _dbContext.Role on e1.QuaternaryRoleId equals e5.RoleId into er4
                          from x4 in er4.DefaultIfEmpty()
-
+                         where e1.ProcessId == processId
                          select new Model
                          {
                              SetupId = e1.SetupId,
@@ -40,11 +40,51 @@ namespace CSRPulse.Data.Repositories
 
                          };
 
+            return result;
+        }
 
+
+        public IQueryable<Model> GetPSHistoryDetails(int processId, int revisionNo)
+        {
+            var result = from e1 in _dbContext.ProcessSetupHistory
+                         join e2 in _dbContext.Role on e1.PrimaryRoleId equals e2.RoleId into er1
+                         from x1 in er1.DefaultIfEmpty()
+                         join e3 in _dbContext.Role on e1.SecondoryRoleId equals e3.RoleId into er2
+                         from x2 in er2.DefaultIfEmpty()
+                         join e4 in _dbContext.Role on e1.TertiaryRoleId equals e4.RoleId into er3
+                         from x3 in er3.DefaultIfEmpty()
+                         join e5 in _dbContext.Role on e1.QuaternaryRoleId equals e5.RoleId into er4
+                         from x4 in er4.DefaultIfEmpty()
+                         where e1.ProcessId == processId && e1.RevisionNo == revisionNo
+                         select new Model
+                         {
+                             ProcessId = e1.ProcessId,
+                             RevisionNo = e1.RevisionNo,
+                             PrimaryRoleId = e1.PrimaryRoleId,
+                             PrimaryRole = x1.RoleName,
+                             SecondoryRoleId = e1.SecondoryRoleId,
+                             SecondoryRole = x2.RoleName,
+                             TertiaryRoleId = e1.TertiaryRoleId,
+                             TertiaryRole = x3.RoleName,
+                             QuaternaryRoleId = e1.QuaternaryRoleId,
+                             QuaternaryRole = x4.RoleName,
+                             LevelId = e1.LevelId,
+                             Skip = e1.Skip ?? false,
+                             Sequence = e1.Sequence
+                         };
 
             return result;
         }
 
+        public IQueryable<SelectListModel> GetRevisionHistoryDropdown(int processId)
+        {
+            return _dbContext.ProcessSetupHistory.Where(p => p.ProcessId == processId).GroupBy(x => new { x.RevisionNo, x.StartDate })
+                  .Select(y => new SelectListModel()
+                  {
+                      id = y.Key.RevisionNo ?? 1,
+                      value = "Revision No: " + y.Key.RevisionNo + " (" + y.Key.StartDate.ToString() + ")"
+                  });
+        }
         public class Model
         {
             public int SetupId { get; set; }
@@ -61,6 +101,12 @@ namespace CSRPulse.Data.Repositories
             public int LevelId { get; set; }
             public bool Skip { get; set; }
             public int? Sequence { get; set; }
+        }
+
+        public class SelectListModel
+        {
+            public int id { set; get; }
+            public string value { set; get; }
         }
     }
 }

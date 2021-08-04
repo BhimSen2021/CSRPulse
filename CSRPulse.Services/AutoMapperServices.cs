@@ -118,8 +118,6 @@ namespace CSRPulse.Services
                .ForMember(d => d.Designation, o => o.MapFrom(s => s.Designation.DesignationName));
             CreateMap<DesignationHistory, DTOModel.DesignationHistory>();
 
-            CreateMap<DTOModel.Partner, Partner>().ReverseMap();
-
             CreateMap<DTOModel.ProcessSetup, ProcessSetup>().ReverseMap();
             CreateMap<DTOModel.ProcessSetupHistory, ProcessSetupHistory>().ReverseMap();
 
@@ -134,8 +132,21 @@ namespace CSRPulse.Services
             .ForMember(d => d.Sequence, o => o.MapFrom(s => s.Sequence))
             .ForMember(d => d.Skip, o => o.MapFrom(s => s.Skip))
             .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy));
-            
 
+            CreateMap<DTOModel.Partner, Partner>().ReverseMap();
+
+            CreateMap<DTOModel.NgoawardDetail, NgoawardDetail>().ReverseMap();
+            CreateMap<DTOModel.NgosaturatoryAuditorDetail, NgosaturatoryAuditorDetail>().ReverseMap();
+            CreateMap<DTOModel.NgokeyProjects, NGOKeyProjects>().ReverseMap();
+            CreateMap<DTOModel.NgocorpusGrantFund, NGOCorpusGrantFund>().ReverseMap();
+
+
+            #region A u d i t
+
+            CreateMap<DTOModel.AuditReviewModule, AuditReviewModule>().ReverseMap();
+            CreateMap<DTOModel.AuditReviewParamter, AuditReviewParamter>().ReverseMap();
+
+            #endregion
             #endregion
 
             #region Email Mapper
@@ -210,9 +221,13 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.Process, SelectListModel>()
                 .ForMember(d => d.id, o => o.MapFrom(s => s.ProcessId))
                 .ForMember(d => d.value, o => o.MapFrom(s => s.ProcessName));
+
+            CreateMap<DTOModel.AuditReviewModule, SelectListModel>()
+               .ForMember(d => d.id, o => o.MapFrom(s => s.ModuleId))
+               .ForMember(d => d.value, o => o.MapFrom(s => s.Module));
             #endregion
 
-            
+
         }
     }
 }

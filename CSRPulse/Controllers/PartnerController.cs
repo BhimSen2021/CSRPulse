@@ -99,8 +99,14 @@ namespace CSRPulse.Controllers
             try
             {
                 BindDropdowns();
-                   var dDetail = await _partnerService.GetPartnerById(partnerId);
-                return View(dDetail);
+                var partner = await _partnerService.GetPartnerById(partnerId);
+                if (partner.PartnerType == (int)Common.PartnerType.NGO)
+                {
+                    BindFYYear();
+                    return View("NGOTypeEdit", partner);
+                }
+                else
+                    return View(partner);
             }
             catch (Exception)
             {
@@ -153,6 +159,286 @@ namespace CSRPulse.Controllers
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
         }
 
+        [NonAction]
+        void BindFYYear()
+        {
+            var fyYears = _ddlService.GetFYYear(startYear:2018);
+            ViewBag.fyYears = new SelectList(fyYears, "id", "value");
+        }
+
+        private List<NgoawardDetail> MakeEmpityRow(List<NgoawardDetail> model)
+        {
+            if (model == null)
+                model = new List<NgoawardDetail>();
+
+            var newItem = new NgoawardDetail();
+            model.Add(newItem);
+            return model;
+        }
+
+        #region List of Awards/Recognitions given to the Organization
+        public async Task<IActionResult> SaveAwardDetails(Partner partner, string ButtonType)
+        {
+            try
+            {
+                int flag = 0;
+                if (ButtonType == "SaveAwardDetails")
+                {
+                    var listAD = partner.NgoawardDetail.Where(s => s.Award != null && s.AwardConferrer != null && s.YearOfReceiving > 0).ToList();
+
+                    RevoveModelState(ModelState);
+                    if (TryValidateModel(partner.NgosaturatoryAuditorDetail))
+                    {
+                        var CreatedOn = DateTime.Now;
+                        listAD.ToList().ForEach(h =>
+                        {
+                            h.PartnerId = partner.PartnerId;
+                            h.NgoawardDetailId = 0;
+                            h.CreatedOn = CreatedOn;
+                            h.CreatedBy = userDetail.UserID;
+                        });
+
+                        partner.NgoawardDetail = listAD;
+                        var ngoawardDetails = await _partnerService.GetUpdateNGOAwardDetails(partner);
+                        partner.NgoawardDetail = ngoawardDetails;
+                        flag = 1;
+                    }
+                }
+                else if (ButtonType == "AddAwardDetails")
+                {
+                    var award = new NgoawardDetail() { PartnerId = partner.PartnerId };
+                    if (partner.NgoawardDetail == null)
+                        partner.NgoawardDetail = new List<NgoawardDetail>();
+
+                    partner.NgoawardDetail.Add(award);
+                    flag = 2;
+                }
+                return Json(new { flag = flag, htmlData = ConvertViewToString("_NGOAwardDetails", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Details of the Statutory Auditor
+        public async Task<IActionResult> SaveSaturatoryAuditorDetails(Partner partner, string ButtonType)
+        {
+            try
+            {
+                int flag = 0;
+                if (ButtonType == "SaveSaturatoryAuditorDetails")
+                {
+                    var listAD = partner.NgosaturatoryAuditorDetail.Where(s => s.AuditingFirm != null && s.Association != null).ToList();
+
+                    RevoveModelState(ModelState);
+                    if (TryValidateModel(partner.NgosaturatoryAuditorDetail))
+                    {
+                        var CreatedOn = DateTime.Now;
+                        listAD.ToList().ForEach(h =>
+                        {
+                            h.PartnerId = partner.PartnerId;
+                            h.NgosaturatoryAuditorDetailId = 0;
+                            h.CreatedOn = CreatedOn;
+                            h.CreatedBy = userDetail.UserID;
+                        });
+
+                        partner.NgosaturatoryAuditorDetail = listAD;
+                        var Details = await _partnerService.GetUpdateSaturatoryAuditorDetails(partner);
+                        partner.NgosaturatoryAuditorDetail = Details;
+                        flag = 1;
+                    }
+                }
+                else if (ButtonType == "AddSaturatoryAuditorDetails")
+                {
+                    var model = new NgosaturatoryAuditorDetail() { PartnerId = partner.PartnerId };
+                    if (partner.NgosaturatoryAuditorDetail == null)
+                        partner.NgosaturatoryAuditorDetail = new List<NgosaturatoryAuditorDetail>();
+
+                    partner.NgosaturatoryAuditorDetail.Add(model);
+                    flag = 2;
+                }
+
+                return Json(new { flag = flag, htmlData = ConvertViewToString("_NGOSaturatoryAuditorDetail", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+
+        #endregion
+
+        #region Details of current key projects of the Organization
+        public async Task<IActionResult> SaveNGOKeyProjects(Partner partner, string ButtonType)
+        {
+            try
+            {
+                int flag = 0;
+                if (ButtonType == "SaveNGOKeyProjects")
+                {
+                    var listAD = partner.NGOKeyProjects.Where(s => s.DonorAgency != null && s.ProjectLocation != null).ToList();
+
+                    RevoveModelState(ModelState);
+                    if (TryValidateModel(partner.NGOKeyProjects))
+                    {
+                        var CreatedOn = DateTime.Now;
+                        listAD.ToList().ForEach(h =>
+                        {
+                            h.PartnerId = partner.PartnerId;
+                            h.NgokeyProjectId = 0;
+                            h.CreatedOn = CreatedOn;
+                            h.CreatedBy = userDetail.UserID;
+                        });
+
+                        partner.NGOKeyProjects = listAD;
+                        var Details = await _partnerService.GetUpdateNGOKeyProjects(partner);
+                        partner.NGOKeyProjects = Details;
+                        flag = 1;
+                    }
+                }
+                else if (ButtonType == "AddNGOKeyProjects")
+                {
+                    var model = new NGOKeyProjects() { PartnerId = partner.PartnerId };
+                    if (partner.NGOKeyProjects == null)
+                        partner.NGOKeyProjects = new List<NGOKeyProjects>();
+
+                    partner.NGOKeyProjects.Add(model);
+                    flag = 2;
+                }
+
+                return Json(new { flag = flag, htmlData = ConvertViewToString("_NGOKeyProjects", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+        #endregion
+
+
+        #region Corpus fund and Grant Inflow
+        public async Task<IActionResult> SaveCorpusFund(Partner partner, string ButtonType)
+        {
+            try
+            {
+                int flag = 0;
+                if (ButtonType == "SaveCorpusFund")
+                {
+                    var listAD = partner.NgocorpusGrantFund.Where(s => s.FundsAmount != null).ToList();
+
+                    RevoveModelState(ModelState);
+                    if (TryValidateModel(partner.NgocorpusGrantFund))
+                    {
+                        var CreatedOn = DateTime.Now;
+                        listAD.ToList().ForEach(h =>
+                        {
+                            h.PartnerId = partner.PartnerId;
+                            h.NgocorpusGrantFundId = 0;
+                            h.FundType = (int)Common.CorpusGrantFund.CorpusFund;
+                            h.CreatedOn = CreatedOn;
+                            h.CreatedBy = userDetail.UserID;
+                        });
+
+                        partner.NgocorpusGrantFund = listAD;
+                        var Details = await _partnerService.GetUpdateNGOCorpusGrantFund(partner, (int)Common.CorpusGrantFund.CorpusFund);
+                        partner.NgocorpusGrantFund = Details;
+                        flag = 1;
+                    }
+                }
+                else if (ButtonType == "AddCorpusFund")
+                {
+                   
+                    var model = new NGOCorpusGrantFund() { PartnerId = partner.PartnerId, FundType = (int)Common.CorpusGrantFund.CorpusFund };
+                    if (partner.NgocorpusGrantFund == null)
+                        partner.NgocorpusGrantFund = new List<NGOCorpusGrantFund>();
+
+                    partner.NgocorpusGrantFund.Add(model);
+                    flag = 2;
+                }
+
+                BindFYYear();
+                return Json(new { flag = flag, htmlData = ConvertViewToString("_NGOCorpusFund", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+
+        public async Task<IActionResult> SaveGrantInflow(Partner partner, string ButtonType)
+        {
+            try
+            {
+                int flag = 0;
+                if (ButtonType == "SaveGrantInflow")
+                {
+                    var listAD = partner.NgocorpusGrantFund.Where(s => s.FundsAmount != null).ToList();
+
+                    RevoveModelState(ModelState);
+                    if (TryValidateModel(partner.NgocorpusGrantFund))
+                    {
+                        var CreatedOn = DateTime.Now;
+                        listAD.ToList().ForEach(h =>
+                        {
+                            h.PartnerId = partner.PartnerId;
+                            h.NgocorpusGrantFundId = 0;
+                            h.FundType = (int)Common.CorpusGrantFund.GrantInflow;
+                            h.CreatedOn = CreatedOn;
+                            h.CreatedBy = userDetail.UserID;
+                        });
+
+                        partner.NgocorpusGrantFund = listAD;
+                        var Details = await _partnerService.GetUpdateNGOCorpusGrantFund(partner, (int)Common.CorpusGrantFund.GrantInflow);
+                        partner.NgocorpusGrantFund = Details;
+                        flag = 1;
+                    }
+                }
+                else if (ButtonType == "AddGrantInflow")
+                {
+                    
+                    var model = new NGOCorpusGrantFund() { PartnerId = partner.PartnerId, FundType = (int)Common.CorpusGrantFund.GrantInflow };
+                    if (partner.NgocorpusGrantFund == null)
+                        partner.NgocorpusGrantFund = new List<NGOCorpusGrantFund>();
+
+                    partner.NgocorpusGrantFund.Add(model);
+                    flag = 2;
+                }
+
+                BindFYYear();
+                return Json(new { flag = flag, htmlData = ConvertViewToString("_NGOGrantInflow", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+        #endregion
+        private void RevoveModelState(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)
+        {
+            modelState.Remove("PartnerName");
+            modelState.Remove("PartnerType");
+            modelState.Remove("Email");
+            modelState.Remove("RegAddress");
+            modelState.Remove("RegCity");
+            modelState.Remove("RegPin");
+            modelState.Remove("RegState");
+            modelState.Remove("CommAddress");
+            modelState.Remove("ComCity");
+            modelState.Remove("ComPin");
+            modelState.Remove("ComState");
+        }
 
     }
 }

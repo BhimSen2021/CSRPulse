@@ -4,6 +4,12 @@
     color: #dc3545;
 }
 
+.note-editor:after {
+    content: "*Note - Do not paste directly from the ms word, it may corrupt your formatting. You can paste any text from notepad.";
+    color: #ff9041;
+    font-style: italic;
+}
+
 textarea {
     resize: none;
 }
@@ -12,7 +18,7 @@ textarea {
     text-align: left !important;
 }
 
-.invalid {   
+.invalid {
     width: 100%;
     margin-top: 0.25rem;
     font-size: 0.75rem;

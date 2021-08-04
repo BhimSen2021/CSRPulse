@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSRPulse.Services
 {
@@ -43,9 +45,22 @@ namespace CSRPulse.Services
         {
             try
             {
-                var designation = await _genericRepository.GetByIDAsync<DTOModel.Partner>(PartnerId);
-                if (designation != null)
-                    return _mapper.Map<Partner>(designation);
+                var partner = await _genericRepository.GetByIDAsync<DTOModel.Partner>(PartnerId);
+                if (partner != null)
+                {
+                    if (partner.PartnerType == (int)Common.PartnerType.NGO)
+                    {
+                        var NGOpartner = _genericRepository.GetIQueryable<DTOModel.Partner>(p => p.PartnerId == PartnerId).Include(a => a.NgoawardDetail)
+                            .Include(b => b.NgosaturatoryAuditorDetail)
+                            .Include(k => k.NgokeyProjects)
+                            .Include(f => f.NgocorpusGrantFund);
+
+                        var res = _mapper.Map<IEnumerable<DTOModel.Partner>, IEnumerable<Partner>>(NGOpartner);
+
+                        return res.FirstOrDefault();
+                    }
+                    return _mapper.Map<Partner>(partner);
+                }
                 else
                     return new Partner();
 
@@ -61,7 +76,7 @@ namespace CSRPulse.Services
             {
                 var dData = await _genericRepository.GetByIDAsync<DTOModel.Partner>(partner.PartnerId);
                 if (dData != null)
-                {                   
+                {
 
                     dData.PartnerName = partner.PartnerName;
                     dData.PartnerType = partner.PartnerType;
@@ -122,6 +137,8 @@ namespace CSRPulse.Services
             }
         }
 
+
+
         public bool ActiveDeActive(int id, bool IsActive)
         {
             try
@@ -136,5 +153,125 @@ namespace CSRPulse.Services
                 return false;
             }
         }
+
+
+
+        public async Task<List<NgoawardDetail>> GetUpdateNGOAwardDetails(Partner partner)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.NgoawardDetail>>(partner.NgoawardDetail);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.NgoawardDetail>(x => x.PartnerId == partner.PartnerId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.NgoawardDetail>(x => x.PartnerId == partner.PartnerId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.NgoawardDetail>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.NgoawardDetail>(x => x.PartnerId == partner.PartnerId);
+
+                return _mapper.Map<List<NgoawardDetail>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<NgosaturatoryAuditorDetail>> GetUpdateSaturatoryAuditorDetails(Partner partner)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.NgosaturatoryAuditorDetail>>(partner.NgosaturatoryAuditorDetail);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.NgosaturatoryAuditorDetail>(x => x.PartnerId == partner.PartnerId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.NgosaturatoryAuditorDetail>(x => x.PartnerId == partner.PartnerId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.NgosaturatoryAuditorDetail>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.NgosaturatoryAuditorDetail>(x => x.PartnerId == partner.PartnerId);
+
+                return _mapper.Map<List<NgosaturatoryAuditorDetail>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<NGOKeyProjects>> GetUpdateNGOKeyProjects(Partner partner)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.NgokeyProjects>>(partner.NGOKeyProjects);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.NgokeyProjects>(x => x.PartnerId == partner.PartnerId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.NgokeyProjects>(x => x.PartnerId == partner.PartnerId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.NgokeyProjects>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.NgokeyProjects>(x => x.PartnerId == partner.PartnerId);
+
+                return _mapper.Map<List<NGOKeyProjects>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<NGOCorpusGrantFund>> GetUpdateNGOCorpusGrantFund(Partner partner, int fundType)
+        {
+            try
+            {
+
+                var model = _mapper.Map<List<DTOModel.NgocorpusGrantFund>>(partner.NgocorpusGrantFund);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.NgocorpusGrantFund>(x => x.PartnerId == partner.PartnerId && x.FundType == fundType);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.NgocorpusGrantFund>(x => x.PartnerId == partner.PartnerId && x.FundType == fundType);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.NgocorpusGrantFund>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.NgocorpusGrantFund>(x => x.PartnerId == partner.PartnerId && x.FundType == fundType);
+
+                return _mapper.Map<List<NGOCorpusGrantFund>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

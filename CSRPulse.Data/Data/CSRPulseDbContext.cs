@@ -22,6 +22,8 @@ namespace CSRPulse.Data.Data
         }
 
         public virtual DbSet<Activity> Activity { get; set; }
+        public virtual DbSet<AuditReviewModule> AuditReviewModule { get; set; }
+        public virtual DbSet<AuditReviewParamter> AuditReviewParamter { get; set; }
         public virtual DbSet<Block> Block { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
@@ -39,6 +41,13 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<MailSubject> MailSubject { get; set; }
         public virtual DbSet<Maintenance> Maintenance { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<NgoawardDetail> NgoawardDetail { get; set; }
+        public virtual DbSet<NgochartDocument> NgochartDocument { get; set; }
+        public virtual DbSet<NgocorpusGrantFund> NgocorpusGrantFund { get; set; }
+        public virtual DbSet<NgokeyProjects> NgokeyProjects { get; set; }
+        public virtual DbSet<Ngomember> Ngomember { get; set; }
+        public virtual DbSet<NgoregistrationDetail> NgoregistrationDetail { get; set; }
+        public virtual DbSet<NgosaturatoryAuditorDetail> NgosaturatoryAuditorDetail { get; set; }
         public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Process> Process { get; set; }
@@ -60,6 +69,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -94,6 +104,26 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.ThemeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Activity_Theme");
+            });
+
+            modelBuilder.Entity<AuditReviewModule>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            });
+
+            modelBuilder.Entity<AuditReviewParamter>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Module)
+                    .WithMany(p => p.AuditReviewParamter)
+                    .HasForeignKey(d => d.ModuleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AuditReviewParamter_AuditReviewModule");
             });
 
             modelBuilder.Entity<Block>(entity =>
@@ -359,6 +389,131 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.Url).IsUnicode(false);
             });
 
+            modelBuilder.Entity<NgoawardDetail>(entity =>
+            {
+                entity.Property(e => e.Award).IsUnicode(false);
+
+                entity.Property(e => e.AwardConferrer).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgoawardDetail)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOAwardDetail_Partner");
+            });
+
+            modelBuilder.Entity<NgochartDocument>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgochartDocument)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOChartDoccument_Partner");
+            });
+
+            modelBuilder.Entity<NgocorpusGrantFund>(entity =>
+            {
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgocorpusGrantFund)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOCorpusGrantFund_Partner");
+            });
+
+            modelBuilder.Entity<NgokeyProjects>(entity =>
+            {
+                entity.Property(e => e.AdditionalInformation).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DonorAgency).IsUnicode(false);
+
+                entity.Property(e => e.ProjectEnd).IsUnicode(false);
+
+                entity.Property(e => e.ProjectLocation).IsUnicode(false);
+
+                entity.Property(e => e.ProjectObjective).IsUnicode(false);
+
+                entity.Property(e => e.ProjectStart).IsUnicode(false);
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgokeyProjects)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOKeyProjects_Partner");
+            });
+
+            modelBuilder.Entity<Ngomember>(entity =>
+            {
+                entity.Property(e => e.Address).IsUnicode(false);
+
+                entity.Property(e => e.AffiliatedOrganisation).IsUnicode(false);
+
+                entity.Property(e => e.City).IsUnicode(false);
+
+                entity.Property(e => e.CrimeDescription).IsUnicode(false);
+
+                entity.Property(e => e.Designation).IsUnicode(false);
+
+                entity.Property(e => e.Email).IsUnicode(false);
+
+                entity.Property(e => e.Experience).IsUnicode(false);
+
+                entity.Property(e => e.MemberRelatedtoAbfdetail).IsUnicode(false);
+
+                entity.Property(e => e.MemberWillfulDefaulterDetail).IsUnicode(false);
+
+                entity.Property(e => e.Name).IsUnicode(false);
+
+                entity.Property(e => e.Panno).IsUnicode(false);
+
+                entity.Property(e => e.PassportNo).IsUnicode(false);
+
+                entity.Property(e => e.Qualification).IsUnicode(false);
+
+                entity.Property(e => e.VoterId).IsUnicode(false);
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.Ngomember)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOMember_Partner");
+            });
+
+            modelBuilder.Entity<NgoregistrationDetail>(entity =>
+            {
+                entity.Property(e => e.ApprovalNo80G).IsUnicode(false);
+
+                entity.Property(e => e.Pannumber).IsUnicode(false);
+
+                entity.Property(e => e.RegNo).IsUnicode(false);
+
+                entity.Property(e => e.RegNoCertificate).IsUnicode(false);
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgoregistrationDetail)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGORegistrationDetail_Partner");
+            });
+
+            modelBuilder.Entity<NgosaturatoryAuditorDetail>(entity =>
+            {
+                entity.Property(e => e.AuditingFirm).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgosaturatoryAuditorDetail)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOSaturatoryAuditorDetail_Partner");
+            });
+
             modelBuilder.Entity<Partner>(entity =>
             {
                 entity.Property(e => e.ComCity).IsUnicode(false);
@@ -380,6 +535,8 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.RegMobile).IsUnicode(false);
 
                 entity.Property(e => e.RegPhone).IsUnicode(false);
+
+                entity.Property(e => e.ReligiousPoliticalObjectives).IsUnicode(false);
 
                 entity.Property(e => e.Website).IsUnicode(false);
             });
@@ -442,9 +599,13 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<ProcessSetupHistory>(entity =>
             {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Flag).IsUnicode(false);
 
                 entity.Property(e => e.Skip).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.StartDate).HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<ProcessWorkFlow>(entity =>

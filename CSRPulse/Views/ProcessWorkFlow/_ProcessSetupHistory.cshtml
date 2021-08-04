@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ProcessSetupHistory>
+@using CSRPulse.Common
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <table class="table table-hover table-centered mb-0">
+            <thead>
+                <tr>
+                    <th width="5%">#</th>
+                    <th>Skip</th>
+                    <th>Primary Role</th>
+                    <th>Secondory Role</th>
+                    <th>Tertiary Role</th>
+                    <th>Quaternary Role</th>
+                    <th>Level Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(item) +1)</span>
+                            </td>
+                            <td><span class="badge @(item.Skip==true?"bg-success":"bg-danger")">@ExtensionMethods.BoolToYesNo(item.Skip ?? false)</span></td>
+                            <td>@item.PrimaryRole</td>
+                            <td>@item.SecondoryRole</td>
+                            <td>@item.TertiaryRole</td>
+                            <td>@item.QuaternaryRole</td>
+                            <td>@Enum.GetName(typeof(ProcessLevel), item.LevelId)</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

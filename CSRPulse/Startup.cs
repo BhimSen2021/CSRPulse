@@ -83,7 +83,9 @@ namespace CSRPulse
             services.AddScoped<IProcessSetupServices, ProcessSetupServices>();
 
             services.AddScoped<IProcessSetupRepository, ProcessSetupRepository>();
-            
+            services.AddScoped<IAuditReviewModuleServices, AuditReviewModuleServices>();
+            services.AddScoped<IAuditReviewParamterServices, AuditReviewParamterServices>();
+
 
             #endregion
 

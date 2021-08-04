@@ -47,10 +47,12 @@ namespace CSRPulse.Data.Repositories
         Task<bool> RemoveMultipleEntityAsync<TEntity>(IEnumerable<TEntity> removeEntityList) where TEntity : class;
         IQueryable<TEntity> GetIQueryable<TEntity>(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "") where TEntity : class;
         Task<IQueryable<TEntity>> GetIQueryableAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "") where TEntity : class;
-               
+
         //IEnumerable<T> ExecWithStoreProcedure<T>(string query, params object[] parameters);
         //void ExecuteWithStoreProcedure(string query, params object[] parameters);
         //DataTable GetTablesSchema(string sTableName);
+
+        Task<int> Count<TEntity>() where TEntity : class;
 
         IDatabaseTransaction BeginTransaction();
     }

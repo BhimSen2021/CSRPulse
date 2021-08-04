@@ -1,5 +1,5 @@
-var quill = new Quill("#snow-editor", {
-    theme: "snow",
+var quill = new Quill('#snow-editor', {
+    theme: 'snow',
     modules: {
         toolbar: [
             [{
@@ -37,10 +37,4 @@ var quill = new Quill("#snow-editor", {
             ["clean"]
         ]
     }
-}),
-quill = new Quill("#snow-editor", {
-    theme: "bubble"
 });
-
-
-

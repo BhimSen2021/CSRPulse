@@ -146,7 +146,7 @@ namespace CSRPulse.Controllers
         [HttpPost]
         public JsonResult ActiveDeActive(int id, bool isChecked)
         {
-            _logger.LogInformation("UoMController/ActiveDeActive");
+            _logger.LogInformation("StateController/ActiveDeActive");
             var result = _stateServices.ActiveDeActive(id, isChecked);
             return Json(result);
 

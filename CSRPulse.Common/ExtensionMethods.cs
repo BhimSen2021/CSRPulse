@@ -200,6 +200,11 @@ namespace CSRPulse.Common
                 return string.Concat(str.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
             else
                 return str;
-        }       
+        }
+
+        public static string StripHTML(string str)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(str, @"<(?!br[\x20/>])(?!p[\x20/>])[^<>]+>", string.Empty).Replace("<p>", " ").Replace("<br>", " ");
+        }
     }
 }
