@@ -139,7 +139,9 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.NgosaturatoryAuditorDetail, NgosaturatoryAuditorDetail>().ReverseMap();
             CreateMap<DTOModel.NgokeyProjects, NGOKeyProjects>().ReverseMap();
             CreateMap<DTOModel.NgocorpusGrantFund, NGOCorpusGrantFund>().ReverseMap();
-
+            CreateMap<DTOModel.NgoregistrationDetail, NGORegistrationDetail>().ReverseMap();
+            CreateMap<DTOModel.NgochartDocument, NGOChartDocument>().ReverseMap();
+            CreateMap<DTOModel.Ngomember, NGOMember>().ReverseMap();
 
             #region A u d i t
 

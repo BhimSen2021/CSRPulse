@@ -35,7 +35,6 @@
         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="accordion-body bg-white">
                 <form method="post" asp-controller="Partner" asp-action="Edit">
-
                     @Html.AntiForgeryToken()
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="PartnerId" />
@@ -116,12 +115,137 @@
             </div>
         </div>
     </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingSix">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                @Html.DisplayNameFor(m => m.NgoregistrationDetail)
+            </button>
+        </h2>
+        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoregistration-grid">
+                    @{ await Html.RenderPartialAsync("_NGORegistration", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingSeven">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                @Html.DisplayNameFor(m => m.NgochartDocument)
+            </button>
+        </h2>
+        <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngochartdocument-grid">
+                    @{ await Html.RenderPartialAsync("_NGOChartDocument", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingEigth">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEigth" aria-expanded="false" aria-controls="collapseEigth">
+                Details of the Trustees/ Governing Members/ Board Members
+            </button>
+        </h2>
+        <div id="collapseEigth" class="accordion-collapse collapse" aria-labelledby="headingEigth" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoboardmember-grid">
+                    @{ await Html.RenderPartialAsync("_NGOBoardMembers", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddMember", new NGOMember() { PartnerId = Model.PartnerId, MemberType = (int)NGOMemberType.NoKeyPerson }); }
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingNine">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                Key Persons of the Organization
+            </button>
+        </h2>
+        <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngokeyperson-grid">
+                    @{ await Html.RenderPartialAsync("_NGOKeyPerson", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddMember", new NGOMember() { PartnerId = Model.PartnerId, MemberType = (int)NGOMemberType.KeyPerson }); }
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingTen">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                Documents of the Organization to be submitted
+            </button>
+        </h2>
+        <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+               
+            </div>
+        </div>
+    </div>
 </div>
 <div class="row bg-white">
     <div class="col mt-2 text-end">
         <a asp-area="" asp-controller="Partner" asp-action="Index" class="btn btn-dark btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
     </div>
 </div>
+<partial name="_Confirmation" />
+<script>
+    function onMember(data) {
+        if (data.flag == 1) {
+            if (data.mType == 2) {
+                $("#div-ngoboardmember-grid").html(data.htmlData);
+                $('#ngo-member-modal_2').modal('hide');
+            }
+            else {
+                $("#div-ngokeyperson-grid").html(data.htmlData);
+                $('#ngo-member-modal_1').modal('hide');
+            }
+            commonMessage('success', 'Member Added Successfully.');
+        }
+    }
+
+    function openpopup(cnt) {
+        var type = cnt.id.split('_')[0];
+        var id = cnt.id.split('_')[1];
+        $('.btnconfirm').attr('id', type + '_' + id);
+    }
+
+    function ActiveDeActive(obj) {
+        var type = obj.id.split('_')[0];
+        var id = obj.id.split('_')[1];
+        console.log(id);
+        console.log(type);
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/Partner/DeleteMember',
+            data: { id: id, type: type, partnerId:@Model.PartnerId },
+            success: function (data) {
+                if (data.flag == 1) {
+                    if (data.mType == 2) {
+                        $("#div-ngoboardmember-grid").html(data.htmlData);
+                        $('#ngo-member-modal_2').modal('hide');
+                    }
+                    else {
+                        $("#div-ngokeyperson-grid").html(data.htmlData);
+                        $('#ngo-member-modal_1').modal('hide');
+                    }
+                    commonMessage('success', 'Member Deleted Successfully.');
+                }
+
+                else {
+                    commonMessage('warning', 'Member Deletion failed.');
+                }
+            },
+            error: function (data) {
+                commonMessage('error', 'Member Deletion failed.');
+            }
+        });
+    }
+</script>
 
 @section Scripts{
     <script>
@@ -138,6 +262,6 @@
 
             }
         }
-
     </script>
 }
+

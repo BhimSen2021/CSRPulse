@@ -1,0 +1,79 @@
+﻿@model Partner
+
+<form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" asp-action="SaveNGORegistration" asp-controller="Partner" data-ajax-success="onAwardDetails">
+    <div class="mb-2 text-end">
+        <input type="hidden" asp-for="PartnerId" id="RegistrationPId" />
+        <button class="btn btn-danger btn-sm" type="submit" name="ButtonType" value="AddNGORegistration"><i class="mdi mdi-plus"></i> Add New</button>
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveNGORegistration"><i class="mdi mdi-file-document-edit"></i> Save</button>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <table class="table table-hover table-sm table-centered mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Constitution</th>
+                        <th>Date of Registration</th>
+                        <th>Registration Number</th>
+                        <th>PAN Number</th> 
+                        <th>Certificate of Registration Number u/s 12A</th> 
+                        <th>Approval Number u/s 80G</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.NgoregistrationDetail != null)
+                    {
+                        for (int i = 0; i < Model.NgoregistrationDetail.Count; i++)
+                        {
+                    <tr>
+                        <td>
+                            <span>@(i+1)</span>
+                            <input type="hidden" asp-for="@Model.NgoregistrationDetail[i].NgoregistrationDetailId" />
+                            <input type="hidden" asp-for="@Model.NgoregistrationDetail[i].PartnerId" />
+                        </td>
+                        <td>
+                            <select asp-for="@Model.NgoregistrationDetail[i].ConstitutionId" aria-required="true" class="form-select">
+                                <option label="Select" selected=""></option>
+                                <option label="Section 8 Company" value="1"></option>
+                                <option label="Society" value="2"></option>
+                                <option label="Trust" value="3"></option>
+                            </select>
+                            <span asp-validation-for="@Model.NgoregistrationDetail[i].ConstitutionId" class="invalid"></span>
+                        </td>
+                        <td>                            
+                            @Html.EditorFor(model => model.NgoregistrationDetail[i].RegDate, new { htmlAttributes = new { @class = "form-control form-control-sm", @autocomplete = "off" } })
+                            <span asp-validation-for="@Model.NgoregistrationDetail[i].RegDate" class="invalid"></span>
+                        </td>
+                        <td>
+                            <input type="text" asp-for="@Model.NgoregistrationDetail[i].RegNo" class="form-control form-control-sm" maxlength="100" placeholder="You can enter max 100 characters" autocomplete="off">
+                            <span asp-validation-for="@Model.NgoregistrationDetail[i].RegNo" class="invalid"></span>
+                        </td>
+                        <td>
+                            <input type="text" asp-for="@Model.NgoregistrationDetail[i].Pannumber" class="form-control form-control-sm" maxlength="10" placeholder="You can enter max 10 characters" autocomplete="off">
+                            <span asp-validation-for="@Model.NgoregistrationDetail[i].Pannumber" class="invalid"></span>
+                        </td>
+                        <td>
+                            <input type="text" asp-for="@Model.NgoregistrationDetail[i].RegNoCertificate" class="form-control form-control-sm" maxlength="50" placeholder="You can enter max 50 characters" autocomplete="off">
+                            <span asp-validation-for="@Model.NgoregistrationDetail[i].RegNoCertificate" class="invalid"></span>
+                        </td>
+                        <td>
+                            <input type="text" asp-for="@Model.NgoregistrationDetail[i].ApprovalNo80G" class="form-control form-control-sm" maxlength="50" placeholder="You can enter max 50 characters" autocomplete="off">
+                            <span asp-validation-for="@Model.NgoregistrationDetail[i].ApprovalNo80G" class="invalid"></span>
+                        </td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+        function onAwardDetails(data) {
+            $("#div-ngoregistration-grid").html(data.htmlData);
+            if (data.flag == 1) {
+                commonMessage('success', 'NGO Registration Details Saved Successfully.');
+            }
+        }
+</script>

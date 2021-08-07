@@ -1,0 +1,58 @@
+﻿@model Partner
+@using CSRPulse.Common
+<form data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace">
+    <div class="mb-2 text-end">
+        <input type="hidden" asp-for="PartnerId" id="KeyPersonPId" />
+        <button id="addKeyPerson" class="btn btn-danger btn-sm" type="button"><i class="mdi mdi-plus"></i> Add New</button>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <table class="table table-hover table-sm table-centered mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Name of the Member</th>
+                        <th>Gender</th>
+                        <th>Date of Joining</th>
+                        <th width="5%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Ngomember != null)
+                    {
+                        var a = 0;
+                        for (int i = 0; i < Model.Ngomember.Count; i++)
+                        {
+                            if (Model.Ngomember[i].MemberType == (int)NGOMemberType.KeyPerson)
+                            {
+                                <tr>
+                                    <td>
+                                        <span>@(a+1)</span>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Ngomember[i].Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayName(Enum.GetName(typeof(Gender), Model.Ngomember[i].Gender))
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.Ngomember[i].JoiningDate)
+                                    </td>
+                                    <td data-bs-toggle="tooltip" data-bs-placement="top" title="Click here to, Delete member "><a id="KeyPerson_@Model.Ngomember[i].NgomemberId " data-bs-toggle="modal" data-bs-target="#info-header-modal" onclick="openpopup(this)"><i class="dripicons-trash me-2"></i></a></td>
+                                </tr>
+                                a = a + 1;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $('#addKeyPerson').click(function () {
+        $('#ngo-member-modal_1').modal('show');
+    });
+    
+</script>

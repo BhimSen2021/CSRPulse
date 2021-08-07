@@ -13,7 +13,7 @@ namespace CSRPulse.Model
         [StringLength(256, MinimumLength = 2, ErrorMessage = "Partner name should be contain atleast 2 characters.")]
         [Display(Name = "Partner Name")]
         public string PartnerName { get; set; }
-        
+
         [Required]
         [Display(Name = "Partner Type")]
         public int PartnerType { get; set; }
@@ -81,7 +81,7 @@ namespace CSRPulse.Model
 
         [Display(Name = "Does the Organization have any religious or political objectives?")]
         public bool? IsReligiousPoliticalObjectives { get; set; }
-        [StringLength(500,ErrorMessage = "Length does not exceed 500 characters.")]      
+        [StringLength(500, ErrorMessage = "Length does not exceed 500 characters.")]
         public string ReligiousPoliticalObjectives { get; set; }
         [Display(Name = "Whether the entire grant proposal falls within the constitutional document?")]
         public bool? IsConstitutionalDocument { get; set; }
@@ -96,7 +96,15 @@ namespace CSRPulse.Model
         [Display(Name = "Corpus fund and Grant Inflow")]
         public List<NGOCorpusGrantFund> NgocorpusGrantFund { get; set; }
 
+        [Display(Name = "NGO Registration Details")]
+        public List<NGORegistrationDetail> NgoregistrationDetail { get; set; }
+
+        [Display(Name = "Organization Chart specifying supervisory, admin, project related, advisors, consultants")]
+        public List<NGOChartDocument> NgochartDocument { get; set; }
+
+        public List<NGOMember> Ngomember { get; set; }
+
     }
-    
-    
+
+
 }
