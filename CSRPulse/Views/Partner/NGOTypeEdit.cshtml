@@ -181,10 +181,43 @@
         </h2>
         <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
             <div class="accordion-body bg-white">
-               
+
             </div>
         </div>
     </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingEleven">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                Indian Funding Agencies
+            </button>
+        </h2>
+        <div id="collapseEleven" class="accordion-collapse collapse" aria-labelledby="headingEleven" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoindianagency-grid">
+                    @{ await Html.RenderPartialAsync("_NGOIndianFundingAgencies", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddFundingAgency", new NGOFundingPartner() { PartnerId = Model.PartnerId, AgencyType = (int)AgencyType.IndianFundingAgencies }); }
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingTwelve">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                Foreign Funding Agencies
+            </button>
+        </h2>
+        <div id="collapseTwelve" class="accordion-collapse collapse" aria-labelledby="headingTwelve" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoforeignagency-grid">
+                    @{ await Html.RenderPartialAsync("_NGOForeignFundingAgencies", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddFundingAgency", new NGOFundingPartner() { PartnerId = Model.PartnerId, AgencyType = (int)AgencyType.ForeignFundingAgencies }); }
+            </div>
+        </div>
+    </div>
+
 </div>
 <div class="row bg-white">
     <div class="col mt-2 text-end">
@@ -207,6 +240,21 @@
         }
     }
 
+    function onAgency(data) {
+        debugger;
+        if (data.flag == 1) {
+            if (data.type == 1) {
+                $("#div-ngoindianagency-grid").html(data.htmlData);
+                $('#ngo-agency-modal_1').modal('hide');
+            }
+            else {
+                $("#div-ngoforeignagency-grid").html(data.htmlData);
+                $('#ngo-agency-modal_2').modal('hide');
+            }
+            commonMessage('success', 'Funding Agency Added Successfully.');
+        }
+    }
+
     function openpopup(cnt) {
         var type = cnt.id.split('_')[0];
         var id = cnt.id.split('_')[1];
@@ -216,32 +264,50 @@
     function ActiveDeActive(obj) {
         var type = obj.id.split('_')[0];
         var id = obj.id.split('_')[1];
-        console.log(id);
-        console.log(type);
+        var url = '';
+        if (type == 'nonKeyPerson' || type =='keyPerson') {
+            url = '/Partner/DeleteMember';
+        }
+        else if (type == 'indianAgency' || type == 'foreignAgency') {
+            url = '/Partner/DeleteFundingAgency';
+        }
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
-            url: '/Partner/DeleteMember',
+            url: url,
             data: { id: id, type: type, partnerId:@Model.PartnerId },
             success: function (data) {
                 if (data.flag == 1) {
-                    if (data.mType == 2) {
-                        $("#div-ngoboardmember-grid").html(data.htmlData);
-                        $('#ngo-member-modal_2').modal('hide');
+                    if (type == 'nonKeyPerson' || type == 'keyPerson') {
+                        if (data.type == 2) {
+                            $("#div-ngoboardmember-grid").html(data.htmlData);
+                            $('#ngo-member-modal_2').modal('hide');
+                        }
+                        else {
+                            $("#div-ngokeyperson-grid").html(data.htmlData);
+                            $('#ngo-member-modal_1').modal('hide');
+                        }
+                        commonMessage('success', 'Member Deleted Successfully.');
                     }
-                    else {
-                        $("#div-ngokeyperson-grid").html(data.htmlData);
-                        $('#ngo-member-modal_1').modal('hide');
+                    else if (type == 'indianAgency' || type == 'foreignAgency') {
+                        if (data.type == 1) {
+                            $("#div-ngoindianagency-grid").html(data.htmlData);
+                            $('#ngo-agency-modal_1').modal('hide');
+                        }
+                        else {
+                            $("#div-ngoforeignagency-grid").html(data.htmlData);
+                            $('#ngo-agency-modal_2').modal('hide');
+                        }
+                        commonMessage('success', 'Funding Agency Deleted Successfully.');
                     }
-                    commonMessage('success', 'Member Deleted Successfully.');
                 }
 
                 else {
-                    commonMessage('warning', 'Member Deletion failed.');
+                    commonMessage('warning', 'Deletion failed.');
                 }
             },
             error: function (data) {
-                commonMessage('error', 'Member Deletion failed.');
+                commonMessage('error', 'Deletion failed.');
             }
         });
     }

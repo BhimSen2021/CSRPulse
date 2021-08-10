@@ -142,6 +142,12 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.NgoregistrationDetail, NGORegistrationDetail>().ReverseMap();
             CreateMap<DTOModel.NgochartDocument, NGOChartDocument>().ReverseMap();
             CreateMap<DTOModel.Ngomember, NGOMember>().ReverseMap();
+            CreateMap<DTOModel.FundingAgency, FundingAgency>().ReverseMap();
+
+            CreateMap<DTOModel.NgofundingPartner, NGOFundingPartner>()
+            .ForMember(d => d.FundingAgency, o => o.MapFrom(s => s.FundingAgency.AgencyName));
+            CreateMap<NGOFundingPartner, DTOModel.NgofundingPartner>();
+
 
             #region A u d i t
 
@@ -164,8 +170,8 @@ namespace CSRPulse.Services
 
             #region Dropdown Mapper
             CreateMap<DTOModel.State, SelectListModel>()
-                .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
-                .ForMember(d => d.value, o => o.MapFrom(s => s.StateName));
+            .ForMember(d => d.id, o => o.MapFrom(s => s.StateId))
+            .ForMember(d => d.value, o => o.MapFrom(s => s.StateName));
 
             CreateMap<DTOModel.Role, SelectListModel>()
               .ForMember(d => d.id, o => o.MapFrom(s => s.RoleId))
@@ -227,6 +233,10 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.AuditReviewModule, SelectListModel>()
                .ForMember(d => d.id, o => o.MapFrom(s => s.ModuleId))
                .ForMember(d => d.value, o => o.MapFrom(s => s.Module));
+
+            CreateMap<DTOModel.FundingAgency, SelectListModel>()
+              .ForMember(d => d.id, o => o.MapFrom(s => s.FundingAgencyId))
+              .ForMember(d => d.value, o => o.MapFrom(s => s.AgencyName));
             #endregion
 
 

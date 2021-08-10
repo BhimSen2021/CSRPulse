@@ -232,5 +232,11 @@ namespace CSRPulse.Services
             return fyYears;
         }
 
+        public IEnumerable<SelectListModel> GetFundingAgency(int? agencyType)
+        {           
+           var agencies= _genericRepository.Get<DTOModel.FundingAgency>(x => agencyType.HasValue ? x.AgencyType == agencyType.Value : (1 > 0) && x.IsActive == true);
+            var processList = _mapper.Map<List<SelectListModel>>(agencies);
+            return processList.ToList();
+        }
     }
 }

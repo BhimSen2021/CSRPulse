@@ -16,6 +16,7 @@ namespace CSRPulse.Data.Models
             NgoawardDetail = new HashSet<NgoawardDetail>();
             NgochartDocument = new HashSet<NgochartDocument>();
             NgocorpusGrantFund = new HashSet<NgocorpusGrantFund>();
+            NgofundingPartner = new HashSet<NgofundingPartner>();
             NgokeyProjects = new HashSet<NgokeyProjects>();
             Ngomember = new HashSet<Ngomember>();
             NgoregistrationDetail = new HashSet<NgoregistrationDetail>();
@@ -81,6 +82,8 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<NgochartDocument> NgochartDocument { get; set; }
         [InverseProperty("Partner")]
         public virtual ICollection<NgocorpusGrantFund> NgocorpusGrantFund { get; set; }
+        [InverseProperty("Partner")]
+        public virtual ICollection<NgofundingPartner> NgofundingPartner { get; set; }
         [InverseProperty("Partner")]
         public virtual ICollection<NgokeyProjects> NgokeyProjects { get; set; }
         [InverseProperty("Partner")]

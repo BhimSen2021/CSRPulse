@@ -104,6 +104,8 @@ namespace CSRPulse.Model
 
         public List<NGOMember> Ngomember { get; set; }
 
+        public List<NGOFundingPartner> NgofundingPartner { get; set; }
+
     }
 
 

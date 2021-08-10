@@ -33,6 +33,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<DesignationHistory> DesignationHistory { get; set; }
         public virtual DbSet<District> District { get; set; }
         public virtual DbSet<EmailConfiguration> EmailConfiguration { get; set; }
+        public virtual DbSet<FundingAgency> FundingAgency { get; set; }
         public virtual DbSet<Indicator> Indicator { get; set; }
         public virtual DbSet<IndicatorResponseType> IndicatorResponseType { get; set; }
         public virtual DbSet<IndicatorType> IndicatorType { get; set; }
@@ -44,6 +45,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<NgoawardDetail> NgoawardDetail { get; set; }
         public virtual DbSet<NgochartDocument> NgochartDocument { get; set; }
         public virtual DbSet<NgocorpusGrantFund> NgocorpusGrantFund { get; set; }
+        public virtual DbSet<NgofundingPartner> NgofundingPartner { get; set; }
         public virtual DbSet<NgokeyProjects> NgokeyProjects { get; set; }
         public virtual DbSet<Ngomember> Ngomember { get; set; }
         public virtual DbSet<NgoregistrationDetail> NgoregistrationDetail { get; set; }
@@ -86,6 +88,7 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -285,6 +288,15 @@ namespace CSRPulse.Data.Data
                     .HasConstraintName("FK_EmailConfiguration_UpdatedBy");
             });
 
+            modelBuilder.Entity<FundingAgency>(entity =>
+            {
+                entity.Property(e => e.AgencyName).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            });
+
             modelBuilder.Entity<Indicator>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
@@ -422,6 +434,25 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.PartnerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_NGOCorpusGrantFund_Partner");
+            });
+
+            modelBuilder.Entity<NgofundingPartner>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.NgofundingPartnerName).IsUnicode(false);
+
+                entity.HasOne(d => d.FundingAgency)
+                    .WithMany(p => p.NgofundingPartner)
+                    .HasForeignKey(d => d.FundingAgencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOFundingPartner_FundingAgency");
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.NgofundingPartner)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NGOFundingPartner_Partner");
             });
 
             modelBuilder.Entity<NgokeyProjects>(entity =>

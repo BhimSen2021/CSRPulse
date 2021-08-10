@@ -56,7 +56,8 @@ namespace CSRPulse.Services
                             .Include(f => f.NgocorpusGrantFund)
                             .Include(r => r.NgoregistrationDetail)
                             .Include(m => m.Ngomember)
-                            .Include(c => c.NgochartDocument);
+                            .Include(c => c.NgochartDocument)
+                            .Include(f => f.NgofundingPartner).ThenInclude(a => a.FundingAgency);
 
                         var res = _mapper.Map<IEnumerable<DTOModel.Partner>, IEnumerable<Partner>>(NGOpartner);
 
@@ -352,11 +353,56 @@ namespace CSRPulse.Services
         {
             try
             {
-                 _genericRepository.Delete<DTOModel.Ngomember>(id);
+                _genericRepository.Delete<DTOModel.Ngomember>(id);
 
                 var result = await _genericRepository.GetAsync<DTOModel.Ngomember>(x => x.PartnerId == partnerId && x.MemberType == memberType);
 
                 return _mapper.Map<List<NGOMember>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<NGOFundingPartner>> GetInsertNGOFundingPartner(NGOFundingPartner fundingPartner)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.NgofundingPartner>(fundingPartner);
+                await _genericRepository.InsertAsync(model);
+
+                var result = _genericRepository.GetIQueryable<DTOModel.NgofundingPartner>(x => x.PartnerId == fundingPartner.PartnerId && x.AgencyType == fundingPartner.AgencyType).Include(a => a.FundingAgency);
+
+                return _mapper.Map<List<NGOFundingPartner>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public List<NGOFundingPartner> GetDeleteNGOFundingPartner(int id, int partnerId, int agencyType)
+        {
+            try
+            {
+                _genericRepository.Delete<DTOModel.NgofundingPartner>(id);
+
+                var result = _genericRepository.GetIQueryable<DTOModel.NgofundingPartner>(x => x.PartnerId == partnerId && x.AgencyType == agencyType).Include(a => a.FundingAgency);
+
+                return _mapper.Map<List<NGOFundingPartner>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<NGOFundingPartner> GetNGOFundingPartner(int id)
+        {
+            try
+            {
+                var result = await _genericRepository.GetByIDAsync<NGOFundingPartner>(id);
+                return _mapper.Map<NGOFundingPartner>(result);
             }
             catch (Exception)
             {

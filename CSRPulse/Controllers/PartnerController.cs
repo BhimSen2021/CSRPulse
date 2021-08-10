@@ -612,9 +612,9 @@ namespace CSRPulse.Controllers
                 flag = 1;
                 if (memberType == (int)Common.NGOMemberType.NoKeyPerson)
 
-                    return Json(new { flag = flag, mType = memberType, htmlData = ConvertViewToString("_NGOBoardMembers", partner, true) });
+                    return Json(new { flag = flag, type = memberType, htmlData = ConvertViewToString("_NGOBoardMembers", partner, true) });
                 else
-                    return Json(new { flag = flag, mType = memberType, htmlData = ConvertViewToString("_NGOKeyPerson", partner, true) });
+                    return Json(new { flag = flag, type = memberType, htmlData = ConvertViewToString("_NGOKeyPerson", partner, true) });
             }
             catch (Exception ex)
             {
@@ -622,6 +622,70 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
+
+        #endregion
+
+        #region Existing Funding Agencies
+
+        public async Task<IActionResult> SaveFundingAgency(NGOFundingPartner fundingPartner, string ButtonType)
+        {
+            try
+            {
+                int flag = 0;
+                Partner partner = new Partner() { PartnerId = fundingPartner.PartnerId, PartnerType = (int)Common.PartnerType.NGO };
+                if (ButtonType == "SaveAgency")
+                {
+                    if (ModelState.IsValid)
+                    {
+                        fundingPartner.CreatedOn = DateTime.UtcNow;
+                        fundingPartner.CreatedBy = userDetail.UserID;
+
+                        var ngofundingPartner = await _partnerService.GetInsertNGOFundingPartner(fundingPartner);
+                        partner.NgofundingPartner = ngofundingPartner;
+                        flag = 1;
+
+                        if (fundingPartner.AgencyType == (int)Common.AgencyType.IndianFundingAgencies)
+
+                            return Json(new { flag = flag, type = fundingPartner.AgencyType, htmlData = ConvertViewToString("_NGOIndianFundingAgencies", partner, true) });
+                        else
+                            return Json(new { flag = flag, type = fundingPartner.AgencyType, htmlData = ConvertViewToString("_NGOForeignFundingAgencies", partner, true) });
+                    }
+                }
+                return Json(new { flag = flag, type = fundingPartner.AgencyType, htmlData = ConvertViewToString("_AddFundingAgency", fundingPartner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        public IActionResult DeleteFundingAgency(int id, string type, int partnerId)
+        {
+            try
+            {
+                int flag = 0;
+                int agencyType = (type.ToLower() == "indianAgency" ? (int)Common.AgencyType.IndianFundingAgencies : (int)Common.AgencyType.ForeignFundingAgencies);
+
+                Partner partner = new Partner() { PartnerId = partnerId};
+                var ngoFundingPartner = _partnerService.GetDeleteNGOFundingPartner(id, partnerId, agencyType);
+                partner.NgofundingPartner = ngoFundingPartner;
+
+                flag = 1;
+                if (agencyType == (int)Common.AgencyType.IndianFundingAgencies)
+
+                    return Json(new { flag = flag, type = agencyType, htmlData = ConvertViewToString("_NGOIndianFundingAgencies", partner, true) });
+                else
+                    return Json(new { flag = flag, type = agencyType, htmlData = ConvertViewToString("_NGOForeignFundingAgencies", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+               
+
 
         #endregion
         private void RevoveModelState(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)

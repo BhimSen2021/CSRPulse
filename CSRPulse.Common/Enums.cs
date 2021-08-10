@@ -110,4 +110,10 @@ namespace CSRPulse.Common
         CorpusFund = 1,
         GrantInflow = 2
     }
+
+    public enum AgencyType
+    {
+        IndianFundingAgencies = 1,
+        ForeignFundingAgencies = 2
+    }
 }
