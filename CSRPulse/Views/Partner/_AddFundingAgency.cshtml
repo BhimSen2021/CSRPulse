@@ -1,0 +1,46 @@
+﻿@model NGOFundingPartner
+@using CSRPulse.Common
+@inject CSRPulse.Services.IServices.IDropdownBindService _DropdownBindService;
+
+<div id="ngo-agency-modal_@Model.AgencyType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ngo-agency-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="ngo-member-modalLabel">
+                    @if (Model.AgencyType == (int)AgencyType.IndianFundingAgencies)
+                    {<text>Indian Funding Agencies</text>}
+                else
+                { <text>Foreign Funding Agencies</text>}
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" asp-action="SaveFundingAgency" asp-controller="Partner" data-ajax-success="onAgency">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" id="ngoagencyPid_@Model.AgencyType" asp-for="PartnerId" />
+                <input type="hidden" id="agencyType_@Model.AgencyType" asp-for="AgencyType" />
+                <div class="modal-body">
+                    <div class="row m-2">
+                        <div class="mb-3">
+                            <label asp-for="FundingAgencyId" class="form-label required"></label>
+                            <select id="FundingAgency_@Model.AgencyType" asp-for="FundingAgencyId" asp-items="@(new SelectList(_DropdownBindService.GetFundingAgency(Model.AgencyType),"id","value"))" aria-required="true" class="form-select">
+                            </select>
+                            <span asp-validation-for="FundingAgencyId" class="invalid"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NgofundingPartnerName" class="form-label required"></label>
+                            <input id="NgofundingPartnerName_@Model.AgencyType" type="text" asp-for="NgofundingPartnerName" class="form-control" maxlength="150" placeholder="You can enter max 500 characters" autocomplete="off">
+                            <span asp-validation-for="NgofundingPartnerName" class="invalid"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-end">
+                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">No</button>
+                            <button type="submit" name="ButtonType" value="SaveAgency" class="btnconfirm btn btn-info btn-sm">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,195 @@
+﻿@model CSRPulse.Model.AuditReviewParamter
+@using CSRPulse.Common
+@{
+    ViewData["Title"] = "Add New Audit Review Parameter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Financial Audit</a></li>
+                    <li class="breadcrumb-item active">Audit Review Parameter</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Audit Review Parameter</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-controller="AuditReviewParamter" asp-action="Create">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="mb-3">
+                    <label asp-for="ModuleId" class="form-label required"></label>
+                    <select asp-for="ModuleId" asp-items="@ViewBag.ddlModule" aria-required="true" class="form-select">
+                        <option disabled="" label="Select Module" selected="" value=""></option>
+                    </select>
+                    <span asp-validation-for="ModuleId" class="invalid"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Scope" class="form-label required"></label>
+                    <input asp-for="Scope" type="hidden" class="form-control" />
+
+                    <div id="editor" class="editor note-editor mb-2" style="height: 250px;">
+                    </div>
+                    <span asp-validation-for="Scope" class="invalid"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ReviewInstruction" class="form-label required"></label>
+                    <input asp-for="ReviewInstruction" type="hidden" class="form-control" />
+                    <div id="editor2" class="ReviewInstruction note-editor mb-2" style="height: 250px;">
+                    </div>
+                    <span asp-validation-for="ReviewInstruction" class="invalid"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mb-3">
+                        <label asp-for="Critical" class="form-label"></label>
+                        <select asp-for="Critical" asp-items="@Html.GetEnumSelectList<Critical>()" aria-required="true" class="form-select">
+                        </select>
+                        <span asp-validation-for="Critical" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ReferenceNo" class="form-label required"> </label>
+                        <input type="text" asp-for="ReferenceNo" onkeypress="return onlyNumber(event)" class="form-control" maxlength="4" placeholder="Enter ReferenceNo (max 4 digits number)" autocomplete="off">
+                        <span asp-validation-for="ReferenceNo" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="IsActive" class="form-label"></label>
+                        <input asp-for="IsActive" type="checkbox" id="@Model.ParamterId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" checked="checked" />
+                        <label for="@Model.ParamterId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        <span asp-validation-for="IsActive" class="invalid"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mb-3">
+                        <label asp-for="MaximumMarks" class="form-label required"></label>
+                        <select asp-for="MaximumMarks" aria-required="true" class="form-select">
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                            <option value="0">0</option>
+                            <option value="-2">NA</option>
+                        </select>
+                        <span asp-validation-for="MaximumMarks" class="invalid"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Sequence" class="form-label"> </label>
+                        <input type="text" asp-for="Sequence" onkeypress="return onlyNumber(event)" class="form-control" maxlength="2" placeholder="Enter Sequence (max 2 digits number)" autocomplete="off">
+                        <span asp-validation-for="Sequence" class="invalid"></span>
+                    </div>
+                </div>
+                <div class="mb-2 text-end">
+                    <a asp-area="" asp-controller="AuditReviewParamter" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                    <button class="btn btn-primary btn-sm" type="submit" onclick="handleSubmit()"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                </div>
+            </div> <!-- end card -->
+        </form>
+    </div> <!-- end card body-->
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var scope = new Quill('.editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        font: []
+                    }, {
+                        size: []
+                    }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{
+                        color: []
+                    }, {
+                        background: []
+                    }],
+                    [{
+                        script: "super"
+                    }, {
+                        script: "sub"
+                    }],
+                    [{
+                        header: [!1, 1, 2, 3, 4, 5, 6]
+                    }],
+                    [{
+                        list: "ordered"
+                    }, {
+                        list: "bullet"
+                    }],
+                    ["direction", {
+                        align: []
+                    }],
+
+                    ["clean"]
+                ]
+            }
+        });
+
+        var reviewInstruction = new Quill('.ReviewInstruction', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        font: []
+                    }, {
+                        size: []
+                    }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{
+                        color: []
+                    }, {
+                        background: []
+                    }],
+                    [{
+                        script: "super"
+                    }, {
+                        script: "sub"
+                    }],
+                    [{
+                        header: [!1, 1, 2, 3, 4, 5, 6]
+                    }],
+                    [{
+                        list: "ordered"
+                    }, {
+                        list: "bullet"
+                    }],
+                    ["direction", {
+                        align: []
+                    }],
+
+                    ["clean"]
+                ]
+            }
+        });
+        // This will set `ignore` for all validation calls
+        jQuery.validator.setDefaults({
+            // This will ignore all hidden elements alongside `contenteditable` elements
+            // that have no `name` attribute
+            ignore: ":hidden, [contenteditable='true']:not([name])"
+        });
+
+        function handleSubmit() {
+            document.getElementById('Scope').value = scope.root.innerHTML;
+            document.getElementById('ReviewInstruction').value = reviewInstruction.root.innerHTML;
+        };
+    </script>
+}

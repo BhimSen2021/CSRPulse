@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
-    [Route("[Controller]/[action]")]
     public class ProcessWorkFlowController : BaseController<ProcessWorkFlowController>
     {
         private readonly IProcessSetupServices _processSetupServices;
@@ -36,6 +35,9 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("ProcessWorkFlow/GetProcessWorkFlow");
 
             ViewBag.ddlRole = new SelectList(_dropdownBindService.GetRole(null), "id", "value");
+
+            ViewBag.ddlRevisionNo = new SelectList(await _processSetupServices.GetRevisionHistoryDropdown(processId), "id", "value");
+
             var setupModel = new ProcessSetupModel();
 
             var processes = await _processSetupServices.GetProcessSetupById(processId);
@@ -83,9 +85,10 @@ namespace CSRPulse.Controllers
                 var listProces = processes.processSetupList.Where(s => s.PrimaryRoleId > 0 && s.LevelId > 0).ToList();
                 if (listProces.Count > 0)
                 {
+                    var CreatedOn = DateTime.Now;
                     listProces.ToList().ForEach(h =>
                     {
-                        h.CreatedOn = DateTime.Now;
+                        h.CreatedOn = CreatedOn;
                         h.CreatedBy = userDetail.UserID;
                     });
 
@@ -106,6 +109,13 @@ namespace CSRPulse.Controllers
 
                 throw;
             }
+        }
+
+
+        public async Task<ActionResult> ProcessSetupHistory(int processId, int revisionNo)
+        {
+            var processSetupHistory = await _processSetupServices.GetPSHistoryDetails(processId, revisionNo);
+            return PartialView("_ProcessSetupHistory", processSetupHistory);
         }
 
         private List<ProcessSetup> MakeProcesRecords(List<ProcessSetup> processSetups, int processId, int revisionNo)

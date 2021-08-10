@@ -32,7 +32,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-
                     <div class="mb-3">
                         <label asp-for="PartnerType" class="form-label required"></label>
                         <select asp-for="PartnerType" asp-items="@Html.GetEnumSelectList<PartnerType>()" aria-required="true" class="form-select">
@@ -190,10 +189,7 @@
                 $('#ComPin').val($('#RegPin').val());
                 $('#CommPhone').val($('#RegPhone').val());
                 $('#CommMobile').val($('#RegMobile').val());
-
-            } else {
-
-            }
+            } 
         }
 
     </script>

@@ -1,0 +1,333 @@
+﻿@model Partner
+@using CSRPulse.Common
+@{
+    ViewData["Title"] = "Partner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item active">Partner</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Partner</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                About the NGO
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <form method="post" asp-controller="Partner" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="PartnerId" />
+                    <input type="hidden" asp-for="IsActive" />
+                    <div class="row">
+                        <div class="mb-2 text-end">
+                            <button class="btn btn-success btn-sm" type="submit"><i class="mdi mdi-file-document-edit me-1"></i> Save</button>
+                        </div>
+                    </div> <!-- end card -->
+                    @{ await Html.RenderPartialAsync("_AboutPartner", Model); }
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                @Html.DisplayNameFor(m => m.NgoawardDetail)
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoawarddetails-grid">
+                    @{ await Html.RenderPartialAsync("_NGOAwardDetails", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                @Html.DisplayNameFor(m => m.NgosaturatoryAuditorDetail)
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngosaturatoryauditordetail-grid">
+                    @{ await Html.RenderPartialAsync("_NGOSaturatoryAuditorDetail", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                @Html.DisplayNameFor(m => m.NGOKeyProjects)
+            </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngokeyprojects-grid">
+                    @{ await Html.RenderPartialAsync("_NGOKeyProjects", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingFive">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                @Html.DisplayNameFor(m => m.NgocorpusGrantFund)
+            </button>
+        </h2>
+        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div class="row">
+                    <div class="col" id="div-corpusfund-grid">
+                        @{ await Html.RenderPartialAsync("_NGOCorpusFund", Model); }
+                    </div>
+                    <div class="col" id="div-grantinflow-grid">
+                        @{ await Html.RenderPartialAsync("_NGOGrantInflow", Model); }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingSix">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                @Html.DisplayNameFor(m => m.NgoregistrationDetail)
+            </button>
+        </h2>
+        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoregistration-grid">
+                    @{ await Html.RenderPartialAsync("_NGORegistration", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingSeven">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                @Html.DisplayNameFor(m => m.NgochartDocument)
+            </button>
+        </h2>
+        <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngochartdocument-grid">
+                    @{ await Html.RenderPartialAsync("_NGOChartDocument", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingEigth">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEigth" aria-expanded="false" aria-controls="collapseEigth">
+                Details of the Trustees/ Governing Members/ Board Members
+            </button>
+        </h2>
+        <div id="collapseEigth" class="accordion-collapse collapse" aria-labelledby="headingEigth" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoboardmember-grid">
+                    @{ await Html.RenderPartialAsync("_NGOBoardMembers", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddMember", new NGOMember() { PartnerId = Model.PartnerId, MemberType = (int)NGOMemberType.NoKeyPerson }); }
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingNine">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                Key Persons of the Organization
+            </button>
+        </h2>
+        <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngokeyperson-grid">
+                    @{ await Html.RenderPartialAsync("_NGOKeyPerson", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddMember", new NGOMember() { PartnerId = Model.PartnerId, MemberType = (int)NGOMemberType.KeyPerson }); }
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingTen">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                Documents of the Organization to be submitted
+            </button>
+        </h2>
+        <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingEleven">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                Indian Funding Agencies
+            </button>
+        </h2>
+        <div id="collapseEleven" class="accordion-collapse collapse" aria-labelledby="headingEleven" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoindianagency-grid">
+                    @{ await Html.RenderPartialAsync("_NGOIndianFundingAgencies", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddFundingAgency", new NGOFundingPartner() { PartnerId = Model.PartnerId, AgencyType = (int)AgencyType.IndianFundingAgencies }); }
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header m-0" id="headingTwelve">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                Foreign Funding Agencies
+            </button>
+        </h2>
+        <div id="collapseTwelve" class="accordion-collapse collapse" aria-labelledby="headingTwelve" data-bs-parent="#accordionExample">
+            <div class="accordion-body bg-white">
+                <div id="div-ngoforeignagency-grid">
+                    @{ await Html.RenderPartialAsync("_NGOForeignFundingAgencies", Model); }
+                </div>
+                @{ await Html.RenderPartialAsync("_AddFundingAgency", new NGOFundingPartner() { PartnerId = Model.PartnerId, AgencyType = (int)AgencyType.ForeignFundingAgencies }); }
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row bg-white">
+    <div class="col mt-2 text-end">
+        <a asp-area="" asp-controller="Partner" asp-action="Index" class="btn btn-dark btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+    </div>
+</div>
+<partial name="_Confirmation" />
+<script>
+    function onMember(data) {
+        if (data.flag == 1) {
+            if (data.mType == 2) {
+                $("#div-ngoboardmember-grid").html(data.htmlData);
+                $('#ngo-member-modal_2').modal('hide');
+            }
+            else {
+                $("#div-ngokeyperson-grid").html(data.htmlData);
+                $('#ngo-member-modal_1').modal('hide');
+            }
+            commonMessage('success', 'Member Added Successfully.');
+        }
+    }
+
+    function onAgency(data) {
+        debugger;
+        if (data.flag == 1) {
+            if (data.type == 1) {
+                $("#div-ngoindianagency-grid").html(data.htmlData);
+                $('#ngo-agency-modal_1').modal('hide');
+            }
+            else {
+                $("#div-ngoforeignagency-grid").html(data.htmlData);
+                $('#ngo-agency-modal_2').modal('hide');
+            }
+            commonMessage('success', 'Funding Agency Added Successfully.');
+        }
+    }
+
+    function openpopup(cnt) {
+        var type = cnt.id.split('_')[0];
+        var id = cnt.id.split('_')[1];
+        $('.btnconfirm').attr('id', type + '_' + id);
+    }
+
+    function ActiveDeActive(obj) {
+        var type = obj.id.split('_')[0];
+        var id = obj.id.split('_')[1];
+        var url = '';
+        if (type == 'nonKeyPerson' || type =='keyPerson') {
+            url = '/Partner/DeleteMember';
+        }
+        else if (type == 'indianAgency' || type == 'foreignAgency') {
+            url = '/Partner/DeleteFundingAgency';
+        }
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: url,
+            data: { id: id, type: type, partnerId:@Model.PartnerId },
+            success: function (data) {
+                if (data.flag == 1) {
+                    if (type == 'nonKeyPerson' || type == 'keyPerson') {
+                        if (data.type == 2) {
+                            $("#div-ngoboardmember-grid").html(data.htmlData);
+                            $('#ngo-member-modal_2').modal('hide');
+                        }
+                        else {
+                            $("#div-ngokeyperson-grid").html(data.htmlData);
+                            $('#ngo-member-modal_1').modal('hide');
+                        }
+                        commonMessage('success', 'Member Deleted Successfully.');
+                    }
+                    else if (type == 'indianAgency' || type == 'foreignAgency') {
+                        if (data.type == 1) {
+                            $("#div-ngoindianagency-grid").html(data.htmlData);
+                            $('#ngo-agency-modal_1').modal('hide');
+                        }
+                        else {
+                            $("#div-ngoforeignagency-grid").html(data.htmlData);
+                            $('#ngo-agency-modal_2').modal('hide');
+                        }
+                        commonMessage('success', 'Funding Agency Deleted Successfully.');
+                    }
+                }
+
+                else {
+                    commonMessage('warning', 'Deletion failed.');
+                }
+            },
+            error: function (data) {
+                commonMessage('error', 'Deletion failed.');
+            }
+        });
+    }
+</script>
+
+@section Scripts{
+    <script>
+        function CopyRegToCom(obj) {
+            if ($(obj).is(":checked")) {
+                $('#CommAddress').val($('#RegAddress').val());
+                $('#ComState').val($('#RegState').val());
+                $('#ComCity').val($('#RegCity').val());
+                $('#ComPin').val($('#RegPin').val());
+                $('#CommPhone').val($('#RegPhone').val());
+                $('#CommMobile').val($('#RegMobile').val());
+
+            } else {
+
+            }
+        }
+    </script>
+}
+

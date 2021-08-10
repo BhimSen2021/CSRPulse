@@ -1,0 +1,65 @@
+﻿@model Partner
+
+<form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" asp-action="SaveSaturatoryAuditorDetails" asp-controller="Partner" data-ajax-success="onSaturatoryAuditorDetails">
+    <div class="mb-2 text-end">
+        <input type="hidden" asp-for="PartnerId" id="SaturatoryAuditorPId" />
+        <button class="btn btn-danger btn-sm" type="submit" name="ButtonType" value="AddSaturatoryAuditorDetails"><i class="mdi mdi-plus"></i> Add New</button>
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveSaturatoryAuditorDetails"><i class="mdi mdi-file-document-edit"></i> Save</button>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <table class="table table-hover table-sm table-centered mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th width="50%">Name of the Auditing Firm</th>
+                        <th>Years of association with the organization as an Auditor</th>
+                        <th>Does the organization have a signed contract with the Auditor?</th>                       
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.NgosaturatoryAuditorDetail != null)
+                    {
+                        for (int i = 0; i < Model.NgosaturatoryAuditorDetail.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <span>@(i+1)</span>
+                                    <input type="hidden" asp-for="@Model.NgosaturatoryAuditorDetail[i].NgosaturatoryAuditorDetailId" />
+                                    <input type="hidden" asp-for="@Model.NgosaturatoryAuditorDetail[i].PartnerId" />
+                                </td>
+                                <td>
+
+                                    <input type="text" asp-for="@Model.NgosaturatoryAuditorDetail[i].AuditingFirm" class="form-control form-control-sm" maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                    <span asp-validation-for="@Model.NgosaturatoryAuditorDetail[i].AuditingFirm" class="invalid"></span>
+                                </td>
+                                <td>
+                                    <input type="text" asp-for="@Model.NgosaturatoryAuditorDetail[i].Association" class="form-control form-control-sm" maxlength="2" onkeypress="return onlyNumber(event)" placeholder="You can enter max 2 digits number" autocomplete="off">
+                                    <span asp-validation-for="@Model.NgosaturatoryAuditorDetail[i].Association" class="invalid"></span>
+                                </td>
+                                <td>
+                                    <div>
+                                        <input asp-for="@Model.NgosaturatoryAuditorDetail[i].SignedContract" type="checkbox" id="@Model.NgosaturatoryAuditorDetail[i].NgosaturatoryAuditorDetailId" data-switch="success" />
+                                        <label for="@Model.NgosaturatoryAuditorDetail[i].NgosaturatoryAuditorDetailId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+
+                                    </div>
+                                    <span asp-validation-for="@Model.NgosaturatoryAuditorDetail[i].SignedContract" class="invalid"></span>
+                                </td>
+                                
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function onSaturatoryAuditorDetails(data) {
+        $("#div-ngosaturatoryauditordetail-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'NGO Ngosaturatory Auditor Detail Saved Successfully.');
+        }
+    }
+</script>

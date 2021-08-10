@@ -1,0 +1,63 @@
+﻿@model Partner
+
+    <form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" asp-action="SaveAwardDetails" asp-controller="Partner" data-ajax-success="onAwardDetails">
+        <div class="mb-2 text-end">
+            <input type="hidden" asp-for="PartnerId" id="AwardPId" />
+            <button class="btn btn-danger btn-sm" type="submit" name="ButtonType" value="AddAwardDetails"><i class="mdi mdi-plus"></i> Add New</button>
+            <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveAwardDetails" ><i class="mdi mdi-file-document-edit"></i> Save</button>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <table class="table table-hover table-sm table-centered mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Name of the Award/Recognition</th>
+                            <th>Year of Receiving</th>
+                            <th>Name of the Body/ organization who conferred the Award/ Recognition</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.NgoawardDetail != null)
+                        {
+                            for (int i = 0; i < Model.NgoawardDetail.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <span>@(i+1)</span>
+                                        <input type="hidden" asp-for="@Model.NgoawardDetail[i].NgoawardDetailId" />
+                                        <input type="hidden" asp-for="@Model.NgoawardDetail[i].PartnerId" />
+                                    </td>
+                                    <td>
+
+                                        <input type="text" asp-for="@Model.NgoawardDetail[i].Award" class="form-control form-control-sm" maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                        <span asp-validation-for="@Model.NgoawardDetail[i].Award" class="invalid"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" asp-for="@Model.NgoawardDetail[i].YearOfReceiving" class="form-control form-control-sm" maxlength="4" onkeypress="return onlyNumber(event)" placeholder="You can enter max 4 digits number" autocomplete="off">
+                                        <span asp-validation-for="@Model.NgoawardDetail[i].YearOfReceiving" class="invalid"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" asp-for="@Model.NgoawardDetail[i].AwardConferrer" class="form-control form-control-sm" maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                        <span asp-validation-for="@Model.NgoawardDetail[i].AwardConferrer" class="invalid"></span>
+                                    </td>
+                                    
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        function onAwardDetails(data) {
+           
+            $("#div-ngoawarddetails-grid").html(data.htmlData);
+            if (data.flag == 1) {
+                commonMessage('success', 'NGO Award Details Saved Successfully.');
+            }
+           
+        }
+    </script>

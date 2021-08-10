@@ -5,9 +5,14 @@
         <form data-ajax="true" data-ajax-method="PUT" asp-controller="ProcessWorkFlow" asp-action="UpdateSkipValue" data-ajax-success="onUpdated">
             <div class="card">
                 <div class="card-body">
-                    <div class="col-md text-end">
-                        <button class="btn btn-success btn-sm btn-rounded mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to update process"><i class="uil-check me-1"></i>Update Skip Value</button>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#info-header-modal" class="btn btn-danger btn-sm btn-rounded mb-3" data-bs-placement="top" title="Click here, to edit and add new process"><i class="mdi mdi-plus-circle me-1"></i>Add/Edit Process</a>
+                    <div class="row">
+                        <div class="col-md text-start">
+                            <button class="btn btn-success btn-sm btn-rounded mb-3" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to update process"><i class="uil-check me-1"></i>Update Skip Value</button>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#info-header-modal" class="btn btn-danger btn-sm btn-rounded mb-3" data-bs-placement="top" title="Click here, to edit and add new process"><i class="mdi mdi-plus-circle me-1"></i>Add/Edit Process</a>
+                        </div>
+                        <div class="col-md text-end">
+                            <button id="btnHistory" class="btn btn-dark btn-sm btn-rounded mb-3" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to see history details"><i class="uil-history me-1"></i>Show History</button>
+                        </div>
                     </div>
                     <table class="table table-hover table-centered mb-0">
                         <thead>
@@ -173,10 +178,43 @@
     </div>
 </div>
 
+
+<div id="process-history-modal" class="modal fade" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="process-history-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-full-width">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="info-header-modalLabel">Process Setup Workflow Revision History</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-2 col-form-label">
+                    <i class="mdi mdi-filter"></i> <label>Filter By :</label>
+                </div>
+                <div class="row mb-4">
+                    <label class="col-md-1 col-form-label">Process</label>
+                    <div class="col-md-3">
+                        <label id="lblPProcess" class="text-muted col-form-label"></label>
+                    </div>
+
+                    <label asp-for="RevisionNo" class="col-md-1 col-form-label">Revision No</label>
+                    <div class="col-md-3">
+                        <select id="ddlRevisionNo" asp-for="RevisionNo" asp-items="@ViewBag.ddlRevisionNo" aria-required="true" class="form-select">
+                        </select>
+                    </div>
+                </div>
+                <div class="row" id="ModelBody">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     $(document).ready(function () {
         Tooltip();
         $('#lblProcess').text($('#ProcessId').text());
+        $('#lblPProcess').text($('#ProcessId').text());
     });
     function onSuccess(data) {
         if (data.success == true) {
@@ -198,4 +236,32 @@
         }
     }
 
+    $('#btnHistory').click(function () {
+        BindProcessSetupHistory(@Model.RevisionNo-1);
+    });
+
+    $('#ddlRevisionNo').change(function() {
+        BindProcessSetupHistory($('#ddlRevisionNo').val());
+    });
+
+
+
+    function BindProcessSetupHistory(revisionNo) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'html',
+            url: '/ProcessWorkFlow/ProcessSetupHistory',
+            data: { processId: $('#ProcessId').val(), revisionNo: revisionNo },
+            success: function (response) {
+                $('#ModelBody').html(response);
+                $('#process-history-modal').modal('show');
+            },
+            failure: function (response) {
+                commonMessage('warning', 'Process Workflow history loading failed!');
+            },
+            error: function (response) {
+                commonMessage('warning', 'Process Workflow history loading failed!');
+            }
+        });
+    }
 </script>

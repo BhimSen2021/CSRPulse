@@ -1,0 +1,158 @@
+﻿@model NGOMember
+@using CSRPulse.Common
+@{
+    var IsDisplay = Model.MemberType == (int)NGOMemberType.KeyPerson ? "d-none" : "";
+
+}
+<div id="ngo-member-modal_@Model.MemberType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ngo-member-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title" id="ngo-member-modalLabel">
+                    @if (Model.MemberType == (int)NGOMemberType.NoKeyPerson)
+                    {<text>Trustees/ Governing Members/ Board Members Details</text>}
+                else
+                { <text>Key Person Member Details</text>}
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" asp-action="SaveMember" asp-controller="Partner" data-ajax-success="onMember">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" id="ngomemberPid_@Model.MemberType" asp-for="PartnerId" />
+                <input type="hidden" id="MemberType_@Model.MemberType" asp-for="MemberType" />
+                <div class="modal-body">
+                    <div class="row m-2">
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label asp-for="Name" class="form-label required"></label>
+                                <input id="name_@Model.MemberType" type="text" asp-for="Name" class="form-control form-control-sm" maxlength="150" placeholder="You can enter max 150 characters" autocomplete="off">
+                                <span asp-validation-for="Name" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Gender" class="form-label required"></label>
+                                <select id="gender_@Model.MemberType" asp-for="Gender" asp-items="@Html.GetEnumSelectList<Gender>()" aria-required="true" class="form-select">
+                                </select>
+                                <span asp-validation-for="Gender" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Qualification" class="form-label"></label>
+                                <input id="qualification_@Model.MemberType" type="text" asp-for="Qualification" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off">
+                                <span asp-validation-for="Qualification" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="City" class="form-label"></label>
+                                <input id="city_@Model.MemberType" type="text" asp-for="City" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off">
+                                <span asp-validation-for="City" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Pincode" class="form-label"></label>
+                                <input id="pincode_@Model.MemberType" type="text" asp-for="Pincode" class="form-control form-control-sm" onkeypress="return onlyNumber(event)" maxlength="6" placeholder="You can enter max 6 digit number" autocomplete="off">
+                                <span asp-validation-for="Pincode" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Age" class="form-label"></label>
+                                <input id="age_@Model.MemberType" type="text" asp-for="Age" class="form-control form-control-sm" onkeypress="return onlyNumber(event)" maxlength="2" placeholder="You can enter max 2 digit number" autocomplete="off">
+                                <span asp-validation-for="Age" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="PassportNo" class="form-label"></label>
+                                <input id="passpostno_@Model.MemberType" type="text" asp-for="PassportNo" class="form-control form-control-sm" maxlength="10" placeholder="You can enter max 10 characters" autocomplete="off">
+                                <span asp-validation-for="PassportNo" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="AffiliatedOrganisation" class="form-label"></label>
+                                <input id="AffiliatedOrganisation_@Model.MemberType" type="text" asp-for="AffiliatedOrganisation" class="form-control form-control-sm" maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                <span asp-validation-for="AffiliatedOrganisation" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="IsCrimeDescription" class="form-label"></label>
+                                <input asp-for="IsCrimeDescription" type="checkbox" id="IsCD_@Model.MemberType" data-switch="success" />
+                                <label for="IsCD_@Model.MemberType" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsCrimeDescription" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="IsMemberWillfulDefaulter" class="form-label"></label>
+                                <input asp-for="IsMemberWillfulDefaulter" type="checkbox" id="IsMD_@Model.MemberType" data-switch="success" />
+                                <label for="IsMD_@Model.MemberType" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsMemberWillfulDefaulter" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="IsMemberRelatedtoAbf" class="form-label"></label>
+                                <input asp-for="IsMemberRelatedtoAbf" type="checkbox" id="IsMR_@Model.MemberType" data-switch="success" />
+                                <label for="IsMR_@Model.MemberType" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsMemberRelatedtoAbf" class="invalid"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="mb-3">
+                                <label asp-for="Designation" class="form-label required"></label>
+                                <input id="designation_@Model.MemberType" type="text" asp-for="Designation" class="form-control form-control-sm" maxlength="200" placeholder="You can enter max 200 characters" autocomplete="off">
+                                <span asp-validation-for="Designation" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="JoiningDate" class="form-label required"></label>
+                                @Html.EditorFor(model => model.JoiningDate, new { htmlAttributes = new { @id = "joiningdate_" + Model.MemberType + "", @class = "form-control form-control-sm", @autocomplete = "off" } })
+                                <span asp-validation-for="JoiningDate" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Experience" class="form-label"></label>
+                                <input id="Experience_@Model.MemberType" type="text" asp-for="Experience" class="form-control form-control-sm" maxlength="4000" placeholder="You can enter max 4000 characters" autocomplete="off">
+                                <span asp-validation-for="Experience" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Address" class="form-label"></label>
+                                <input id="address_@Model.MemberType" type="text" asp-for="Address" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off">
+                                <span asp-validation-for="Address" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="DateOfBirth" class="form-label"></label>
+                                @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @id = "dateofbirth_" + Model.MemberType, @class = "form-control form-control-sm", @autocomplete = "off" } })
+                                <span asp-validation-for="DateOfBirth" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Panno" class="form-label"></label>
+                                <input id="panno_@Model.MemberType" type="text" asp-for="Panno" class="form-control form-control-sm" maxlength="10" placeholder="You can enter max 10 characters" autocomplete="off">
+                                <span asp-validation-for="Panno" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="VoterId" class="form-label"></label>
+                                <input id="voterid_@Model.MemberType" type="text" asp-for="VoterId" class="form-control form-control-sm" maxlength="10" placeholder="You can enter max 10 characters" autocomplete="off">
+                                <span asp-validation-for="VoterId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="IsDrawingRemuneration" class="form-label"></label>
+                                <input asp-for="IsDrawingRemuneration" type="checkbox" id="IsDR_@Model.MemberType" data-switch="success" />
+                                <label for="IsDR_@Model.MemberType" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsDrawingRemuneration" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="CrimeDescription" class="form-label"></label>
+                                <input id="CrimeDescription_@Model.MemberType" type="text" asp-for="CrimeDescription" class="form-control form-control-sm" maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                <span asp-validation-for="CrimeDescription" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="MemberWillfulDefaulterDetail" class="form-label"></label>
+                                <input id="MemberWillfulDefaulterDetail_@Model.MemberType" type="text" asp-for="MemberWillfulDefaulterDetail" class="form-control form-control-sm " maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                <span asp-validation-for="MemberWillfulDefaulterDetail" class="invalid"></span>
+                            </div>
+                            <div class="mb-3 @IsDisplay">
+                                <label asp-for="MemberRelatedtoAbfdetail" class="form-label"></label>
+                                <input id="MemberRelatedtoAbfdetail_@Model.MemberType" type="text" asp-for="MemberRelatedtoAbfdetail" class="form-control form-control-sm" maxlength="500" placeholder="You can enter max 500 characters" autocomplete="off">
+                                <span asp-validation-for="MemberRelatedtoAbfdetail" class="invalid"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-end">
+                            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">No</button>
+                            <button type="submit" name="ButtonType" value="SaveMember" class="btnconfirm btn btn-info btn-sm">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

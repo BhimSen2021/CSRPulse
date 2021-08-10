@@ -9,7 +9,8 @@ namespace CSRPulse.Services
         Task<bool> CreateProcessSetup(List<ProcessSetup> processes);
         Task<List<ProcessSetup>> GetProcessSetupById(int processId);
         Task<bool> UpdateProcessSetup(ProcessSetup processSetup);
-        Task<bool> InsertProcessSetupHistory(List<ProcessSetupHistory> process);
-        Task<List<ProcessSetupHistory>> GetProcessSetupHistoryBySetupId(int processId);
+        Task<bool> InsertProcessSetupHistory(List<ProcessSetupHistory> process);        
+        Task<List<ProcessSetupHistory>> GetPSHistoryDetails(int processId, int revisionNo);
+        Task<IEnumerable<SelectListModel>> GetRevisionHistoryDropdown(int processId);
     }
 }

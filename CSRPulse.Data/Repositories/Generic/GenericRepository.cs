@@ -278,7 +278,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().AddRange(entityList);
-             _dbContext.SaveChanges();
+                _dbContext.SaveChanges();
                 flag = true;
             }
             catch (Exception)
@@ -316,7 +316,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Set<TEntity>().RemoveRange(removeEntityList);
-               _dbContext.SaveChanges();
+                _dbContext.SaveChanges();
                 flag = true;
             }
             catch (Exception)
@@ -348,7 +348,7 @@ namespace CSRPulse.Data.Repositories
         {
             TEntity entityToDelete = _dbContext.Set<TEntity>().Find(id);
             Delete(entityToDelete);
-           _dbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         public virtual void Delete<TEntity>(Expression<Func<TEntity, bool>> filter) where TEntity : class
@@ -393,7 +393,7 @@ namespace CSRPulse.Data.Repositories
             try
             {
                 _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
-                 _dbContext.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -417,7 +417,7 @@ namespace CSRPulse.Data.Repositories
             }
             try
             {
-                
+
                 _dbContext.Entry(entityList).State = EntityState.Modified;
                 _dbContext.SaveChanges();
             }
@@ -492,7 +492,7 @@ namespace CSRPulse.Data.Repositories
         {
             throw new NotImplementedException();
         }
-               
+
 
         public Task DeleteAsync<TEntity>(object id) where TEntity : class
         {
@@ -507,13 +507,18 @@ namespace CSRPulse.Data.Repositories
         public Task DeleteAsync<TEntity>(TEntity entityToDelete) where TEntity : class
         {
             throw new NotImplementedException();
-        }       
+        }
 
         public IDatabaseTransaction BeginTransaction()
         {
             return new EntityDatabaseTransaction(_dbContext);
         }
 
-       
+        public async Task<int> Count<TEntity>() where TEntity : class
+        {
+            return await _dbContext.Set<TEntity>().CountAsync();
+        }
+
+
     }
 }

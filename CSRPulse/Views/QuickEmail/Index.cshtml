@@ -73,9 +73,55 @@
     </div>
 </div>
 
-<script src="~/assets/js/pages/demo.quilljs.js"></script>
+@*<script src="~/assets/js/pages/demo.quilljs.js"></script>*@
 <script type="text/javascript">
     function handleSubmit() {
         document.getElementById('Message').value = quill.root.innerHTML;
     };
 </script>
+@section Scripts{
+    <script>
+        var quill = new Quill('#snow-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        font: []
+                    }, {
+                        size: []
+                    }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{
+                        color: []
+                    }, {
+                        background: []
+                    }],
+                    [{
+                        script: "super"
+                    }, {
+                        script: "sub"
+                    }],
+                    [{
+                        header: [!1, 1, 2, 3, 4, 5, 6]
+                    }],
+                    [{
+                        list: "ordered"
+                    }, {
+                        list: "bullet"
+                    }],
+                    ["direction", {
+                        align: []
+                    }],
+
+                    ["clean"]
+                ]
+            }
+        });
+        // This will set `ignore` for all validation calls
+        jQuery.validator.setDefaults({
+            // This will ignore all hidden elements alongside `contenteditable` elements
+            // that have no `name` attribute
+            ignore: ":hidden, [contenteditable='true']:not([name])"
+        });
+    </script>
+}

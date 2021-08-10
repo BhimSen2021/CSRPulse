@@ -53,13 +53,67 @@ namespace CSRPulse.Common
     public enum PartnerType
     {
         NGO = 1,
-        Auditor = 2
+        Auditor = 2,
+        BusinessUnit = 3
     }
 
     public enum ProcessLevel
     {
-        Initiator=1,
-        Forwarder=2,
-        FinalApproval=3
+        Initiator = 1,
+        Forwarder = 2,
+        FinalApproval = 3
+    }
+
+    public enum Critical
+    {
+        Select = 1,
+        No = 2,
+        Yes = 3
+    }
+
+    public enum MaximumMarks
+    {
+        Two = 2,
+        One = 1,
+        Zero = 0,
+        NA = -2
+    }
+
+    public enum Constitution
+    {
+        Section_8_Compney = 1,
+        Society = 2,
+        Trust = 3
+    }
+
+    public enum Gender
+    {
+        Male = 1,
+        Female = 2,
+        Other = 3
+    }
+
+    public enum NGOMemberType
+    {
+        KeyPerson = 1,
+        NoKeyPerson = 2
+    }
+
+    public enum YesNo
+    {
+        Yes = 1,
+        No = 0
+    }
+
+    public enum CorpusGrantFund
+    {
+        CorpusFund = 1,
+        GrantInflow = 2
+    }
+
+    public enum AgencyType
+    {
+        IndianFundingAgencies = 1,
+        ForeignFundingAgencies = 2
     }
 }

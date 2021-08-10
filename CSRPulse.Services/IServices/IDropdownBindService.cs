@@ -33,5 +33,8 @@ namespace CSRPulse.Services.IServices
         IEnumerable<SelectListModel> GetPartners(int? partnerId);
 
         IEnumerable<SelectListModel> GetProcess(int? processId);
+        IEnumerable<SelectListModel> GetModule(int? moduleId);
+        IEnumerable<SelectListModel> GetFYYear(int startYear);
+        IEnumerable<SelectListModel> GetFundingAgency(int? agencyType);
     }
 }

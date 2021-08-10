@@ -25,11 +25,16 @@
                                 <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this record."> @Html.ActionLink(item.DocumentName,"Edit", "ProcessDocument", new { dId = item.DocumentId })</span>                                
                             </td>
                             <td>@item.ParentDocument</td>
-                            <td>
-                                <div>
-                                    <input type="checkbox" id="switch_@item.DocumentId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (item.IsActive == true) { <text> checked="checked" </text> } />
-                                    <label for="switch_@item.DocumentId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                </div>
+                            <td class="text-center" width="5%">
+                                @if (item.IsActive == true)
+                                {
+                                    <span class="badge badge-outline-success rounded-pill" style="width:100%">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-outline-warning rounded-pill" style="width:100%">No</span>
+                                }
+                              
                             </td>
                         </tr>
                     }
