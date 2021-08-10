@@ -20,8 +20,10 @@ namespace CSRPulse.Data.Models
             DistrictUpdatedByNavigation = new HashSet<District>();
             EmailConfigurationCreatedByNavigation = new HashSet<EmailConfiguration>();
             EmailConfigurationUpdatedByNavigation = new HashSet<EmailConfiguration>();
+            ProcessDocumentCreatedByNavigation = new HashSet<ProcessDocument>();
+            ProcessDocumentUpdatedByNavigation = new HashSet<ProcessDocument>();
             ProcessSetupCreatedByNavigation = new HashSet<ProcessSetup>();
-            ProcessSetupUpdatedbyNavigation = new HashSet<ProcessSetup>();
+            ProcessSetupUpdatedByNavigation = new HashSet<ProcessSetup>();
             ProcessWorkFlowReceiver = new HashSet<ProcessWorkFlow>();
             ProcessWorkFlowSender = new HashSet<ProcessWorkFlow>();
             StateCreatedByNavigation = new HashSet<State>();
@@ -96,10 +98,14 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<EmailConfiguration> EmailConfigurationCreatedByNavigation { get; set; }
         [InverseProperty(nameof(EmailConfiguration.UpdatedByNavigation))]
         public virtual ICollection<EmailConfiguration> EmailConfigurationUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProcessDocument.CreatedByNavigation))]
+        public virtual ICollection<ProcessDocument> ProcessDocumentCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProcessDocument.UpdatedByNavigation))]
+        public virtual ICollection<ProcessDocument> ProcessDocumentUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(ProcessSetup.CreatedByNavigation))]
         public virtual ICollection<ProcessSetup> ProcessSetupCreatedByNavigation { get; set; }
-        [InverseProperty(nameof(ProcessSetup.UpdatedbyNavigation))]
-        public virtual ICollection<ProcessSetup> ProcessSetupUpdatedbyNavigation { get; set; }
+        [InverseProperty(nameof(ProcessSetup.UpdatedByNavigation))]
+        public virtual ICollection<ProcessSetup> ProcessSetupUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(ProcessWorkFlow.Receiver))]
         public virtual ICollection<ProcessWorkFlow> ProcessWorkFlowReceiver { get; set; }
         [InverseProperty(nameof(ProcessWorkFlow.Sender))]

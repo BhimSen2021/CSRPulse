@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Process Document";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        @{await Html.RenderPartialAsync("_Filter");}
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div-process-document">
+
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function openpopup(cnt) {
+            debugger;
+            var id = cnt.id.split('_')[1];
+            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+        }
+        function ActiveDeActive(obj) {
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/District/ActiveDeActive',
+                data: { id: id, isChecked: isChecked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'Status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'Status changing failed.');
+                    }
+                },
+                error: function (responce) {
+                    commonMessage('error', 'Status changing failed.');
+                }
+            });
+        }
+    </script>
+}

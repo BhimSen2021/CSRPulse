@@ -1,0 +1,101 @@
+﻿@model CSRPulse.Model.ProcessDocument
+@{
+
+    ViewData["Title"] = "Create Document";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="row alert alert-danger" role="alert">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with (<span class="text-danger">*</span>) are compulsory fields
+
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-end">
+        <strong>[Characters <>#;|$ are not allowed]</strong>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" asp-controller="ProcessDocument" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+
+                    <div class="mb-3">
+                        <label asp-for="DocumentName" class="form-label required"></label>
+                        <input type="text" asp-for="DocumentName" class="form-control" autocomplete="off" placeholder="Enter Document Name (max 500 characters)" />
+                        <span asp-validation-for="DocumentName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProcessId" class="form-label required"></label>
+                        <select class="form-select" asp-for="ProcessId" asp-items="@ViewBag.ddlProcess" aria-hidden="true">
+                            <option label="Select Process" disabled selected="" value=""></option>
+                        </select>
+                        <span asp-validation-for="ProcessId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DocumentUpload" class="form-label"></label>
+                        <input asp-for="DocumentUpload" type="checkbox" id="chk" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" />
+                        <label for="chk" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DocumentType" class="form-label required">Document Type</label><span class="text-muted fst-italic">(Please select atleast one Document Type)</span><br />
+                        @for (int i = 0; i < Model.DocumentTypes.Count; i++)
+                        {
+                            <input type="checkbox" asp-for="@Model.DocumentTypes[i].DocumentCheck" id="@Model.DocumentTypes[i].DocumentTypeId" />
+                            <label asp-for="@Model.DocumentTypes[i].DocumentTypeId" for="@Model.DocumentTypes[i].DocumentTypeId">@Model.DocumentTypes[i].DocumentTypeName</label>
+                            <input type="hidden" asp-for="@Model.DocumentTypes[i].DocumentTypeId" />
+                            <input type="hidden" asp-for="@Model.DocumentTypes[i].DocumentTypeName" />
+                            <br />
+                        }
+                        <span asp-validation-for="DocumentType" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mb-3">
+                        <label asp-for="Remark" class="form-label"></label>
+                        <input type="text" asp-for="Remark" class="form-control" autocomplete="off" placeholder="Enter Remar (max 500 characters)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ParentDocumentId" class="form-label"></label>
+                        <select class="form-select" asp-for="ParentDocumentId" asp-items="@ViewBag.ddlParentDocument" aria-hidden="true">
+                            <option label="Select Parent Document" disabled selected="" value=""></option>
+                        </select>
+                     
+                    </div>
+                    <div class="mb-3">
+
+                        <label asp-for="DocumentMaxSize" class="form-label"></label>
+                        <input type="text" asp-for="DocumentMaxSize" class="form-control" onkeypress="return onlyNumber(event)" maxlength="2" placeholder="Enter Document Max Size [1-20]" max="20" />
+                        <span asp-validation-for="DocumentMaxSize" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Mandatory" class="form-label"></label>
+                        <input asp-for="Mandatory" type="checkbox" id="chkMandatory" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success"/>
+                        <label for="chkMandatory" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="IsActive" class="form-label"></label>
+                        <input asp-for="IsActive" type="checkbox" id="chkIsActive" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" />
+                        <label for="chkIsActive" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                    </div>
+
+                </div>
+
+                <div class="mb-2 text-end">
+                    <a asp-controller="ProcessDocument" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                    <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

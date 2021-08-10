@@ -132,21 +132,7 @@ namespace CSRPulse.Services
             .ForMember(d => d.Sequence, o => o.MapFrom(s => s.Sequence))
             .ForMember(d => d.Skip, o => o.MapFrom(s => s.Skip))
             .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy));
-
-            CreateMap<DTOModel.Partner, Partner>().ReverseMap();
-
-            CreateMap<DTOModel.NgoawardDetail, NgoawardDetail>().ReverseMap();
-            CreateMap<DTOModel.NgosaturatoryAuditorDetail, NgosaturatoryAuditorDetail>().ReverseMap();
-            CreateMap<DTOModel.NgokeyProjects, NGOKeyProjects>().ReverseMap();
-            CreateMap<DTOModel.NgocorpusGrantFund, NGOCorpusGrantFund>().ReverseMap();
-            CreateMap<DTOModel.NgoregistrationDetail, NGORegistrationDetail>().ReverseMap();
-            CreateMap<DTOModel.NgochartDocument, NGOChartDocument>().ReverseMap();
-            CreateMap<DTOModel.Ngomember, NGOMember>().ReverseMap();
-            CreateMap<DTOModel.FundingAgency, FundingAgency>().ReverseMap();
-
-            CreateMap<DTOModel.NgofundingPartner, NGOFundingPartner>()
-            .ForMember(d => d.FundingAgency, o => o.MapFrom(s => s.FundingAgency.AgencyName));
-            CreateMap<NGOFundingPartner, DTOModel.NgofundingPartner>();
+            
 
 
             #region A u d i t

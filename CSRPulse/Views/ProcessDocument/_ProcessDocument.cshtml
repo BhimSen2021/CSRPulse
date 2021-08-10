@@ -1,0 +1,59 @@
+﻿@model List<CSRPulse.Model.ProcessDocument>
+
+<div class="card">
+    <div class="card-body">
+        <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>Document Name</th>
+                    <th>Parent Document</th>
+                    <th width="5%">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(item) +1)</span>
+                            </td>
+
+                            <td>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this record."> @Html.ActionLink(item.DocumentName,"Edit", "ProcessDocument", new { dId = item.DocumentId })</span>                                
+                            </td>
+                            <td>@item.ParentDocument</td>
+                            <td class="text-center" width="5%">
+                                @if (item.IsActive == true)
+                                {
+                                    <span class="badge badge-outline-success rounded-pill" style="width:100%">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-outline-warning rounded-pill" style="width:100%">No</span>
+                                }
+                              
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip()
+        })
+        Basicdatatable();
+    });
+</script>

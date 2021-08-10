@@ -14,6 +14,7 @@ using CSRPulse.Model;
 using DNTCaptcha.Core;
 using CSRPulse.ExportImport.Interfaces;
 using CSRPulse.ExportImport;
+using CSRPulse.IServices;
 
 namespace CSRPulse
 {
@@ -83,9 +84,7 @@ namespace CSRPulse
             services.AddScoped<IProcessSetupServices, ProcessSetupServices>();
 
             services.AddScoped<IProcessSetupRepository, ProcessSetupRepository>();
-            services.AddScoped<IAuditReviewModuleServices, AuditReviewModuleServices>();
-            services.AddScoped<IAuditReviewParamterServices, AuditReviewParamterServices>();
-
+            
 
             #endregion
 
