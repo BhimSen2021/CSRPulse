@@ -13,6 +13,8 @@ namespace CSRPulse.Model
         [StringLength(500), MinLength(2, ErrorMessage = "Process name should be contain atleast 2 characters.")]
         [Display(Name = "Process Name")]
         public string ProcessName { get; set; }
+        [Display(Name = "Document")]
+        public bool Document { get; set; }
         [Display(Name = "Final Status")]
         public int? FinalStatus { get; set; }
         [Display(Name = "Active")]

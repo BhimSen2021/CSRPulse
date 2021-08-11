@@ -14,6 +14,7 @@ namespace CSRPulse.Data.Models
         public ProcessDocument()
         {
             InverseParentDocument = new HashSet<ProcessDocument>();
+            PartnerDocument = new HashSet<PartnerDocument>();
         }
 
         [Key]
@@ -52,5 +53,7 @@ namespace CSRPulse.Data.Models
         public virtual User UpdatedByNavigation { get; set; }
         [InverseProperty(nameof(ProcessDocument.ParentDocument))]
         public virtual ICollection<ProcessDocument> InverseParentDocument { get; set; }
+        [InverseProperty("Document")]
+        public virtual ICollection<PartnerDocument> PartnerDocument { get; set; }
     }
 }

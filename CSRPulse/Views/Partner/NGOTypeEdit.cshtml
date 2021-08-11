@@ -1,5 +1,10 @@
 ﻿@model Partner
 @using CSRPulse.Common
+@inject CSRPulse.Services.IPartnerService _service
+@{
+    var result = await _service.GetPartnerDocumentAsync(Model.PartnerId);
+}
+
 @{
     ViewData["Title"] = "Partner";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -181,7 +186,7 @@
         </h2>
         <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
             <div class="accordion-body bg-white">
-
+                @{ await Html.RenderPartialAsync("_NGOPartnerDocument", result); }
             </div>
         </div>
     </div>

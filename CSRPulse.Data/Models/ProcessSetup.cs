@@ -26,7 +26,7 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
-        public int? UpdatedBy { get; set; }
+        public int? Updatedby { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
 
@@ -48,8 +48,8 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(TertiaryRoleId))]
         [InverseProperty(nameof(Role.ProcessSetupTertiaryRole))]
         public virtual Role TertiaryRole { get; set; }
-        [ForeignKey(nameof(UpdatedBy))]
-        [InverseProperty(nameof(User.ProcessSetupUpdatedByNavigation))]
-        public virtual User UpdatedByNavigation { get; set; }
+        [ForeignKey(nameof(Updatedby))]
+        [InverseProperty(nameof(User.ProcessSetupUpdatedbyNavigation))]
+        public virtual User UpdatedbyNavigation { get; set; }
     }
 }

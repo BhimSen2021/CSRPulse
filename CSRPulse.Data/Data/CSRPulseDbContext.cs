@@ -51,6 +51,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<NgoregistrationDetail> NgoregistrationDetail { get; set; }
         public virtual DbSet<NgosaturatoryAuditorDetail> NgosaturatoryAuditorDetail { get; set; }
         public virtual DbSet<Partner> Partner { get; set; }
+        public virtual DbSet<PartnerDocument> PartnerDocument { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Process> Process { get; set; }
         public virtual DbSet<ProcessDocument> ProcessDocument { get; set; }
@@ -71,10 +72,11 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserType> UserType { get; set; }
         public virtual DbSet<Village> Village { get; set; }
 
+
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -572,6 +574,29 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.Website).IsUnicode(false);
             });
 
+            modelBuilder.Entity<PartnerDocument>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Remark).IsUnicode(false);
+
+                entity.Property(e => e.ServerDocumentName).IsUnicode(false);
+
+                entity.Property(e => e.UploadedDocumentName).IsUnicode(false);
+
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.PartnerDocument)
+                    .HasForeignKey(d => d.DocumentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PartnerDocument_ProcessDocument");
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.PartnerDocument)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PartnerDocument_Partner");
+            });
+
             modelBuilder.Entity<Plan>(entity =>
             {
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
@@ -587,7 +612,7 @@ namespace CSRPulse.Data.Data
             modelBuilder.Entity<ProcessDocument>(entity =>
             {
                 entity.HasKey(e => e.DocumentId)
-                    .HasName("PK__ProcessD__1ABEEF0F9D8C3169");
+                    .HasName("PK__ProcessD__1ABEEF0F13141462");
 
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
 
@@ -599,7 +624,7 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.ProcessDocumentCreatedByNavigation)
                     .HasForeignKey(d => d.CreatedBy)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProcessDo__Creat__764C846B");
+                    .HasConstraintName("FK__ProcessDo__Creat__3DD3211E");
 
                 entity.HasOne(d => d.ParentDocument)
                     .WithMany(p => p.InverseParentDocument)
@@ -610,12 +635,12 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.ProcessDocument)
                     .HasForeignKey(d => d.ProcessId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProcessDo__Proce__7834CCDD");
+                    .HasConstraintName("FK__ProcessDo__Proce__3EC74557");
 
                 entity.HasOne(d => d.UpdatedByNavigation)
                     .WithMany(p => p.ProcessDocumentUpdatedByNavigation)
                     .HasForeignKey(d => d.UpdatedBy)
-                    .HasConstraintName("FK__ProcessDo__Updat__7740A8A4");
+                    .HasConstraintName("FK__ProcessDo__Updat__3FBB6990");
             });
 
             modelBuilder.Entity<ProcessSetup>(entity =>
@@ -656,9 +681,9 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.TertiaryRoleId)
                     .HasConstraintName("FK_ProcessSetup_Role2");
 
-                entity.HasOne(d => d.UpdatedByNavigation)
-                    .WithMany(p => p.ProcessSetupUpdatedByNavigation)
-                    .HasForeignKey(d => d.UpdatedBy)
+                entity.HasOne(d => d.UpdatedbyNavigation)
+                    .WithMany(p => p.ProcessSetupUpdatedbyNavigation)
+                    .HasForeignKey(d => d.Updatedby)
                     .HasConstraintName("FK_ProcessSetup_User1");
             });
 

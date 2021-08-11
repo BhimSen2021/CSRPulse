@@ -21,6 +21,7 @@ namespace CSRPulse.Data.Models
             Ngomember = new HashSet<Ngomember>();
             NgoregistrationDetail = new HashSet<NgoregistrationDetail>();
             NgosaturatoryAuditorDetail = new HashSet<NgosaturatoryAuditorDetail>();
+            PartnerDocument = new HashSet<PartnerDocument>();
         }
 
         [Key]
@@ -92,5 +93,7 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<NgoregistrationDetail> NgoregistrationDetail { get; set; }
         [InverseProperty("Partner")]
         public virtual ICollection<NgosaturatoryAuditorDetail> NgosaturatoryAuditorDetail { get; set; }
+        [InverseProperty("Partner")]
+        public virtual ICollection<PartnerDocument> PartnerDocument { get; set; }
     }
 }

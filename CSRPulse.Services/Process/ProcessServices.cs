@@ -66,6 +66,7 @@ namespace CSRPulse.Services
                         return true;
 
                     dData.ProcessName = process.ProcessName;
+                    dData.Document = process.Document;
 
                     _genericRepository.Update(dData);
                     return true;

@@ -43,6 +43,13 @@
                         <span asp-validation-for="FinalStatus" class="invalid"></span>
                     </div>
                     <div class="mb-3">
+                        <label asp-for="Document" class="form-label"></label>
+                        <input asp-for="Document" type="checkbox" id="@Model.Document" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" checked="checked" />
+                        <label for="@Model.ProcessId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        <span asp-validation-for="Document" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-3">
                         <label asp-for="IsActive" class="form-label"></label>
                         <input asp-for="IsActive" type="checkbox" id="@Model.ProcessId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" checked="checked" />
                         <label for="@Model.ProcessId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>

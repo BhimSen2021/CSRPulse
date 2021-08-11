@@ -14,10 +14,12 @@ namespace CSRPulse.Services
     public class PartnerService : BaseService, IPartnerService
     {
         private readonly IGenericRepository _genericRepository;
+        private readonly IPartnerRepository _partnerRepository;
         private readonly IMapper _mapper;
-        public PartnerService(IGenericRepository generic, IMapper mapper)
+        public PartnerService(IGenericRepository generic, IPartnerRepository partnerRepository, IMapper mapper)
         {
             _genericRepository = generic;
+            _partnerRepository = partnerRepository;
             _mapper = mapper;
         }
 
@@ -409,5 +411,30 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+        public async Task<List<PartnerDocument>> GetPartnerDocumentAsync(int partnerId)
+        {
+            try
+            {
+                var result = await _partnerRepository.GetDocuments(partnerId).OrderBy(s => s.DocumentId).ToListAsync();
+                if (result != null)
+                {
+                    return result.Select(a => new PartnerDocument()
+                    {
+                        PartnetId = a.PartnetId,
+                        DocumentId = a.DocumentId,
+                        DocumentName = a.DocumentName,
+                        IsUploaded = a.IsUploaded
+                    }).ToList();
+                }
+                else
+                    return new List<PartnerDocument>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

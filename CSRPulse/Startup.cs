@@ -44,7 +44,7 @@ namespace CSRPulse
             services.AddScoped<IDesignationServices, DesignationServices>();
             services.AddScoped<IDesignationHistoryService, DesignationHistoryService>();
             services.AddScoped<IDesignationHistoryRepository, DesignationHistoryRepository>();
-            
+
             services.AddScoped<IPartnerService, PartnerService>();
             services.AddScoped<IProcessServices, ProcessServices>();
             services.AddScoped<IRegistrationService, RegistrationService>();
@@ -84,7 +84,12 @@ namespace CSRPulse
             services.AddScoped<IProcessSetupServices, ProcessSetupServices>();
 
             services.AddScoped<IProcessSetupRepository, ProcessSetupRepository>();
-            
+
+            services.AddScoped<IAuditReviewModuleServices, AuditReviewModuleServices>();
+            services.AddScoped<IAuditReviewParamterServices, AuditReviewParamterServices>();
+
+            services.AddScoped<IProcessDocumentService, ProcessDocumentService>();
+            services.AddScoped<IPartnerRepository, PartnerRepository>();
 
             #endregion
 
