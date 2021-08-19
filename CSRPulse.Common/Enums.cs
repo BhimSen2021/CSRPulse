@@ -53,7 +53,7 @@ namespace CSRPulse.Common
     public enum PartnerType
     {
         NGO = 1,
-        Auditor = 2,
+        Foundation = 2,
         BusinessUnit = 3
     }
 
@@ -115,5 +115,16 @@ namespace CSRPulse.Common
     {
         IndianFundingAgencies = 1,
         ForeignFundingAgencies = 2
+    }
+
+    public enum ProcessDocumentType
+    {
+        Word = 1,
+        Excel = 2,
+        PDF = 3,
+        Image = 4,
+        Text = 5,
+        Vedio_MP4 = 6
+
     }
 }

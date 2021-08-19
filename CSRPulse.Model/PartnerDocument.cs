@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace CSRPulse.Model
 {
-    public class PartnerDocument
+    public class PartnerDocument : BaseModel
     {
-        public int PartnetId { get; set; }
+        public int PartnerDocumentId { get; set; }
+        public int PartnerId { get; set; }
         public int DocumentId { get; set; }
-        public string DocumentName { get; set; }
-        public bool IsUploaded { get; set; }
+        [Display(Name = "Document Name")]
+        public string UploadedDocumentName { get; set; }
+
+        public string ServerDocumentName { get; set; }
+        [StringLength(256)]
+        public string Remark { get; set; }
     }
 }

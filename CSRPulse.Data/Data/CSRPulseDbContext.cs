@@ -24,6 +24,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Activity> Activity { get; set; }
         public virtual DbSet<AuditReviewModule> AuditReviewModule { get; set; }
         public virtual DbSet<AuditReviewParamter> AuditReviewParamter { get; set; }
+        public virtual DbSet<Auditor> Auditor { get; set; }
+        public virtual DbSet<AuditorDocument> AuditorDocument { get; set; }
         public virtual DbSet<Block> Block { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerLicenseActivation> CustomerLicenseActivation { get; set; }
@@ -72,9 +74,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<UserType> UserType { get; set; }
         public virtual DbSet<Village> Village { get; set; }
 
-
         public static string CustomeDataBase { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -129,6 +129,57 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.ModuleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AuditReviewParamter_AuditReviewModule");
+            });
+
+            modelBuilder.Entity<Auditor>(entity =>
+            {
+                entity.Property(e => e.Address).IsUnicode(false);
+
+                entity.Property(e => e.AuditOrganization).IsUnicode(false);
+
+                entity.Property(e => e.City).IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Email).IsUnicode(false);
+
+                entity.Property(e => e.Gstno).IsUnicode(false);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Pan).IsUnicode(false);
+
+                entity.Property(e => e.Phone).IsUnicode(false);
+
+                entity.Property(e => e.Website).IsUnicode(false);
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Auditor)
+                    .HasForeignKey(d => d.StateId)
+                    .HasConstraintName("FK_Auditor_State");
+            });
+
+            modelBuilder.Entity<AuditorDocument>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Remark).IsUnicode(false);
+
+                entity.Property(e => e.Sdname).IsUnicode(false);
+
+                entity.Property(e => e.Udname).IsUnicode(false);
+
+                entity.HasOne(d => d.Auditor)
+                    .WithMany(p => p.AuditorDocument)
+                    .HasForeignKey(d => d.AuditorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AuditorDocument_Auditor");
+
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.AuditorDocument)
+                    .HasForeignKey(d => d.DocumentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AuditorDocument_ProcessDocument");
             });
 
             modelBuilder.Entity<Block>(entity =>

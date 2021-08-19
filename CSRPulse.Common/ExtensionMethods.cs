@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -205,6 +206,46 @@ namespace CSRPulse.Common
         public static string StripHTML(string str)
         {
             return System.Text.RegularExpressions.Regex.Replace(str, @"<(?!br[\x20/>])(?!p[\x20/>])[^<>]+>", string.Empty).Replace("<p>", " ").Replace("<br>", " ");
+        }
+
+        public static string GetUploadDocumentType(string str)
+        {
+            if (str.Contains(','))
+            {
+                List<int> typeIds = str.Split(',').Select(s => int.Parse(s)).ToList();
+
+                var docType = string.Empty;
+                foreach (var item in typeIds)
+                {
+                    switch (item)
+                    {
+                        case (int)ProcessDocumentType.Word:
+                            docType = docType + "docx" + ',' + "doc" + ',';
+                            break;
+                        case (int)ProcessDocumentType.Excel:
+                            docType = docType + "xlsx" + ',' + "xls" + ',';
+                            break;
+                        case (int)ProcessDocumentType.PDF:
+                            docType = docType + "pdf" + ',';
+                            break;
+                        case (int)ProcessDocumentType.Text:
+                            docType = docType + "txt" + ',';
+                            break;
+                        case (int)ProcessDocumentType.Image:
+                            docType = docType + "png" + ',' + "jpg" + ',' + "jpeg" + ',' + "gif" + ',' + "bmp" + ',';
+                            break;
+                        case (int)ProcessDocumentType.Vedio_MP4:
+                            docType = docType + "mp4" + ',';
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                docType = docType.TrimEnd(',');
+
+                return docType;
+            }
+            return str;
         }
     }
 }

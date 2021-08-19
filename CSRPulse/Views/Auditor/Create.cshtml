@@ -1,0 +1,102 @@
+﻿@model CSRPulse.Model.Auditor
+@{
+    ViewData["Title"] = "Add New Financial Audit/Impact Assessent Agency";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Financial Audit</a></li>
+                    <li class="breadcrumb-item active">Financial Audit/Impact Assessent Agency</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Add New Financial Audit/Impact Assessent Agency</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-area="" asp-controller="Auditor" asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label asp-for="AuditOrganization" class="form-label required"></label>
+                            <input type="text" asp-for="AuditOrganization" class="form-control" maxlength="256" placeholder="Enter Financial Audit/Impact Assessent (max 256 characters)" autocomplete="off">
+                            <span asp-validation-for="AuditOrganization" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input type="text" asp-for="Email" class="form-control" maxlength="50" placeholder="Enter Email (max 50 characters)" autocomplete="off">
+                            <span asp-validation-for="Email" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="Website" class="form-label"></label>
+                            <input type="text" asp-for="Website" class="form-control" maxlength="50" placeholder="Enter Website (max 50 characters)" autocomplete="off">
+                            <span asp-validation-for="Website" class="invalid"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input type="text" asp-for="Address" class="form-control" maxlength="256" placeholder="Enter Address (max 256 characters)" autocomplete="off">
+                            <span asp-validation-for="Address" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="City" class="form-label"></label>
+                            <input type="text" asp-for="City" class="form-control" maxlength="50" placeholder="Enter City (max 50 characters)" autocomplete="off">
+                            <span asp-validation-for="City" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="PinCode" class="form-label"></label>
+                            <input type="text" asp-for="PinCode" onkeypress="return onlyNumber(event)" class="form-control" maxlength="6" placeholder="Enter PIN Code (6 digit numeric number)" autocomplete="off">
+                            <span asp-validation-for="PinCode" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="StateId" class="form-label required"></label>
+                            <select asp-for="StateId" asp-items="@ViewBag.ddlState" aria-required="true" class="form-select">
+                                <option disabled="" label="Select State" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="StateId" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="Gstno" class="form-label"></label>
+                            <input type="text" asp-for="Gstno" class="form-control" maxlength="20" placeholder="Enter GST Number (max 20 characters)" autocomplete="off">
+                            <span asp-validation-for="Gstno" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="Pan" class="form-label"></label>
+                            <input type="text" asp-for="Pan" class="form-control" maxlength="10" placeholder="Enter PAN Number" autocomplete="off">
+                            <span asp-validation-for="Pan" class="invalid"></span>
+                        </div>
+                        <div class="mb-3 col-md-6 col-sm-12">
+                            <label asp-for="IsActive" class="form-label"></label>
+                            <input asp-for="IsActive" type="checkbox" id="@Model.AuditorId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" checked="checked" />
+                            <label for="@Model.AuditorId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                            <span asp-validation-for="IsActive" class="invalid"></span>
+                        </div>
+                     
+                        <div class="mb-2 text-end">
+                            <a asp-area="" asp-controller="Auditor" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

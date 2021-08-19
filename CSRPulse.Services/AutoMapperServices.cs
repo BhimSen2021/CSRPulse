@@ -156,6 +156,20 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.AuditReviewParamter, AuditReviewParamter>().ReverseMap();
 
             #endregion
+
+            #region A u d i t o r
+
+            CreateMap<DTOModel.Auditor, Auditor>()
+               .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName));
+
+            CreateMap<DTOModel.Auditor, Auditor>().ReverseMap();
+            CreateMap<DTOModel.AuditorDocument, AuditorDocument>()
+                .ForMember(d => d.DocumentName, o => o.MapFrom(s => s.Document.DocumentName));
+
+            CreateMap<DTOModel.AuditorDocument, AuditorDocument>().ReverseMap();
+            #endregion
+
+
             #endregion
 
             #region Email Mapper
@@ -238,6 +252,10 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.FundingAgency, SelectListModel>()
               .ForMember(d => d.id, o => o.MapFrom(s => s.FundingAgencyId))
               .ForMember(d => d.value, o => o.MapFrom(s => s.AgencyName));
+
+            CreateMap<DTOModel.ProcessDocument, SelectListModel>()
+             .ForMember(d => d.id, o => o.MapFrom(s => s.DocumentId))
+             .ForMember(d => d.value, o => o.MapFrom(s => s.DocumentName));
             #endregion
 
 

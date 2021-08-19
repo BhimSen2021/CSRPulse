@@ -412,14 +412,14 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<PartnerDocument>> GetPartnerDocumentAsync(int partnerId)
+        public async Task<List<PartnerDocumentDetail>> GetPartnerDocumentAsync(int partnerId)
         {
             try
             {
                 var result = await _partnerRepository.GetDocuments(partnerId).OrderBy(s => s.DocumentId).ToListAsync();
                 if (result != null)
                 {
-                    return result.Select(a => new PartnerDocument()
+                    return result.Select(a => new PartnerDocumentDetail()
                     {
                         PartnetId = a.PartnetId,
                         DocumentId = a.DocumentId,
@@ -428,7 +428,7 @@ namespace CSRPulse.Services
                     }).ToList();
                 }
                 else
-                    return new List<PartnerDocument>();
+                    return new List<PartnerDocumentDetail>();
             }
             catch (Exception)
             {

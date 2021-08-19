@@ -13,6 +13,7 @@ namespace CSRPulse.Data.Models
     {
         public State()
         {
+            Auditor = new HashSet<Auditor>();
             Block = new HashSet<Block>();
             District = new HashSet<District>();
             Village = new HashSet<Village>();
@@ -46,6 +47,8 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(UpdatedBy))]
         [InverseProperty(nameof(User.StateUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
+        [InverseProperty("State")]
+        public virtual ICollection<Auditor> Auditor { get; set; }
         [InverseProperty("State")]
         public virtual ICollection<Block> Block { get; set; }
         [InverseProperty("State")]

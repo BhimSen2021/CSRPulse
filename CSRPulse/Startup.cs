@@ -91,6 +91,8 @@ namespace CSRPulse
             services.AddScoped<IProcessDocumentService, ProcessDocumentService>();
             services.AddScoped<IPartnerRepository, PartnerRepository>();
 
+            services.AddScoped<IAuditorServices, AuditorServices>();
+
             #endregion
 
             services.AddSession(option =>
@@ -98,17 +100,17 @@ namespace CSRPulse
                     option.IdleTimeout = TimeSpan.FromMinutes(30);
                 });
 
-#if DEBUG
+        #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation().AddViewOptions(option =>
             {
                 option.HtmlHelperOptions.ClientValidationEnabled = true;
             });
-#endif
+        #endif
 
             services.AddDNTCaptcha(options =>
                  options.UseCookieStorageProvider()
                      .ShowThousandsSeparators(false));
-
+            
             services.Configure<SMTPConfig>(Configuration.GetSection("MailSettings"));
         }
 

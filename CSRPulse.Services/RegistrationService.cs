@@ -90,7 +90,6 @@ namespace CSRPulse.Services
 
         public async Task<bool> CustomerPaymentAsync(Model.Customer customer, string _dbPath)
         {
-
             string outputRes = string.Empty;
             var getCustomer = _genericRepository.GetIQueryable<DTOModel.Customer>(x => x.CustomerId == customer.CustomerId).FirstOrDefault();
             if (getCustomer != null)

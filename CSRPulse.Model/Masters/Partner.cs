@@ -11,7 +11,7 @@ namespace CSRPulse.Model
         public int PartnerId { get; set; }
         [Required]
         [StringLength(256, MinimumLength = 2, ErrorMessage = "Partner name should be contain atleast 2 characters.")]
-        [Display(Name = "Partner Name")]
+        [Display(Name = "Project Partner Name")]
         public string PartnerName { get; set; }
 
         [Required]

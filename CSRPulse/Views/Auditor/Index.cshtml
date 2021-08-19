@@ -1,7 +1,6 @@
-﻿@model IEnumerable<Partner>
-
+﻿@model IEnumerable<Auditor>
 @{
-    ViewData["Title"] = "Project Partner";
+    ViewData["Title"] = "Financial Audit/Impact Assessent Agency";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,20 +11,21 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
-                    <li class="breadcrumb-item active">Project Partner</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Financial Audit</a></li>
+                    <li class="breadcrumb-item active">Financial Audit/Impact Assessent Agency</li>
                 </ol>
             </div>
-            <h4 class="page-title">Project Partner List</h4>
+            <h4 class="page-title">Financial Audit/Impact Assessent Agency</h4>
         </div>
     </div>
 </div>
+
 <div class="row">
     @{await Html.RenderPartialAsync("_Filter");}
 </div>
 
-<div class="row" id="div-partner-list"> </div>
+<div class="row" id="div-auditor-list"> </div>
 <partial name="_Confirmation" />
-
 
 @section Scripts{
     <script type="text/javascript">
@@ -35,12 +35,13 @@
 
         }
         function ActiveDeActive(obj) {
+            debugger;
             var id = obj.id.split('_')[0];
             var isChecked = obj.id.split('_')[1];
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: '/Partner/ActiveDeActive',
+                url: '/Auditor/ActiveDeActive',
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {

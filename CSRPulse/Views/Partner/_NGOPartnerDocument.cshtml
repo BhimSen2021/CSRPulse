@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PartnerDocument>
+﻿@model IEnumerable<PartnerDocumentDetail>
 @using CSRPulse.Common
 <form>
     <div class="row">
@@ -8,7 +8,7 @@
                     <tr>
                         <th>#</th>
                         <th>Document Type</th>
-                        <th>Is Uploaded</th>
+                        <th width="5%">Uploaded</th>
                         <th width="5%">Action</th>
                     </tr>
                 </thead>
@@ -20,7 +20,8 @@
                             <tr>
                                 <td><span>@(Model.ToList().IndexOf(item) +1)</span></td>
                                 <td>@item.DocumentName</td>
-                                <td>@item.IsUploaded</td>
+                                <td class="text-center">@ExtensionMethods.BoolToYesNo(item.IsUploaded)</td>
+                                <td class="text-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here to, Upload Documents"><a id="documentId_@item.DocumentId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onclick="addDocument(this)"><i class="uil-export me-2"></i></a></td>
                             </tr>
                         }
                     }
@@ -30,4 +31,10 @@
     </div>
 </form>
 
-
+<script>
+    function addDocument(cnt) {
+        //var type = cnt.id.split('_')[0];
+        //var id = cnt.id.split('_')[1];
+        //$('.btnconfirm').attr('id', type + '_' + id);
+    }
+</script>

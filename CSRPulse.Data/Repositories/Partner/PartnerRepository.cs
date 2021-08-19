@@ -10,9 +10,9 @@ namespace CSRPulse.Data.Repositories
         public IQueryable<Document> GetDocuments(int partnerId)
         {
             var result = from d in _dbContext.ProcessDocument
-                         join p in _dbContext.PartnerDocument on d.DocumentId equals p.DocumentId into er1
+                         join p in _dbContext.PartnerDocument.Where(x => x.PartnerId == partnerId) on d.DocumentId equals p.DocumentId into er1
                          from x1 in er1.DefaultIfEmpty()
-                         where d.ProcessId == 2 && x1.PartnerId == partnerId
+                         where d.ProcessId == 2
                          select new Document
                          {
                              DocumentId = d.DocumentId,
