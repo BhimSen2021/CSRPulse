@@ -26,6 +26,7 @@ namespace CSRPulse.Data.Models
             ProcessSetupUpdatedbyNavigation = new HashSet<ProcessSetup>();
             ProcessWorkFlowReceiver = new HashSet<ProcessWorkFlow>();
             ProcessWorkFlowSender = new HashSet<ProcessWorkFlow>();
+            Project = new HashSet<Project>();
             StateCreatedByNavigation = new HashSet<State>();
             StateUpdatedByNavigation = new HashSet<State>();
             UserRights = new HashSet<UserRights>();
@@ -110,6 +111,8 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProcessWorkFlow> ProcessWorkFlowReceiver { get; set; }
         [InverseProperty(nameof(ProcessWorkFlow.Sender))]
         public virtual ICollection<ProcessWorkFlow> ProcessWorkFlowSender { get; set; }
+        [InverseProperty("ProgramManager")]
+        public virtual ICollection<Project> Project { get; set; }
         [InverseProperty(nameof(State.CreatedByNavigation))]
         public virtual ICollection<State> StateCreatedByNavigation { get; set; }
         [InverseProperty(nameof(State.UpdatedByNavigation))]

@@ -61,6 +61,12 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<ProcessSetupHistory> ProcessSetupHistory { get; set; }
         public virtual DbSet<ProcessWorkFlow> ProcessWorkFlow { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<Project> Project { get; set; }
+        public virtual DbSet<ProjectFinancialReport> ProjectFinancialReport { get; set; }
+        public virtual DbSet<ProjectInternalSource> ProjectInternalSource { get; set; }
+        public virtual DbSet<ProjectInterventionReport> ProjectInterventionReport { get; set; }
+        public virtual DbSet<ProjectOtherSource> ProjectOtherSource { get; set; }
+        public virtual DbSet<ProjectReport> ProjectReport { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
         public virtual DbSet<State> State { get; set; }
@@ -774,6 +780,108 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<Project>(entity =>
+            {
+                entity.Property(e => e.ExtendComments).IsUnicode(false);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ProjectName).IsUnicode(false);
+
+                entity.Property(e => e.ShortName).IsUnicode(false);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Partner)
+                    .WithMany(p => p.Project)
+                    .HasForeignKey(d => d.PartnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Partner");
+
+                entity.HasOne(d => d.ProgramManager)
+                    .WithMany(p => p.Project)
+                    .HasForeignKey(d => d.ProgramManagerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_User");
+
+                entity.HasOne(d => d.SubTheme)
+                    .WithMany(p => p.Project)
+                    .HasForeignKey(d => d.SubThemeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_SubTheme");
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.Project)
+                    .HasForeignKey(d => d.ThemeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Theme");
+            });
+
+            modelBuilder.Entity<ProjectFinancialReport>(entity =>
+            {
+                entity.Property(e => e.AcceptanceRemark).IsUnicode(false);
+
+                entity.Property(e => e.ProjectYear).IsUnicode(false);
+
+                entity.Property(e => e.ReportName).IsUnicode(false);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectFinancialReport)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectFinancialReport_Project");
+            });
+
+            modelBuilder.Entity<ProjectInternalSource>(entity =>
+            {
+                entity.Property(e => e.RevisionNo).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectInternalSource)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectInternalSource_Project");
+            });
+
+            modelBuilder.Entity<ProjectInterventionReport>(entity =>
+            {
+                entity.Property(e => e.AcceptanceRemark).IsUnicode(false);
+
+                entity.Property(e => e.ProjectYear).IsUnicode(false);
+
+                entity.Property(e => e.ReportName).IsUnicode(false);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectInterventionReport)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectInterventionReport_Project");
+            });
+
+            modelBuilder.Entity<ProjectOtherSource>(entity =>
+            {
+                entity.Property(e => e.RevisionNo).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectOtherSource)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectOtherSource_Project");
+            });
+
+            modelBuilder.Entity<ProjectReport>(entity =>
+            {
+                entity.Property(e => e.ReportName).IsUnicode(false);
+
+                entity.Property(e => e.YearName).IsUnicode(false);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectReport)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectReport_Project");
             });
 
             modelBuilder.Entity<Role>(entity =>

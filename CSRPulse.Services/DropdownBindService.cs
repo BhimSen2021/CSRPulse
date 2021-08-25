@@ -208,6 +208,13 @@ namespace CSRPulse.Services
             return roleList.ToList();
         }
 
+        public IEnumerable<SelectListModel> GetUsers(int? roleId)
+        {
+            var users = _genericRepository.Get<DTOModel.User>(x => roleId.HasValue ? x.RoleId == roleId.Value : (1 > 0) && x.IsActive == true);
+            var listModels = _mapper.Map<List<SelectListModel>>(users);
+            return listModels.ToList();
+        }
+
         public IEnumerable<SelectListModel> GetProcess(int? processId)
         {
             var dtoProcess = _genericRepository.Get<DTOModel.Process>(x => processId.HasValue ? x.ProcessId == processId.Value : (1 > 0) && x.IsActive == true);
@@ -233,10 +240,21 @@ namespace CSRPulse.Services
         }
 
         public IEnumerable<SelectListModel> GetFundingAgency(int? agencyType)
-        {           
-           var agencies= _genericRepository.Get<DTOModel.FundingAgency>(x => agencyType.HasValue ? x.AgencyType == agencyType.Value : (1 > 0) && x.IsActive == true);
+        {
+            var agencies = _genericRepository.Get<DTOModel.FundingAgency>(x => agencyType.HasValue ? x.AgencyType == agencyType.Value : (1 > 0) && x.IsActive == true);
             var processList = _mapper.Map<List<SelectListModel>>(agencies);
             return processList.ToList();
         }
+
+        public IEnumerable<SelectListModel> GetSource(int? type)
+        {
+            var source = new List<SelectListModel>();
+            for (int i = 1; i <= 5; i++)
+            {
+                source.Add(new SelectListModel { id = i, value = "Source - " + (i) });
+            }
+            return source;
+        }
+
     }
 }

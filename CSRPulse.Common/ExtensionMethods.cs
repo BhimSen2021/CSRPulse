@@ -247,5 +247,25 @@ namespace CSRPulse.Common
             }
             return str;
         }
+
+        public static string ReportStatus(int status, DateTime startDate)
+        {
+            switch (status)
+            {
+                case 1:
+                    {
+                        if (startDate.Date > DateTime.UtcNow.Date)
+                            return "Not Due";
+                        else
+                            return "Pending";
+                    }
+                case 2:                    
+                        return "Submitted";                    
+
+                default:
+                    return "";
+            }
+        }
+
     }
 }

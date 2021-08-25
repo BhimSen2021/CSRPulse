@@ -1,0 +1,33 @@
+﻿@model CSRPulse.Model.Project
+
+@{
+    ViewData["Title"] = "Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item active">Project</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Add New Project</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+<div id="div-create">
+    <partial name="_Create" model="Model" />
+</div>
+
+@section Scripts{
+    <script src="~/scripts/Project.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,49 @@
+﻿@model Project
+@inject CSRPulse.Services.IServices.IDropdownBindService _ddlService;
+@{
+    var ddlOtherSource = new SelectList(_ddlService.GetSource(null), "id", "value");
+}
+<div class="row">
+    <div class="mb-3">
+        <table id="tblOtherSource" class="table table-hover table-sm table-centered mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th width="50%">Source</th>
+                    <th>Amount (₹)</th>
+                    <th>Per(%)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ProjectOtherSource != null)
+                {
+                    for (int i = 0; i < Model.ProjectOtherSource.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(i+1)</span>                               
+                                <input type="hidden" asp-for="@Model.ProjectOtherSource[i].RevisionNo" />
+                                <input type="hidden" asp-for="@Model.ProjectOtherSource[i].ProjectId" />
+                            </td>
+                            <td>
+                                <select asp-for="@Model.ProjectOtherSource[i].SourceId" asp-items="ddlOtherSource" aria-required="true" class="form-select form-select-sm">
+                                </select>
+                                <span asp-validation-for="@Model.ProjectOtherSource[i].SourceId" class="invalid"></span>
+                            </td>
+                            <td>
+                                <input type="text" asp-for="@Model.ProjectOtherSource[i].Amount" class="form-control form-control-sm" onchange="checkAmountOS(this)" maxlength="10" onkeypress="return onlyNumber(event)" autocomplete="off">
+                                <span asp-validation-for="@Model.ProjectOtherSource[i].Amount" class="invalid"></span>
+                            </td>
+                            <td><label id="lblPerOS_@i">@Model.ProjectOtherSource[i].Per</label></td>
+                            <td>
+                                <a class="" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-otherSource-grid"
+                                   data-ajax-mode="replace" asp-action="RemoveOS" asp-route-srNo="@(i)" asp-controller="Project"><i class="dripicons-trash me-1"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

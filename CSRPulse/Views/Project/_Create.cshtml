@@ -1,0 +1,161 @@
+﻿@model Project
+@using CSRPulse.Common
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form data-ajax="true" data-ajax-method="POST" asp-controller="Project" asp-action="Create" data-ajax-success="OnCreate">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="PartnerId" class="form-label required"></label>
+                            <select asp-for="PartnerId" asp-items="@ViewBag.ddlPartner" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Partner" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="PartnerId" class="invalid"></span>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="ProjectName" class="form-label required"></label>
+                            <input type="text" asp-for="ProjectName" class="form-control" maxlength="4000" placeholder="Enter Name of the Organisation(max 4000 characters)" autocomplete="off">
+                            <span asp-validation-for="ProjectName" class="invalid"></span>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="ShortName" class="form-label"></label>
+                            <input type="text" asp-for="ShortName" class="form-control" maxlength="2000" placeholder="Enter Project Short Name(max 2000 characters)" autocomplete="off">
+                            <span asp-validation-for="ShortName" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="StartDate" class="form-label required"></label>
+                            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @data_val = "false", @class = "form-control", @onchange = "SetEndDateMinVal()", @autocomplete = "off" } })
+                            <span asp-validation-for="StartDate" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="EndDate" class="form-label required"></label>
+                            @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @data_val = "false", @class = "form-control", @autocomplete = "off" } })
+                            <span asp-validation-for="EndDate" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="ThemeId" class="form-label required"></label>
+                            <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" aria-required="true" class="form-select">
+                                <option disabled="" label="Select Theme" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="ThemeId" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="SubThemeId" class="form-label required"></label>
+                            <select asp-for="SubThemeId" asp-items="@(new SelectList(string.Empty,"id","value"))" aria-required="true" class="form-select">
+                                <option label="Select SubTheme" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="SubThemeId" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="TotalBudget" class="form-label required"></label>
+                            <input type="text" asp-for="TotalBudget" class="form-control" autocomplete="off" maxlength="10" onchange="return CalcOtherSource()" onkeypress="return onlyNumber(event);">
+                            <span asp-validation-for="TotalBudget" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="LocationLavel" class="form-label required"></label>
+                            <select asp-for="LocationLavel" asp-items="@Html.GetEnumSelectList<LocationLevel>()" aria-required="true" class="form-select">
+                                <option label="Select Implementation Level" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="LocationLavel" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="TrustContribution" class="form-label required"></label>
+                            <div class="row">
+                                <div class="col-10">
+                                    <input type="text" asp-for="TrustContribution" class="form-control" autocomplete="off" maxlength="10" onchange="return CalcOtherSource()" onkeypress=" return onlyNumber(event);">
+                                    <span asp-validation-for="TrustContribution" class="invalid"></span>
+                                </div>
+                                <div class="col-2"><label id="lblTrustPer" class="col-form-label text-info">0.00%</label></div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="OtherSource" class="form-label"></label>
+                            <div class="row">
+                                <div class="col-10">
+                                    <input type="text" asp-for="OtherSource" class="form-control" autocomplete="off" maxlength="10" readonly>
+                                    <span asp-validation-for="OtherSource" class="invalid"></span>
+                                </div>
+                                <div class="col-2"><label id="lblOtherPer" class="col-form-label text-info">0.00%</label></div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <div class="row mb-2">
+                                <div class="col text-start text-info">
+                                    <i>Support from internal breakup</i>
+                                </div>
+                                <div class="col text-end">
+                                    <button id="btnAddIS" class="btn btn-dark btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddIS"><i class="mdi mdi-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <div id="div-internalSource-grid">
+                                <partial name="_TrustContribution" model="Model" />
+                            </div>
+                            <div class="text-warning text-end">
+                                <label id="lblRemaning_IS">Remaining amount (₹): 0 </label>
+                            </div>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <div class="row mb-2">
+                                <div class="col text-start text-info">
+                                    <i>Other sources contribution breakup</i>
+                                </div>
+                                <div class="col text-end">
+                                    <button id="btnAddOS" class="btn btn-dark btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddOS"><i class="mdi mdi-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <div id="div-otherSource-grid">
+                                <partial name="_OtherSourcesContribution" model="Model" />
+                            </div>
+                            <div class="text-warning text-end">
+                                <label id="lblRemaning_OS">Remaining amount (₹): 0 </label>
+                            </div>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="ReportType" class="form-label required"></label>
+                            <select asp-for="ReportType" asp-items="@Html.GetEnumSelectList<ReportType>()" aria-required="true" class="form-select">
+                                <option label="Select Report Type" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="ReportType" class="invalid"></span>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="ProgramManagerId" class="form-label required"></label>
+                            <select asp-for="ProgramManagerId" asp-items="@ViewBag.ddlPM" aria-required="true" class="form-select">
+                                <option label="Select Program Manager" selected="" value=""></option>
+                            </select>
+                            <span asp-validation-for="ProgramManagerId" class="invalid"></span>
+                        </div>
+                        <div class="mb-2 text-end">
+                            <a asp-area="" asp-controller="Project" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function OnCreate(data) {
+        if (data.msg == 'addOS') {
+            $("#div-otherSource-grid").html(data.htmlData);
+        }
+       else if (data.msg == 'addIS') {
+            $("#div-internalSource-grid").html(data.htmlData);
+        }
+        else if (data.msg == "save") {
+            commonMessage('warning', 'Project Created Successfully');
+            window.location.href = "@Url.Action("Index", "Project")";
+        }
+        else {
+            $("#div-create").html(data.htmlData);
+        }
+    }
+
+</script>

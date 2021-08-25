@@ -93,6 +93,8 @@ namespace CSRPulse
 
             services.AddScoped<IAuditorServices, AuditorServices>();
 
+            services.AddScoped<IProjectService, ProjectService>();
+
             #endregion
 
             services.AddSession(option =>

@@ -127,4 +127,33 @@ namespace CSRPulse.Common
         Vedio_MP4 = 6
 
     }
+
+    public enum LocationLevel
+    {
+        District = 2,
+        Block = 3,
+        Village = 4
+    }
+
+    public enum ProjectStatus
+    {
+        Open = 1,
+        PreClose = 2,
+        Close = 3
+    }
+    public enum ReportType
+    {
+        Monthly = 1,
+        Quarterly = 2
+    }
+
+    public enum UserRole
+    {
+        Partner = 9,
+        ProgramExecutive = 33,
+        ProgramManager = 66,
+        ProgramHead = 68,
+        ExecutiveDirector = 69,
+        Administrator = 99
+    }
 }

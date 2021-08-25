@@ -17,7 +17,7 @@ $(document).ready(function () {
 });
 
 function Basicdatatable() {
-    $("#basic-datatable").DataTable({
+    $(".basic-datatable").DataTable({
         keys: !0,
         language: {
             paginate: {

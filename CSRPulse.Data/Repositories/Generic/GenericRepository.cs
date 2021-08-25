@@ -409,6 +409,32 @@ namespace CSRPulse.Data.Repositories
                 throw fail;
             }
         }
+        public async virtual Task UpdateAsync<TEntity>(TEntity entityToUpdate) where TEntity : class
+        {
+            if (entityToUpdate == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            try
+            {
+                _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                var msg = string.Empty;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                    }
+                }
+                var fail = new Exception(msg, dbEx);
+                throw fail;
+            }
+        }
+
         public Task UpdateMultipleEntity<TEntity>(IEnumerable<TEntity> entityList) where TEntity : class
         {
             if (entityList == null)

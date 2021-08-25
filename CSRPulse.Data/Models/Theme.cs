@@ -15,6 +15,7 @@ namespace CSRPulse.Data.Models
         {
             Activity = new HashSet<Activity>();
             Indicator = new HashSet<Indicator>();
+            Project = new HashSet<Project>();
             SubActivity = new HashSet<SubActivity>();
             SubTheme = new HashSet<SubTheme>();
         }
@@ -39,6 +40,8 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<Activity> Activity { get; set; }
         [InverseProperty("Theme")]
         public virtual ICollection<Indicator> Indicator { get; set; }
+        [InverseProperty("Theme")]
+        public virtual ICollection<Project> Project { get; set; }
         [InverseProperty("Theme")]
         public virtual ICollection<SubActivity> SubActivity { get; set; }
         [InverseProperty("Theme")]
