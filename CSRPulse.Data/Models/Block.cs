@@ -13,6 +13,7 @@ namespace CSRPulse.Data.Models
     {
         public Block()
         {
+            ProjectLocationDetail = new HashSet<ProjectLocationDetail>();
             Village = new HashSet<Village>();
         }
 
@@ -48,6 +49,8 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(UpdatedBy))]
         [InverseProperty(nameof(User.BlockUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
+        [InverseProperty("Block")]
+        public virtual ICollection<ProjectLocationDetail> ProjectLocationDetail { get; set; }
         [InverseProperty("Block")]
         public virtual ICollection<Village> Village { get; set; }
     }

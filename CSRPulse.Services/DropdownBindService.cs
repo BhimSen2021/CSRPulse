@@ -256,5 +256,36 @@ namespace CSRPulse.Services
             return source;
         }
 
+        #region Location
+
+        public async Task<IEnumerable<ProjectLocationDetail>> GetStateLocationAsync(int? stateId)
+        {
+            try
+            {
+                var states = await _genericRepository.GetAsync<DTOModel.State>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)));
+                var locations = _mapper.Map<List<ProjectLocationDetail>>(states);
+                return locations.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ProjectLocationDetail>> GetDistrictLocationAsync(int? stateId, int? districtId)
+        {
+            try
+            {
+                var districts = await _genericRepository.GetAsync<DTOModel.District>(x => (stateId.HasValue ? x.StateId == stateId.Value : (1 > 0)) && (districtId.HasValue ? x.DistrictId == districtId.Value : (1 > 0)) && x.IsActive == true);
+                var locations = _mapper.Map<List<ProjectLocationDetail>>(districts);
+                return locations.ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
     }
 }

@@ -14,6 +14,8 @@ namespace CSRPulse.Data.Models
         public District()
         {
             Block = new HashSet<Block>();
+            ProjectLocation = new HashSet<ProjectLocation>();
+            ProjectLocationDetail = new HashSet<ProjectLocationDetail>();
             Village = new HashSet<Village>();
         }
 
@@ -47,6 +49,10 @@ namespace CSRPulse.Data.Models
         public virtual User UpdatedByNavigation { get; set; }
         [InverseProperty("District")]
         public virtual ICollection<Block> Block { get; set; }
+        [InverseProperty("District")]
+        public virtual ICollection<ProjectLocation> ProjectLocation { get; set; }
+        [InverseProperty("District")]
+        public virtual ICollection<ProjectLocationDetail> ProjectLocationDetail { get; set; }
         [InverseProperty("District")]
         public virtual ICollection<Village> Village { get; set; }
     }

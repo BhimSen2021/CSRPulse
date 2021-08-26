@@ -1,5 +1,13 @@
 ﻿$(document).ready(function () {
     StartDateValidation();
+
+    $(".CollapseAll").click(function () {
+        $('.tree2 .branch').each(function () {
+            var icon = $(this).children('i:first');
+            icon.toggleClass('mdi mdi-arrow-down-drop-circle mdi mdi-arrow-right-drop-circle');
+            $(this).children().children().toggle();
+        });
+    });
 });
 
 $('#ThemeId').change(function () {
@@ -122,4 +130,48 @@ function checkAmountOS(id) {
     }
     else
         $('#lblRemaning_OS').text('Remaining amount (₹): ' + (OtherSource - subTotal));
+}
+
+function SetLocation(lLevel) {
+    var allVals = [];
+    if (lLevel == '1') {
+        $(".Lavel1").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).val());
+            }
+        });
+    }
+    else if (lLevel == '2') {
+        $(".Lavel2").parent().parent().find("li .Lavel2").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).parent().parent().parent().find(".Lavel1").val() + ':' + $(this).val());
+            }
+        });
+    }
+    else if (lLevel == '3') {
+        $(".Lavel3").parent().parent().parent().parent().find("li .Lavel3").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).parent().parent().parent().parent().parent().find(".Lavel1").val() + ':' + $(this).parent().parent().parent().find(".Lavel2").val() + ':' + $(this).val());
+            }
+        });
+    }
+    else if (lLevel == '4') {
+        $(".Lavel3").parent().parent().parent().parent().parent().parent().find("li .Lavel4").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).parent().parent().parent().parent().parent().parent().parent().find(".Lavel1").val() + ':' + $(this).parent().parent().parent().parent().parent().find(".Lavel2").val() + ':' + $(this).parent().parent().parent().find(".Lavel3").val() + ':' + $(this).val());
+            }
+        });
+    }
+    let strLocations = allVals.toString();
+    if (strLocations.length > 0) {
+        $('#hdnLocationIds').val(strLocations);
+        commonMessage('success', 'Selected location added.');
+        $('#divalert').css('display', 'none');
+        $("#AddLocationModal").modal('hide');
+    }
+    else {
+        $('#divalert').css('display', 'block');        
+        $('#hdnLocationIds').val('');
+    }
+    
 }

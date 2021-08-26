@@ -17,7 +17,8 @@
             <h4 class="page-title">Edit Project</h4>
         </div>
     </div>
-    <div class="col-12">
+
+    <div class="col-12 bg-white">
         <ul class="nav nav-tabs nav-justified nav-bordered mb-3">
             <li class="nav-item">
                 <a href="#pd-b2" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
@@ -28,7 +29,7 @@
             <li class="nav-item">
                 <a href="#profile-b2" onclick="return loadReport()" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                    <span class="d-none d-md-block">Project Report</span>
+                    <span class="d-none d-md-block">Progress Report</span>
                 </a>
                 <a id="InterventionReport" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-intervention-report-grid"
                    data-ajax-mode="replace" asp-action="GetReport" asp-route-projectId="@Model.ProjectId" asp-controller="Project"></a>
@@ -45,19 +46,23 @@
 
 <div class="tab-content">
     <div class="tab-pane show active" id="pd-b2">
-        <div class="col">
-            <div class="alert alert-secondary" role="alert">
-                <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        <div class="card">
+            <div class="card-body">
+                <div class="col">
+                    <div class="alert alert-secondary" role="alert">
+                        <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+                    </div>
+                </div>
+                <div id="div-edit">
+                    <partial name="_Edit" model="Model" />
+                </div>
             </div>
-        </div>
-        <div id="div-edit">
-            <partial name="_Edit" model="Model" />
         </div>
     </div>
     <div class="tab-pane" id="profile-b2">
         <div class="card">
             <div class="card-body">
-                <h4 class="page-title">Progress Report</h4>
+                <h5 class="mb-3">Progress Report</h5>
                 <input id="hdnReportIsLoad" type="hidden" value="0" />
                 <div id="div-intervention-report-grid">
                     @{await Html.RenderPartialAsync("_ProjectInterventionReport", Model.ProjectInterventionReport);}
@@ -66,7 +71,7 @@
         </div>
     </div>
 </div>
-
+<partial name="_AddLocationModal" model="Model.ProjectLocation"/>
 <script>
 function loadReport() {
     if ($('#hdnReportIsLoad').val() == 0) {
@@ -77,4 +82,5 @@ function loadReport() {
 </script>
 @section Scripts{
     <script src="~/scripts/Project.js" asp-append-version="true"></script>
+    <script src="~/scripts/JqueryTreeview.js" asp-append-version="true"></script>
 }

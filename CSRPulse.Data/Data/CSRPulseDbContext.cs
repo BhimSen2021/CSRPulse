@@ -65,6 +65,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<ProjectFinancialReport> ProjectFinancialReport { get; set; }
         public virtual DbSet<ProjectInternalSource> ProjectInternalSource { get; set; }
         public virtual DbSet<ProjectInterventionReport> ProjectInterventionReport { get; set; }
+        public virtual DbSet<ProjectLocation> ProjectLocation { get; set; }
+        public virtual DbSet<ProjectLocationDetail> ProjectLocationDetail { get; set; }
         public virtual DbSet<ProjectOtherSource> ProjectOtherSource { get; set; }
         public virtual DbSet<ProjectReport> ProjectReport { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -81,6 +83,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -858,6 +861,60 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProjectInterventionReport_Project");
+            });
+
+            modelBuilder.Entity<ProjectLocation>(entity =>
+            {
+                entity.HasOne(d => d.District)
+                    .WithMany(p => p.ProjectLocation)
+                    .HasForeignKey(d => d.DistrictId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLocation_District");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectLocation)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLocation_Project");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.ProjectLocation)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLocation_State");
+            });
+
+            modelBuilder.Entity<ProjectLocationDetail>(entity =>
+            {
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Block)
+                    .WithMany(p => p.ProjectLocationDetail)
+                    .HasForeignKey(d => d.BlockId)
+                    .HasConstraintName("FK_ProjectLocationDetail_Block");
+
+                entity.HasOne(d => d.District)
+                    .WithMany(p => p.ProjectLocationDetail)
+                    .HasForeignKey(d => d.DistrictId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLocationDetail_District");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectLocationDetail)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLocationDetail_Project");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.ProjectLocationDetail)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectLocationDetail_State");
+
+                entity.HasOne(d => d.Village)
+                    .WithMany(p => p.ProjectLocationDetail)
+                    .HasForeignKey(d => d.VillageId)
+                    .HasConstraintName("FK_ProjectLocationDetail_Village");
             });
 
             modelBuilder.Entity<ProjectOtherSource>(entity =>

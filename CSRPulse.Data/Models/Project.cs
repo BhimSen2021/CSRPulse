@@ -16,6 +16,8 @@ namespace CSRPulse.Data.Models
             ProjectFinancialReport = new HashSet<ProjectFinancialReport>();
             ProjectInternalSource = new HashSet<ProjectInternalSource>();
             ProjectInterventionReport = new HashSet<ProjectInterventionReport>();
+            ProjectLocation = new HashSet<ProjectLocation>();
+            ProjectLocationDetail = new HashSet<ProjectLocationDetail>();
             ProjectOtherSource = new HashSet<ProjectOtherSource>();
             ProjectReport = new HashSet<ProjectReport>();
         }
@@ -76,6 +78,10 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProjectInternalSource> ProjectInternalSource { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectInterventionReport> ProjectInterventionReport { get; set; }
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectLocation> ProjectLocation { get; set; }
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectLocationDetail> ProjectLocationDetail { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectOtherSource> ProjectOtherSource { get; set; }
         [InverseProperty("Project")]

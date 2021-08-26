@@ -118,7 +118,7 @@ namespace CSRPulse.Services
                .ForMember(d => d.Designation, o => o.MapFrom(s => s.Designation.DesignationName));
             CreateMap<DesignationHistory, DTOModel.DesignationHistory>();
 
-            CreateMap<DTOModel.ProcessSetup, ProcessSetup>().ReverseMap();                     
+            CreateMap<DTOModel.ProcessSetup, ProcessSetup>().ReverseMap();
 
             CreateMap<DTOModel.ProcessSetup, DTOModel.ProcessSetupHistory>()
             .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
@@ -148,7 +148,7 @@ namespace CSRPulse.Services
             CreateMap<NGOFundingPartner, DTOModel.NgofundingPartner>();
 
             CreateMap<DTOModel.ProcessDocument, ProcessDocument>().ReverseMap();
-            
+
 
             #region A u d i t
 
@@ -179,6 +179,8 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.ProjectInternalSource, ProjectInternalSource>().ReverseMap();
             CreateMap<DTOModel.ProjectInterventionReport, ProjectInterventionReport>().ReverseMap();
             CreateMap<DTOModel.ProjectFinancialReport, ProjectFinancialReport>().ReverseMap();
+            CreateMap<DTOModel.ProjectLocation, ProjectLocation>().ReverseMap();
+            CreateMap<DTOModel.ProjectLocationDetail, ProjectLocationDetail>().ReverseMap();
             #endregion
 
             #region Email Mapper
@@ -269,6 +271,16 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.User, SelectListModel>()
              .ForMember(d => d.id, o => o.MapFrom(s => s.UserId))
              .ForMember(d => d.value, o => o.MapFrom(s => s.FullName));
+
+            CreateMap<DTOModel.State, ProjectLocationDetail>()
+             .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
+             .ForMember(d => d.StateName, o => o.MapFrom(s => s.StateName));
+
+            CreateMap<DTOModel.District, ProjectLocationDetail>()
+             .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
+             .ForMember(d => d.DistrictId, o => o.MapFrom(s => s.DistrictId))
+             .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.DistrictName));
+
             #endregion
 
 

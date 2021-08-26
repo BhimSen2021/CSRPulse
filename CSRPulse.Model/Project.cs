@@ -24,7 +24,8 @@ namespace CSRPulse.Model
         public int SubThemeId { get; set; }
         [Required, Display(Name = "Implementation Level")]
         public int LocationLavel { get; set; }
-
+        [Required, Display(Name = "Implementation Location")]
+        public string hdnLocationIds { get; set; }
         [Required, DataType(DataType.Date), Display(Name = "Project Start Date")]
         public DateTime? StartDate { get; set; }
         [Required, DataType(DataType.Date), Display(Name = "Project End Date")]
@@ -39,7 +40,7 @@ namespace CSRPulse.Model
         public decimal? OtherSource { get; set; }
         [Display(Name = "Project Status")]
         public int Status { get; set; }
-        [Required, Display(Name = "Project Type")]
+        [Required, Display(Name = "Report Type")]
         public int ReportType { get; set; }
         public DateTime? ExtentDate { get; set; }
         public int? ExtendedBy { get; set; }
@@ -50,5 +51,7 @@ namespace CSRPulse.Model
         public List<ProjectInterventionReport> ProjectInterventionReport { get; set; }
         public List<ProjectFinancialReport> ProjectFinancialReport { get; set; }
         public List<ProjectReport> ProjectReport { get; set; }
+        public List<ProjectLocation> ProjectLocation { get; set; }
+        public List<ProjectLocationDetail> ProjectLocationDetail { get; set; }
     }
 }

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ProjectLocation>
+<div id="AddLocationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title"> Add Location </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body" style="overflow: auto">
+                <div class="mb-2 form-label"> <b>Location Level : </b> District </div>
+                <div class="row slimscroll" style="max-height: 300px; overflow: hidden; width: auto; height: 255px;">
+                    <div class="col-sm-12">
+                        @{
+                            List<CSRPulse.Model.ProjectLocationDetail> tvState = ViewBag.tvState;
+                            string IsCheck = string.Empty;
+                        }
+                        @if (tvState != null)
+                        {
+                            if (tvState.Count == 0)
+                            {
+                                <span>No State found.</span>
+                            }
+                            else
+                            {
+                                <ul class="treeview tree2 tvState">
+                                    @foreach (var s in tvState)
+                                    {
+
+                                        <li style="list-style: none;" id="li@(s.StateId)">
+                                            <input type="checkbox" class="Lavel1" id="chkT@(s.StateId)" value="@(s.StateId)" />
+                                            &nbsp; @s.StateName
+                                            @{
+                                                List<CSRPulse.Model.ProjectLocationDetail> tvDistrict = ViewBag.tvDistrict;
+                                            }
+                                            @if (tvDistrict != null)
+                                            {
+                                                <ul class="tree2 tvDistrict">
+                                                    @foreach (var d in tvDistrict)
+                                                    {
+
+                                                        if (@s.StateId == @d.StateId)
+                                                        {
+                                                            IsCheck = null;
+                                                            if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId)) { IsCheck = "checked"; }
+
+                                                            <li style="list-style: none;">
+                                                                <input type="checkbox" class="Lavel2" id="chkS@(d.DistrictId)" value="@(d.DistrictId)" @IsCheck />
+                                                                &nbsp; @d.DistrictName
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="divalert" style="display:none" class="col-12 mb-2 text-danger text-end">
+                        <strong><i class="dripicons-information me-1"></i>Alert - </strong> Please select location.
+                    </div>
+                    <div class="mb-2 col-12 text-end">
+                        <input type="button" id="btnCollapseAll" value="Collapse And Expand All" class="CollapseAll btn btn-outline-dark btn-sm" />
+                        <input type="button" id="btnOK" value="Add Selected Location" onclick="SetLocation(2)" class="btn btn-outline-info btn-sm" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

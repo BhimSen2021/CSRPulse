@@ -15,6 +15,8 @@ namespace CSRPulse.Controllers
     public class ProjectController : BaseController<ProjectController>
     {
         private readonly IProjectService _projectService;
+
+
         private readonly IDropdownBindService _ddlService;
         public ProjectController(IProjectService projectService, IDropdownBindService dropdownBindService)
         {
@@ -39,8 +41,9 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await BindLocationAsync();
             BindDropdowns();
 
             var project = new Project();
@@ -129,6 +132,14 @@ namespace CSRPulse.Controllers
                         project.ProjectFinancialReport = new List<ProjectFinancialReport>();
                     project.ProjectFinancialReport = MakeProjectFReport(ProjectIReportList);
 
+                    // Make Project Location
+                    if (project.hdnLocationIds.Length > 0)
+                    {
+                        if (project.ProjectLocation == null)
+                            project.ProjectLocation = new List<ProjectLocation>();
+                        project.ProjectLocation = MakeProjectLocation(project.hdnLocationIds);
+
+                    }
                     var result = await _projectService.CreateStateAsync(project);
                     if (project.IsExist)
                     {
@@ -142,6 +153,7 @@ namespace CSRPulse.Controllers
                         return Json(new { msg = "save", htmlData = ConvertViewToString("_OtherSourcesContribution", project, true) });
                     }
                 }
+                await BindLocationAsync();
                 BindDropdowns();
                 return Json(new { msg = "", htmlData = ConvertViewToString("_Create", project, true) });
             }
@@ -152,10 +164,11 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-        public IActionResult Edit(int pid)
+        public async Task<IActionResult> Edit(int pid)
         {
             try
             {
+                await BindLocationAsync();
                 BindDropdowns();
                 var project = _projectService.GetProjectById(pid);
 
@@ -174,7 +187,7 @@ namespace CSRPulse.Controllers
                     i.Per = Convert.ToString(Math.Round((Convert.ToDecimal
                     (i.Amount * 100 / project.TotalBudget)), 2)) + "%";
                 });
-
+                project.hdnLocationIds = SetProjectLocation(project.ProjectLocation);
                 return View(project);
             }
             catch (Exception)
@@ -241,9 +254,24 @@ namespace CSRPulse.Controllers
 
                     if (project.ProjectOtherSource != null)
                         project.ProjectOtherSource = project.ProjectOtherSource.Where(x => x.Amount > 0).ToList();
+                    else
+                        project.ProjectOtherSource = new List<ProjectOtherSource>();
 
                     if (project.ProjectInternalSource != null)
                         project.ProjectInternalSource = project.ProjectInternalSource.Where(x => x.Amount > 0).ToList();
+                    else
+                        project.ProjectInternalSource = new List<ProjectInternalSource>();
+
+                    // Make Project Location
+                    if (project.hdnLocationIds.Length > 0)
+                    {
+                        if (project.ProjectLocation == null)
+                            project.ProjectLocation = new List<ProjectLocation>();
+                        project.ProjectLocation = MakeProjectLocation(project.hdnLocationIds);
+
+                    }
+                    else
+                        project.ProjectLocation = new List<ProjectLocation>();
 
                     var result = await _projectService.UpdateProjectAsync(project);
                     if (result)
@@ -255,6 +283,8 @@ namespace CSRPulse.Controllers
                     HttpContext.Session.Remove("project");
                     return Json(new { msg = "save", htmlData = ConvertViewToString("_Edit", project, true) });
                 }
+
+                await BindLocationAsync();
                 BindDropdowns();
                 BindNestedDropdown(project.ThemeId);
                 return Json(new { msg = "", htmlData = ConvertViewToString("_Edit", project, true) });
@@ -310,6 +340,13 @@ namespace CSRPulse.Controllers
             var PMList = _ddlService.GetUsers((int)Common.UserRole.ProgramManager);
             ViewBag.ddlPM = new SelectList(PMList, "id", "value");
 
+        }
+
+        [NonAction]
+        async Task BindLocationAsync()
+        {
+            ViewBag.tvState = await _ddlService.GetStateLocationAsync(null);
+            ViewBag.tvDistrict = await _ddlService.GetDistrictLocationAsync(null, null);
         }
         [NonAction]
         void BindNestedDropdown(int themeId)
@@ -375,6 +412,34 @@ namespace CSRPulse.Controllers
             return financialReports;
         }
 
+        private List<ProjectLocation> MakeProjectLocation(string locationIds)
+        {
+            List<ProjectLocation> projectLocations = new List<ProjectLocation>();
+            string[] arr = locationIds.Split(',');
+            string[] val = { };
+            for (int i = 0; i < arr.Length; i++)
+            {
+                val = arr[i].Split(':');
+                projectLocations.Add(new ProjectLocation
+                {
+                    StateId = val[0] == "" ? 0 : Convert.ToInt32(val[0]),
+                    DistrictId = val[1] == "" ? 0 : Convert.ToInt32(val[1]),
+                });
+            }
+
+            return projectLocations;
+        }
+
+        private string SetProjectLocation(List<ProjectLocation> projectLocations)
+        {
+            string locationIds = string.Empty;
+            foreach (var item in projectLocations)
+            {
+                locationIds += item.StateId + ":" + item.DistrictId + ",";
+            }
+            locationIds = locationIds.TrimEnd(',');
+            return locationIds;
+        }
         [HttpGet]
         public JsonResult BindSubThemeDropdown(int themeId)
         {
@@ -382,6 +447,7 @@ namespace CSRPulse.Controllers
             var selectListModels = _ddlService.GetSubTheme(themeId, null).ToList();
             return Json(new SelectList(selectListModels, "id", "value"));
         }
+
 
         #region Report
         public async Task<PartialViewResult> GetReportAsync(int projectId)

@@ -38,5 +38,7 @@ namespace CSRPulse.Services.IServices
         IEnumerable<SelectListModel> GetFundingAgency(int? agencyType);
         IEnumerable<SelectListModel> GetSource(int? type);
         IEnumerable<SelectListModel> GetUsers(int? roleId);
+        Task<IEnumerable<ProjectLocationDetail>> GetStateLocationAsync(int? stateId);
+        Task<IEnumerable<ProjectLocationDetail>> GetDistrictLocationAsync(int? stateId, int? districtId);
     }
 }

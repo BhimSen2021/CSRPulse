@@ -57,7 +57,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var projects = _genericRepository.GetIQueryable<DTOModel.Project>(p => p.ProjectId == projectId).Include(i => i.ProjectInternalSource).Include(o => o.ProjectOtherSource);
+                var projects = _genericRepository.GetIQueryable<DTOModel.Project>(p => p.ProjectId == projectId).Include(i => i.ProjectInternalSource).Include(o => o.ProjectOtherSource).Include(l => l.ProjectLocation);
                 var project = _mapper.Map<IEnumerable<DTOModel.Project>, IEnumerable<Project>>(projects);
 
                 return project.FirstOrDefault();
@@ -95,6 +95,15 @@ namespace CSRPulse.Services
                         await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectInternalSource>(oldIS);
                         await _genericRepository.AddMultipleEntityAsync(model.ProjectInternalSource);
                     }
+
+                    // Update project location
+                    var oldLocations = await _genericRepository.GetAsync<DTOModel.ProjectLocation>(x => x.ProjectId == project.ProjectId);
+                    if (oldLocations != null && oldLocations.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectLocation>(oldLocations);
+                        await _genericRepository.AddMultipleEntityAsync(model.ProjectLocation);
+                    }
+
 
                     return true;
                 }

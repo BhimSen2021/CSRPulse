@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Project";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
 
 <div class="row">
@@ -27,7 +26,9 @@
 <div id="div-create">
     <partial name="_Create" model="Model" />
 </div>
+<partial name="_AddLocationModal" model="new List<ProjectLocation>()" />
 
 @section Scripts{
     <script src="~/scripts/Project.js" asp-append-version="true"></script>
+    <script src="~/scripts/JqueryTreeview.js" asp-append-version="true"></script>
 }
