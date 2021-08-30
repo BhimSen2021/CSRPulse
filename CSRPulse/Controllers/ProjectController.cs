@@ -171,8 +171,11 @@ namespace CSRPulse.Controllers
                 await BindLocationAsync();
                 BindDropdowns();
                 var project = _projectService.GetProjectById(pid);
+                ViewBag.tvLDetails = await _projectService.GetTvLocationDetails(project.ProjectId, project.LocationLavel);
 
                 BindNestedDropdown(project.ThemeId);
+
+
                 HttpContext.Session.SetComplexData("project", project);
                 // Make Percentage for project other source breakup
                 project.ProjectOtherSource.ForEach(o =>
@@ -285,8 +288,10 @@ namespace CSRPulse.Controllers
                 }
 
                 await BindLocationAsync();
+                ViewBag.tvLDetails = await _projectService.GetTvLocationDetails(project.ProjectId, project.LocationLavel);
                 BindDropdowns();
                 BindNestedDropdown(project.ThemeId);
+
                 return Json(new { msg = "", htmlData = ConvertViewToString("_Edit", project, true) });
 
             }
@@ -298,7 +303,16 @@ namespace CSRPulse.Controllers
             }
         }
 
-
+        public async Task<IActionResult> SaveLocationDetail(int projectId, int lLevel, string locationIds)
+        {
+            List<ProjectLocationDetail> locationDetails = new List<ProjectLocationDetail>();
+            locationDetails = MakeProjectLocationDetail(projectId, locationIds, lLevel);
+            var flag = await _projectService.AddLocationDetails(locationDetails, projectId);
+            var result = _projectService.GetLocationDetails(projectId, lLevel);
+          
+            return PartialView("_LocationDetail", result);
+           
+        }
         public PartialViewResult RemoveOS(int srNo)
         {
             var project1 = HttpContext.Session.GetComplexData<Project>("project");
@@ -347,6 +361,7 @@ namespace CSRPulse.Controllers
         {
             ViewBag.tvState = await _ddlService.GetStateLocationAsync(null);
             ViewBag.tvDistrict = await _ddlService.GetDistrictLocationAsync(null, null);
+
         }
         [NonAction]
         void BindNestedDropdown(int themeId)
@@ -430,6 +445,63 @@ namespace CSRPulse.Controllers
             return projectLocations;
         }
 
+        private List<ProjectLocationDetail> MakeProjectLocationDetail(int projectId, string locationIds, int lLevel)
+        {
+            List<ProjectLocationDetail> projectLocations = new List<ProjectLocationDetail>();
+            string[] arr = locationIds.Split(',');
+            string[] val = { };
+            for (int i = 0; i < arr.Length; i++)
+            {
+                val = arr[i].Split(':');
+                if (lLevel == 2)
+                {
+                    projectLocations.Add(new ProjectLocationDetail
+                    {
+                        ProjectId = projectId,
+                        StateId = val[0] == "" ? 0 : Convert.ToInt32(val[0]),
+                        DistrictId = val[1] == "" ? 0 : Convert.ToInt32(val[1]),
+                        BlockId = null,
+                        VillageId = null
+                    });
+                }
+                else if (lLevel == 3)
+                {
+                    projectLocations.Add(new ProjectLocationDetail
+                    {
+                        ProjectId = projectId,
+                        StateId = val[0] == "" ? 0 : Convert.ToInt32(val[0]),
+                        DistrictId = val[1] == "" ? 0 : Convert.ToInt32(val[1]),
+                        BlockId = val[2] == "" ? 0 : Convert.ToInt32(val[2]),
+                        VillageId = null
+                    });
+                }
+                else if (lLevel == 4)
+                {
+                    projectLocations.Add(new ProjectLocationDetail
+                    {
+                        ProjectId = projectId,
+                        StateId = val[0] == "" ? 0 : Convert.ToInt32(val[0]),
+                        DistrictId = val[1] == "" ? 0 : Convert.ToInt32(val[1]),
+                        BlockId = val[2] == "" ? 0 : Convert.ToInt32(val[2]),
+                        VillageId = val[3] == "" ? 0 : Convert.ToInt32(val[3]),
+                    });
+                }
+                else
+                {
+                    projectLocations.Add(new ProjectLocationDetail
+                    {
+                        ProjectId = projectId,
+                        StateId = 0,
+                        DistrictId = 0,
+                        BlockId = null,
+                        VillageId = null
+                    });
+                }
+
+            }
+
+            return projectLocations;
+        }
         private string SetProjectLocation(List<ProjectLocation> projectLocations)
         {
             string locationIds = string.Empty;

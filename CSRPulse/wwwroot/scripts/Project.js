@@ -132,7 +132,9 @@ function checkAmountOS(id) {
         $('#lblRemaning_OS').text('Remaining amount (₹): ' + (OtherSource - subTotal));
 }
 
-function SetLocation(lLevel) {
+function SetLocation(lLevel, ltype) {
+    if (ltype == 2)
+        lLevel = $('#LocationLavel :selected').val();
     var allVals = [];
     if (lLevel == '1') {
         $(".Lavel1").each(function () {
@@ -163,15 +165,43 @@ function SetLocation(lLevel) {
         });
     }
     let strLocations = allVals.toString();
-    if (strLocations.length > 0) {
-        $('#hdnLocationIds').val(strLocations);
-        commonMessage('success', 'Selected location added.');
-        $('#divalert').css('display', 'none');
-        $("#AddLocationModal").modal('hide');
+    // Add location for location
+    if (ltype == 1) {
+        if (strLocations.length > 0) {
+            $('#hdnLocationIds').val(strLocations);
+            commonMessage('success', 'Selected location added.');
+            $('#divalert').css('display', 'none');
+            $("#AddLocationModal").modal('hide');
+        }
+        else {
+            $('#divalert').css('display', 'block');
+            $('#hdnLocationIds').val('');
+        }
     }
-    else {
-        $('#divalert').css('display', 'block');        
-        $('#hdnLocationIds').val('');
+    //Add location for location details
+    else if (ltype == 2) {
+        if (strLocations.length > 0) {
+            $('#divLocationDetailAlert').css('display', 'none');
+            $("#AddLocationDetailModal").modal('hide');
+            var projectId = $('#ProjectId').val();
+            $.ajax({
+                type: 'POST',
+            /*dataType: 'JSON',*/
+                dataType: 'html',
+                url: '/Project/SaveLocationDetail',
+                data: { projectId: projectId, lLevel: lLevel, locationIds: strLocations },
+                success: function (data) {
+                    $("#div-location-detail-grid").html(data);                    
+                },
+                error: function (responce) {
+                    commonMessage('error', 'error occurred on save location details.');
+                }
+            });
+        }
+        else {
+            $('#divLocationDetailAlert').css('display', 'block');
+        }
     }
-    
+
 }
+

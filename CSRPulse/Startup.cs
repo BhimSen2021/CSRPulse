@@ -94,6 +94,7 @@ namespace CSRPulse
             services.AddScoped<IAuditorServices, AuditorServices>();
 
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
 
             #endregion
 

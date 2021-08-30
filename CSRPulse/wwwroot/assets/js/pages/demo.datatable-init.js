@@ -18,6 +18,7 @@ $(document).ready(function () {
 
 function Basicdatatable() {
     $(".basic-datatable").DataTable({
+        destroy: true,
         keys: !0,
         language: {
             paginate: {
