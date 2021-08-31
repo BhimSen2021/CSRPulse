@@ -31,7 +31,7 @@ namespace CSRPulse.Model
         [Required, DataType(DataType.Date), Display(Name = "Project End Date")]
         public DateTime? EndDate { get; set; }
 
-        [Required, Display(Name = "Total Budget (₹)")]
+        [Required, Display(Name = "Total Budget (₹)")]       
         public decimal TotalBudget { get; set; }
         [Required, Display(Name = "Total Project Support from Internal(₹)")]
         public decimal TrustContribution { get; set; }

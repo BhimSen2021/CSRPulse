@@ -15,6 +15,7 @@ using DNTCaptcha.Core;
 using CSRPulse.ExportImport.Interfaces;
 using CSRPulse.ExportImport;
 using CSRPulse.IServices;
+using System.Globalization;
 
 namespace CSRPulse
 {
@@ -120,7 +121,7 @@ namespace CSRPulse
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile("Logs/CSRPulse-{Date}.txt");
+            loggerFactory.AddFile("Logs/CSRPulse-{Date}.txt");                       
 
             if (env.IsDevelopment())
             {

@@ -28,7 +28,7 @@
                                 <span asp-validation-for="@Model.ProjectInternalSource[i].SourceId" class="invalid"></span>
                             </td>
                             <td>
-                                <input type="text" asp-for="@Model.ProjectInternalSource[i].Amount" class="form-control form-control-sm" maxlength="10" onchange="checkAmountIS(this.id)" onkeypress="return onlyNumber(event)" autocomplete="off">
+                                <input type="text" asp-for="@Model.ProjectInternalSource[i].Amount" class="form-control form-control-sm" maxlength="16" onchange="checkAmountIS(this.id)" onkeypress="return DecimalNumberOnly(event)" onblur="javascript:return CFormat(this.id)" autocomplete="off">
                                 <span asp-validation-for="@Model.ProjectInternalSource[i].Amount" class="invalid"></span>
                             </td>
                             <td><label id="lblPerIS_@i">@Model.ProjectInternalSource[i].Per</label></td>

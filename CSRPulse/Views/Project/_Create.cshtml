@@ -68,11 +68,6 @@
                             <span asp-validation-for="ReportType" class="invalid"></span>
                         </div>
                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                            <label asp-for="TotalBudget" class="form-label required"></label>
-                            <input type="text" asp-for="TotalBudget" class="form-control" autocomplete="off" maxlength="10" onchange="return CalcOtherSource()" onkeypress="return onlyNumber(event);">
-                            <span asp-validation-for="TotalBudget" class="invalid"></span>
-                        </div>
-                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                             <label asp-for="LocationLavel" class="form-label required"></label>
                             <select asp-for="LocationLavel" asp-items="@Html.GetEnumSelectList<LocationLevel>()" aria-required="true" class="form-select">
                                 <option label="Select Implementation Level" selected="" value=""></option>
@@ -80,10 +75,16 @@
                             <span asp-validation-for="LocationLavel" class="invalid"></span>
                         </div>
                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                            <label asp-for="TotalBudget" class="form-label required"></label>
+                            <input type="text" asp-for="TotalBudget" class="form-control" autocomplete="off" maxlength="16" onchange="return CalcOtherSource()" onkeypress="return DecimalNumberOnly(event);" onblur="javascript:return CFormat(this.id)">
+                            <span asp-validation-for="TotalBudget" class="invalid"></span>
+                        </div>
+
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                             <label asp-for="TrustContribution" class="form-label required"></label>
                             <div class="row">
                                 <div class="col-10">
-                                    <input type="text" asp-for="TrustContribution" class="form-control" autocomplete="off" maxlength="10" onchange="return CalcOtherSource()" onkeypress=" return onlyNumber(event);">
+                                    <input type="text" asp-for="TrustContribution" class="form-control" autocomplete="off" maxlength="16" onchange="return CalcOtherSource()" onkeypress=" return DecimalNumberOnly(event);" onblur="javascript:return CFormat(this.id)">
                                     <span asp-validation-for="TrustContribution" class="invalid"></span>
                                 </div>
                                 <div class="col-2"><label id="lblTrustPer" class="col-form-label text-info">0.00%</label></div>
@@ -94,7 +95,7 @@
                             <label asp-for="OtherSource" class="form-label"></label>
                             <div class="row">
                                 <div class="col-10">
-                                    <input type="text" asp-for="OtherSource" class="form-control" autocomplete="off" maxlength="10" readonly>
+                                    <input type="text" asp-for="OtherSource" class="form-control" autocomplete="off" maxlength="16" readonly>
                                     <span asp-validation-for="OtherSource" class="invalid"></span>
                                 </div>
                                 <div class="col-2"><label id="lblOtherPer" class="col-form-label text-info">0.00%</label></div>

@@ -68,17 +68,18 @@
                     <span asp-validation-for="ReportType" class="invalid"></span>
                 </div>
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                    <label asp-for="TotalBudget" class="form-label required"></label>
-                    <input type="text" asp-for="TotalBudget" class="form-control" autocomplete="off" maxlength="10" readonly>
-                    <span asp-validation-for="TotalBudget" class="invalid"></span>
-                </div>
-                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <label asp-for="LocationLavel" class="form-label required"></label>
                     <select asp-for="LocationLavel" asp-items="@Html.GetEnumSelectList<LocationLevel>()" aria-required="true" class="form-select">
                         <option label="Select Implementation Level" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="LocationLavel" class="invalid"></span>
                 </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <label asp-for="TotalBudget" class="form-label required"></label>
+                    <input type="text" asp-for="TotalBudget" class="form-control" autocomplete="off" maxlength="10" readonly>
+                    <span asp-validation-for="TotalBudget" class="invalid"></span>
+                </div>
+
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <label asp-for="TrustContribution" class="form-label required"></label>
                     <div class="row">

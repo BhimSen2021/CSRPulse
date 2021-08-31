@@ -47,8 +47,8 @@ function SetEndDateMinVal() {
 }
 
 function CalcOtherSource() {
-    totalBudget = parseFloat($('#TotalBudget').val());
-    trustContribution = parseFloat($('#TrustContribution').val());
+    totalBudget = parseFloat(RemoveComma($('#TotalBudget').val()));
+    trustContribution = parseFloat(RemoveComma($('#TrustContribution').val()));
 
     if (totalBudget >= trustContribution) {
         otherSource = totalBudget - trustContribution;
@@ -57,7 +57,7 @@ function CalcOtherSource() {
         else
             $('#btnAddOS').attr("disabled", true);
 
-        $('#OtherSource').val(otherSource);
+        $('#OtherSource').val(MakeMoneyFormat(otherSource));
 
         if (trustContribution > 0)
             $('#btnAddIS').attr("disabled", false);
@@ -67,7 +67,7 @@ function CalcOtherSource() {
         // Total Project Support from Internal Percentage
         if (trustContribution > 0) {
             $('#lblTrustPer').text(((trustContribution * 100) / totalBudget).toFixed(2) + " %");
-            $('#lblRemaning_IS').text("Remaining amount (₹): " + trustContribution);
+            $('#lblRemaning_IS').text("Remaining amount (₹): " + MakeMoneyFormat(trustContribution));
         }
         else
             $('#lblTrustPer').text("0.00 %");
@@ -75,7 +75,7 @@ function CalcOtherSource() {
         // Other Sources Contribution Percentage
         if (otherSource > 0) {
             $('#lblOtherPer').text(((otherSource * 100) / totalBudget).toFixed(2) + " %");
-            $('#lblRemaning_OS').text("Remaining amount (₹): " + otherSource);
+            $('#lblRemaning_OS').text("Remaining amount (₹): " + MakeMoneyFormat(otherSource));
         }
         else
             $('#lblOtherPer').text("0.00 %");
@@ -89,11 +89,11 @@ function CalcOtherSource() {
 function checkAmountIS(id) {
     let subTotal = 0;
     let rowCount = $('#tblInternalSource > tbody  > tr').length;
-    let TrustContribution = parseFloat($('#TrustContribution').val()).toFixed(2);
-    let BudgetValue = parseFloat($('#TotalBudget').val()).toFixed(2);
+    let TrustContribution = parseFloat(RemoveComma($('#TrustContribution').val())).toFixed(2);
+    let BudgetValue = parseFloat(RemoveComma($('#TotalBudget').val())).toFixed(2);
 
     for (var i = 0; i < rowCount; i++) {
-        let amount = $('#ProjectInternalSource_' + i + '__Amount').val();
+        let amount = RemoveComma($('#ProjectInternalSource_' + i + '__Amount').val());
         var Percent = ((amount * 100) / BudgetValue).toFixed(2);
         $('#lblPerIS_' + i).text(Percent + "%");
         if (amount == '')
@@ -106,17 +106,17 @@ function checkAmountIS(id) {
         commonMessage('warning', 'Total breakup amount should not be greater then, Total Project Support from Internal.');
     }
     else
-        $('#lblRemaning_IS').text('Remaining amount (₹): ' + (TrustContribution - subTotal));
+        $('#lblRemaning_IS').text('Remaining amount (₹): ' + MakeMoneyFormat((TrustContribution - subTotal)));
 }
 
 function checkAmountOS(id) {
     let subTotal = 0;
     let rowCount = $('#tblOtherSource > tbody  > tr').length;
-    let OtherSource = parseFloat($('#OtherSource').val()).toFixed(2);
-    let BudgetValue = parseFloat($('#TotalBudget').val()).toFixed(2);
+    let OtherSource = parseFloat(RemoveComma($('#OtherSource').val())).toFixed(2);
+    let BudgetValue = parseFloat(RemoveComma($('#TotalBudget').val())).toFixed(2);
 
     for (var i = 0; i < rowCount; i++) {
-        let amount = $('#ProjectOtherSource_' + i + '__Amount').val();
+        let amount = RemoveComma($('#ProjectOtherSource_' + i + '__Amount').val());
         var Percent = ((amount * 100) / BudgetValue).toFixed(2);
         $('#lblPerOS_' + i).text(Percent + "%");
         if (amount == '')
@@ -129,7 +129,7 @@ function checkAmountOS(id) {
         commonMessage('warning', 'Total breakup amount should not be greater then, Total Other source amount.');
     }
     else
-        $('#lblRemaning_OS').text('Remaining amount (₹): ' + (OtherSource - subTotal));
+        $('#lblRemaning_OS').text('Remaining amount (₹): ' + MakeMoneyFormat((OtherSource - subTotal)));
 }
 
 function SetLocation(lLevel, ltype) {
@@ -191,7 +191,8 @@ function SetLocation(lLevel, ltype) {
                 url: '/Project/SaveLocationDetail',
                 data: { projectId: projectId, lLevel: lLevel, locationIds: strLocations },
                 success: function (data) {
-                    $("#div-location-detail-grid").html(data);                    
+                    $("#div-location-detail-grid").html(data);
+                    commonMessage('success', 'Location detail added successfully.');
                 },
                 error: function (responce) {
                     commonMessage('error', 'error occurred on save location details.');
