@@ -31,7 +31,7 @@ namespace CSRPulse.Services
                     return false;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
