@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FundingSource>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-area="" asp-controller="FundingSource" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus-circle me-1"></i> Add New Funding Source</a>
+        </div>
+        <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.SourceName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Sequence)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var fundingSource in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(fundingSource) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this funding source.">  @Html.ActionLink(fundingSource.SourceName, "Edit", "FundingSource", new { SourceId = fundingSource.SourceId })</span></td>
+                            <td>
+                                @Html.DisplayFor(model => fundingSource.Sequence)
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@fundingSource.SourceId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (fundingSource.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@fundingSource.SourceId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

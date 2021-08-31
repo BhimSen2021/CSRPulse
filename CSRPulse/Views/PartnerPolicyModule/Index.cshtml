@@ -1,0 +1,75 @@
+﻿@model IEnumerable<PartnerPolicyModule>
+@{
+    ViewData["Title"] = "Partner Policy Module";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    @* <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>*@
+                    <li class="breadcrumb-item active">Partner Policy Module</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Partner Policy Module List</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    @{await Html.RenderPartialAsync("_Filter");}
+</div>
+
+<div class="row" id="div-partnerpolicymodule-list"> </div>
+<partial name="_Confirmation" />
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function openpopup(cnt) {
+            var id = cnt.id.split('_')[1];
+            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+        }
+        function ActiveDeActive(obj) {
+            var isChecked = obj.id.split('_')[1];
+            var id = obj.id.split('_')[0];//2#last
+            var varname = id.split('#')[1];
+            id = id.split('#')[0];//2
+            //2#last_true
+            var urlval = '';
+            if (varname == 'Board')
+                urlval = '/partnerpolicymodule/ActiveDeActiveIsFormallyApprovedByBoard';
+            else if (varname == 'Imp')
+                urlval = '/partnerpolicymodule/ActiveDeActiveIsImplementedSince';
+            else if (varname == 'Last')
+                urlval = '/partnerpolicymodule/ActiveDeActiveIsLastUpdatedOn';
+            else
+                urlval = '/partnerpolicymodule/ActiveDeActive';
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+            /*url: '/partnerpolicymodule/ActiveDeActive',*/
+                url: urlval,
+                data: { id: id, isChecked: isChecked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'Status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'Status changing failed.');
+                    }
+                },
+                error: function (responce) {
+                    commonMessage('error', 'Status changing failed.');
+                }
+            });
+        }
+
+    </script>
+}

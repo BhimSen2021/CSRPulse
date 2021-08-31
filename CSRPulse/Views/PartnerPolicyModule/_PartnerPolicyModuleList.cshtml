@@ -1,0 +1,72 @@
+﻿@model IEnumerable<PartnerPolicyModule>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-area="" asp-controller="PartnerPolicyModule" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus"></i> Add New Partner Policy Module</a>
+        </div>
+        <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.PolicyModuleName)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsFormallyApprovedByBoard)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsImplementedSince)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsLastUpdatedOn)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var partnerPolicyModule in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(Model.ToList().IndexOf(partnerPolicyModule) +1)</span>
+                            </td>
+
+                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Partner Policy Module.">  @Html.ActionLink(partnerPolicyModule.PolicyModuleName, "Edit", "PartnerPolicyModule", new { policymoduleId = partnerPolicyModule.PolicyModuleId })</span></td>
+
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch#Board_@partnerPolicyModule.PolicyModuleId#Board" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsFormallyApprovedByBoard == true) { <text> checked="checked" </text> } />
+                                    <label for="switch#Board_@partnerPolicyModule.PolicyModuleId#Board" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch#Imp_@partnerPolicyModule.PolicyModuleId#Imp" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsImplementedSince == true) { <text> checked="checked" </text> } />
+                                    <label for="switch#Imp_@partnerPolicyModule.PolicyModuleId#Imp" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch#Last_@partnerPolicyModule.PolicyModuleId#Last" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsLastUpdatedOn == true) { <text> checked="checked" </text> } />
+                                    <label for="switch#Last_@partnerPolicyModule.PolicyModuleId#Last" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div>
+                                    <input type="checkbox" id="switch_@partnerPolicyModule.PolicyModuleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsActive == true) { <text> checked="checked" </text> } />
+                                    <label for="switch_@partnerPolicyModule.PolicyModuleId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

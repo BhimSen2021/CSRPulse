@@ -1,0 +1,54 @@
+﻿@model PartnerPolicy
+@{
+    ViewData["Title"] = "Edit Partner Policy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    @*<li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>*@
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item active">Edit Partner Policy</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Partner Policy</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-controller="PartnerPolicy" asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PolicyId" />
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mb-3">
+                        <label asp-for="PolicyName" class="form-label required"></label>
+                        <input type="text" asp-for="PolicyName" class="form-control" maxlength="256" placeholder="Enter Policy Name (max 256 characters)" autocomplete="off">
+                        <span asp-validation-for="PolicyName" class="invalid"></span>
+                    </div>
+
+                    <div class="mb-2 text-end">
+                        <a asp-area="" asp-controller="PartnerPolicy" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                        <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                    </div>
+                </div>
+
+            </div> <!-- end card -->
+        </form>
+    </div> <!-- end card body-->
+</div>

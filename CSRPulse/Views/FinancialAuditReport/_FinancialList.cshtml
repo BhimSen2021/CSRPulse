@@ -1,0 +1,83 @@
+﻿@model IEnumerable<FinancialAuditReport>
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-area="" asp-controller="FinancialAuditReport" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3"><i class="mdi mdi-plus-circle me-1"></i>Add New Audit</a>
+        </div>
+        <table id="basic-datatable" class="basic-datatable table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.NGOId)</th>
+                    <th>@Html.DisplayNameFor(model => model.ProjectId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AuditorId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AuditCheckerId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AuditMakerId)</th>
+                    <th>@Html.DisplayNameFor(model => model.ProgramManagerId)</th>
+                    <th>@Html.DisplayNameFor(model => model.AuditDate)</th>
+                    <th width="5%">@Html.DisplayNameFor(model => model.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var financial in Model)
+                    {
+                <tr>
+                    <td>
+                        <span>@(Model.ToList().IndexOf(financial) +1)</span>
+                    </td>
+
+                    <td>
+                        
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Financial Audit.">
+                            @Html.DisplayFor(model => financial.NGOId) @Html.ActionLink("Edit", "Edit", "FinancialAuditReport", new { FareportId = financial.FareportId })
+                        </span>
+                                    </td>
+                    <td>
+                        @Html.DisplayFor(model => financial.ProjectId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => financial.AuditorId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => financial.AuditCheckerId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => financial.AuditMakerId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => financial.ProgramManagerId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => financial.AuditDate)
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch_@financial.FareportId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success"
+                                   onchange="openpopup(this)" @if (financial.IsActive == true) { <text> checked="checked" </text> } />
+                            <label for="switch_@financial.FareportId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                    <td style="display:none">
+                        @*@Html.ActionLink("Edit", "Edit", new { FAReportId = financial.FAReportId })*@
+                        @*|@Html.ActionLink("Delete", "Delete", new { FAReportId = financial.FAReportId })*@
+                    </td>
+                </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

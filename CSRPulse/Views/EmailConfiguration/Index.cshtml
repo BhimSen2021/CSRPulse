@@ -1,0 +1,65 @@
+﻿@*@model IEnumerable<CSRPulse.Model.EmailConfiguration>*@
+@model EmailConfiguration
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item active">Email Configuration</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Email Configuration</h4>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table id="basic-datatable" class="table table-centered table-hover w-100 dt-responsive nowrap dataTable no-footer dtr-inline">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                    @Html.DisplayNameFor(model=>model.ToEmail)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Server)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Port)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+               
+                <tr>
+                    <td>
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Financial Audit.">
+                            @Html.ActionLink(Model.ToEmail, "Edit", "EmailConfiguration", new { EmailConfigurationID = Model.EmailConfigurationID })
+                        </span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.UserName)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.Server)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.Port)
+                    </td>
+                   
+                </tr>
+               
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -35,7 +35,9 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<DesignationHistory> DesignationHistory { get; set; }
         public virtual DbSet<District> District { get; set; }
         public virtual DbSet<EmailConfiguration> EmailConfiguration { get; set; }
+        public virtual DbSet<FinancialAuditReport> FinancialAuditReport { get; set; }
         public virtual DbSet<FundingAgency> FundingAgency { get; set; }
+        public virtual DbSet<FundingSource> FundingSource { get; set; }
         public virtual DbSet<Indicator> Indicator { get; set; }
         public virtual DbSet<IndicatorResponseType> IndicatorResponseType { get; set; }
         public virtual DbSet<IndicatorType> IndicatorType { get; set; }
@@ -54,6 +56,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<NgosaturatoryAuditorDetail> NgosaturatoryAuditorDetail { get; set; }
         public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<PartnerDocument> PartnerDocument { get; set; }
+        public virtual DbSet<PartnerPolicy> PartnerPolicy { get; set; }
+        public virtual DbSet<PartnerPolicyModule> PartnerPolicyModule { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Process> Process { get; set; }
         public virtual DbSet<ProcessDocument> ProcessDocument { get; set; }
@@ -359,6 +363,13 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
             });
 
+            modelBuilder.Entity<FundingSource>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            });
+
             modelBuilder.Entity<Indicator>(entity =>
             {
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
@@ -655,6 +666,30 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.PartnerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PartnerDocument_Partner");
+            });
+
+            modelBuilder.Entity<PartnerPolicy>(entity =>
+            {
+                entity.HasKey(e => e.PolicyId)
+                    .HasName("PK_PartnerPolicy_PolicyId");
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.PolicyName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PartnerPolicyModule>(entity =>
+            {
+                entity.HasKey(e => e.PolicyModuleId)
+                    .HasName("PK_PartnerPolicyModule_PolicyId");
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.PolicyModuleName).IsUnicode(false);
             });
 
             modelBuilder.Entity<Plan>(entity =>

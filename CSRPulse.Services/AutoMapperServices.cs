@@ -55,7 +55,11 @@ namespace CSRPulse.Services
                 .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
-
+            CreateMap<DTOModel.EmailConfiguration, EmailConfiguration>().ReverseMap();
+            CreateMap<DTOModel.FinancialAuditReport, FinancialAuditReport>().ReverseMap();
+            CreateMap<DTOModel.FundingSource, FundingSource>().ReverseMap();
+            CreateMap<DTOModel.PartnerPolicy, PartnerPolicy>().ReverseMap();
+            CreateMap<DTOModel.PartnerPolicyModule, PartnerPolicyModule>().ReverseMap();
             #region M A S T E R S
 
             #region Thematic Mapper
@@ -280,6 +284,19 @@ namespace CSRPulse.Services
              .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
              .ForMember(d => d.DistrictId, o => o.MapFrom(s => s.DistrictId))
              .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.DistrictName));
+
+            CreateMap<DTOModel.Project, SelectListModel>()
+             .ForMember(d => d.id, o => o.MapFrom(s => s.ProjectId))
+             .ForMember(d => d.value, o => o.MapFrom(s => s.ProjectName));
+
+            CreateMap<DTOModel.Auditor, SelectListModel>()
+             .ForMember(d => d.id, o => o.MapFrom(s => s.AuditorId))
+             .ForMember(d => d.value, o => o.MapFrom(s => s.AuditOrganization));
+
+            CreateMap<DTOModel.PartnerPolicy, SelectListModel>()
+            .ForMember(d => d.id, o => o.MapFrom(s => s.PolicyId))
+            .ForMember(d => d.value, o => o.MapFrom(s => s.PolicyName));
+
 
             #endregion
 
