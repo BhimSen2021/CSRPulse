@@ -156,4 +156,10 @@ namespace CSRPulse.Common
         ExecutiveDirector = 69,
         Administrator = 99
     }
+    public enum ProcessDocument
+    {
+        PartnerDocument = 2,
+        FinancialAuditAgencyOnboardingDocument = 4,
+        DocumentProject = 5
+    }
 }

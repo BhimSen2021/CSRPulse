@@ -15,6 +15,13 @@ namespace CSRPulse.Services
         Task<List<ProjectLocationDetail>> GetTvLocationDetails(int projectId, int implementationLevel);
         List<ProjectLocationDetail> GetLocationDetails(int projectId, int lLevel);
         Task<bool> AddLocationDetails(List<ProjectLocationDetail> locationDetails, int projectId);
+        Task<List<ProjectDocument>> GetDocumentList(int projectId, int processId);
+        Task<int> SaveDocument(ProjectDocument document);
+        bool DeleteDocument(int pdId);
+        Task UpdateDocument(ProjectDocument document);
 
+        Task<int> SaveCommunication(ProjectCommunication communication);
+        Task<List<ProjectCommunication>> GetCommunications(int projectId, bool? IsActive);
+        bool ArchiveCommunication(int id, bool IsActive);
     }
 }

@@ -188,6 +188,8 @@ namespace CSRPulse.Services
 
             CreateMap<ProjectLocationDetail, DTOModel.ProjectLocationDetail>();
 
+            CreateMap<DTOModel.ProjectDocument, ProjectDocument >().ReverseMap();
+            CreateMap<DTOModel.ProjectCommunication, ProjectCommunication>().ReverseMap();
             #endregion
 
             #region Email Mapper

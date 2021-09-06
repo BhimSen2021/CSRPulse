@@ -29,7 +29,6 @@
                 <hr />
 
                 <div id="xss" style="height:auto;">
-
                 </div>
 
             </div>
@@ -39,6 +38,16 @@
 </div>
 
 <script type="text/javascript">
+    $(document).ready(
+        function () {
+            $('input:file').change(
+                function () {
+                    if ($(this).val()) {
+                        $('#submitform').attr('disabled', false);
+                    }
+                }
+            );
+        });
 
     function onsuccess(data) {
 

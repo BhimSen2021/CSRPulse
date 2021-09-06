@@ -66,10 +66,27 @@ namespace CSRPulse.Data.Repositories
                              };
                 return level2;
             }
-
         }
-      
 
+        public IQueryable<ProjectDocument> GetDocuments(int projectId, int processId)
+        {
+            return from m in _dbContext.ProcessDocument.Where(x => x.ProcessId == processId && x.IsActive == true)
+                   join d in _dbContext.ProjectDocument.Where(d => d.ProjectId == projectId)
+                   on m.DocumentId equals d.DocumentId into doc
+                   from d1 in doc.DefaultIfEmpty()
+                   select new ProjectDocument
+                   {
+                       ProjectDocumentId = d1.ProjectDocumentId,
+                       ProjectId = d1.ProjectId,
+                       DocumentId = m.DocumentId,
+                       DocumentName = d1.DocumentName,
+                       MDocumentName = m.DocumentName,
+                       DocumentMaxSize = m.DocumentMaxSize ?? 10,
+                       DocumentType = m.DocumentType,
+                       ServerDocumentName = d1.ServerDocumentName,
+                       Mandatory = m.Mandatory ?? false
+                   };
+        }
         public class ProjectLocationDetail
         {
             public int LocationId { get; set; }
@@ -84,6 +101,18 @@ namespace CSRPulse.Data.Repositories
             public string BlockName { get; set; }
             public string VillageName { get; set; }
 
+        }
+        public class ProjectDocument
+        {
+            public int ProjectDocumentId { get; set; }
+            public int ProjectId { get; set; }
+            public int DocumentId { get; set; }
+            public string DocumentName { get; set; }
+            public string MDocumentName { get; set; }
+            public string ServerDocumentName { get; set; }
+            public string DocumentType { get; set; }
+            public int DocumentMaxSize { get; set; }
+            public bool Mandatory { get; set; }
         }
     }
 }

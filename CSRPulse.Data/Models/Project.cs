@@ -13,6 +13,8 @@ namespace CSRPulse.Data.Models
     {
         public Project()
         {
+            ProjectCommunication = new HashSet<ProjectCommunication>();
+            ProjectDocument = new HashSet<ProjectDocument>();
             ProjectFinancialReport = new HashSet<ProjectFinancialReport>();
             ProjectInternalSource = new HashSet<ProjectInternalSource>();
             ProjectInterventionReport = new HashSet<ProjectInterventionReport>();
@@ -72,6 +74,10 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(ThemeId))]
         [InverseProperty("Project")]
         public virtual Theme Theme { get; set; }
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectCommunication> ProjectCommunication { get; set; }
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectDocument> ProjectDocument { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectFinancialReport> ProjectFinancialReport { get; set; }
         [InverseProperty("Project")]

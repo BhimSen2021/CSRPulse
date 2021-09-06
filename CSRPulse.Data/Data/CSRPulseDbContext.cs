@@ -62,6 +62,8 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<ProcessWorkFlow> ProcessWorkFlow { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Project> Project { get; set; }
+        public virtual DbSet<ProjectCommunication> ProjectCommunication { get; set; }
+        public virtual DbSet<ProjectDocument> ProjectDocument { get; set; }
         public virtual DbSet<ProjectFinancialReport> ProjectFinancialReport { get; set; }
         public virtual DbSet<ProjectInternalSource> ProjectInternalSource { get; set; }
         public virtual DbSet<ProjectInterventionReport> ProjectInterventionReport { get; set; }
@@ -820,6 +822,32 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.ThemeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Project_Theme");
+            });
+
+            modelBuilder.Entity<ProjectCommunication>(entity =>
+            {
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectCommunication)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectCommunication_Project");
+            });
+
+            modelBuilder.Entity<ProjectDocument>(entity =>
+            {
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.ProjectDocument)
+                    .HasForeignKey(d => d.DocumentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectDocument_ProcessDocument");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectDocument)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectDocument_Project");
             });
 
             modelBuilder.Entity<ProjectFinancialReport>(entity =>

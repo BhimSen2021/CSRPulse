@@ -19,9 +19,7 @@
         </div>
     </div>
     <div class="col">
-        <div class="alert alert-secondary" role="alert">
-            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
-        </div>
+        <partial name="_NoteFieldsMark" />
     </div>
 </div>
 
@@ -88,7 +86,7 @@
                             <label for="@Model.AuditorId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                             <span asp-validation-for="IsActive" class="invalid"></span>
                         </div>
-                     
+
                         <div class="mb-2 text-end">
                             <a asp-area="" asp-controller="Auditor" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
                             <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>

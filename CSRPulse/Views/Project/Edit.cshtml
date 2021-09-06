@@ -30,12 +30,24 @@
                 <a href="#report-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
                     <span class="d-none d-md-block">Progress Report</span>
-                </a>                
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#freport-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Financial Report</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a href="#location-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                     <span class="d-none d-md-block">Location</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#document-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Documents & Communication</span>
                 </a>
             </li>
         </ul>
@@ -47,12 +59,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <div class="alert alert-warning" role="alert">
-                        <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
-                    </div>
+                    <partial name="_NoteFieldsMark" />
                 </div>
                 <div id="div-edit">
-                    <partial name="_Edit" model="Model" />
+                    <partial name="_ProjectDetail" model="Model" />
                 </div>
             </div>
         </div>
@@ -61,14 +71,22 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3">Progress Report</h5>
-                <input id="hdnReportIsLoad" type="hidden" value="0" />
                 <div id="div-intervention-report-grid">
                     @{await Html.RenderPartialAsync("_ProjectInterventionReport", Model.ProjectInterventionReport);}
                 </div>
             </div>
         </div>
     </div>
-
+    <div class="tab-pane" id="freport-b2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-3">Financial Report</h5>
+                <div id="div-intervention-report-grid">
+                    @{await Html.RenderPartialAsync("_ProjectFinancialReport", Model.ProjectFinancialReport);}
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="tab-pane" id="location-b2">
         <div class="card">
             <div class="card-body">
@@ -91,6 +109,14 @@
         </div>
     </div>
 
+    <div class="tab-pane" id="document-b2">
+        <div class="card">
+            <div class="card-body">
+                @{await Html.RenderPartialAsync("_DocumentCommunication", Model);}
+            </div>
+        </div>
+    </div>
+
 </div>
 <partial name="_AddLocationModal" model="Model.ProjectLocation" />
 <partial name="_AddLocationDetailModal" model="Model.ProjectLocationDetail" />
@@ -104,4 +130,6 @@
 @section Scripts{
     <script src="~/scripts/Project.js" asp-append-version="true"></script>
     <script src="~/scripts/JqueryTreeview.js" asp-append-version="true"></script>
+
+
 }

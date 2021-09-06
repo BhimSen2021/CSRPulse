@@ -2,7 +2,6 @@
 @using CSRPulse.Common
 <div class="row">
     <div class="col-12">
-
         <form data-ajax="true" data-ajax-method="POST" asp-controller="Project" asp-action="Edit" data-ajax-success="OnEdit">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -76,7 +75,7 @@
                 </div>
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <label asp-for="TotalBudget" class="form-label required"></label>
-                    <input type="text" asp-for="TotalBudget" class="form-control" autocomplete="off" maxlength="10" readonly>
+                    <input type="text" asp-for="TotalBudget" asp-format="{0:N}" class="form-control" autocomplete="off" maxlength="16" readonly>
                     <span asp-validation-for="TotalBudget" class="invalid"></span>
                 </div>
 
@@ -84,7 +83,7 @@
                     <label asp-for="TrustContribution" class="form-label required"></label>
                     <div class="row">
                         <div class="col-10">
-                            <input type="text" asp-for="TrustContribution" class="form-control" autocomplete="off" maxlength="10" readonly>
+                            <input type="text" asp-for="TrustContribution" asp-format="{0:N}" class="form-control" autocomplete="off" maxlength="16" readonly>
                             <span asp-validation-for="TrustContribution" class="invalid"></span>
                         </div>
                         <div class="col-2"><label id="lblTrustPer" class="col-form-label text-info">0.00%</label></div>
@@ -95,7 +94,7 @@
                     <label asp-for="OtherSource" class="form-label"></label>
                     <div class="row">
                         <div class="col-10">
-                            <input type="text" asp-for="OtherSource" class="form-control" autocomplete="off" maxlength="10" readonly>
+                            <input type="text" asp-for="OtherSource" asp-format="{0:N}" class="form-control" autocomplete="off" maxlength="10" readonly>
                             <span asp-validation-for="OtherSource" class="invalid"></span>
                         </div>
                         <div class="col-2"><label id="lblOtherPer" class="col-form-label text-info">0.00%</label></div>
@@ -107,7 +106,7 @@
                             <i>Support from internal breakup</i>
                         </div>
                         <div class="col text-end">
-                            <button id="btnAddIS" class="btn btn-outline-info btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddIS"><i class="mdi mdi-plus"></i> Add</button>
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to add new internal breakup" id="btnAddIS" class="btn btn-outline-info btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddIS"><i class="mdi mdi-plus"></i> Add</button>
                         </div>
                     </div>
                     <div id="div-internalSource-grid">
@@ -123,7 +122,7 @@
                             <i>Other sources contribution breakup</i>
                         </div>
                         <div class="col text-end">
-                            <button id="btnAddOS" class="btn btn-outline-info btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddOS"><i class="mdi mdi-plus"></i> Add</button>
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to add new Other sources contribution breakup"  id="btnAddOS" class="btn btn-outline-info btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddOS"><i class="mdi mdi-plus"></i> Add</button>
                         </div>
                     </div>
                     <div id="div-otherSource-grid">

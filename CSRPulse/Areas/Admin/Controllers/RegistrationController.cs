@@ -1,17 +1,15 @@
-﻿using CSRPulse.Model;
-using CSRPulse.Services.IServices;
+﻿using CSRPulse.Common;
+using CSRPulse.Model;
 using CSRPulse.Services;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.AspNetCore.Http;
+using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace CSRPulse.Areas.Admin.Controllers
 {
@@ -70,8 +68,8 @@ namespace CSRPulse.Areas.Admin.Controllers
                 {
                     if (singUp.ImagePhoto != null)
                     {
-                        string folder = "assets/images/users/";
-                        singUp.ImageName = await UploadImage(folder, singUp.ImagePhoto);
+                        string imagePath = DocumentUploadFilePath.UserProfileImagePath;
+                        singUp.ImageName = await UploadImage(imagePath, singUp.ImagePhoto);
                     }
                     else
                         singUp.ImageName = "sample-profile.png";
@@ -140,8 +138,8 @@ namespace CSRPulse.Areas.Admin.Controllers
                 {
                     if (signUp.ImagePhoto != null)
                     {
-                        string folder = "assets/images/users/";
-                        signUp.ImageName = await UploadImage(folder, signUp.ImagePhoto);
+                        string imagePath = DocumentUploadFilePath.UserProfileImagePath;                       
+                        signUp.ImageName = await UploadImage(imagePath, signUp.ImagePhoto);
                     }
 
                     signUp.UpdatedBy = userDetail.UserID;
@@ -204,7 +202,6 @@ namespace CSRPulse.Areas.Admin.Controllers
             if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
                 Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
 
-
             var fileName = Guid.NewGuid().ToString() + "_" + file.FileName;
             folderPath += fileName;
             string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
@@ -227,8 +224,5 @@ namespace CSRPulse.Areas.Admin.Controllers
             var Partners = _ddlService.GetPartners(null);
             ViewBag.ddlPartner = new SelectList(Partners, "id", "value");
         }
-
-
-
     }
 }

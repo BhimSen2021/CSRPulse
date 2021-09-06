@@ -5,12 +5,10 @@
         <div class="row">
             <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 col-xs-12 required mt-2">
                 Select File
-                            </div>
+            </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
                 <div class="input-group image-preview">
-
-
                     <input type="text" class="form-control image-preview-filename" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
                     <span class="input-group-btn">
                         <!-- image-preview-clear button -->
@@ -22,14 +20,9 @@
                             <span class="glyphicon glyphicon-folder-open"></span>
                             <span class="image-preview-input-title">Browse</span>
                             @Html.TextBox("file", "", new { type = "file", @class = "", @name = "input-file-preview" })
-
-
                         </span>
                     </span>
-
-
                 </div>
-
                 <div>
                     @Html.ValidationMessage("FileRequired", "", new { @class = "text-danger" })
                 </div>
@@ -37,29 +30,23 @@
 
             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
 
-                <button type="submit" id="submitform" class="btn btn-success pull-center"
+                <button type="submit" id="submitform" class="btn btn-success pull-center validate-data"
                         data-toggle="tooltip"
-                        title="Click here, to validate your file.">
-                    <i class="fa fa-check" aria-hidden="true"></i>
+                        title="Click here, to validate your file." disabled>
+                    <i class="dripicons-checkmark me-1" aria-hidden="true"></i>
                     Validate Data
                 </button>
-
             </div>
 
             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
-
                 <button type="button" id="btnSave" class="btn btn-info pull-center d-none"
                         data-toggle="tooltip" title="Click here, to update manual sheet data.">
-
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                    Update
+                    <i class="dripicons-cloud-upload me-1" aria-hidden="true"></i>
+                    Import Data
                 </button>
-
             </div>
         </div>
-
     </div>
-
 </form>
 
 

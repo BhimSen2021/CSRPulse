@@ -183,12 +183,13 @@ namespace CSRPulse.Controllers
 
         public async Task<IActionResult> ExportTemplate()
         {
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\DistrictTemplate.xlsx");
 
-            if (!System.IO.File.Exists(filepath))
+            var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, DocumentUploadFilePath.TemplatesLocationFilePath + "DistrictTemplate.xlsx");
+
+            if (!System.IO.File.Exists(sPhysicalPath))
                 return Content($"Template not found.");
 
-            return await DownloadFile(filepath);
+            return await DownloadFile(sPhysicalPath);
         }
 
         public async Task<IActionResult> ExportRefTemplate()
@@ -197,24 +198,23 @@ namespace CSRPulse.Controllers
             List<string> takeColumns = new List<string> { "StateId", "StateName" };
             var statedt = Common.ExtensionMethods.ToDataTable<State>(statelist);
 
-
             var dt = Common.ExtensionMethods.PrepairExportTable(statedt, takeColumns);
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
 
+            var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, DocumentUploadFilePath.TempFilePath);
+            if (!Directory.Exists(uploadedFilePath))
+                Directory.CreateDirectory(uploadedFilePath);
 
-            var fname = string.Format(@"{0}.xlsx", DateTime.Now.Ticks);
-
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"TempFiles\" + fname);
-
-            if (_export.ExportToExcel(ds, filepath, "RefrenceCode_District"))
+            var sPhysicalPath = Path.Combine(uploadedFilePath, ExtensionMethods.SetUniqueFileName(".xlsx"));
+            if (_export.ExportToExcel(ds, sPhysicalPath, "RefrenceCode_District"))
             {
-                if (!System.IO.File.Exists(filepath))
+                if (!System.IO.File.Exists(sPhysicalPath))
                     return Content($"Tempfile path not found.");
 
-                var res = await DownloadFile(filepath);
+                var res = await DownloadFile(sPhysicalPath);
 
-                Common.ExtensionMethods.DeleteFile(filepath);
+                Common.ExtensionMethods.DeleteFile(sPhysicalPath);
                 return res;
 
             }
@@ -245,20 +245,19 @@ namespace CSRPulse.Controllers
                 string msg = string.Empty;
                 DistrictImportModel districtImpModel = new DistrictImportModel();
                 List<DistrictImport> DistrictForm = new List<DistrictImport>();
+
                 if (file.Length > 0)
                 {
-                    string fileExtension = Path.GetExtension(file.FileName);
-                    fileName = Path.GetFileName(file.FileName);
+                    var fileExtension = Path.GetExtension(file.FileName).ToLower();
 
-                    var contentType = Path.GetExtension(file.FileName);
-                    var dicValue = GetDictionaryValueByKeyName(".xlsx");
-                    if ((fileExtension == ".xlsx" || fileExtension == ".xlx"))
+                    if (ValidateFileMimeType(file) && fileExtension == ".xlsx")
                     {
+                        fileName = Path.GetFileName(file.FileName);
                         #region Upload File At temp location===
                         fileName = ExtensionMethods.SetUniqueFileName(Path.GetFileNameWithoutExtension(file.FileName),
                                Path.GetExtension(file.FileName));
 
-                        filePath = @"Templates\Location\";
+                        filePath = DocumentUploadFilePath.TempFilePath;
                         var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
                         string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
 
@@ -359,7 +358,6 @@ namespace CSRPulse.Controllers
                         districtImpModel.Message = "Invalid file format.";
                         return Json(new { status = "success", htmlData = ConvertViewToString("_DistrictImportGridView", districtImpModel, true) });
                     }
-
                 }
                 return Json("success");
             }

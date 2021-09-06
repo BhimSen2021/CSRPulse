@@ -23,11 +23,9 @@
         <div class="panel panel-default">
 
             <div class="panel-body" id="dv-import">
-
                 @{await Html.RenderPartialAsync("_ImportFilter");}
 
                 <hr />
-
                 <div id="xss" style="height:auto;">
 
                 </div>
@@ -39,9 +37,18 @@
 </div>
 
 <script type="text/javascript">
-      
-    function onsuccess(data) {
-        debugger;
+    $(document).ready(
+        function () {
+            $('input:file').change(
+                function () {
+                    if ($(this).val()) {
+                        $('#submitform').attr('disabled', false);                         
+                    }
+                }
+            );           
+        });
+
+    function onsuccess(data) {       
         if (data.status == "nofileFound") {
 
             $("#xss").html(data.htmlData);
@@ -74,8 +81,7 @@
 </script>
 
 <script>
-        $('#btnSave').click(function () {
-            debugger;
+        $('#btnSave').click(function () {           
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',

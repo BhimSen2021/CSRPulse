@@ -132,9 +132,7 @@ function checkAmountOS(id) {
         $('#lblRemaning_OS').text('Remaining amount (₹): ' + MakeMoneyFormat((OtherSource - subTotal)));
 }
 
-function SetLocation(lLevel, ltype) {
-    if (ltype == 2)
-        lLevel = $('#LocationLavel :selected').val();
+function SetLocation(lLevel, ltype) {   
     var allVals = [];
     if (lLevel == '1') {
         $(".Lavel1").each(function () {
@@ -178,15 +176,51 @@ function SetLocation(lLevel, ltype) {
             $('#hdnLocationIds').val('');
         }
     }
+}
+
+
+function SaveLocation(lLevel, ltype) {
+    if (ltype == 2)
+        lLevel = $('#LocationLavel :selected').val();
+    var allVals = [];
+    if (lLevel == '1') {
+        $(".dLavel1").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).val());
+            }
+        });
+    }
+    else if (lLevel == '2') {
+        $(".dLavel2").parent().parent().find("li .dLavel2").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).parent().parent().parent().find(".dLavel1").val() + ':' + $(this).val());
+            }
+        });
+    }
+    else if (lLevel == '3') {
+        $(".dLavel3").parent().parent().parent().parent().find("li .dLavel3").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).parent().parent().parent().parent().parent().find(".dLavel1").val() + ':' + $(this).parent().parent().parent().find(".dLavel2").val() + ':' + $(this).val());
+            }
+        });
+    }
+    else if (lLevel == '4') {
+        $(".dLavel3").parent().parent().parent().parent().parent().parent().find("li .dLavel4").each(function () {
+            if ($(this).is(':checked')) {
+                allVals.push($(this).parent().parent().parent().parent().parent().parent().parent().find(".dLavel1").val() + ':' + $(this).parent().parent().parent().parent().parent().find(".dLavel2").val() + ':' + $(this).parent().parent().parent().find(".dLavel3").val() + ':' + $(this).val());
+            }
+        });
+    }
+    let strLocations = allVals.toString();
+    
     //Add location for location details
-    else if (ltype == 2) {
         if (strLocations.length > 0) {
             $('#divLocationDetailAlert').css('display', 'none');
             $("#AddLocationDetailModal").modal('hide');
             var projectId = $('#ProjectId').val();
             $.ajax({
                 type: 'POST',
-            /*dataType: 'JSON',*/
+                /*dataType: 'JSON',*/
                 dataType: 'html',
                 url: '/Project/SaveLocationDetail',
                 data: { projectId: projectId, lLevel: lLevel, locationIds: strLocations },
@@ -202,7 +236,5 @@ function SetLocation(lLevel, ltype) {
         else {
             $('#divLocationDetailAlert').css('display', 'block');
         }
-    }
-
 }
 

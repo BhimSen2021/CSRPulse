@@ -1,27 +1,33 @@
-﻿using CSRPulse.Model;
+﻿using CSRPulse.Common;
+using CSRPulse.Model;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+
 
 namespace CSRPulse.Controllers
 {
     public class ProjectController : BaseController<ProjectController>
     {
         private readonly IProjectService _projectService;
-
-
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IDropdownBindService _ddlService;
-        public ProjectController(IProjectService projectService, IDropdownBindService dropdownBindService)
+        public ProjectController(IProjectService projectService, IDropdownBindService dropdownBindService, IWebHostEnvironment webHostEnvironment)
         {
             _projectService = projectService;
             _ddlService = dropdownBindService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -43,18 +49,28 @@ namespace CSRPulse.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            await BindLocationAsync();
-            BindDropdowns();
+            try
+            {
+                _logger.LogInformation("ProjectController/Create");
+                await BindLocationAsync();
+                BindDropdowns();
 
-            var project = new Project();
-            project.ProjectOtherSource = new List<ProjectOtherSource>();
-            project.ProjectOtherSource.Add(new ProjectOtherSource { ProjectOtherSourceId = 0, ProjectId = 0, SourceId = 0, Amount = null, RevisionNo = 1 });
+                var project = new Project();
+                project.ProjectOtherSource = new List<ProjectOtherSource>();
+                project.ProjectOtherSource.Add(new ProjectOtherSource { ProjectOtherSourceId = 0, ProjectId = 0, SourceId = 0, Amount = null, RevisionNo = 1 });
 
-            project.ProjectInternalSource = new List<ProjectInternalSource>();
-            project.ProjectInternalSource.Add(new ProjectInternalSource { ProjectInternalSourceId = 0, ProjectId = 0, SourceId = 0, Amount = null, RevisionNo = 1 });
+                project.ProjectInternalSource = new List<ProjectInternalSource>();
+                project.ProjectInternalSource.Add(new ProjectInternalSource { ProjectInternalSourceId = 0, ProjectId = 0, SourceId = 0, Amount = null, RevisionNo = 1 });
 
-            HttpContext.Session.SetComplexData("project", project);
-            return View(project);
+                HttpContext.Session.SetComplexData("project", project);
+                return View(project);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+
+            }
         }
 
         [HttpPost]
@@ -116,7 +132,7 @@ namespace CSRPulse.Controllers
                     project.ProjectInternalSource = project.ProjectInternalSource.Where(x => x.Amount > 0).ToList();
 
                     // Make project Intervention Report
-                    DataTable projectIReportDt = Common.ProjectReport.MakeProjectReport(project.ProjectId, project.StartDate ?? DateTime.UtcNow, project.EndDate ?? DateTime.UtcNow, project.ReportType);
+                    DataTable projectIReportDt = ReportHelper.MakeProjectReport(project.ProjectId, project.StartDate ?? DateTime.UtcNow, project.EndDate ?? DateTime.UtcNow, project.ReportType);
                     var ProjectIReportList = ConvertProjectIReportList(projectIReportDt);
                     if (project.ProjectInterventionReport == null)
                         project.ProjectInterventionReport = new List<ProjectInterventionReport>();
@@ -173,6 +189,10 @@ namespace CSRPulse.Controllers
                 var project = _projectService.GetProjectById(pid);
                 ViewBag.tvLDetails = await _projectService.GetTvLocationDetails(project.ProjectId, project.LocationLavel);
 
+                if (project.ProjectDocument == null)
+                    project.ProjectDocument = new List<ProjectDocument>();
+                project.ProjectDocument = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
+
                 BindNestedDropdown(project.ThemeId);
 
 
@@ -193,8 +213,9 @@ namespace CSRPulse.Controllers
                 project.hdnLocationIds = SetProjectLocation(project.ProjectLocation);
                 return View(project);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
         }
@@ -284,7 +305,7 @@ namespace CSRPulse.Controllers
                         TempData["Error"] = "Project Updation Failed.";
 
                     HttpContext.Session.Remove("project");
-                    return Json(new { msg = "save", htmlData = ConvertViewToString("_Edit", project, true) });
+                    return Json(new { msg = "save", htmlData = ConvertViewToString("_ProjectDetail", project, true) });
                 }
 
                 await BindLocationAsync();
@@ -292,7 +313,7 @@ namespace CSRPulse.Controllers
                 BindDropdowns();
                 BindNestedDropdown(project.ThemeId);
 
-                return Json(new { msg = "", htmlData = ConvertViewToString("_Edit", project, true) });
+                return Json(new { msg = "", htmlData = ConvertViewToString("_ProjectDetail", project, true) });
 
             }
             catch (Exception ex)
@@ -305,30 +326,54 @@ namespace CSRPulse.Controllers
 
         public async Task<IActionResult> SaveLocationDetail(int projectId, int lLevel, string locationIds)
         {
-            List<ProjectLocationDetail> locationDetails = new List<ProjectLocationDetail>();
-            locationDetails = MakeProjectLocationDetail(projectId, locationIds, lLevel);
-            var flag = await _projectService.AddLocationDetails(locationDetails, projectId);
-            var result = _projectService.GetLocationDetails(projectId, lLevel);
-          
-            return PartialView("_LocationDetail", result);
-           
+            try
+            {
+                List<ProjectLocationDetail> locationDetails = new List<ProjectLocationDetail>();
+                locationDetails = MakeProjectLocationDetail(projectId, locationIds, lLevel);
+                var flag = await _projectService.AddLocationDetails(locationDetails, projectId);
+                var result = _projectService.GetLocationDetails(projectId, lLevel);
+
+                return PartialView("_LocationDetail", result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
         }
         public PartialViewResult RemoveOS(int srNo)
         {
-            var project1 = HttpContext.Session.GetComplexData<Project>("project");
+            try
+            {
+                var project1 = HttpContext.Session.GetComplexData<Project>("project");
 
-            project1.ProjectOtherSource.RemoveAt(srNo);
-            HttpContext.Session.SetComplexData("project", project1);
-            return PartialView("_OtherSourcesContribution", project1);
+                project1.ProjectOtherSource.RemoveAt(srNo);
+                HttpContext.Session.SetComplexData("project", project1);
+                return PartialView("_OtherSourcesContribution", project1);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
 
         }
         public PartialViewResult RemoveIS(int srNo)
         {
-            var project1 = HttpContext.Session.GetComplexData<Project>("project");
+            try
+            {
+                var project1 = HttpContext.Session.GetComplexData<Project>("project");
 
-            project1.ProjectInternalSource.RemoveAt(srNo);
-            HttpContext.Session.SetComplexData("project", project1);
-            return PartialView("_TrustContribution", project1);
+                project1.ProjectInternalSource.RemoveAt(srNo);
+                HttpContext.Session.SetComplexData("project", project1);
+                return PartialView("_TrustContribution", project1);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
         }
 
         [HttpPost]
@@ -431,6 +476,7 @@ namespace CSRPulse.Controllers
         {
             List<ProjectLocation> projectLocations = new List<ProjectLocation>();
             string[] arr = locationIds.Split(',');
+            arr = arr.Distinct().ToArray();
             string[] val = { };
             for (int i = 0; i < arr.Length; i++)
             {
@@ -529,5 +575,175 @@ namespace CSRPulse.Controllers
 
         }
         #endregion
+
+        #region Document
+        public async Task<IActionResult> SaveDocumentCommunication(Project project, string ButtonType)
+        {
+            try
+            {
+                if (ButtonType == "document")
+                {
+                    if (project.ProjectDocument.Where(x => (x.ServerDocumentName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
+                        return Json(new { flag = 2, type = 1, msg = "select all mandatory documents", htmlData = ConvertViewToString("_DocumentList", project, true) });
+
+                    #region Check Mime Type
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < project.ProjectDocument.Count; i++)
+                    {
+                        if (project.ProjectDocument[i].DocumentFile != null)
+                        {
+                            if (!ValidateFileMimeType(project.ProjectDocument[i].DocumentFile))
+                            {
+                                stringBuilder.Append($"# {i + 1} The file format of the {project.ProjectDocument[i].DocumentFile.FileName} file is incorrect");
+                                stringBuilder.Append("<br>");
+                            }
+                        }
+                    }
+
+                    if (stringBuilder.ToString() != "")
+                    {
+                        return Json(new { flag = 2, type = 1, msg = stringBuilder.ToString(), htmlData = ConvertViewToString("_DocumentList", project, true) });
+                    }
+                    #endregion
+
+                    for (int i = 0; i < project.ProjectDocument.Count; i++)
+                    {
+                        var document = new ProjectDocument();
+                        document.ProjectId = project.ProjectId;
+                        document.DocumentId = project.ProjectDocument[i].DocumentId;
+                        document.ProjectDocumentId = project.ProjectDocument[i].ProjectDocumentId;
+
+                        if (project.ProjectDocument[i].DocumentFile != null)
+                        {                           
+                            var filePath = DocumentUploadFilePath.ProjectFilePath;
+                            document.DocumentName = project.ProjectDocument[i].DocumentFile.FileName;
+                            document.ServerDocumentName = await UploadDocument(filePath, project.ProjectDocument[i].DocumentFile);
+                        }
+                        if (project.ProjectDocument[i].ProjectDocumentId == 0)
+                            await _projectService.SaveDocument(document);
+                        else
+                        {
+                            if (project.ProjectDocument[i].DocumentFile != null)
+                            {
+                                await _projectService.UpdateDocument(document);
+                            }
+                        }
+                    }
+
+                    var documents = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
+                    project.ProjectDocument = documents;
+
+                    return Json(new { flag = 1, type = 1, msg = "Documents uploaded successfully", htmlData = ConvertViewToString("_DocumentList", project, true) });
+                }
+                else
+                {
+                    project.Communication.ProjectId = project.ProjectId;
+                    project.Communication.CreatedBy = userDetail.UserID;
+                    project.Communication.CreatedOn = DateTime.UtcNow;
+                    project.Communication.IsActive = true;
+                    await _projectService.SaveCommunication(project.Communication);
+
+                    project.ProjectCommunication = await _projectService.GetCommunications(project.ProjectId, true);
+
+                    return Json(new { flag = 1, type = 2, htmlData = ConvertViewToString("_CommunicationList", project, true) });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+
+        private async Task<string> UploadDocument(string filePath, IFormFile file)
+        {
+            try
+            {
+                if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, filePath)))
+                    Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, filePath));
+
+                var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+
+                return await UploadFile(uploadedFilePath, file);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        public IActionResult DownloadDocument(string fileName)
+        {
+            var filePath = DocumentUploadFilePath.ProjectFilePath;
+            var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath + fileName);
+            if (!System.IO.File.Exists(sPhysicalPath))
+                return Content($"file not found.");
+
+            return DownloadAnyFile(fileName, sPhysicalPath, null);
+        }
+        public async Task<PartialViewResult> RemoveDocument(int pdId, int pId, string fName)
+        {
+            try
+            {
+                var project = new Project();
+                project.ProjectId = pId;
+                var isDeleted = _projectService.DeleteDocument(pdId);
+                if (isDeleted)
+                {
+                    var filePath = DocumentUploadFilePath.ProjectFilePath;
+                    var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath + fName);
+                    if (System.IO.File.Exists(sPhysicalPath))
+                    {
+                        FileInfo myfile = new FileInfo(sPhysicalPath);
+                        myfile.Delete();
+                    }
+                }
+                project.ProjectDocument = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
+
+                return PartialView("_DocumentList", project);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+
+        #endregion
+
+        #region Communication
+        [HttpPost]
+        public JsonResult ArchiveCommunication(int id, bool isChecked)
+        {
+            _logger.LogInformation("BlockController/ArchiveCommunication");
+            var result = _projectService.ArchiveCommunication(id, isChecked);
+            return Json(result);
+
+        }
+
+        public async Task<PartialViewResult> ShowArchive(int pId, bool isArchive)
+        {
+            try
+            {
+                var project = new Project();
+                project.ProjectId = pId;
+                project.ProjectCommunication = await _projectService.GetCommunications(project.ProjectId, isArchive);
+
+                return PartialView("_CommunicationList", project);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+        #endregion
+
     }
+
 }

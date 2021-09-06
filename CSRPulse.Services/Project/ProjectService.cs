@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DTOModel = CSRPulse.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using CSRPulse.Common;
 
 namespace CSRPulse.Services
 {
@@ -59,7 +60,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var projects = _genericRepository.GetIQueryable<DTOModel.Project>(p => p.ProjectId == projectId).Include(i => i.ProjectInternalSource).Include(o => o.ProjectOtherSource).Include(l => l.ProjectLocation).Include(r => r.ProjectInterventionReport).Include(ld => ld.ProjectLocationDetail).ThenInclude(s => s.State).Include(ld => ld.ProjectLocationDetail).ThenInclude(d => d.District).Include(ld => ld.ProjectLocationDetail).ThenInclude(b => b.Block);
+                var projects = _genericRepository.GetIQueryable<DTOModel.Project>(p => p.ProjectId == projectId).Include(i => i.ProjectInternalSource).Include(o => o.ProjectOtherSource).Include(l => l.ProjectLocation).Include(r => r.ProjectInterventionReport).Include(f => f.ProjectFinancialReport).Include(ld => ld.ProjectLocationDetail).ThenInclude(s => s.State).Include(ld => ld.ProjectLocationDetail).ThenInclude(d => d.District).Include(ld => ld.ProjectLocationDetail).ThenInclude(b => b.Block).Include(c => c.ProjectCommunication);
 
                 var project = _mapper.Map<IEnumerable<DTOModel.Project>, IEnumerable<Project>>(projects);
 
@@ -174,6 +175,71 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+        public async Task<int> SaveDocument(ProjectDocument document)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.ProjectDocument>(document);
+                return await _genericRepository.InsertAsync(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public bool DeleteDocument(int pdId)
+        {
+            try
+            {
+                _genericRepository.Delete<DTOModel.ProjectDocument>(pdId);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task UpdateDocument(ProjectDocument document)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.ProjectDocument>(document);
+                await _genericRepository.UpdateAsync(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<ProjectDocument>> GetDocumentList(int projectId, int processId)
+        {
+            try
+            {
+                var result = await _projectRepository.GetDocuments(projectId, processId).ToListAsync();
+                if (result != null)
+                {
+                    return result.Select(d => new ProjectDocument()
+                    {
+                        ProjectDocumentId = d.ProjectDocumentId,
+                        ProjectId = d.ProjectId,
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        MDocumentName = d.MDocumentName,
+                        DocumentMaxSize = d.DocumentMaxSize,
+                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                        Mandatory = d.Mandatory,
+                        ServerDocumentName = d.ServerDocumentName,
+                    }).ToList();
+                }
+                else
+                    return new List<ProjectDocument>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public List<ProjectLocationDetail> GetLocationDetails(int projectId, int lLevel)
         {
@@ -187,6 +253,48 @@ namespace CSRPulse.Services
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<int> SaveCommunication(ProjectCommunication communication)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.ProjectCommunication>(communication);
+                return await _genericRepository.InsertAsync(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<ProjectCommunication>> GetCommunications(int projectId, bool? IsActive)
+        {
+            try
+            {
+                var communications = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.ProjectCommunication>(x => x.ProjectId == projectId && (IsActive.HasValue ? x.IsActive == IsActive : (1 > 0))));
+
+                return _mapper.Map<List<ProjectCommunication>>(communications);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool ArchiveCommunication(int id, bool IsActive)
+        {
+            try
+            {
+                var model = _genericRepository.GetByID<DTOModel.ProjectCommunication>(id);
+                model.IsActive = IsActive;
+                _genericRepository.Update(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
@@ -212,8 +320,8 @@ namespace CSRPulse.Services
             {
                 return false;
             }
-
         }
+
 
     }
 }

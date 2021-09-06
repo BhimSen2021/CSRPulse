@@ -5,7 +5,7 @@ using System.Data;
 
 namespace CSRPulse.Common
 {
-    public static class ProjectReport
+    public static class ReportHelper
     {
         public static DataTable MakeProjectReport(int projectId, DateTime startDate, DateTime endDate, int reportType)
         {
@@ -29,6 +29,7 @@ namespace CSRPulse.Common
         #region Q u a r t e r l y
         private static DataTable MakeQuarters(int projectId, DateTime startDate, DateTime endDate)
         {
+            int DueDay = 7;
             int NoOfQuarters = CountQuarters(startDate, endDate);
             DataTable dt = new DataTable();
             dt.Columns.Add("ProjectId");
@@ -71,7 +72,7 @@ namespace CSRPulse.Common
                         dtend = dtstart.AddMonths(3).AddDays(-1);
                         dataRow["StartDate"] = dtstart.ToString("dd/MM/yyyy");
                         dataRow["EndDate"] = dtend.ToString("dd/MM/yyyy");
-                        dataRow["DueDate"] = dtend.AddDays(7).ToString("dd/MM/yyyy");
+                        dataRow["DueDate"] = dtend.AddDays(DueDay).ToString("dd/MM/yyyy");
                     }
                     else
                     {
@@ -79,7 +80,7 @@ namespace CSRPulse.Common
                         dtend = dtstart.AddMonths(3).AddDays(-1);
                         dataRow["StartDate"] = dtstart.ToString("dd/MM/yyyy");
                         dataRow["EndDate"] = endDate.ToString("dd/MM/yyyy");
-                        dataRow["DueDate"] = endDate.AddDays(7).ToString("dd/MM/yyyy");
+                        dataRow["DueDate"] = endDate.AddDays(DueDay).ToString("dd/MM/yyyy");
                     }
                 }
                 dt.Rows.Add(dataRow);
@@ -229,7 +230,7 @@ namespace CSRPulse.Common
         private static DataTable MakeMonths(int projectId, DateTime startDate, DateTime endDate)
         {
             int PeriodEndOn = 31;
-            int DueOnDate = 5;
+            int DueDay = 5;
             DataTable dt = new DataTable();
             dt.Columns.Add("ProjectId");
             dt.Columns.Add("ReportNo");
@@ -269,7 +270,7 @@ namespace CSRPulse.Common
                         PeriodEnd = PeriodEndOn;
                     MonthEndDate = new DateTime(startDate.Year, startDate.Month, PeriodEnd);
                     drow["EndDate"] = (new DateTime(startDate.Year, startDate.Month, PeriodEnd)).ToString("dd/MM/yyyy");
-                    drow["DueDate"] = (new DateTime(startDate.Year, startDate.Month, PeriodEnd).AddDays(DueOnDate)).ToString("dd/MM/yyyy");
+                    drow["DueDate"] = (new DateTime(startDate.Year, startDate.Month, PeriodEnd).AddDays(DueDay)).ToString("dd/MM/yyyy");
                     nextMonthStartDate = new DateTime(startDate.Year, startDate.Month, PeriodEnd).AddDays(1);
                     if (nextMonthStartDate.Month == MonthEndDate.Month)
                         dayvar30 = "next";
@@ -281,7 +282,7 @@ namespace CSRPulse.Common
                     if (mon == numofmonth - 1)
                     {
                         MonthEndDate = endDate;
-                        drow["DueDate"] = endDate.AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                        drow["DueDate"] = endDate.AddDays(DueDay).ToString("dd/MM/yyyy");
                         drow["StartDate"] = nextMonthStartDate.ToString("dd/MM/yyyy");
                         drow["EndDate"] = endDate.ToString("dd/MM/yyyy");
                     }
@@ -294,7 +295,7 @@ namespace CSRPulse.Common
                             variable = "Feb";
                             MonthEndDate = nextMonthStartDate.AddMonths(1);
                             drow["EndDate"] = (nextMonthStartDate.AddMonths(1)).ToString("dd/MM/yyyy");
-                            drow["DueDate"] = nextMonthStartDate.AddMonths(1).AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                            drow["DueDate"] = nextMonthStartDate.AddMonths(1).AddDays(DueDay).ToString("dd/MM/yyyy");
                             nextMonthStartDate = (nextMonthStartDate.AddMonths(1).AddDays(1));
                         }
                         else if (((nextMonthStartDate.AddMonths(-1).Month == 2 && PeriodEndOn > 27) & variable == "Feb") || variable == "Feb")
@@ -313,14 +314,14 @@ namespace CSRPulse.Common
                                 MonthEndDate = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEnd);
                                 drow["EndDate"] = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEnd).ToString("dd/MM/yyyy");
                                
-                                drow["DueDate"] = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEnd).AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                                drow["DueDate"] = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEnd).AddDays(DueDay).ToString("dd/MM/yyyy");
                                 nextMonthStartDate = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEnd).AddDays(1);
                             }
                             else
                             {
                                 MonthEndDate = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEndOn);
                                 drow["EndDate"] = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEndOn).ToString("dd/MM/yyyy");
-                                drow["DueDate"] = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEndOn).AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                                drow["DueDate"] = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEndOn).AddDays(DueDay).ToString("dd/MM/yyyy");
                                 nextMonthStartDate = new DateTime(nextMonthStartDate.Year, nextMonthStartDate.Month, PeriodEndOn).AddDays(1);
                             }
                             variable = "";
@@ -346,7 +347,7 @@ namespace CSRPulse.Common
                                 }
                                 MonthEndDate = new DateTime(yearname, nextMonthStartDate.Month, PeriodEnd);
                                 drow["EndDate"] = MonthEndDate.ToString("dd/MM/yyyy");
-                                drow["DueDate"] = new DateTime(yearname, nextMonthStartDate.Month, PeriodEnd).AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                                drow["DueDate"] = new DateTime(yearname, nextMonthStartDate.Month, PeriodEnd).AddDays(DueDay).ToString("dd/MM/yyyy");
                                 nextMonthStartDate = new DateTime(yearname, nextMonthStartDate.Month, PeriodEnd).AddDays(1);
                             }
                             else
@@ -355,14 +356,14 @@ namespace CSRPulse.Common
                                 {
                                     MonthEndDate = new DateTime(yearname, nextMonthStartDate.AddMonths(1).Month, PeriodEndOn);
                                     drow["EndDate"] = MonthEndDate.ToString("dd/MM/yyyy");
-                                    drow["DueDate"] = new DateTime(yearname, nextMonthStartDate.AddMonths(1).Month, PeriodEndOn).AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                                    drow["DueDate"] = new DateTime(yearname, nextMonthStartDate.AddMonths(1).Month, PeriodEndOn).AddDays(DueDay).ToString("dd/MM/yyyy");
                                     nextMonthStartDate = new DateTime(yearname, nextMonthStartDate.AddMonths(1).Month, PeriodEndOn).AddDays(1);
                                 }
                                 else
                                 {
                                     MonthEndDate = new DateTime(yearname, nextMonthStartDate.Month, PeriodEndOn);
                                     drow["EndDate"] = MonthEndDate.ToString("dd/MM/yyyy");
-                                    drow["DueDate"] = new DateTime(yearname, nextMonthStartDate.Month, PeriodEndOn).AddDays(DueOnDate).ToString("dd/MM/yyyy");
+                                    drow["DueDate"] = new DateTime(yearname, nextMonthStartDate.Month, PeriodEndOn).AddDays(DueDay).ToString("dd/MM/yyyy");
                                     nextMonthStartDate = new DateTime(yearname, nextMonthStartDate.Month, PeriodEndOn).AddDays(1);
 
                                 }

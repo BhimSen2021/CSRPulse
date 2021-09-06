@@ -218,11 +218,13 @@ namespace CSRPulse.Controllers
 
         public async Task<IActionResult> ExportTemplate()
         {
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\BlockTemplate.xlsx");
-            if (!System.IO.File.Exists(filepath))
+            var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, 
+                DocumentUploadFilePath.TemplatesLocationFilePath + "BlockTemplate.xlsx");
+
+            if (!System.IO.File.Exists(sPhysicalPath))
                 return Content($"Template not found.");
 
-            return await DownloadFile(filepath);
+            return await DownloadFile(sPhysicalPath);
         }
 
         public async Task<IActionResult> ExportRefTemplate()
@@ -237,27 +239,26 @@ namespace CSRPulse.Controllers
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
 
+            var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, DocumentUploadFilePath.TempFilePath);
+            if (!Directory.Exists(uploadedFilePath))
+                Directory.CreateDirectory(uploadedFilePath);
 
-            var fname = string.Format(@"{0}.xlsx", DateTime.Now.Ticks);
+            var sPhysicalPath = Path.Combine(uploadedFilePath, ExtensionMethods.SetUniqueFileName(".xlsx"));
 
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"TempFiles\" + fname);
-
-            if (_export.ExportToExcel(ds, filepath, "RefrenceCode_Block"))
+            if (_export.ExportToExcel(ds, sPhysicalPath, "RefrenceCode_Block"))
             {
-                if (!System.IO.File.Exists(filepath))
+                if (!System.IO.File.Exists(sPhysicalPath))
                     return Content($"Tempfile path not found.");
 
-                var res = await DownloadFile(filepath);
+                var res = await DownloadFile(sPhysicalPath);
 
-                Common.ExtensionMethods.DeleteFile(filepath);
+                Common.ExtensionMethods.DeleteFile(sPhysicalPath);
                 return res;
-
             }
             else
             {
                 return Content($"Block refrence code file downloding filed.");
             }
-
         }
 
         public ViewResult Import()
@@ -281,19 +282,14 @@ namespace CSRPulse.Controllers
                 List<BlockImport> BlockForm = new List<BlockImport>();
                 if (file.Length > 0)
                 {
-
                     string fileExtension = Path.GetExtension(file.FileName);
-                    fileName = Path.GetFileName(file.FileName);
 
-                    var contentType = Path.GetExtension(file.FileName);
-                    var dicValue = GetDictionaryValueByKeyName(".xlsx");
-                    if ((fileExtension == ".xlsx" || fileExtension == ".xlx"))
+                    if (ValidateFileMimeType(file) && fileExtension == ".xlsx")
                     {
                         #region Upload File At temp location===
                         fileName = ExtensionMethods.SetUniqueFileName(Path.GetFileNameWithoutExtension(file.FileName),
                                Path.GetExtension(file.FileName));
-
-                        filePath = @"Templates\Location\";
+                        filePath = DocumentUploadFilePath.TempFilePath;
                         var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
                         string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
 
@@ -341,7 +337,7 @@ namespace CSRPulse.Controllers
                                 dataTable.Columns["StateId"].SetOrdinal(0);
                                 dataTable.Columns["DistrictId"].SetOrdinal(1);
                                 dataTable.Columns["BlockCode"].SetOrdinal(2);
-                                dataTable.Columns["BlockName"].SetOrdinal(3);                               
+                                dataTable.Columns["BlockName"].SetOrdinal(3);
                                 dataTable.Columns["State"].SetOrdinal(4);
                                 dataTable.Columns["District"].SetOrdinal(5);
                                 dataTable.Columns["error"].SetOrdinal(6);

@@ -35,7 +35,7 @@
                                     @foreach (var s in tvState.Distinct())
                                     {
                                         <li style="list-style: none;" id="li@(s.StateId)">
-                                            <input type="checkbox" class="Lavel1" id="chkT@(s.StateId)" value="@(s.StateId)" />
+                                            <input type="checkbox" class="dLavel1" id="chkT@(s.StateId)" value="@(s.StateId)" />
                                             &nbsp; @s.StateName
 
                                             @if (tvDistrict != null)
@@ -50,7 +50,7 @@
                                                             if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId)) { IsCheck = "checked"; }
 
                                                             <li style="list-style: none;">
-                                                                <input type="checkbox" class="Lavel2" id="chkS@(d.DistrictId)" value="@(d.DistrictId)" @IsCheck />
+                                                                <input type="checkbox" class="dLavel2" id="chkS@(d.DistrictId)" value="@(d.DistrictId)" @IsCheck />
                                                                 &nbsp; @d.DistrictName
 
                                                                 @if (tvBlock != null)
@@ -63,7 +63,7 @@
                                                                                 IsCheck = null;
                                                                                 if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId && x.BlockId == b.BlockId)) { IsCheck = "checked"; }
                                                                                 <li style="list-style: none;">
-                                                                                    <input type="checkbox" class="Lavel3" id="chkI@(b.BlockId)" value="@(b.BlockId)" @IsCheck />
+                                                                                    <input type="checkbox" class="dLavel3" id="chkI@(b.BlockId)" value="@(b.BlockId)" @IsCheck />
                                                                                     &nbsp; @b.BlockName
                                                                                     @if (tvVillage != null)
                                                                                     {
@@ -75,7 +75,7 @@
                                                                                                     IsCheck = null;
                                                                                                     if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId && x.BlockId == b.BlockId && x.VillageId == v.VillageId)) { IsCheck = "checked"; }
                                                                                                     <li style="list-style: none;">
-                                                                                                        <input type="checkbox" class="Lavel4" id="chkI@(v.VillageId)" value="@(v.VillageId)" />
+                                                                                                        <input type="checkbox" class="dLavel4" id="chkI@(v.VillageId)" value="@(v.VillageId)" />
                                                                                                         &nbsp; @v.VillageName
                                                                                                     </li>
                                                                                                 }
@@ -106,7 +106,7 @@
                     </div>
                     <div class="mb-2 col-12 text-end">
                         <input type="button" value="Collapse And Expand All" class="CollapseAll btn btn-outline-dark btn-sm" />
-                        <input type="button" value="Save Selected Location" onclick="SetLocation(0,2)" class="btn btn-outline-info btn-sm" />
+                        <input type="button" value="Save Selected Location" onclick="SaveLocation(0,2)" class="btn btn-outline-info btn-sm" />
                     </div>
                 </div>
             </div>
