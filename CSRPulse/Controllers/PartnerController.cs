@@ -562,7 +562,6 @@ namespace CSRPulse.Controllers
             if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
                 Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
 
-
             var fileName = DateTime.Now.ToString("ddMMyyhhssmmff") + "_" + file.FileName;
             folderPath += fileName;
             string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
