@@ -1,0 +1,75 @@
+﻿@model FundingSource
+@{
+    ViewData["Title"] = "Funding Source";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item active">Funding Source</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Funding Source</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-controller="FundingSource" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="SourceId" />
+                    <div class="row">
+                        <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="mb-3">
+                                <label asp-for="SourceType" class="form-label required"></label>
+                                <select asp-for="SourceType" asp-items="@ViewBag.ddlsourcetype" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Source Type" selected="" value=""></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="SourceName" class="form-label required"></label>
+                                <input type="text" asp-for="SourceName" class="form-control" maxlength="50" placeholder="Enter Source Name (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="SourceName" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Sequence" class="form-label required"></label>
+                                <input type="text" asp-for="Sequence" class="form-control" maxlength="3" placeholder="Enter Source Sequence (max 3 characters)" autocomplete="off">
+                                <span asp-validation-for="Sequence" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <div>
+                                    <input asp-for="IsActive" type="checkbox" id="@Model.SourceId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" />
+                                    <label for="@Model.SourceId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                </div>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>
+
+
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="FundingSource" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

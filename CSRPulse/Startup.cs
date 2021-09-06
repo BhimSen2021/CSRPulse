@@ -95,8 +95,17 @@ namespace CSRPulse
             services.AddScoped<IAuditorServices, AuditorServices>();
 
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IEmailConfigurationServices, EmailConfigurationServices>();
+            services.AddScoped<IFinancialAuditReportService, FinancialAuditReportService>();
+            services.AddScoped<IFundingSourceService, FundingSourceService>();
+            #region Partner Policy And Module
             services.AddScoped<IProjectRepository, ProjectRepository>();
 
+            services.AddScoped<IPartnerPolicyService, PartnerPolicyService>();
+
+            services.AddScoped<IPartnerPolicyModuleService, PartnerPolicyModuleService>();
+
+            #endregion
             #endregion
 
             services.AddSession(option =>

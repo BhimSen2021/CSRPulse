@@ -154,7 +154,9 @@ namespace CSRPulse.Common
         ProgramManager = 66,
         ProgramHead = 68,
         ExecutiveDirector = 69,
-        Administrator = 99
+        Administrator = 99,
+        AuditorChecker = 51,
+        AuditorMaker = 52
     }
     public enum ProcessDocument
     {

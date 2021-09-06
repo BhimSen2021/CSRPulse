@@ -9,24 +9,28 @@ namespace CSRPulse.Services.IServices
     public interface IDropdownBindService
     {
         List<SelectListModel> GetCountryAsync(int? countryId);
+        List<SelectListModel> GetFundingSourceAsync(int? SourceType);
+        List<SelectListModel> GetAuditorChecker(int? AuditCheckerId);
+        List<SelectListModel> GetAuditorMaker(int? AuditMakerId);
+        IEnumerable<SelectListModel> GetProjects(int? projectId);
+        IEnumerable<SelectListModel> GetAuditors(int? auditorId);
+        IEnumerable<SelectListModel> GetProgramManagers(int? ProgramManagerId);
         IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId);
-
         IEnumerable<SelectListModel> GetAllEmails();
         IEnumerable<SelectListModel> GetRole(int? roleid);
 
         IEnumerable<SelectListModel> GetDistrict(int? stateId, int? districtId);
         IEnumerable<SelectListModel> GetBlock(int? stateId, int? districtId, int? blockId);
-
         IEnumerable<SelectListModel> GetTheme(int? themeId);
         IEnumerable<SelectListModel> GetSubTheme(int? themeId, int? subThemeId);
 
         IEnumerable<SelectListModel> GetActivity(int? themeId, int? activityId);
         IEnumerable<SelectListModel> GetSubActivity(int? themeId, int? activityId);
         IEnumerable<SelectListModel> GetUoM(int? uomId);
-
         IEnumerable<SelectListModel> GetIndicatorResponseType();
         IEnumerable<SelectListModel> GetIndicatorType();
         IEnumerable<SelectListModel> GetDepartments();
+        IEnumerable<SelectListModel> GetPartnerPolicy();
 
         IEnumerable<SelectListModel> GetDesignations(int? designationId);
 

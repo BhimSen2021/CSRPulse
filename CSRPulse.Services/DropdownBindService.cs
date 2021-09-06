@@ -28,6 +28,51 @@ namespace CSRPulse.Services
                 };
             return countryList;
         }
+        public List<SelectListModel> GetFundingSourceAsync(int? SourceType)
+        {
+            var fundingsourceList = new List<SelectListModel>()
+                {
+                    new SelectListModel { id = 1, value = "Internal Source" },
+                    new SelectListModel { id = 2, value = "Other Source" }
+                };
+            return fundingsourceList;
+        }
+        public List<SelectListModel> GetAuditorChecker(int? AuditCheckerId)
+        {
+            var auditcheckerList = new List<SelectListModel>()
+                {
+                    new SelectListModel { id = 1, value = "Audit Checker" },
+                    new SelectListModel { id = 2, value = "Audit Checker-1" }
+                };
+            return auditcheckerList;
+        }
+        public List<SelectListModel> GetAuditorMaker(int? AuditMakerId)
+        {
+            var auditmakerList = new List<SelectListModel>()
+                {
+                    new SelectListModel { id = 1, value = "Audit Maker" },
+                    new SelectListModel { id = 2, value = "AuditMaker-1" }
+                };
+            return auditmakerList;
+        }
+        public IEnumerable<SelectListModel> GetProgramManagers(int? ProgramManagerId)
+        {
+            var dtoProgram = _genericRepository.Get<DTOModel.User>(x => ProgramManagerId.HasValue ? x.UserId == ProgramManagerId.Value : (1 > 0) && x.IsActive == true);
+            var programtList = _mapper.Map<List<SelectListModel>>(dtoProgram);
+            return programtList.ToList();
+        }
+        public IEnumerable<SelectListModel> GetProjects(int? projectId)
+        {
+            var dtoProject = _genericRepository.Get<DTOModel.Project>(x => projectId.HasValue ? x.ProjectId == projectId.Value : (1 > 0) && x.IsActive == true);
+            var projectList = _mapper.Map<List<SelectListModel>>(dtoProject);
+            return projectList.ToList();
+        }
+        public IEnumerable<SelectListModel> GetAuditors(int? auditorId)
+        {
+            var dtoAuditor = _genericRepository.Get<DTOModel.Auditor>(x => auditorId.HasValue ? x.AuditorId == auditorId.Value : (1 > 0) && x.IsActive == true);
+            var auditorList = _mapper.Map<List<SelectListModel>>(dtoAuditor);
+            return auditorList.ToList();
+        }
 
         public IEnumerable<SelectListModel> GetStateAsync(int? countryId, int? stateId)
         {
@@ -191,6 +236,13 @@ namespace CSRPulse.Services
         {
             var departments = _genericRepository.Get<DTOModel.Department>(x => x.IsActive == true);
             var selectLists = _mapper.Map<List<SelectListModel>>(departments);
+            return selectLists.ToList();
+
+        }
+        public IEnumerable<SelectListModel> GetPartnerPolicy()
+        {
+            var partnerpolicy = _genericRepository.Get<DTOModel.PartnerPolicy>(x => x.IsActive == true);
+            var selectLists = _mapper.Map<List<SelectListModel>>(partnerpolicy);
             return selectLists.ToList();
 
         }

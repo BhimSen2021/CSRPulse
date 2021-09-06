@@ -1,0 +1,102 @@
+﻿@model CSRPulse.Model.FinancialAuditReport
+@{
+    ViewData["Title"] = "Add New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Thematics</a></li>
+                    <li class="breadcrumb-item active">Financial Audit</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Add New</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert alert-secondary" role="alert">
+            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-area="" asp-controller="FinancialAuditReport" asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="mb-3">
+                                <label asp-for="NGOId" class="form-label required"></label>
+                                <select asp-for="NGOId" asp-items="@ViewBag.ddlngo" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select NGO" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="NGOId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ProjectId" class="form-label required"></label>
+                                <select asp-for="ProjectId" asp-items="@ViewBag.ddlGrant" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Project" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="ProjectId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="AuditorId" class="form-label required"></label>
+                                <select asp-for="AuditorId" asp-items="@ViewBag.ddlAuditor" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Auditor" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="AuditorId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="AuditCheckerId" class="form-label required"></label>
+                                <select asp-for="AuditCheckerId" asp-items="@ViewBag.ddlAC" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Auditor Checker" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="AuditCheckerId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="AuditMakerId" class="form-label required"></label>
+                                <select asp-for="AuditMakerId" asp-items="@ViewBag.ddlAM" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Auditor Maker" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="AuditMakerId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ProgramManagerId" class="form-label required"></label>
+                                <select asp-for="ProgramManagerId" asp-items="@ViewBag.ddlManager" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Program Manager" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="ProgramManagerId" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="AuditDate" class="form-label required"></label>
+                                @Html.EditorFor(model => model.AuditDate, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                <span asp-validation-for="AuditDate" class="invalid"></span>
+                                </div>
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label ">Scorecard</label>
+                                <input asp-for="IsActive" type="checkbox" id="@Model.FareportId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" checked="checked" />
+                                <label for="@Model.FareportId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="FinancialAuditReport" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>

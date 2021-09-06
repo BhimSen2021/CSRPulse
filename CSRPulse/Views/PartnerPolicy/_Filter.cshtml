@@ -1,0 +1,31 @@
+﻿@model PartnerPolicy
+
+<div class="card bg-transparent">
+    <div class="card-body">
+        <form data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-partnerpolicy-list" data-ajax-mode="replace" asp-action="GetPartnerPolicyList" asp-controller="PartnerPolicy">
+            <div class="row">
+                <div class="col-md-2 col-form-label">
+                    <i class="mdi mdi-filter"></i> <label>Filter By :</label>
+                </div>
+                <label asp-for="IsActiveFilter" class="col-md-1 col-form-label"></label>
+                <div class="col-md-4">
+                    <select asp-for="IsActiveFilter" aria-required="true" class="form-select">
+                        <option label="All" selected="" value=""></option>
+                        <option label="Yes" value="true"></option>
+                        <option label="No" value="false"></option>
+                    </select>
+                    <span asp-validation-for="IsActiveFilter" class="invalid"></span>
+                </div>
+                <div class="col-md-5 text-end">
+                    <button type="submit" value="Search" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to search records" class="btn btn-warning btn-sm rounded-pill text-white">
+                        <i class="dripicons-search me-2"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
