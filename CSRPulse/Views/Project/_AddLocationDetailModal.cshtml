@@ -1,0 +1,116 @@
+﻿@model IEnumerable<ProjectLocationDetail>
+@{
+    List<CSRPulse.Model.ProjectLocationDetail> tvLDetails = ViewBag.tvLDetails;
+
+    var tvState = tvLDetails.GroupBy(x => x.StateId, (key, group) => group.First()).ToList();
+    var tvDistrict = tvLDetails.GroupBy(x => x.DistrictId, (key, group) => group.FirstOrDefault()).ToList();
+    var tvBlock = tvLDetails.GroupBy(x => x.BlockId, (key, group) => group.FirstOrDefault()).Where(b => b.BlockName != null).ToList();
+    var tvVillage = tvLDetails.GroupBy(x => x.VillageId, (key, group) => group.FirstOrDefault()).Where(v => v.VillageName != null).ToList();
+
+    string IsCheck = string.Empty;
+}
+<div id="AddLocationDetailModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title"> Add Location Details </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body" style="overflow: auto">
+                <div class="mb-2 form-label">
+                    <b>Location Level : </b>  <label id="lblLDLevel">
+                    </label>
+                </div>
+                <div class="row slimscroll" style="max-height: 300px; overflow: hidden; width: auto; height: 255px;">
+                    <div class="col-sm-12">
+                        @if (tvState != null)
+                        {
+                            if (tvState.Count == 0)
+                            {
+                                <span>No State found.</span>
+                            }
+                            else
+                            {
+                                <ul class="treeview tree2 tvState">
+                                    @foreach (var s in tvState.Distinct())
+                                    {
+                                        <li style="list-style: none;" id="li@(s.StateId)">
+                                            <input type="checkbox" class="dLavel1" id="chkT@(s.StateId)" value="@(s.StateId)" />
+                                            &nbsp; @s.StateName
+
+                                            @if (tvDistrict != null)
+                                            {
+                                                <ul class="tree2 tvDistrict">
+                                                    @foreach (var d in tvDistrict)
+                                                    {
+
+                                                        if (@s.StateId == @d.StateId)
+                                                        {
+                                                            IsCheck = null;
+                                                            if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId)) { IsCheck = "checked"; }
+
+                                                            <li style="list-style: none;">
+                                                                <input type="checkbox" class="dLavel2" id="chkS@(d.DistrictId)" value="@(d.DistrictId)" @IsCheck />
+                                                                &nbsp; @d.DistrictName
+
+                                                                @if (tvBlock != null)
+                                                                {
+                                                                    <ul class="tree2 tvBlock">
+                                                                        @foreach (var b in tvBlock)
+                                                                        {
+                                                                            if (d.DistrictId == b.DistrictId)
+                                                                            {
+                                                                                IsCheck = null;
+                                                                                if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId && x.BlockId == b.BlockId)) { IsCheck = "checked"; }
+                                                                                <li style="list-style: none;">
+                                                                                    <input type="checkbox" class="dLavel3" id="chkI@(b.BlockId)" value="@(b.BlockId)" @IsCheck />
+                                                                                    &nbsp; @b.BlockName
+                                                                                    @if (tvVillage != null)
+                                                                                    {
+                                                                                        <ul>
+                                                                                            @foreach (var v in tvVillage)
+                                                                                            {
+                                                                                                if (b.BlockId == v.BlockId)
+                                                                                                {
+                                                                                                    IsCheck = null;
+                                                                                                    if (Model.Any(x => x.StateId == d.StateId && x.DistrictId == d.DistrictId && x.BlockId == b.BlockId && x.VillageId == v.VillageId)) { IsCheck = "checked"; }
+                                                                                                    <li style="list-style: none;">
+                                                                                                        <input type="checkbox" class="dLavel4" id="chkI@(v.VillageId)" value="@(v.VillageId)" />
+                                                                                                        &nbsp; @v.VillageName
+                                                                                                    </li>
+                                                                                                }
+
+                                                                                            }
+                                                                                        </ul>
+                                                                                    }
+                                                                                </li>
+                                                                            }
+                                                                        }
+                                                                    </ul>
+                                                                }
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="divLocationDetailAlert" style="display:none" class="col-12 mb-2 text-danger text-end">
+                        <strong><i class="dripicons-information me-1"></i>Alert - </strong> Please select location.
+                    </div>
+                    <div class="mb-2 col-12 text-end">
+                        <input type="button" value="Collapse And Expand All" class="CollapseAll btn btn-outline-dark btn-sm" />
+                        <input type="button" value="Save Selected Location" onclick="SaveLocation(0,2)" class="btn btn-outline-info btn-sm" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

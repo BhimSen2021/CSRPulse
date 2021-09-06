@@ -1,0 +1,82 @@
+﻿@model Project
+<form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" enctype="multipart/form-data" asp-action="SaveDocumentCommunication" asp-controller="Project" data-ajax-success="onDocument">
+    <div class="mb-2 text-end">
+        <input type="hidden" asp-for="ProjectId" id="dProjectId" />
+    </div>
+    <div class="row">
+        <div class="col-6 h5">Documents</div>
+        <div class="col-6 text-end"><button class="btn btn-primary btn-sm" type="submit" name="ButtonType" value="document"><i class="mdi mdi-file-document-edit"></i> Save Document</button></div>
+    </div>
+    <div class="mb-3" id="div-document-grid">
+        @{await Html.RenderPartialAsync("_DocumentList", Model);}
+    </div>
+    <div class="row">
+        <div class="col-6 h5">Communication</div>
+        <div class="col-6 text-end">
+            <a class="btn btn-dark btn-sm me-1" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-communication-grid"
+               data-ajax-mode="replace" asp-action="ShowArchive" asp-route-pId="@(Model.ProjectId)" asp-route-isArchive="false" asp-controller="Project"><i class="dripicons-preview me-1"></i>Show Archive Only</a>
+            <a class="btn btn-success btn-sm me-1" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-communication-grid"
+               data-ajax-mode="replace" asp-action="ShowArchive" asp-route-pId="@(Model.ProjectId)" asp-route-isArchive="true" asp-controller="Project"><i class="dripicons-preview me-1"></i>Show Unarchive Only</a>
+
+            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#AddCommunicationModal">
+                <i class="mdi mdi-plus me-1"></i>Add Communication
+            </button>
+
+        </div>
+    </div>
+    <div class="mb-2" id="div-communication-grid">
+        @{await Html.RenderPartialAsync("_CommunicationList", Model);}
+    </div>
+    <partial name="_AddCommunicationModal" model="Model" />
+</form>
+<partial name="_Confirmation" />
+<script type="text/javascript">
+    function onDocument(data) {
+        if (data.type == 1) {
+            $("#div-document-grid").html(data.htmlData);
+            if (data.flag == 1) {
+                commonMessage('success', data.msg);
+            }
+            else if (data.flag == 2) {
+                commonMessage('warning', data.msg);
+            }
+        }
+        else if (data.type == 2) {
+            $("#div-communication-grid").html(data.htmlData);
+            if (data.flag == 1) {
+                commonMessage('success', 'Communication Saved Successfully.');
+            }
+            $('#AddCommunicationModal').modal('hide');
+
+        }
+    }
+
+    function openpopup(cnt) {
+        var id = cnt.id.split('_')[1];
+        $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+    }
+    function ActiveDeActive(obj) {
+        var id = obj.id.split('_')[0];
+        var isChecked = obj.id.split('_')[1];
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/Project/ArchiveCommunication',
+            data: { id: id, isChecked: isChecked },
+            success: function (responce) {
+                if (responce) {
+                    commonMessage('success', 'Status changed successfully.');
+                }
+
+                else {
+                    commonMessage('warning', 'Status changing failed.');
+                }
+            },
+            error: function (responce) {
+                commonMessage('error', 'Status changing failed.');
+            }
+        });
+    }
+
+</script>

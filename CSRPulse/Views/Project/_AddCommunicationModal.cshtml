@@ -1,0 +1,36 @@
+﻿@model Project
+<div id="AddCommunicationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title"> Add Communication</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body" style="overflow: auto">
+                <div class="row">
+                    <div class="mb-3">
+                        <label asp-for="Communication.Subject" class="form-label required"></label>
+                        <input type="text" asp-for="Communication.Subject" class="form-control" maxlength="256" placeholder="Enter subject (max 256 characters)" autocomplete="off">
+                        <span asp-validation-for="Communication.Subject" class="invalid"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Communication.CommunicationDate" class="form-label required"></label>
+                        @Html.EditorFor(model => model.Communication.CommunicationDate, new { htmlAttributes = new { @data_val = "false", @class = "form-control", @autocomplete = "off" } })
+                        <span asp-validation-for="Communication.CommunicationDate" class="invalid"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Communication.Communication" class="form-label required"></label>
+                        <textarea asp-for="Communication.Communication" class="form-control" rows="5" maxlength="2000" placeholder="Enter communication(max 2000 characters)" autocomplete="off"></textarea>
+                        <span asp-validation-for="Communication.Communication" class="invalid"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-2 col-12 text-end">
+                        <button type="submit" name="ButtonType" value="communication" class="btn btn-primary btn-sm me-1"><i class="mdi mdi-file-document-edit"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -134,6 +134,12 @@ namespace CSRPulse.Common
             return renamedFileName + fileExtension;
         }
 
+        public static string SetUniqueFileName(this string fileExtension)
+        {
+            string renamedFileName = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Millisecond.ToString();
+            return renamedFileName + fileExtension;
+        }
+
         public static List<U> FindDuplicates<T, U>(this List<T> list, Func<T, U> keySelector)
         {
             return list.GroupBy(keySelector)
@@ -266,6 +272,8 @@ namespace CSRPulse.Common
                     return "";
             }
         }
+
+        
 
     }
 }

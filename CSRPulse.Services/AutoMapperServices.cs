@@ -184,7 +184,16 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.ProjectInterventionReport, ProjectInterventionReport>().ReverseMap();
             CreateMap<DTOModel.ProjectFinancialReport, ProjectFinancialReport>().ReverseMap();
             CreateMap<DTOModel.ProjectLocation, ProjectLocation>().ReverseMap();
-            CreateMap<DTOModel.ProjectLocationDetail, ProjectLocationDetail>().ReverseMap();
+            
+            CreateMap<DTOModel.ProjectLocationDetail, ProjectLocationDetail>()
+            .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
+            .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName))
+            .ForMember(d => d.BlockName, o => o.MapFrom(s => s.Block.BlockName));
+
+            CreateMap<ProjectLocationDetail, DTOModel.ProjectLocationDetail>();
+
+            CreateMap<DTOModel.ProjectDocument, ProjectDocument >().ReverseMap();
+            CreateMap<DTOModel.ProjectCommunication, ProjectCommunication>().ReverseMap();
             #endregion
 
             #region Email Mapper

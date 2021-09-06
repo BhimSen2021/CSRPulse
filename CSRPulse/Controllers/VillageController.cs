@@ -29,7 +29,7 @@ namespace CSRPulse.Controllers
         private readonly IDropdownBindService _ddlService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IExport _export;
-        public VillageController(IBlockServices blockServices,IVillageServices villageServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment, IExport export)
+        public VillageController(IBlockServices blockServices, IVillageServices villageServices, IDropdownBindService ddlService, IWebHostEnvironment webHostEnvironment, IExport export)
         {
             _blockServices = blockServices;
             _villageServices = villageServices;
@@ -44,7 +44,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("VillageController/Index");
             try
             {
-               
+
                 BindDropdowns();
                 return View();
             }
@@ -62,7 +62,7 @@ namespace CSRPulse.Controllers
             try
             {
                 var result = await _villageServices.GetVillageList(village);
-                return PartialView("_VillageList",result);
+                return PartialView("_VillageList", result);
             }
             catch (Exception ex)
             {
@@ -118,7 +118,7 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-       
+
         public async Task<IActionResult> Edit(int rid)
         {
             _logger.LogInformation("VillageController/Edit");
@@ -248,11 +248,12 @@ namespace CSRPulse.Controllers
 
         public async Task<IActionResult> ExportTemplate()
         {
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"Templates\Location\VillageTemplate.xlsx");
-            if (!System.IO.File.Exists(filepath))
+            var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, DocumentUploadFilePath.TemplatesLocationFilePath + "VillageTemplate.xlsx");
+
+            if (!System.IO.File.Exists(sPhysicalPath))
                 return Content($"Template not found.");
 
-            return await DownloadFile(filepath);
+            return await DownloadFile(sPhysicalPath);
         }
 
         public async Task<IActionResult> ExportRefTemplate()
@@ -267,25 +268,27 @@ namespace CSRPulse.Controllers
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
 
-            var fname = string.Format(@"{0}.xlsx", DateTime.Now.Ticks);
+            var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, DocumentUploadFilePath.TempFilePath);
+            if (!Directory.Exists(uploadedFilePath))
+                Directory.CreateDirectory(uploadedFilePath);
 
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"TempFiles\" + fname);
+            var sPhysicalPath = Path.Combine(uploadedFilePath, ExtensionMethods.SetUniqueFileName(".xlsx"));
 
-            if (_export.ExportToExcel(ds, filepath, "RefrenceCode_Village"))
+            if (_export.ExportToExcel(ds, sPhysicalPath, "RefrenceCode_Village"))
             {
-                if (!System.IO.File.Exists(filepath))
+                if (!System.IO.File.Exists(sPhysicalPath))
                     return Content($"Tempfile path not found.");
 
-                var res = await DownloadFile(filepath);
+                var res = await DownloadFile(sPhysicalPath);
 
-                Common.ExtensionMethods.DeleteFile(filepath);
+                Common.ExtensionMethods.DeleteFile(sPhysicalPath);
                 return res;
             }
             else
             {
                 return Content($"Village refrence code file downloding filed.");
             }
-        
+
         }
 
         public ViewResult Import()
@@ -309,19 +312,14 @@ namespace CSRPulse.Controllers
                 List<VillageImport> VillageForm = new List<VillageImport>();
                 if (file.Length > 0)
                 {
-
                     string fileExtension = Path.GetExtension(file.FileName);
-                    fileName = Path.GetFileName(file.FileName);
-
-                    var contentType = Path.GetExtension(file.FileName);
-                    var dicValue = GetDictionaryValueByKeyName(".xlsx");
-                    if ((fileExtension == ".xlsx" || fileExtension == ".xlx"))
+                    if (ValidateFileMimeType(file) && fileExtension == ".xlsx")
                     {
                         #region Upload File At temp location===
                         fileName = ExtensionMethods.SetUniqueFileName(Path.GetFileNameWithoutExtension(file.FileName),
                                Path.GetExtension(file.FileName));
 
-                        filePath = @"Templates\Location\";
+                        filePath = DocumentUploadFilePath.TempFilePath;
                         var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
                         string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
 
@@ -338,7 +336,7 @@ namespace CSRPulse.Controllers
                             villageImpModel.Message = "No record found, Please check the sheet and reupload.";
                             return Json(new { status = "noRecordFound", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
                         }
-                        else if(error > 0 && msg == "MAXROW")
+                        else if (error > 0 && msg == "MAXROW")
                         {
                             villageImpModel.NoOfErrors = 1;
                             villageImpModel.Message = "Found more than 10,000 records, You can not validate more than 10,000 villages a single sheet.";

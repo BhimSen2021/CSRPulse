@@ -158,4 +158,10 @@ namespace CSRPulse.Common
         AuditorChecker = 51,
         AuditorMaker = 52
     }
+    public enum ProcessDocument
+    {
+        PartnerDocument = 2,
+        FinancialAuditAgencyOnboardingDocument = 4,
+        DocumentProject = 5
+    }
 }

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ProjectFinancialReport>
+@using CSRPulse.Common
+<div class="row">
+    <div class="mb-3">
+        <table id="tblIReport" class="basic-datatable  table table-striped dt-responsive nowrap w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(m => m.ReportName)</th>
+                    <th>@Html.DisplayNameFor(m => m.SubmittedOn)</th>
+                    <th>@Html.DisplayNameFor(m => m.Status)</th>
+                    <th>@Html.DisplayName("Reporting Period")</th>
+                    <th>@Html.DisplayNameFor(m => m.DueDate)</th>
+                    <th>@Html.DisplayNameFor(m => m.ProjectYear)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var report in Model.OrderBy(r => r.ReportNo))
+                    {
+                        <tr>
+                            <td>@report.ReportNo</td>
+                            <td>@report.ReportName</td>
+                            <td>@report.SubmittedOn</td>
+                            <td>@ExtensionMethods.ReportStatus(report.Status ?? 1, report.StartDate)</td>
+                            <td><span class="badge badge-info-lighten">@report.StartDate.ToShortDateString() to @report.EndDate.ToShortDateString() </span> </td>
+                            <td>@report.DueDate.ToShortDateString()</td>
+                            <td>@report.ProjectYear</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

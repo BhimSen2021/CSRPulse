@@ -12,10 +12,10 @@ using System;
 using CSRPulse.Model;
 using System.Collections.Generic;
 using CSRPulse.Common;
-
+using static CSRPulse.Common.FileHelper;
 namespace CSRPulse.Controllers
 {
-    [CheckAuthorize] // it will check authorization on all the controller and its action which inherited by basecontroller
+    [CheckAuthorize] //it will check authorization on all the controller and its action which inherited by basecontroller
     public abstract class BaseController<T> : Controller where T : BaseController<T>
     {
         private ILogger<T> logger;
@@ -56,6 +56,27 @@ namespace CSRPulse.Controllers
                 byte[] fileBytes = System.IO.File.ReadAllBytes(sPath);
                 return File(fileBytes, "image/jpg;base64");
             }
+        }
+
+        public async Task<string> UploadFile(string uploadedFilePath, IFormFile file)
+        {
+            var fileName = ExtensionMethods.SetUniqueFileName(Path.GetExtension(file.FileName));
+            using (FileStream stream = new FileStream(Path.Combine(uploadedFilePath, fileName), FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            return fileName;
+        }
+        [NonAction]
+        public bool DeleteFile(string sFileFullPath)
+        {
+            if (System.IO.File.Exists(sFileFullPath))
+            {
+                System.IO.File.Delete(sFileFullPath);
+                return true;
+            }
+            else
+                return false;
         }
 
         [NonAction]
@@ -156,5 +177,18 @@ namespace CSRPulse.Controllers
 
         public Dictionary<string, string> GetErrorMessage() => ImportValidationMessage.ImportErrMsg();
 
+        public static bool ValidateFileMimeType(IFormFile file)
+        {
+            string mimeType = string.Empty;
+            using (Stream stream = file.OpenReadStream())
+            {
+                mimeType = GetMimeType(stream);
+            }
+            var disMType = GetFileMimeType(Path.GetExtension(file.FileName));
+            if (mimeType == disMType)
+                return true;
+            else
+                return false;
+        }
     }
 }

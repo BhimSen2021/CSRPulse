@@ -7,7 +7,7 @@ namespace CSRPulse.Model
 {
     public class Project : BaseModel
     {
-        [Key]
+
         public int ProjectId { get; set; }
         [Required, StringLength(4000), Display(Name = "Name of the Project")]
         public string ProjectName { get; set; }
@@ -53,5 +53,8 @@ namespace CSRPulse.Model
         public List<ProjectReport> ProjectReport { get; set; }
         public List<ProjectLocation> ProjectLocation { get; set; }
         public List<ProjectLocationDetail> ProjectLocationDetail { get; set; }
+        public List<ProjectDocument> ProjectDocument { get; set; }
+        public List<ProjectCommunication> ProjectCommunication { get; set; }
+        public ProjectCommunication Communication { get; set; }
     }
 }

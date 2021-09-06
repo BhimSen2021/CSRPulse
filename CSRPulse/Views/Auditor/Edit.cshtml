@@ -19,9 +19,7 @@
         </div>
     </div>
     <div class="col">
-        <div class="alert alert-secondary" role="alert">
-            <strong><i class="dripicons-information me-1"></i>Note - </strong> Fields marked with <b>(<span class="text-danger">*</span>)</b> are compulsory fields.
-        </div>
+        <partial name="_NoteFieldsMark" />
     </div>
 </div>
 
@@ -91,17 +89,17 @@
                 <div class="mb-3">
                     <h5>Document List</h5>
                 </div>
-                    <div id="#div-auditordocument-grid">
-                        @{ await Html.RenderPartialAsync("_AuditorDocument", Model); }
-                    </div>
+                <div id="#div-auditordocument-grid">
+                    @{ await Html.RenderPartialAsync("_AuditorDocument", Model); }
+                </div>
 
-                    <div class="mb-2 text-end">
-                        <a asp-area="" asp-controller="Auditor" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
-                        <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
-                    </div>
+                <div class="mb-2 text-end">
+                    <a asp-area="" asp-controller="Auditor" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                    <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                </div>
 
 
-                </div> <!-- end card -->
+            </div> <!-- end card -->
         </form>
     </div> <!-- end card body-->
 </div>

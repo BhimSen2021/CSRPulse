@@ -1,83 +1,56 @@
 ﻿@model Auditor
-<form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" enctype="multipart/form-data" asp-action="SaveDocument" asp-controller="Auditor" data-ajax-success="onAuditorDocument">
-    <div class="row">
-        <div class="mb-3">
-            <table class="table table-hover table-sm table-centered mb-0">
-                <thead class="table-light">
+<div class="mb-3">
+    <table class="table table-hover table-sm table-centered mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Document Name</th>
+                <th>File Name</th>
+                <th></th>
+                <th>Remark</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.AuditorDocument != null)
+            {
+                for (int i = 0; i < Model.AuditorDocument.Count; i++)
+                {
                     <tr>
-                        <th>#</th>
-                        <th>Document Name</th>
-                        <th>File Name</th>
-                        <th></th>
-                        <th>Remark</th>
-                        <th></th>
+                        <td>
+                            <span>@(i+1)</span>
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentId" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].Sdname" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].Udname" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentName" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentType" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentMaxSize" />
+                        </td>
+                        <td>@Model.AuditorDocument[i].DocumentName</td>
+                        <td><a id="lnk_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Auditor" asp-action="DownloadDocument" asp-route-fileName="@Model.AuditorDocument[i].Sdname">@Model.AuditorDocument[i].Udname</a></td>
+                        <td>
+                            <input asp-for="@Model.AuditorDocument[i].DocumentFile" onchange="Filevalidation(this)">
+                        </td>
+                        <td><input type="text" asp-for="@Model.AuditorDocument[i].Remark" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off"></td>
+                        <th>
+                            @if (Model.AuditorDocument[i].Sdname != null)
+                            {
+                                <a href="javascript:void(0);" class="action-icon" id="AuditorDocument_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear document" onclick="RemoveFile(this)"><i class="dripicons-document-delete text-danger"></i></a>
+                            }
+                        </th>
                     </tr>
-                </thead>
-                <tbody>
-                    @if (Model.AuditorDocument != null)
-                    {
-                        for (int i = 0; i < Model.AuditorDocument.Count; i++)
-                        {
-                            <tr>
-                                <td>
-                                    <span>@(i+1)</span>
-                                    <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentId" />
-                                    <input type="hidden" asp-for="@Model.AuditorDocument[i].Sdname" />
-                                    <input type="hidden" asp-for="@Model.AuditorDocument[i].Udname" />
-                                    <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentName" />
-                                    <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentType" />
-                                    <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentMaxSize" />
-                                </td>
-                                <td>@Model.AuditorDocument[i].DocumentName</td>
-                                <td><a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Auditor" asp-action="DownloadDocument" asp-route-fileName="@Model.AuditorDocument[i].Sdname">@Model.AuditorDocument[i].Udname</a></td>
-                                <td>
-                                    <input asp-for="@Model.AuditorDocument[i].DocumentFile" onchange="Filevalidation(this)">
-                                </td>
-                                <td><input type="text" asp-for="@Model.AuditorDocument[i].Remark" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off"></td>
-                                <th>
-                                    @if (Model.AuditorDocument[i].Sdname != null)
-                                    {
-                                        <a href="javascript:void(0);" class="action-icon" id="AuditorDocument_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove document" onclick="RemoveFile(this)"><i class="mdi mdi-delete"></i></a>
-                                    }
-                            </th>
-                        </tr>
-                    }
                 }
-                </tbody>
-            </table>
-        </div>
-        @*<div class="mb-3 text-end">
-                <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveDocument"><i class="mdi mdi-file-document-edit"></i> Save</button>
-            </div>*@
-    </div>
-</form>
+            }
+        </tbody>
+    </table>
+</div>
+
 
 <script type="text/javascript">
-    function onAuditorDocument(data) {}
-
-    function Filevalidation(obj) {
-        var fileSize = obj.files[0].size;
-        var mSize = $('#' + obj.id.replace('DocumentFile', 'DocumentMaxSize')).val();
-        var fileExt = $('#' + obj.id).val().split('.').pop().toLowerCase();
-        var validExt = $('#' + obj.id.replace('DocumentFile', 'DocumentType')).val();
-
-        if ((fileSize / 1048576) > mSize) {
-            commonMessage('error', 'Maximum file size exceed, The file size can not exceed: ' + mSize + "MB");
-            $('#' + obj.id).val('');
-            return false;
-        }
-        else if (validExt.indexOf(fileExt) < 1) {
-            commonMessage('error', 'Only formats are allowed: ' + validExt);
-            $('#' + obj.id).val('');
-            return false;
-        }
-        else
-            return true;
-    }
-
     /**/
     function RemoveFile(obj) {
         $('#' + obj.id + '__Sdname').val('');
         $('#' + obj.id + '__Remark').val('');
+        $('#' + obj.id.replace('AuditorDocument', 'lnk')).text('');
     }
 </script>

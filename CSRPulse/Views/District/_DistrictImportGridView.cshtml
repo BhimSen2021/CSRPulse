@@ -69,7 +69,7 @@
                                             }
                                             var errorClass = (arrError[err].Length > 0) ? "error1" : null;
                                             str1 = dr[dc].ToString();
-                                            <td data-toggle="tooltip" title="@title" class="@errorClass"> @str1</td>
+                                            <td data-bs-toggle="tooltip" data-bs-placement="top" title="@title" class="@errorClass"> @str1</td>
                                         }
                                         err++;
                                     }
@@ -93,7 +93,7 @@
                                             }
                                             var errorClass = (arrError[err].Length > 0) ? "error1" : null;
                                             str1 = dr[dc].ToString();
-                                            <td toggle-tooltip="tooltip" title="@title" class="@errorClass"> @str1</td>
+                                            <td data-bs-toggle="tooltip" data-bs-placement="top" title="@title" class="@errorClass"> @str1</td>
                                         }
                                         err++;
                                     }

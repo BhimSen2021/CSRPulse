@@ -1,0 +1,41 @@
+﻿@model Project
+<table class="table table-hover table-sm table-centered mb-0">
+    <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Subject</th>
+            <th>Communication Date</th>
+            <th>Communication</th>
+            <th width="5%">Archive</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ProjectCommunication != null)
+        {
+            for (int i = 0; i < Model.ProjectCommunication.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <span>@(i+1)</span>
+                        <input type="hidden" asp-for="@Model.ProjectCommunication[i].ProjectCommunicationId" />
+                    </td>
+                    <td>
+                        @Model.ProjectCommunication[i].Subject
+                    </td>
+                    <td>
+                        @Model.ProjectCommunication[i].CommunicationDate.ToString("MM/dd/yyyy hh:mm tt")
+                    </td>
+                    <td>
+                        @Model.ProjectCommunication[i].Communication
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch_@Model.ProjectCommunication[i].ProjectCommunicationId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onchange="openpopup(this)" data-switch="success" @if (Model.ProjectCommunication[i].IsActive == true) { <text> checked="checked" </text> } />
+                            <label for="switch_@Model.ProjectCommunication[i].ProjectCommunicationId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

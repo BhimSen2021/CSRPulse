@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
@@ -112,7 +113,7 @@ namespace CSRPulse.Controllers
                     if (auditor.AuditorDocument == null)
                         auditor.AuditorDocument = new List<AuditorDocument>();
 
-                    
+
                     foreach (var d in pDocument)
                     {
                         if (auditor.AuditorDocument.Any(x => x.DocumentId == d.DocumentId))
@@ -158,6 +159,28 @@ namespace CSRPulse.Controllers
                     {
                         auditor.AuditorDocument = auditor.AuditorDocument.Where(x => x.DocumentFile != null || x.Sdname != null).ToList();
 
+                        #region Check Mime Type
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int i = 0; i < auditor.AuditorDocument.Count; i++)
+                        {
+                            if (auditor.AuditorDocument[i].DocumentFile != null)
+                            {
+                                if (!ValidateFileMimeType(auditor.AuditorDocument[i].DocumentFile))
+                                {
+                                    stringBuilder.Append($"# {i + 1} The file format of the {auditor.AuditorDocument[i].DocumentFile.FileName} file is incorrect");
+                                    stringBuilder.Append("<br>");
+                                }
+                            }
+                        }
+
+                        if (stringBuilder.ToString() != "")
+                        {
+                            ModelState.AddModelError("", stringBuilder.ToString());
+                            BindDropdowns();
+                            return View(auditor);
+                        }
+                        #endregion
+
                         for (int i = 0; i < auditor.AuditorDocument.Count; i++)
                         {
                             auditor.AuditorDocument[i].CreatedBy = userDetail.CreatedBy;
@@ -166,9 +189,9 @@ namespace CSRPulse.Controllers
 
                             if (auditor.AuditorDocument[i].DocumentFile != null)
                             {
-                                string folder = "images/Auditor/Document/";
+                                string folder = @"documents\Auditor";
                                 auditor.AuditorDocument[i].Udname = auditor.AuditorDocument[i].DocumentFile.FileName;
-                                auditor.AuditorDocument[i].Sdname = await UploadImage(folder, auditor.AuditorDocument[i].DocumentFile);
+                                auditor.AuditorDocument[i].Sdname = await UploadDocument(folder, auditor.AuditorDocument[i].DocumentFile);
                             }
                         }
                     }
@@ -206,22 +229,18 @@ namespace CSRPulse.Controllers
             ViewBag.ddlState = new SelectList(stateList, "id", "value");
         }
 
-        private async Task<string> UploadImage(string folderPath, IFormFile file)
+        private async Task<string> UploadDocument(string folderPath, IFormFile file)
         {
             if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
                 Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
 
-
-            var fileName = DateTime.Now.ToString("ddMMyyhhssmmff") + "_" + file.FileName;
-            folderPath += fileName;
-            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-            return fileName;
+            var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+            return await UploadFile(uploadedFilePath, file);
         }
 
         [HttpPost]
         public JsonResult ActiveDeActive(int id, bool isChecked)
-        {            
+        {
             _logger.LogInformation("AuditorController/ActiveDeActive");
             var result = _auditorServices.ActiveDeActive(id, isChecked);
             return Json(result);

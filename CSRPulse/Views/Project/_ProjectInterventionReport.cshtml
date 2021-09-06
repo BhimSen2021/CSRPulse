@@ -2,8 +2,7 @@
 @using CSRPulse.Common
 <div class="row">
     <div class="mb-3">
-
-        <table class="basic-datatable table table-striped dt-responsive nowrap no-footer dtr-inline dataTable">
+        <table id="tblIReport" class="basic-datatable  table table-striped dt-responsive nowrap w-100">
             <thead class="thead-light">
                 <tr>
                     <th width="5%">#</th>
@@ -34,7 +33,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="3">No Records Found</td>
+                        <td colspan="7">No Records Found</td>
                     </tr>
                 }
             </tbody>
@@ -42,8 +41,3 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        Basicdatatable();
-    });
-</script>

@@ -1462,7 +1462,8 @@ $.extend( $.validator, {
 
 		// https://jqueryvalidation.org/number-method/
 		number: function( value, element ) {
-			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
+			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,](\d{3}|\d{2}))+)(?:[\.,]\d+)?$/.test(value);
+			///^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/
 		},
 
 		// https://jqueryvalidation.org/digits-method/
@@ -1655,3 +1656,4 @@ if ( $.ajaxPrefilter ) {
 }
 return $;
 }));
+

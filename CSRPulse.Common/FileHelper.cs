@@ -1,15 +1,16 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Data.OleDb;
 
 namespace CSRPulse.Common
 {
     public static class FileHelper
     {
-        public static string GetFileContentType(Stream fileStream)
+        public static string GetMimeType(Stream fileStream)
         {
-            string contenttype = "application/octet-stream";
-
+            string mimeType = string.Empty;
             BinaryReader chkBinary = new BinaryReader(fileStream);
             Byte[] chkbytes = chkBinary.ReadBytes(0x10);
 
@@ -19,67 +20,68 @@ namespace CSRPulse.Common
 
             //Set the contenttype based on File Extension
             switch (magicCheck)
-            {
-                //  case "25-50-44-46-2D-31-2E-33-0A-25-E2-E3-CF-D3-0A-31":
-                // case "25-50-44-46-2D-31-2E-34-0A-25-E2-E3-CF-D3-0A-31": // for pdf
+            {              
                 case "25-50-44-46":
-                    contenttype = "application/pdf";
+                    mimeType = "application/pdf";
                     break;
 
                 case "09-08-10-00":
-                case "FD-FF-FF-FF":
+                case "FD-FF-FF-FF":                
+                    //for xls  
+                    mimeType = "application/vnd.ms-excel";
+                    break;
+
+                case "50-4B-03-04":
+                    // for xlsx
+                    mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    break;
+               
                 case "D0-CF-11-E0":
-                    // case "D0-CF-11-E0-A1-B1-1A-E1-00-00-00-00-00-00-00-00": //for xls  
-                    contenttype = "application/vnd.ms-excel";
+                    // for doc
+                    mimeType = "application/msword";
                     break;
 
-                case "50-4B-03-04":  // for xlsx
-                                     // case "50-4B-03-04-14-00-06-00-08-00-00-00-21-00-7C-6C":
-                    contenttype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                case "D2-6C-5A-01":
+                    // for docx
+                    mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                     break;
-
-                //  case "0D-44-4F-43":
-                //  case "CF-11-E0-A1":
-                case "50-4B-03-04-14-00-06-00-08-00-00-00-21-00-E5-79":
-                    //   case "D0-CF-11-E0-A1-B1-1A-E1-00-00-00-00-00-00-00-00":
-                    contenttype = "application/msword";
-                    break;
-                   
 
                 case "47-49-46-38":
-                    // case "47-49-46-38-39-61-F4-01-F4-01-F6-7F-00-77-88-A5":
-                    contenttype = "image/gif";
+                    mimeType = "image/gif";
                     break;
                 case "FF-D8-FF-E1":
-                    //  case "FF-D8-FF-E0-00-10-4A-46-49-46-00-01-01-00-00-01":
-                    contenttype = "image/jpg";
+                    mimeType = "image/jpg";
                     break;
                 case "FF-D8-FF-E0":
-                    // case "FF-D8-FF-E0-00-10-4A-46-49-46-00-01-01-00-00-01":
-                    contenttype = "image/jpeg";
+                    mimeType = "image/jpeg";
                     break;
                 case "89-50-4E-47":
-                    // case "89-50-4E-47-0D-0A-1A-0A-00-00-00-0D-49-48-44-52":
-                    contenttype = "image/png";
+                    mimeType = "image/png";
                     break;
 
                 default:
-                    contenttype = "application/octet-stream";
+                    mimeType = "application/octet-stream";
                     break;
-            }
-            if (contenttype != String.Empty)
-            {
-                Byte[] bytes = chkBinary.ReadBytes((Int32)fileStream.Length);
-                return contenttype;
-            }
-            return contenttype;
+            }            
+            return mimeType;
         }
 
-        public static string GetDictionaryValueByKeyName(string key)
+        public static string GetFileMimeType(string key)
         {
             return dicExtensionAndContentType[key];
         }
-      
+
+
+        public static bool CheckSkipFormulaInExcelFile(string filepath, string filename)
+        {
+            FileInfo file = new FileInfo(filepath);
+            if (file.Exists)
+            {
+               
+            }
+            return false;
+        }
+
         public static readonly Dictionary<string, string> dicExtensionAndContentType = new Dictionary<string, string>(2000, StringComparer.InvariantCultureIgnoreCase)
         {
             {".ez", "application/andrew-inset"},
