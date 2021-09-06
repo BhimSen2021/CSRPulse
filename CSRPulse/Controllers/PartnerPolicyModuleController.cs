@@ -64,6 +64,7 @@ namespace CSRPulse.Controllers
             _logger.LogInformation("PartnerPolicyModuleController/GetPartnerPolicyModuleList");
             try
             {
+               
                 var result = await _partnerPolicyModuleServices.GetPartnerPolicyModuleAsync(PartnerPolicyModule);
                 return PartialView("_PartnerPolicyModuleList", result);
             }
@@ -93,9 +94,9 @@ namespace CSRPulse.Controllers
                 {
                     PartnerPolicyModule.CreatedBy = userDetail.CreatedBy;
                     PartnerPolicyModule.IsActive = true;
-                    PartnerPolicyModule.IsFormallyApprovedByBoard = true;
-                    PartnerPolicyModule.IsImplementedSince = true;
-                    PartnerPolicyModule.IsLastUpdatedOn = true;
+                    //PartnerPolicyModule.IsFormallyApprovedByBoard = true;
+                    //PartnerPolicyModule.IsImplementedSince = true;
+                    //PartnerPolicyModule.IsLastUpdatedOn = true;
                     var result = await _partnerPolicyModuleServices.CreatePartnerPolicyModuleAsync(PartnerPolicyModule);
                     if (result.IsExist)
                     {

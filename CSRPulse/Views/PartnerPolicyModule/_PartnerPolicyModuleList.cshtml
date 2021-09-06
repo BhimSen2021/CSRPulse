@@ -26,26 +26,7 @@
                             </td>
 
                             <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Partner Policy Module.">  @Html.ActionLink(partnerPolicyModule.PolicyModuleName, "Edit", "PartnerPolicyModule", new { policymoduleId = partnerPolicyModule.PolicyModuleId })</span></td>
-
-                            <td>
-                                <div>
-                                    <input type="checkbox" id="switch#Board_@partnerPolicyModule.PolicyModuleId#Board" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsFormallyApprovedByBoard == true) { <text> checked="checked" </text> } />
-                                    <label for="switch#Board_@partnerPolicyModule.PolicyModuleId#Board" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <input type="checkbox" id="switch#Imp_@partnerPolicyModule.PolicyModuleId#Imp" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsImplementedSince == true) { <text> checked="checked" </text> } />
-                                    <label for="switch#Imp_@partnerPolicyModule.PolicyModuleId#Imp" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <input type="checkbox" id="switch#Last_@partnerPolicyModule.PolicyModuleId#Last" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsLastUpdatedOn == true) { <text> checked="checked" </text> } />
-                                    <label for="switch#Last_@partnerPolicyModule.PolicyModuleId#Last" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                </div>
-                            </td>
-
+                                                     
                             <td>
                                 <div>
                                     <input type="checkbox" id="switch_@partnerPolicyModule.PolicyModuleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsActive == true) { <text> checked="checked" </text> } />

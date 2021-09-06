@@ -24,6 +24,9 @@ namespace CSRPulse.Services
         Task<List<NGOFundingPartner>> GetInsertNGOFundingPartner(NGOFundingPartner fundingPartner);
         List<NGOFundingPartner> GetDeleteNGOFundingPartner(int id, int partnerId, int agencyType);
         Task<NGOFundingPartner> GetNGOFundingPartner(int id);
-        Task<List<PartnerDocumentDetail>> GetPartnerDocumentAsync(int partnerId);
+        Task<List<PartnerDocumentDetail>> GetPartnerDocumentAsync(int partnerId);       
+        Task<List<PartnerPolicyModule>> GetPartnerPolicyModuleAsync();
+        Task<List<PartnerPolicy>> GetPartnerPolicyAsync();
+
     }
 }

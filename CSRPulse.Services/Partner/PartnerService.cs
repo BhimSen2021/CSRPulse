@@ -436,5 +436,30 @@ namespace CSRPulse.Services
             }
         }
 
+       public async Task<List<PartnerPolicyModule>> GetPartnerPolicyModuleAsync()
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyModule>(x=>x.IsActive==true);
+                return _mapper.Map<List<PartnerPolicyModule>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<PartnerPolicy>> GetPartnerPolicyAsync()
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicy>(x => x.IsActive == true);
+                return _mapper.Map<List<PartnerPolicy>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@
                     <label asp-for="PolicyId" class="col-md-1 col-form-label">Policy</label>
                     <div class="col-md-3">
                         <select asp-for="PolicyId" asp-items="@ViewBag.ddlPartnerPolicy" aria-required="true" class="form-select">
-                            <option label="All" selected="" value=""></option>
+                            <option label="Select Policy" selected="" value=""></option>
                         </select>
                         <span asp-validation-for="PolicyId" class="invalid"></span>
                     </div>

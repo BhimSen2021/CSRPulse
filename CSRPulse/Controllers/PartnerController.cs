@@ -19,11 +19,13 @@ namespace CSRPulse.Controllers
         private readonly IPartnerService _partnerService;
         private readonly IDropdownBindService _ddlService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        
         public PartnerController(IPartnerService partnerService, IDropdownBindService dropdownBindService, IWebHostEnvironment webHostEnvironment)
         {
             _partnerService = partnerService;
             _ddlService = dropdownBindService;
             _webHostEnvironment = webHostEnvironment;
+            
         }
         [HttpGet]
         public IActionResult Index()
@@ -105,19 +107,26 @@ namespace CSRPulse.Controllers
             {
                 BindDropdowns();
                 var partner = await _partnerService.GetPartnerById(partnerId);
+
                 if (partner.PartnerType == (int)Common.PartnerType.NGO)
                 {
                     BindFYYear();
+                    partner.PartnerPolicy = await _partnerService.GetPartnerPolicyAsync();
+                    partner.PartnerPolicyModule = await _partnerService.GetPartnerPolicyModuleAsync();
                     return View("NGOTypeEdit", partner);
+                   
                 }
                 else
                     return View(partner);
+                    //partner.PartnerPolicyModules = ;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -703,5 +712,39 @@ namespace CSRPulse.Controllers
             modelState.Remove("ComState");
         }
 
+        #region Organization Details
+        //public async Task<IActionResult> SavePartnerPolicyModuleDetail(PartnerPolicyModule partnerPolicyModule, string ButtonType)
+        //{
+        //    try
+        //    {
+        //        int flag = 0;
+        //        PartnerPolicyModule partnermodule = new PartnerPolicyModule() { PolicyModuleId = partnerPolicyModule.PolicyModuleId, PolicyId = partnerPolicyModule.PolicyId };
+        //        if (ButtonType == "SaveAgency")
+        //        {
+        //            if (ModelState.IsValid)
+        //            {
+        //                partnerPolicyModule.CreatedOn = DateTime.UtcNow;
+        //                partnerPolicyModule.CreatedBy = userDetail.UserID;
+
+        //                //var partnerpolicy = await _partnerService.GetInsertNGOFundingPartner(partnerPolicyModule);
+        //                //partnermodule.PartnerPolicyModules = partnerpolicy;
+        //                flag = 1;
+        //            }
+        //        }
+        //        //var result = "";
+        //        return Json(new { flag = flag, type = partnerPolicyModule.PolicyModuleId, htmlData = ConvertViewToString("_AddPartnerPolicyModule", partnerPolicyModule, true) });
+
+        //        //return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+        //        throw;
+
+        //    }
+        //}
+        #endregion
     }
+
 }
+
