@@ -149,7 +149,6 @@ namespace CSRPulse.Areas.Admin.Controllers
                     {
                         if (signUp.OldDesignationId != signUp.DesignationId)
                         {
-
                             var uHistory = new DesignationHistory()
                             {
                                 UserId = signUp.UserID,

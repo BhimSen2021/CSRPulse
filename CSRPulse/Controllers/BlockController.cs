@@ -297,6 +297,16 @@ namespace CSRPulse.Controllers
                         {
                             file.CopyTo(stream);
                         }
+                        #region C H E C K  F O R M U L A S
+                        var isFormulas = CheckFormulaInExcelFile(sPhysicalPath);
+                        if (isFormulas)
+                        {
+                            blockImpModel.NoOfErrors = 1;
+                            blockImpModel.Message = "File contains formula or arithmetic operators that is not allowed in system.";
+                            return Json(new { status = "success", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });
+                        }
+                        #endregion
+
                         #endregion
                         var objBlock = _blockServices.ReadBlockExcelData(sPhysicalPath, false, out msg, out error, out warning, out importBlockSave, out missingHeaders, out columnName);
                         if (error > 0 && msg == "Rows")
