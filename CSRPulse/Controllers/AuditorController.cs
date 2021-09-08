@@ -105,7 +105,7 @@ namespace CSRPulse.Controllers
             try
             {
                 BindDropdowns();
-                var pDocument = await _processDocument.GetProcessDocuments(4);
+                var pDocument = await _processDocument.GetProcessDocuments((int)Common.ProcessDocument.AuditAgencyOnboardingDocument);
                 var auditor = _auditorServices.GetAuditorById(auditorId);
 
                 if (pDocument != null)
@@ -119,6 +119,9 @@ namespace CSRPulse.Controllers
                         if (auditor.AuditorDocument.Any(x => x.DocumentId == d.DocumentId))
                         {
                             auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentName = d.DocumentName;
+                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().Mandatory = d.Mandatory;
+                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentType = d.DocumentType;
+                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentMaxSize = d.DocumentMaxSize ?? 20;
                         }
                         else
                         {
@@ -129,6 +132,7 @@ namespace CSRPulse.Controllers
                                 DocumentName = d.DocumentName,
                                 DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
                                 DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                                Mandatory = d.Mandatory
                             });
                         }
                     }
@@ -157,7 +161,15 @@ namespace CSRPulse.Controllers
                     // Upload Documents
                     if (auditor.AuditorDocument != null)
                     {
-                        auditor.AuditorDocument = auditor.AuditorDocument.Where(x => x.DocumentFile != null || x.Sdname != null).ToList();
+                        // Check All Mandatory Documents
+                        if (auditor.AuditorDocument.Where(x => (x.Sdname == null && x.DocumentFile == null) && x.Mandatory == true).Any())
+                        {
+                            ModelState.AddModelError("", "upload all mandatory documents");
+                            BindDropdowns();
+                            return View(auditor);
+                        }
+
+                            auditor.AuditorDocument = auditor.AuditorDocument.Where(x => x.DocumentFile != null || x.Sdname != null).ToList();
 
                         #region Check Mime Type
                         StringBuilder stringBuilder = new StringBuilder();
@@ -189,7 +201,7 @@ namespace CSRPulse.Controllers
 
                             if (auditor.AuditorDocument[i].DocumentFile != null)
                             {
-                                string folder = @"documents\Auditor";
+                                string folder = DocumentUploadFilePath.AuditorFilePath;
                                 auditor.AuditorDocument[i].Udname = auditor.AuditorDocument[i].DocumentFile.FileName;
                                 auditor.AuditorDocument[i].Sdname = await UploadDocument(folder, auditor.AuditorDocument[i].DocumentFile);
                             }
