@@ -1,4 +1,5 @@
-﻿using CSRPulse.Model;
+﻿using CSRPulse.Common;
+using CSRPulse.Model;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
@@ -502,6 +504,26 @@ namespace CSRPulse.Controllers
                 {
                     var listAD = partner.NgochartDocument.Where(s => s.ServerDocumentName != null || s.DocumentFile != null).ToList();
 
+                    #region Check Mime Type
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < partner.NgochartDocument.Count; i++)
+                    {
+                        if (partner.NgochartDocument[i].DocumentFile != null)
+                        {
+                            if (!ValidateFileMimeType(partner.NgochartDocument[i].DocumentFile))
+                            {
+                                stringBuilder.Append($"# {i + 1} The file format of the {partner.NgochartDocument[i].DocumentFile.FileName} file is incorrect");
+                                stringBuilder.Append("<br>");
+                            }
+                        }                      
+                    }
+
+                    if (stringBuilder.ToString()!="")
+                    {                        
+                            return Json(new { flag = 3, msg = stringBuilder.ToString(), htmlData = ConvertViewToString("_NGOChartDocument", partner, true) });
+                    }
+                    #endregion
+
                     RevoveModelState(ModelState);
                     if (TryValidateModel(partner.NgochartDocument))
                     {
@@ -516,11 +538,14 @@ namespace CSRPulse.Controllers
 
                             if (listAD[i].DocumentFile != null)
                             {
-                                string folder = "images/Partner/ChartDocument/";
-                                listAD[i].DocumentName = listAD[i].DocumentFile.FileName;
-                                listAD[i].ServerDocumentName = await UploadImage(folder, listAD[i].DocumentFile);
+                                var filePath = DocumentUploadFilePath.PartnerFilePath;
+                                listAD[i].DocumentName = partner.NgochartDocument[i].DocumentFile.FileName;
+                                listAD[i].ServerDocumentName = await UploadDocument(filePath, partner.NgochartDocument[i].DocumentFile);
+                                //string folder = "images/Partner/ChartDocument/";
+                                //listAD[i].DocumentName = listAD[i].DocumentFile.FileName;
+                                //listAD[i].ServerDocumentName = await UploadImage(folder, listAD[i].DocumentFile);
                             }
-                        }
+                          }
 
                         partner.NgochartDocument = listAD;
                         var Details = await _partnerService.GetUpdateNGOChartDocument(partner);
@@ -537,8 +562,8 @@ namespace CSRPulse.Controllers
                     partner.NgochartDocument.Add(model);
                     flag = 2;
                 }
-
-                return Json(new { flag = flag, htmlData = ConvertViewToString("_NGOChartDocument", partner, true) });
+                
+                return Json(new { flag = flag, msg = "Documents uploaded Succesfully", htmlData = ConvertViewToString("_NGOChartDocument", partner, true) });
             }
             catch (Exception ex)
             {
@@ -548,26 +573,49 @@ namespace CSRPulse.Controllers
 
         }
 
-        public async Task<IActionResult> DownloadDocument(string fileName)
+        public IActionResult DownloadDocument(string fileName)
         {
-            var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\Partner\ChartDocument\" + fileName);
-            if (!System.IO.File.Exists(filepath))
+            var filePath = DocumentUploadFilePath.PartnerFilePath;
+            var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath + fileName);
+            if (!System.IO.File.Exists(sPhysicalPath))
                 return Content($"file not found.");
 
-            return await DownloadFile(filepath);
+            return DownloadAnyFile(fileName, sPhysicalPath, null);
+            //var filepath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\Partner\ChartDocument\" + fileName);
+            //if (!System.IO.File.Exists(filepath))
+            //    return Content($"file not found.");
+
+            //return await DownloadFile(filepath);
         }
 
-        private async Task<string> UploadImage(string folderPath, IFormFile file)
+        private async Task<string> UploadDocument(string filePath, IFormFile file)
         {
-            if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
-                Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
+            try
+            {
+                if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, filePath)))
+                    Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, filePath));
 
-            var fileName = DateTime.Now.ToString("ddMMyyhhssmmff") + "_" + file.FileName;
-            folderPath += fileName;
-            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-            return fileName;
+                var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+
+                return await UploadFile(uploadedFilePath, file);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
         }
+        //private async Task<string> UploadImage(string folderPath, IFormFile file)
+        //{
+        //    if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
+        //        Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
+
+        //    var fileName = DateTime.Now.ToString("ddMMyyhhssmmff") + "_" + file.FileName;
+        //    folderPath += fileName;
+        //    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+        //    await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+        //    return fileName;
+        //}
         #endregion
 
 

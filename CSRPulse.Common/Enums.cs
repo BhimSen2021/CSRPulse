@@ -164,4 +164,10 @@ namespace CSRPulse.Common
         FinancialAuditAgencyOnboardingDocument = 4,
         DocumentProject = 5
     }
+    public enum FundingSourceType
+    {
+        InternalSource = 1,
+        OtherSource = 2
+    }
+
 }

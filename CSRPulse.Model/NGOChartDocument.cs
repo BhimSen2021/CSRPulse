@@ -18,5 +18,6 @@ namespace CSRPulse.Model
         [StringLength(2000)]
         public string Remarks { get; set; }
         public IFormFile DocumentFile { get; set; }
+        public bool Mandatory { get; set; }
     }
 }

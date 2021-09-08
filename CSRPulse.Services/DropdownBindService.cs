@@ -300,12 +300,16 @@ namespace CSRPulse.Services
 
         public IEnumerable<SelectListModel> GetSource(int? type)
         {
-            var source = new List<SelectListModel>();
-            for (int i = 1; i <= 5; i++)
-            {
-                source.Add(new SelectListModel { id = i, value = "Source - " + (i) });
-            }
-            return source;
+            var source = _genericRepository.Get<DTOModel.FundingSource>(x => type.HasValue ? x.SourceType == type.Value : (1 > 0) && x.IsActive == true);
+            var sourceList = _mapper.Map<List<SelectListModel>>(source);
+            return sourceList.ToList();
+
+            //var source = new List<SelectListModel>();
+            //for (int i = 1; i <= 5; i++)
+            //{
+            //    source.Add(new SelectListModel { id = i, value = "Source - " + (i) });
+            //}
+            //return source;
         }
 
         #region Location

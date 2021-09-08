@@ -306,6 +306,9 @@ namespace CSRPulse.Services
             .ForMember(d => d.id, o => o.MapFrom(s => s.PolicyId))
             .ForMember(d => d.value, o => o.MapFrom(s => s.PolicyName));
 
+            CreateMap<DTOModel.FundingSource, SelectListModel>()
+            .ForMember(d => d.id, o => o.MapFrom(s => s.SourceId))
+            .ForMember(d => d.value, o => o.MapFrom(s => s.SourceName));
 
             #endregion
 

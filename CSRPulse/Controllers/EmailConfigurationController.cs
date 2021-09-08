@@ -23,16 +23,9 @@ namespace CSRPulse.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //List<EmailConfiguration> email = new List<EmailConfiguration>();
-            //email =  _emailconfigServices.GetEmailConfigAsync();
-            var result =await _emailconfigServices.GetEmailConfigAsync();
+           var result =await _emailconfigServices.GetEmailConfigAsync();
             return View(result);
         }
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _mappr.EmailConfiguration.ToListAsync());
-        //}
-
         public async Task<IActionResult> Edit()
         {
             try
@@ -40,9 +33,9 @@ namespace CSRPulse.Controllers
                 var uDetail = await _emailconfigServices.GetEmailConfigAsync();
                 return View(uDetail);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
         }

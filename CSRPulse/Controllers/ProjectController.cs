@@ -392,10 +392,6 @@ namespace CSRPulse.Controllers
             ViewBag.ddlTheme = new SelectList(themeList, "id", "value");
             var partnerList = _ddlService.GetPartners(null);
             ViewBag.ddlPartner = new SelectList(partnerList, "id", "value");
-
-            var sourceList = _ddlService.GetSource(null);
-            ViewBag.ddlOtherSource = new SelectList(sourceList, "id", "value");
-
             var PMList = _ddlService.GetUsers((int)Common.UserRole.ProgramManager);
             ViewBag.ddlPM = new SelectList(PMList, "id", "value");
 
