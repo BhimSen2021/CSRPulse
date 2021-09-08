@@ -36,7 +36,7 @@ namespace CSRPulse.Model
         [Required, Display(Name = "Total Project Support from Internal(₹)")]
         public decimal TrustContribution { get; set; }
 
-        [Display(Name = "Other Sources Contribution (₹)")]
+        [Display(Name = "Other Source Contribution (₹)")]
         public decimal? OtherSource { get; set; }
         [Display(Name = "Project Status")]
         public int Status { get; set; }

@@ -327,6 +327,17 @@ namespace CSRPulse.Controllers
                         {
                             file.CopyTo(stream);
                         }
+
+                        #region C H E C K  F O R M U L A S
+                        var isFormulas = CheckFormulaInExcelFile(sPhysicalPath);
+                        if (isFormulas)
+                        {
+                            villageImpModel.NoOfErrors = 1;
+                            villageImpModel.Message = "File contains formula or arithmetic operators that is not allowed in system.";
+                            return Json(new { status = "success", htmlData = ConvertViewToString("_VillageImportGridView", villageImpModel, true) });
+                        }
+                        #endregion
+
                         #endregion
                         var objVillage = _villageServices.ReadVillageExcelData(sPhysicalPath, false, out msg, out error, out warning, out importVillageSave, out missingHeaders, out columnName);
                         if (error > 0 && msg == "Rows")

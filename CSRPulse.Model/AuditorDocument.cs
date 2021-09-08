@@ -21,6 +21,7 @@ namespace CSRPulse.Model
         public string Remark { get; set; }
         public string DocumentType { get; set; }
         public int DocumentMaxSize { get; set; }
+        public bool Mandatory { get; set; }
         public IFormFile DocumentFile { get; set; }
     }
 }

@@ -194,3 +194,20 @@ function Filevalidation(obj) {
     else
         return true;
 }
+
+
+$(document).on("click", '.table .delete-link', function () {   
+    var deleteLink = $(this);
+    deleteLink.hide();
+    var confirmButton = deleteLink.siblings(".delete-confirm");
+    confirmButton.show();
+    return false;
+});
+
+$(document).on("click", '.table .delete-cancel', function () {
+    var confirmButton = $(".delete-confirm");
+    confirmButton.hide();
+    var deletelink = $(".delete-link");
+    deletelink.show();
+    return false;
+});

@@ -12,16 +12,11 @@
     </div>
     <div class="row">
         <div class="col-6 h5">Communication</div>
-        <div class="col-6 text-end">
-            <a class="btn btn-dark btn-sm me-1" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-communication-grid"
-               data-ajax-mode="replace" asp-action="ShowArchive" asp-route-pId="@(Model.ProjectId)" asp-route-isArchive="false" asp-controller="Project"><i class="dripicons-preview me-1"></i>Show Archive Only</a>
-            <a class="btn btn-success btn-sm me-1" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-communication-grid"
-               data-ajax-mode="replace" asp-action="ShowArchive" asp-route-pId="@(Model.ProjectId)" asp-route-isArchive="true" asp-controller="Project"><i class="dripicons-preview me-1"></i>Show Unarchive Only</a>
-
+        <div class="col-6 text-end">           
+            <button type="button" id="btnShowArchive" class="btn btn-dark btn-sm me-1"><i class="dripicons-preview me-1"></i>Show / Hide Archive</button>
             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#AddCommunicationModal">
                 <i class="mdi mdi-plus me-1"></i>Add Communication
             </button>
-
         </div>
     </div>
     <div class="mb-2" id="div-communication-grid">
@@ -78,5 +73,14 @@
             }
         });
     }
+
+    $(document).ready(function () {
+        $(".is-archive").hide();       
+        $('#btnShowArchive').click(function () {
+            $(".is-archive").toggle(400);
+           
+        });
+
+    });
 
 </script>

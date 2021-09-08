@@ -138,7 +138,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                 {
                     if (signUp.ImagePhoto != null)
                     {
-                        string imagePath = DocumentUploadFilePath.UserProfileImagePath;                       
+                        string imagePath = DocumentUploadFilePath.UserProfileImagePath;
                         signUp.ImageName = await UploadImage(imagePath, signUp.ImagePhoto);
                     }
 
@@ -149,7 +149,6 @@ namespace CSRPulse.Areas.Admin.Controllers
                     {
                         if (signUp.OldDesignationId != signUp.DesignationId)
                         {
-
                             var uHistory = new DesignationHistory()
                             {
                                 UserId = signUp.UserID,
@@ -162,7 +161,6 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                             await _designationHistory.CreateDesignation(uHistory);
                         }
-
 
                         TempData["Message"] = "User Updated Successfully.";
                         return RedirectToAction(nameof(Index));
@@ -202,11 +200,8 @@ namespace CSRPulse.Areas.Admin.Controllers
             if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, folderPath)))
                 Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, folderPath));
 
-            var fileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-            folderPath += fileName;
-            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-            return fileName;
+            var uploadedImagePath = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+            return await UploadFile(uploadedImagePath, file);
         }
 
         [NonAction]

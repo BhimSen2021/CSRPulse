@@ -50,7 +50,7 @@ namespace CSRPulse.Services
                 financial.IsExist = IsExist;
                 return financial;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

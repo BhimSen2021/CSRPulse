@@ -1,57 +1,64 @@
 ﻿@model Project
-<table class="table table-hover table-sm table-centered mb-0">
-    <thead class="table-light">
-        <tr>
-            <th>#</th>
-            <th>Document Name</th>
-            <th>File Name</th>
-            <th width="10%"></th>
-            <th width="5%">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            for (int i = 0; i < Model.ProjectDocument.Count; i++)
+    <table class="table table-hover table-sm table-centered mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Document Name</th>
+                <th>File Name</th>
+                <th width="10%"></th>
+                <th width="6%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
+                for (int i = 0; i < Model.ProjectDocument.Count; i++)
+                {
 
-                <tr>
-                    <td>
-                        <span>@(i+1)</span>
-                        <input type="hidden" id="ProjectDocumentId_@i" asp-for="@Model.ProjectDocument[i].ProjectDocumentId" value="@Model.ProjectDocument[i].ProjectDocumentId"/>
-                        <input type="hidden" id="DocumentId_@i" asp-for="@Model.ProjectDocument[i].DocumentId" />
-                        <input type="hidden" id="ServerDocumentName_@i" asp-for="@Model.ProjectDocument[i].ServerDocumentName" value="@Model.ProjectDocument[i].ServerDocumentName" />
-                        <input type="hidden" asp-for="@Model.ProjectDocument[i].Mandatory" />
-                        <input type="hidden" asp-for="@Model.ProjectDocument[i].DocumentMaxSize" />
-                        <input type="hidden" asp-for="@Model.ProjectDocument[i].DocumentType" />
-                    </td>
-                    <td>
-                        @Model.ProjectDocument[i].MDocumentName
-                        <span class="@(Model.ProjectDocument[i].Mandatory==true?"required":"")"></span>
-                        <input type="hidden" id="MDocumentName_@i" asp-for="@Model.ProjectDocument[i].MDocumentName" />
-                    </td>
-                    <td>
-                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Project" asp-action="DownloadDocument" asp-route-fileName="@Model.ProjectDocument[i].ServerDocumentName">@Model.ProjectDocument[i].DocumentName</a>
-                    </td>
-                    <td>
-                        @if (Model.ProjectDocument[i].ServerDocumentName == null)
-                        {
-                            <input asp-for="@Model.ProjectDocument[i].DocumentFile" onchange="Filevalidation(this)">
-                        }
-                        else
-                        {
-                            <input asp-for="@Model.ProjectDocument[i].DocumentFile" disabled>
-                        }
-                    </td>
-                    <td>
-                        @if (Model.ProjectDocument[i].ServerDocumentName != null && Model.ProjectDocument[i].ProjectDocumentId > 0)
-                        {
-                            <a class="font-16" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-document-grid"
-                               data-ajax-mode="replace" asp-action="RemoveDocument" asp-route-pdId="@(Model.ProjectDocument[i].ProjectDocumentId)" asp-route-pId="@(Model.ProjectId)" asp-route-fName="@(Model.ProjectDocument[i].ServerDocumentName)" asp-controller="Project"><i class="dripicons-trash text-danger"></i></a>
-                        }
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            <span>@(i+1)</span>
+                            <input type="hidden" id="ProjectDocumentId_@i" asp-for="@Model.ProjectDocument[i].ProjectDocumentId" value="@Model.ProjectDocument[i].ProjectDocumentId" />
+                            <input type="hidden" id="DocumentId_@i" asp-for="@Model.ProjectDocument[i].DocumentId" />
+                            <input type="hidden" id="ServerDocumentName_@i" asp-for="@Model.ProjectDocument[i].ServerDocumentName" value="@Model.ProjectDocument[i].ServerDocumentName" />
+                            <input type="hidden" asp-for="@Model.ProjectDocument[i].Mandatory" />
+                            <input type="hidden" asp-for="@Model.ProjectDocument[i].DocumentMaxSize" />
+                            <input type="hidden" asp-for="@Model.ProjectDocument[i].DocumentType" />
+                        </td>
+                        <td>
+                            @Model.ProjectDocument[i].MDocumentName
+                            <span class="@(Model.ProjectDocument[i].Mandatory==true?"required":"")"></span>
+                            <input type="hidden" id="MDocumentName_@i" asp-for="@Model.ProjectDocument[i].MDocumentName" />
+                        </td>
+                        <td>
+                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Project" asp-action="DownloadDocument" asp-route-fileName="@Model.ProjectDocument[i].ServerDocumentName">@Model.ProjectDocument[i].DocumentName</a>
+                        </td>
+                        <td>
+                            @if (Model.ProjectDocument[i].ServerDocumentName == null)
+                            {
+                                <input asp-for="@Model.ProjectDocument[i].DocumentFile" onchange="Filevalidation(this)">
+                            }
+                            else
+                            {
+                                <input asp-for="@Model.ProjectDocument[i].DocumentFile" disabled>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (Model.ProjectDocument[i].ServerDocumentName != null && Model.ProjectDocument[i].ProjectDocumentId > 0)
+                            {
+                                <a class="font-16 delete-link action-icon" id="delete-link_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record">
+                                    <i class="dripicons-trash text-danger" aria-hidden="true"></i>
+                                </a>
+                                <div class="delete-confirm text-nowrap" id="delete-confirm_@i" style="display: none">
+                                    <a class="confirm-delete text-danger" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-document-grid"
+                                       data-ajax-mode="replace" asp-action="RemoveDocument" asp-route-pdId="@(Model.ProjectDocument[i].ProjectDocumentId)" asp-route-pId="@(Model.ProjectId)" asp-route-fName="@(Model.ProjectDocument[i].ServerDocumentName)" asp-controller="Project">
+                                        Yes
+                                    </a> <text>|</text> <a class="delete-cancel text-dark" id="delete-cancel_@i" style="cursor: pointer">No</a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>

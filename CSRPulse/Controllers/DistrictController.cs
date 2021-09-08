@@ -265,6 +265,16 @@ namespace CSRPulse.Controllers
                         {
                             file.CopyTo(stream);
                         }
+                        #region C H E C K  F O R M U L A S
+                        var isFormulas = CheckFormulaInExcelFile(sPhysicalPath);
+                        if (isFormulas)
+                        {
+                            districtImpModel.NoOfErrors = 1;
+                            districtImpModel.Message = "File contains formula or arithmetic operators that is not allowed in system.";
+                            return Json(new { status = "success", htmlData = ConvertViewToString("_DistrictImportGridView", districtImpModel, true) });
+                        }
+                        #endregion
+
                         #endregion
                         var objDistrict = _districtServices.ReadDistrictExcelData(sPhysicalPath, false, out msg, out error, out warning, out importDistrictSave, out missingHeaders, out columnName);
                         if (error > 0 && msg == "Rows")

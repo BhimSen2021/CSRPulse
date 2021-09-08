@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Data.OleDb;
+using System.Data;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace CSRPulse.Common
 {
@@ -20,13 +24,13 @@ namespace CSRPulse.Common
 
             //Set the contenttype based on File Extension
             switch (magicCheck)
-            {              
+            {
                 case "25-50-44-46":
                     mimeType = "application/pdf";
                     break;
 
                 case "09-08-10-00":
-                case "FD-FF-FF-FF":                
+                case "FD-FF-FF-FF":
                     //for xls  
                     mimeType = "application/vnd.ms-excel";
                     break;
@@ -35,7 +39,7 @@ namespace CSRPulse.Common
                     // for xlsx
                     mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     break;
-               
+
                 case "D0-CF-11-E0":
                     // for doc
                     mimeType = "application/msword";
@@ -62,7 +66,7 @@ namespace CSRPulse.Common
                 default:
                     mimeType = "application/octet-stream";
                     break;
-            }            
+            }
             return mimeType;
         }
 
@@ -72,14 +76,110 @@ namespace CSRPulse.Common
         }
 
 
-        public static bool CheckSkipFormulaInExcelFile(string filepath, string filename)
+        public static bool CheckFormulaInExcelFile(string sPhysicalPath)
         {
-            FileInfo file = new FileInfo(filepath);
+            bool result = false;
+            FileInfo file = new FileInfo(sPhysicalPath);
+
             if (file.Exists)
             {
-               
+                Excel.Application xlApp;
+                Excel.Workbook xlWorkBook;
+                Excel.Worksheet xlWorkSheet;
+                Excel.Range range;
+
+                object misValue = System.Reflection.Missing.Value;
+                xlApp = new Excel.Application();
+
+                xlWorkBook = xlApp.Workbooks.Open(sPhysicalPath, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+
+                List<string> SkippedFormulas = GetSkippedFormula();
+                int worksheetcount = xlWorkBook.Worksheets.Count;
+                try
+                {
+                    for (int wCnt = 0; wCnt < worksheetcount; wCnt++)
+                    {
+                        xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets[wCnt + 1];
+                        range = xlWorkSheet.UsedRange;
+
+                        for (int rCnt = 0; rCnt < range.Rows.Count; rCnt++)
+                        {
+                            for (int cCnt = 0; cCnt < range.Columns.Count; cCnt++)
+                            {
+                                if ((bool)(range.Cells[rCnt + 1, cCnt + 1] as Excel.Range).HasFormula == true)
+                                {
+                                    string formula = (string)(range.Cells[rCnt + 1, cCnt + 1] as Excel.Range).Formula;
+
+                                    bool isValid = SkippedFormulas.Contains(GetFormulaSubString(formula.Replace(" ", "")), StringComparer.CurrentCultureIgnoreCase);
+                                    if (!isValid)
+                                    {
+                                        result = true;
+                                    }
+                                }
+                                else if ((range.Cells[rCnt + 1, cCnt + 1] as Excel.Range).Value != null)
+                                {
+                                    if (CheckOperators(Convert.ToString((range.Cells[rCnt + 1, cCnt + 1] as Excel.Range).Value)))
+                                    {
+                                        result = true;
+                                    }
+                                }
+                                if (result)
+                                    break;
+                            }
+                            if (result)
+                                break;
+                        }
+
+                        if (range != null)
+                        {
+                            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(range);
+                        }
+
+                        if (xlWorkSheet != null)
+                        {
+                            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(xlWorkSheet);
+                        }
+                        ReleaseObject(xlWorkSheet);
+                        ReleaseObject(range);
+
+                        if (result)
+                            break;
+                    }
+                }
+                catch (Exception) { result = true; }
+                finally
+                {
+                    xlWorkBook.Close(false, Type.Missing, Type.Missing);
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(xlWorkBook);
+                    xlApp.Quit();
+                    ReleaseObject(xlApp);
+                    ReleaseObject(xlWorkBook);
+
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(xlApp);
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    xlWorkBook = null;
+                    xlApp = null;
+                }
             }
-            return false;
+            return result;
+        }
+
+        private static void ReleaseObject(object obj)
+        {
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                obj = null;
+            }
+            catch (Exception)
+            {
+                obj = null;
+            }
+            finally
+            {
+                GC.Collect();
+            }
         }
 
         public static readonly Dictionary<string, string> dicExtensionAndContentType = new Dictionary<string, string>(2000, StringComparer.InvariantCultureIgnoreCase)
@@ -1359,5 +1459,37 @@ namespace CSRPulse.Common
             {".xtp", "application/octet-stream"},
             {".z", "application/x-compress"},
         };
+
+        private static string GetFormulaSubString(string formula)
+        {
+            var charLocation = formula.IndexOf("(", StringComparison.Ordinal);
+            if (charLocation > 0)
+            {
+                return formula.Substring(0, charLocation + 1);
+            }
+            else
+                return formula;
+        }
+        private static List<string> GetSkippedFormula()
+        {
+            return new List<string>(){
+                "=Sum(",
+                "=ROUND(",
+                "=MIN(",
+                "=Max(",
+                "=AVERAGE(",
+                "=COUNT(",
+                "=LARGE(",
+                "=IF(",
+                "=SUMIF(",
+                "=SUMPRODUCT("
+            };
+        }
+
+        public static bool CheckOperators(string value)
+        {
+            return (value.IndexOfAny(new char[] { '*', '/', '+', '-', '=' }) != -1);           
+        }
+
     }
 }

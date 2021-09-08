@@ -161,7 +161,7 @@ namespace CSRPulse.Common
     public enum ProcessDocument
     {
         PartnerDocument = 2,
-        FinancialAuditAgencyOnboardingDocument = 4,
+        AuditAgencyOnboardingDocument = 4,
         DocumentProject = 5
     }
     public enum FundingSourceType
