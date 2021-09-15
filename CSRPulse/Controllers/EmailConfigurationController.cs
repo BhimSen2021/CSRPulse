@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using CSRPulse.Data.Data;
-using CSRPulse.Model;
+﻿using CSRPulse.Model;
 using CSRPulse.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
@@ -19,37 +14,24 @@ namespace CSRPulse.Controllers
 
         public EmailConfigurationController(IEmailConfigurationServices emailconfigServices)
         {
-            _emailconfigServices = emailconfigServices;          
+            _emailconfigServices = emailconfigServices;
         }
         public async Task<IActionResult> Index()
         {
-           var result =await _emailconfigServices.GetEmailConfigAsync();
-            //email =  _emailconfigServices.GetEmailConfigAsync();
-        }
-            //email =  _emailconfigServices.GetEmailConfigAsync();
-        }
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _mappr.EmailConfiguration.ToListAsync());
-        //}
-
+            var result = await _emailconfigServices.GetEmailConfigAsync();
             return View(result);
-        }
-                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
-        //{
-        //    return View(await _mappr.EmailConfiguration.ToListAsync());
-        //}
 
+        }
         public async Task<IActionResult> Edit()
         {
-
+            try
             {
                 var uDetail = await _emailconfigServices.GetEmailConfigAsync();
                 return View(uDetail);
             }
             catch (Exception ex)
             {
-
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
         }
@@ -64,8 +46,8 @@ namespace CSRPulse.Controllers
                 {
                     email.UpdatedBy = userDetail.CreatedBy;
                     email.UpdatedOn = DateTime.Now;
-                    var result = await _emailconfigServices.UpdateEmailConfig(email);                            
-                   if (result)
+                    var result = await _emailconfigServices.UpdateEmailConfig(email);
+                    if (result)
                     {
                         TempData["Message"] = "Email Configuration Updated Successfully.";
                         return RedirectToAction(nameof(Index));
