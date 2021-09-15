@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Threading.Tasks;
 
 namespace CSRPulse.Common
 {
@@ -78,6 +79,7 @@ namespace CSRPulse.Common
 
         public static bool CheckFormulaInExcelFile(string sPhysicalPath)
         {
+           
             bool result = false;
             FileInfo file = new FileInfo(sPhysicalPath);
 

@@ -16,13 +16,12 @@ namespace CSRPulse.Areas.Admin.Controllers
     public class PlanController : BaseController<PlanController>
     {
         private readonly IPlanService _planService;
-        public PlanController(IPlanService planService) : base()
-        {
+        public PlanController(IPlanService planService)
+        {            
             _planService = planService;
         }
         public async Task<IActionResult> Index()
-        {
-
+        {            
             _logger.LogInformation("Index");
             try
             {

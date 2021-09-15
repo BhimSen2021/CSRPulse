@@ -1,0 +1,20 @@
+﻿<div id="logoutAlert-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="logoutAlert-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title">Alert !</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body justify-content-md-center">
+                The previous session was not logged out. <br /> If you do wish to login now , please press the logout button to close the previous session, else press cancel.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>                
+                <a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="btn btn-info btn-sm">
+                    <i class="mdi mdi-logout me-1"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

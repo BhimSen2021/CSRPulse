@@ -16,23 +16,81 @@ namespace CSRPulse.Services
         private readonly IMapper _mapper;
         private readonly IGenericRepository _genericRepository;
         private readonly IEmailService _emailService;
-        public AccountService(IMapper mapper, IGenericRepository genericRepository, IEmailService emailService)
+        private readonly IAccountRepository _accountRepository;
+
+        public AccountService(IMapper mapper, IGenericRepository genericRepository, IEmailService emailService, IAccountRepository accountRepository)
         {
             _mapper = mapper;
             _genericRepository = genericRepository;
             _emailService = emailService;
+            _accountRepository = accountRepository;
         }
 
         public bool AuthenticateUser(SingIn singIn, out UserDetail userDetail)
         {
+            string dbPassword = string.Empty;
+            bool userExits = false;
             userDetail = new UserDetail();
-            //SetConnectionString(null); // to reset connection.
-
-            var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.Role).FirstOrDefault();
-
-            if (uData == null)
+            userExits = _accountRepository.VerifyUser(singIn.UserName, out dbPassword);
+            if (!userExits)
             {
-                var uInnerData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName).FirstOrDefault();
+                userDetail.ErrorMessage = "notexists";
+                return false;
+            }
+            bool isMatch = Password.VerifyPassword(singIn.Password, dbPassword, Password.Password_Salt);
+            
+            if (isMatch)
+            {
+                var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName == singIn.UserName).Include(r => r.Role).FirstOrDefault();
+                if (uData != null)
+                {
+                    if (uData.WrongAttemp == 0 && uData.LockDate.HasValue)
+                    {
+                        userDetail.ErrorMessage = uData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
+                        return false;
+                    }
+                    else if (uData.WrongAttemp == 0)
+                    {
+                        return false;
+                    }
+                    userDetail = _mapper.Map<UserDetail>(uData);
+
+                    userDetail.RoleId = uData.Role.RoleId;
+                    userDetail.RoleName = uData.Role.RoleName;
+
+                    var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.UserId == uData.UserId).Include(r => r.Menu).ToList();
+
+                    if (uRights != null && uRights.Count > 0)
+                    {
+                        userDetail.userMenuRights = uRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
+                        {
+                            UserId = uRigth.UserId,
+                            MenuId = uRigth.MenuId,
+                            ShowMenu = uRigth.ShowMenu,
+                            CreateRight = uRigth.CreateRight,
+                            EditRight = uRigth.EditRight,
+                            ViewRight = uRigth.ViewRight,
+                            DeleteRight = uRigth.DeleteRight,
+
+                            menu = new Menu()
+                            {
+                                ParentMenuId = uRigth.Menu.ParentMenuId,
+                                MenuId = uRigth.Menu.MenuId,
+                                Area = uRigth.Menu.Area,
+                                MenuName = uRigth.Menu.MenuName,
+                                Url = uRigth.Menu.Url == null ? uRigth.Menu.Url : uRigth.Menu.Url.ToLower(),
+                                SequenceNo = uRigth.Menu.SequenceNo,
+                            }
+
+                        }).ToList();
+                    }
+                    uData.WrongAttemp = null;
+                    _genericRepository.Update(uData);
+                }
+            }
+            else
+            {
+                var uInnerData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName == singIn.UserName).FirstOrDefault();
                 if (uInnerData != null)
                 {
                     if (uInnerData.WrongAttemp == 0 && uInnerData.LockDate.HasValue)
@@ -62,62 +120,15 @@ namespace CSRPulse.Services
                         _genericRepository.Update(uInnerData);
                     }
                 }
-                else
-                {
-                    userDetail.ErrorMessage = "notexists";
-                }
+                else { userDetail.ErrorMessage = "notexists"; }
                 return false;
             }
-            if (uData != null)
-            {
-                if (uData.WrongAttemp == 0 && uData.LockDate.HasValue)
-                {
-                    userDetail.ErrorMessage = uData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
-                    return false;
-                }
-                else if (uData.WrongAttemp == 0)
-                {
-                    return false;
-                }
-                userDetail = _mapper.Map<UserDetail>(uData);
 
-                userDetail.RoleId = uData.Role.RoleId;
-                userDetail.RoleName = uData.Role.RoleName;
-
-                var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.UserId == uData.UserId).Include(r => r.Menu).ToList();
-
-                if (uRights != null && uRights.Count > 0)
-                {
-                    userDetail.userMenuRights = uRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
-                    {
-                        UserId = uRigth.UserId,
-                        MenuId = uRigth.MenuId,
-                        ShowMenu = uRigth.ShowMenu,
-                        CreateRight = uRigth.CreateRight,
-                        EditRight = uRigth.EditRight,
-                        ViewRight = uRigth.ViewRight,
-                        DeleteRight = uRigth.DeleteRight,
-
-                        menu = new Menu()
-                        {
-                            ParentMenuId = uRigth.Menu.ParentMenuId,
-                            MenuId = uRigth.Menu.MenuId,
-                            Area = uRigth.Menu.Area,
-                            MenuName = uRigth.Menu.MenuName,
-                            Url = uRigth.Menu.Url == null ? uRigth.Menu.Url : uRigth.Menu.Url.ToLower(),
-                            SequenceNo = uRigth.Menu.SequenceNo,
-                        }
-
-                    }).ToList();
-                }
-                uData.WrongAttemp = null;
-                _genericRepository.Update(uData);
-            }
             if (userDetail.UserID > 0) { return true; }
-
             else { return false; }
-        }
 
+        }
+       
         public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID, out string companyName)
         {
             try
@@ -215,6 +226,7 @@ namespace CSRPulse.Services
         {
             return _genericRepository.Exists<DTOModel.User>(x => x.UserName == username && (!string.IsNullOrEmpty(password) ? x.Password == password : (1 > 0)));
         }
+
         /// <summary>
         /// To send mail regarding password forgot
         /// </summary>
@@ -275,7 +287,7 @@ namespace CSRPulse.Services
             try
             {
                 var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.User>().Include(d => d.Department));
-               
+
                 return _mapper.Map<List<User>>(result);
             }
             catch (Exception)

@@ -23,16 +23,9 @@ namespace CSRPulse.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //List<EmailConfiguration> email = new List<EmailConfiguration>();
-            //email =  _emailconfigServices.GetEmailConfigAsync();
             var result =await _emailconfigServices.GetEmailConfigAsync();
             return View(result);
-        }
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _mappr.EmailConfiguration.ToListAsync());
-        //}
-
+        }        
         public async Task<IActionResult> Edit()
         {
             try
@@ -40,9 +33,9 @@ namespace CSRPulse.Controllers
                 var uDetail = await _emailconfigServices.GetEmailConfigAsync();
                 return View(uDetail);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
         }
@@ -57,19 +50,15 @@ namespace CSRPulse.Controllers
                 {
                     email.UpdatedBy = userDetail.CreatedBy;
                     email.UpdatedOn = DateTime.Now;
-                    var result = await _emailconfigServices.UpdateEmailConfig(email);
-                    if (email.IsExist)
-                    {
-                        ModelState.AddModelError("", "Email already exists");
-                    }
-                    else if (result)
+                    var result = await _emailconfigServices.UpdateEmailConfig(email);                            
+                   if (result)
                     {
                         TempData["Message"] = "Email Configuration Updated Successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        TempData["Error"] = "UoM Updation Failed.";
+                        TempData["Error"] = "Email Configuration Updation Failed.";
                     }
                 }
                 return View(email);

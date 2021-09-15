@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<CSRPulse.Model.EmailConfiguration>*@
+﻿
 @model EmailConfiguration
 @{
     ViewData["Title"] = "Index";
@@ -42,7 +42,7 @@
                
                 <tr>
                     <td>
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Financial Audit.">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this record.">
                             @Html.ActionLink(Model.ToEmail, "Edit", "EmailConfiguration", new { EmailConfigurationID = Model.EmailConfigurationID })
                         </span>
                     </td>

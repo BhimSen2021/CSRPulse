@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-6 h5">Communication</div>
         <div class="col-6 text-end">           
-            <button type="button" id="btnShowArchive" class="btn btn-dark btn-sm me-1"><i class="dripicons-preview me-1"></i>Show / Hide Archive</button>
+            <button type="button" id="btnShowArchive" class="btn btn-dark btn-sm me-1">Show Archive</button>
             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#AddCommunicationModal">
                 <i class="mdi mdi-plus me-1"></i>Add Communication
             </button>
@@ -57,7 +57,7 @@
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
-            url: '/Project/ArchiveCommunication',
+            url: '@Url.Action("ArchiveCommunication", "Project")',
             data: { id: id, isChecked: isChecked },
             success: function (responce) {
                 if (responce) {
@@ -75,10 +75,12 @@
     }
 
     $(document).ready(function () {
-        $(".is-archive").hide();       
+        $(".is-archive").hide();
         $('#btnShowArchive').click(function () {
             $(".is-archive").toggle(400);
-           
+            $(this).text(function (i, text) {
+                return text === "Show Archive" ? "Hide Archive" : "Show Archive";
+            })
         });
 
     });

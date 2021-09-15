@@ -24,7 +24,7 @@
     <div class="card-body">
         <form method="post" asp-area="Admin" asp-controller="Registration" asp-action="Create" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
-          
+
             <div class="row">
                 <h4 class="text-muted text-start mb-3">Please fill in this form to create an account.</h4>
                 <div class="col-xl-4 text-center">
@@ -73,7 +73,7 @@
                     <div class="text-start mb-3">
                         @Html.LabelFor(model => model.PartnerId, htmlAttributes: new { @class = "form-label" })
                         <select asp-for="PartnerId" asp-items="@ViewBag.ddlPartner" aria-required="true" class="form-select">
-                            <option disabled="" label="Select Partner" selected="" value=""></option>
+                            <option label="Select Partner" selected="" value=""></option>
                         </select>
                         <span asp-validation-for="PartnerId" class="invalid"></span>
                     </div>
@@ -96,8 +96,9 @@
                                 <span class="password-eye"></span>
                             </div>
                         </div>
-                        <span class="font-11 text-muted">Password must contain at least 8 characters, including UPPER/lowercase, special and numbers</span>
+                        <span class="font-11 text-info">Password must contain at least 8 characters, including UPPER, lower, symbols and numbers</span>
                         <span asp-validation-for="Password" class="invalid"></span>
+                        <input type="hidden" asp-for="hdPassword" />
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "form-label required" })
@@ -108,9 +109,10 @@
                             </div>
                         </div>
                         <span asp-validation-for="ConfirmPassword" class="invalid"></span>
+                        <input type="hidden" asp-for="hdConfirmPassword" />
                     </div>
                     <div class="mb-2 text-end">
-                        <button class="btn btn-primary rounded-pill" type="submit"><i class="mdi mdi-account-circle me-1"></i> Submit </button>
+                        <button class="btn btn-primary rounded-pill" type="submit" onclick="SubmitEncry();"><i class="mdi mdi-account-circle me-1"></i> Submit </button>
                     </div>
                 </div>
 
@@ -120,6 +122,7 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/aes.js"></script>
     <script type="text/javascript">
         $("#myImg").click(function () {
             $("#ImagePhoto").trigger('click');
@@ -138,5 +141,41 @@
         function imageIsLoaded(e) {
             $('#myImg').attr('src', e.target.result);
         };
+
+        function SubmitEncry() {
+            var txtpassword = $('#Password').val();
+            var txtConfirmPassword = $('#ConfirmPassword').val();
+
+            if (txtConfirmPassword == '' || txtpassword == '') {
+                return;
+            }
+            else {
+                $('#Password').val('');
+                $('#hdPassword').val('');
+                $('#ConfirmPassword').val('');
+                $('#hdConfirmPassword').val('');
+                var key = CryptoJS.enc.Utf8.parse('8080808080808080');
+                var iv = CryptoJS.enc.Utf8.parse('8080808080808080');
+                var encryptedcpassword = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(txtConfirmPassword), key,
+                    {
+                        keySize: 128 / 8,
+                        iv: iv,
+                        mode: CryptoJS.mode.CBC,
+                        padding: CryptoJS.pad.Pkcs7
+                    });
+                $('#hdConfirmPassword').val(encryptedcpassword);
+                $('#ConfirmPassword').val(encryptedcpassword);
+                var encryptedpassword = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(txtpassword), key,
+                    {
+                        keySize: 128 / 8,
+                        iv: iv,
+                        mode: CryptoJS.mode.CBC,
+                        padding: CryptoJS.pad.Pkcs7
+                    });
+                $('#hdPassword').val(encryptedpassword);
+                $('#Password').val(encryptedpassword);
+            }
+
+        }
     </script>
 }

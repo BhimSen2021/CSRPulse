@@ -1,10 +1,12 @@
 ﻿@model CSRPulse.Model.SingIn
 
 <form method="post" asp-area="Admin">
+    @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
         <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">
+        <input type="hidden" asp-for="hdUserName" />
         <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
 
@@ -16,6 +18,7 @@
                 <span class="password-eye"></span>
             </div>
         </div>
+        <input type="hidden" asp-for="hdPassword" />
         <span asp-validation-for="Password" class="text-danger"></span>
         <span asp-validation-for="WrongAttemp" class="text-danger"></span>
     </div>
@@ -40,6 +43,7 @@
     </div>
 
     <div class="d-grid mb-0 text-center">
-        <button type="submit" name="ButtonName" class="btn btn-primary" value="LogIn"><i class="mdi mdi-login"></i> Log In </button>
+        <button type="submit" name="ButtonName" onclick="SubmitEncry();" class="btn btn-primary" value="LogIn"><i class="mdi mdi-login"></i> Log In </button>
     </div>
 </form>
+

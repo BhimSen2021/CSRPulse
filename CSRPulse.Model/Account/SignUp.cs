@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CSRPulse.Model
 {
-    public class SignUp:BaseModel
+    public class SignUp : BaseModel
     {
         [Display(Name = "Full Name"), Required(ErrorMessage = "Please Enter Full Name")]
         [StringLength(100), MinLength(2, ErrorMessage = "Full name should be contain atleast 2 characters.")]
@@ -24,28 +24,29 @@ namespace CSRPulse.Model
         public string MobileNo { get; set; }
 
         [Display(Name = "User Name"), Required(ErrorMessage = "Please Enter User Name")]
-       
+
         [StringLength(50), MinLength(2, ErrorMessage = "User name should be contain atleast 2 characters.")]
         public string UserName { get; set; }
 
-        [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Password")]
-        [StringLength(50)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$", ErrorMessage = "Invalid password patterns.")]
+        [DataType(DataType.Password), StringLength(50), Required(ErrorMessage = "Please Enter Password")]
+
+        //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$", ErrorMessage = "Invalid password patterns.")]
         public string Password { get; set; }
+        public string hdPassword { get; set; }
 
         [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Confirm Password")]
         [Display(Name = "Confirm Password"), Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-      
+        public string hdConfirmPassword { get; set; }
         public IFormFile ImagePhoto { get; set; }
         public string ImageName { get; set; }
 
         public bool RecordExist { get; set; }
 
         public int UserID { get; set; }
-        [Display(Name ="Role"), Required(ErrorMessage = "Please Select Role")]
+        [Display(Name = "Role"), Required(ErrorMessage = "Please Select Role")]
         public int RoleId { get; set; }
-       
+
         [Display(Name = "Department"), Required(ErrorMessage = "Please Select Department")]
         public int DepartmentId { get; set; }
         [Display(Name = "Department")]

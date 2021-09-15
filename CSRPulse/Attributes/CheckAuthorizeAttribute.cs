@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Routing;
 using System.Linq;
 using CSRPulse.Model;
 using CSRPulse.Common;
+
 namespace CSRPulse.Attributes
 {
     public class CheckAuthorizeAttribute : ActionFilterAttribute, IActionFilter
     {
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+           
             string actionName = string.Empty;
             string controllerName = string.Empty;
-            // string actionName = filterContext.ActionDescriptor.ActionConstraints.ToString();
+           
             var controllerActionDescriptor = filterContext.ActionDescriptor as ControllerActionDescriptor;
 
             if (controllerActionDescriptor != null)
@@ -23,12 +24,13 @@ namespace CSRPulse.Attributes
                 actionName = controllerActionDescriptor.ActionName.ToString().ToLower();
             }
             var user = filterContext.HttpContext.Session.GetComplexData<UserDetail>("User");
+           
+            var indexPageURL = $"{controllerName}/index";
 
-            var indexPageURL = $"{controllerName}/{actionName}";
 
             if (!SharedControllers.controllers.Contains(controllerName))
             {
-                if (user != null && user.userMenuRights.Count > 0)
+                if (user != null && actionName != "index" && user.userMenuRights.Count > 0)
                 {
                     var menuRights = user.userMenuRights;
 
@@ -71,7 +73,7 @@ namespace CSRPulse.Attributes
                     }
                     else
                     {
-                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "CustomerLogin", controller = "Account" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "Login", controller = "Account",Area="Admin" }));
                         base.OnActionExecuting(filterContext);
 
                     }

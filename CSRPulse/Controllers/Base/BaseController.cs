@@ -15,12 +15,16 @@ using CSRPulse.Common;
 using static CSRPulse.Common.FileHelper;
 namespace CSRPulse.Controllers
 {
+    [SessionTimeout]
     [CheckAuthorize] //it will check authorization on all the controller and its action which inherited by basecontroller
     public abstract class BaseController<T> : Controller where T : BaseController<T>
     {
+      
         private ILogger<T> logger;
+        
         protected ILogger<T> _logger => logger ??= HttpContext.RequestServices.GetService<ILogger<T>>();
-
+       
+       
         protected UserDetail userDetail
         {
             get
@@ -38,7 +42,7 @@ namespace CSRPulse.Controllers
             }
             else
             {
-                string sPath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "your path here");
+                string sPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "your path here");
                 byte[] fileBytes = System.IO.File.ReadAllBytes(sPath);
                 return File(fileBytes, "image/jpg;base64");
             }

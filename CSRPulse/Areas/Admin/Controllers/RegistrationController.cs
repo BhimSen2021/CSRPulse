@@ -64,6 +64,19 @@ namespace CSRPulse.Areas.Admin.Controllers
             {
                 _logger.LogInformation("Admin/RegistrationController/Create");
 
+                if (string.IsNullOrEmpty(singUp.hdConfirmPassword))
+                    ModelState.AddModelError("ConfirmPassword", "Please enter confirm password.");
+                if (string.IsNullOrEmpty(singUp.hdPassword))
+                    ModelState.AddModelError("Password", "Please enter password.");
+
+                singUp.Password = Password.DecryptStringAES(singUp.hdPassword);
+                singUp.ConfirmPassword = Password.DecryptStringAES(singUp.hdConfirmPassword);
+                string ErrorMessage = string.Empty;
+                if (!Password.ValidatePassword(singUp.Password, out ErrorMessage))
+                {
+                    ModelState.AddModelError("Password", ErrorMessage);
+                }
+
                 if (ModelState.IsValid)
                 {
                     if (singUp.ImagePhoto != null)
@@ -77,6 +90,9 @@ namespace CSRPulse.Areas.Admin.Controllers
                     singUp.CreatedBy = userDetail.UserID;
                     singUp.CreatedOn = DateTime.Now;
                     singUp.IsActive = true;
+
+                    singUp.Password = Password.CreatePasswordHash(singUp.Password.Trim(), Password.CreateSalt(Password.Password_Salt));
+
                     var result = await _registrationService.RegistrationAsync(singUp);
                     if (singUp.RecordExist)
                     {
@@ -132,14 +148,24 @@ namespace CSRPulse.Areas.Admin.Controllers
             try
             {
                 _logger.LogInformation("Admin/RegistrationController/Edit");
-                ModelState.Remove("UserName");
-
+                //ModelState.Remove("UserName");
+                ModelState.Remove("Password");
+                ModelState.Remove("ConfirmPassword");
                 if (ModelState.IsValid)
                 {
                     if (signUp.ImagePhoto != null)
                     {
                         string imagePath = DocumentUploadFilePath.UserProfileImagePath;
-                        signUp.ImageName = await UploadImage(imagePath, signUp.ImagePhoto);
+                        if (ValidateFileMimeType(signUp.ImagePhoto))
+                        {
+                            signUp.ImageName = await UploadImage(imagePath, signUp.ImagePhoto);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Invalid user image format");
+                            BindDropdowns();
+                            return View(signUp);
+                        }
                     }
 
                     signUp.UpdatedBy = userDetail.UserID;
