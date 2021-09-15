@@ -1,7 +1,7 @@
 ﻿@model Project
 @inject CSRPulse.Services.IServices.IDropdownBindService _ddlService;
 @{
-    var ddlOtherSource = new SelectList(_ddlService.GetSource(null), "id", "value");
+    var ddlOtherSource = new SelectList(_ddlService.GetSource((int)CSRPulse.Common.FundingSourceType.InternalSource), "id", "value");
 }
 <div class="row">
     <div class="mb-3">
@@ -23,7 +23,8 @@
                         <tr>
                             <td><span>@(i+1)</span></td>
                             <td>
-                                <select asp-for="@Model.ProjectInternalSource[i].SourceId" asp-items="ddlOtherSource" aria-required="true" class="form-select form-select-sm">
+                                <select asp-for="@Model.ProjectOtherSource[i].SourceId" asp-items="ddlOtherSource" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Source Type" selected="" value=""></option>
                                 </select>
                                 <span asp-validation-for="@Model.ProjectInternalSource[i].SourceId" class="invalid"></span>
                             </td>

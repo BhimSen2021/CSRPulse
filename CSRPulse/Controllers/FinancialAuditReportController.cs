@@ -55,12 +55,6 @@ namespace CSRPulse.Controllers
         public IActionResult Create()
         {
             BindDropdowns();
-            //BindDropdownsPartners();
-            //BindDropdownsProject();
-            //BindDropdownsManager();
-            //BindDropdownsAudit();
-            //BindDropdownsAuditChecker();
-            //BindDropdownsAuditMaker();
             return View(new FinancialAuditReport());
         }
 
@@ -86,12 +80,7 @@ namespace CSRPulse.Controllers
                         return RedirectToAction(nameof(Index));
                     }
                 }
-                //BindDropdownsPartners();
-                //BindDropdownsProject();
-                //BindDropdownsManager();
-                //BindDropdownsAudit();
-                //BindDropdownsAuditChecker();
-                //BindDropdownsAuditMaker();
+                
                 return View(financial);
             }
             catch (Exception ex)
@@ -106,12 +95,6 @@ namespace CSRPulse.Controllers
             try
             {
                 BindDropdowns();
-                //BindDropdownsPartners();
-                //BindDropdownsProject();
-                //BindDropdownsManager();
-                //BindDropdownsAudit();
-                //BindDropdownsAuditChecker();
-                //BindDropdownsAuditMaker();
                 var uDetail = await _finanacServices.GetFinancialByIdAsync(fareportId);
                 return View(uDetail);
             }
@@ -131,12 +114,6 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("FinancialAuditReportController/Edit");
                 ModelState.Remove("IsActive");
                 BindDropdowns();
-                //BindDropdownsPartners();
-                //BindDropdownsProject();
-                //BindDropdownsManager();
-                //BindDropdownsAudit();
-                //BindDropdownsAuditChecker();
-                //BindDropdownsAuditMaker();
                 if (ModelState.IsValid)
                 {
                     financial.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;

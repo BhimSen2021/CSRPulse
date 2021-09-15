@@ -461,5 +461,18 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+        public async Task UpdateDocument(NGOChartDocument partnerlist)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.NgochartDocument>(partnerlist);
+                await _genericRepository.UpdateAsync(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

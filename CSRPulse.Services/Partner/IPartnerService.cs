@@ -27,6 +27,6 @@ namespace CSRPulse.Services
         Task<List<PartnerDocumentDetail>> GetPartnerDocumentAsync(int partnerId);       
         Task<List<PartnerPolicyModule>> GetPartnerPolicyModuleAsync();
         Task<List<PartnerPolicy>> GetPartnerPolicyAsync();
-
+        Task UpdateDocument(NGOChartDocument partnerlist);
     }
 }

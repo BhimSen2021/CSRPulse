@@ -17,7 +17,7 @@ namespace CSRPulse.Data.Models
         [StringLength(100)]
         public string SourceName { get; set; }
         public int Sequence { get; set; }
-        public int SourceType { get; set; }
+        public int? SourceType { get; set; }
         [Required]
         public bool? IsActive { get; set; }
         [Column(TypeName = "datetime")]

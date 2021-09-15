@@ -23,19 +23,33 @@ namespace CSRPulse.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var result =await _emailconfigServices.GetEmailConfigAsync();
+           var result =await _emailconfigServices.GetEmailConfigAsync();
+            //email =  _emailconfigServices.GetEmailConfigAsync();
+        }
+            //email =  _emailconfigServices.GetEmailConfigAsync();
+        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _mappr.EmailConfiguration.ToListAsync());
+        //}
+
             return View(result);
-        }        
+        }
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+        //{
+        //    return View(await _mappr.EmailConfiguration.ToListAsync());
+        //}
+
         public async Task<IActionResult> Edit()
         {
-            try
+
             {
                 var uDetail = await _emailconfigServices.GetEmailConfigAsync();
                 return View(uDetail);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+
                 throw;
             }
         }
