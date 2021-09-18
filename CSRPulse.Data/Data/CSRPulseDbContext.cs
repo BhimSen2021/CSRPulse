@@ -330,17 +330,11 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<EmailConfiguration>(entity =>
             {
-                entity.Property(e => e.Bcc).IsUnicode(false);
-
-                entity.Property(e => e.CcEmail).IsUnicode(false);
+                entity.Property(e => e.FriendlyName).IsUnicode(false);
 
                 entity.Property(e => e.Password).IsUnicode(false);
 
                 entity.Property(e => e.Server).IsUnicode(false);
-
-                entity.Property(e => e.Signature).IsUnicode(false);
-
-                entity.Property(e => e.ToEmail).IsUnicode(false);
 
                 entity.Property(e => e.UserName).IsUnicode(false);
 
@@ -447,6 +441,12 @@ namespace CSRPulse.Data.Data
 
             modelBuilder.Entity<MailSubject>(entity =>
             {
+                entity.Property(e => e.ContactUs).IsUnicode(false);
+
+                entity.Property(e => e.HeaderImage).IsUnicode(false);
+
+                entity.Property(e => e.Signature).IsUnicode(false);
+
                 entity.HasOne(d => d.MailProcess)
                     .WithMany(p => p.MailSubject)
                     .HasForeignKey(d => d.MailProcessId)

@@ -21,7 +21,6 @@ namespace CSRPulse.Common
 
             string data_as_hex = BitConverter.ToString(chkbytes);
             string magicCheck = data_as_hex.Substring(0, 11);
-            //   string magicCheck = data_as_hex;
 
             //Set the contenttype based on File Extension
             switch (magicCheck)
@@ -79,7 +78,7 @@ namespace CSRPulse.Common
 
         public static bool CheckFormulaInExcelFile(string sPhysicalPath)
         {
-           
+
             bool result = false;
             FileInfo file = new FileInfo(sPhysicalPath);
 
@@ -540,7 +539,8 @@ namespace CSRPulse.Common
             {".xul", "application/vnd.mozilla.xul+xml"},
             {".cil", "application/vnd.ms-artgalry"},
             {".cab", "application/vnd.ms-cab-compressed"},
-            {".xls", "application/vnd.ms-excel"},
+            //{".xls", "application/vnd.ms-excel"},
+            {".xls", "application/msword"},
             {".xlm", "application/vnd.ms-excel"},
             {".xla", "application/vnd.ms-excel"},
             {".xlc", "application/vnd.ms-excel"},
@@ -618,7 +618,8 @@ namespace CSRPulse.Common
             {".potx", "application/vnd.openxmlformats-officedocument.presentationml.template"},
             {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
             {".xltx", "application/vnd.openxmlformats-officedocument.spreadsheetml.template"},
-            {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+            {".docx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+            //{".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
             {".dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template"},
             {".mgp", "application/vnd.osgeo.mapguide.package"},
             {".dp", "application/vnd.osgi.dp"},
@@ -1490,7 +1491,7 @@ namespace CSRPulse.Common
 
         public static bool CheckOperators(string value)
         {
-            return (value.IndexOfAny(new char[] { '*', '/', '+', '-', '=' }) != -1);           
+            return (value.IndexOfAny(new char[] { '*', '/', '+', '-', '=' }) != -1);
         }
 
     }

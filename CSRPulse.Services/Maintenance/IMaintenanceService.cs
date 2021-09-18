@@ -12,6 +12,6 @@ namespace CSRPulse.Services
         Maintenance GetMaintenanceDetails();
         void UpdateMaintenance(bool IsMaintenance);
         bool IsUnderMaintenance();
-        Task<bool> SendEmailAsync(string Message);
+        Task<bool> SendEmailAsync(Maintenance maintenance);
     }
 }

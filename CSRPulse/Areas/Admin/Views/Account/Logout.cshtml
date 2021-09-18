@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Log Out";
     Layout = null;
+    var message = TempData["Message"] == null ? "" : TempData["Message"].ToString();
+    var messageError = TempData["Error"] == null ? "" : TempData["Error"].ToString();
 }
 
 <!DOCTYPE html>
@@ -71,16 +73,42 @@
                     to put your customers at the center of everything you do. <i class="mdi mdi-format-quote-close"></i>
                 </p>
                 <p>
-                    - CSRPulse logout
+                    - CSRPulse Log Out
                 </p>
             </div> <!-- end auth-user-testimonial-->
         </div>
         <!-- end Auth fluid right content -->
     </div>
-   
+
     <!-- bundle -->
     <script src="~/assets/js/vendor.min.js"></script>
     <script src="~/assets/js/app.min.js"></script>
+    <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+           if ('@messageError' != "") {
+                var str = '@HtmlEncoder.Encode(@messageError)';
+                str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+                $.bootstrapGrowl('<div class="alert alert-danger alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Error :  </strong>' + str, {
+                    align: 'center',
+                    width: 'auto',
+                    allow_dismiss: false,
+                    delay: 10000
+                });
+            }
+            if ('@message' != "") {
+                var str = '@HtmlEncoder.Encode(@message)';
+                str = str.replace(/&amp;lt;/g, "<").replace(/&amp;gt;/g, ">").replace(/&amp;#39;/g, "'");
+                $.bootstrapGrowl('<div class="alert alert-success alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Success:  </strong>' + str, {
+                    align: 'center',
+                    width: 'auto',
+                    allow_dismiss: false,
+                    delay: 10000
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
 

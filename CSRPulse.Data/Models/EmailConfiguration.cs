@@ -16,23 +16,18 @@ namespace CSRPulse.Data.Models
         public int EmailConfigurationId { get; set; }
         [Required]
         [StringLength(50)]
-        public string ToEmail { get; set; }
-        [StringLength(50)]
-        public string Bcc { get; set; }
-        [StringLength(50)]
-        public string CcEmail { get; set; }
-        [StringLength(50)]
         public string UserName { get; set; }
+        [Required]
         [StringLength(100)]
         public string Password { get; set; }
         [Required]
         [StringLength(50)]
         public string Server { get; set; }
         public int Port { get; set; }
-        [StringLength(200)]
-        public string Signature { get; set; }
         [Column("SSLStatus")]
         public bool Sslstatus { get; set; }
+        [StringLength(50)]
+        public string FriendlyName { get; set; }
         public int CreatedBy { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }

@@ -19,17 +19,19 @@ namespace CSRPulse.Areas.Admin.Controllers
     {
         private readonly IRegistrationService _registrationService;
         private readonly IDesignationHistoryService _designationHistory;
+        private readonly IEmailService _emailService;
         private readonly IAccountService _accountService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IDropdownBindService _ddlService;
 
-        public RegistrationController(IRegistrationService registrationService, IAccountService accountService, IWebHostEnvironment webHostEnvironment, IDropdownBindService dropdownBindService, IDesignationHistoryService designationHistory) : base()
+        public RegistrationController(IRegistrationService registrationService, IAccountService accountService, IWebHostEnvironment webHostEnvironment, IDropdownBindService dropdownBindService, IDesignationHistoryService designationHistory, IEmailService emailService) : base()
         {
             _registrationService = registrationService;
             _accountService = accountService;
             _webHostEnvironment = webHostEnvironment;
             _ddlService = dropdownBindService;
             _designationHistory = designationHistory;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -64,6 +66,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             {
                 _logger.LogInformation("Admin/RegistrationController/Create");
 
+                
                 if (string.IsNullOrEmpty(singUp.hdConfirmPassword))
                     ModelState.AddModelError("ConfirmPassword", "Please enter confirm password.");
                 if (string.IsNullOrEmpty(singUp.hdPassword))
@@ -72,6 +75,8 @@ namespace CSRPulse.Areas.Admin.Controllers
                 singUp.Password = Password.DecryptStringAES(singUp.hdPassword);
                 singUp.ConfirmPassword = Password.DecryptStringAES(singUp.hdConfirmPassword);
                 string ErrorMessage = string.Empty;
+               
+
                 if (!Password.ValidatePassword(singUp.Password, out ErrorMessage))
                 {
                     ModelState.AddModelError("Password", ErrorMessage);
@@ -90,6 +95,8 @@ namespace CSRPulse.Areas.Admin.Controllers
                     singUp.CreatedBy = userDetail.UserID;
                     singUp.CreatedOn = DateTime.Now;
                     singUp.IsActive = true;
+                    string decryptPassword = string.Empty;
+                    decryptPassword = singUp.Password.Trim();
 
                     singUp.Password = Password.CreatePasswordHash(singUp.Password.Trim(), Password.CreateSalt(Password.Password_Salt));
 
@@ -100,6 +107,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                     }
                     if (result > 0)
                     {
+
                         var uHistory = new DesignationHistory()
                         {
                             UserId = result,
@@ -110,7 +118,12 @@ namespace CSRPulse.Areas.Admin.Controllers
                         };
                         await _designationHistory.CreateDesignation(uHistory);
 
-                        TempData["Message"] = "User Registred Successfully.";
+                        bool IsSend = await _emailService.SendMail(new MailDetail() { To = singUp.EmailId, FullName = singUp.FullName, UserName = singUp.UserName, Password = decryptPassword }, MailProcess.Registration);
+                        if (IsSend)
+                            TempData["Message"] = "User Registred Successfully.";
+                        else
+                            TempData["Message"] = "User Registred Successfully, But email sending failed.";
+
                         return RedirectToAction(nameof(Index));
                     }
                 }
@@ -148,7 +161,6 @@ namespace CSRPulse.Areas.Admin.Controllers
             try
             {
                 _logger.LogInformation("Admin/RegistrationController/Edit");
-                //ModelState.Remove("UserName");
                 ModelState.Remove("Password");
                 ModelState.Remove("ConfirmPassword");
                 if (ModelState.IsValid)

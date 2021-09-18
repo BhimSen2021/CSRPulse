@@ -22,6 +22,16 @@ namespace CSRPulse.Data.Models
         public int MailProcessId { get; set; }
         [StringLength(100)]
         public string Subject { get; set; }
+        [StringLength(50)]
+        public string ContactUs { get; set; }
+        [StringLength(50)]
+        public string Signature { get; set; }
+        [StringLength(500)]
+        public string Disclaimer { get; set; }
+        [StringLength(500)]
+        public string TermsConditions { get; set; }
+        [StringLength(50)]
+        public string HeaderImage { get; set; }
         public bool IsDeleted { get; set; }
 
         [ForeignKey(nameof(MailProcessId))]

@@ -1,4 +1,5 @@
-﻿using CSRPulse.Model;
+﻿using CSRPulse.Common;
+using CSRPulse.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,8 @@ namespace CSRPulse.Services
 {
     public interface IEmailService
     {
-        Task<bool> CustomerRelatedMails(Common.EmailMessage message);
-    
+        Task<bool> SendMail(MailDetail mailDetail, MailProcess mailProcess);
+
+
     }
 }

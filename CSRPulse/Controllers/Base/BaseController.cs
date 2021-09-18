@@ -184,11 +184,13 @@ namespace CSRPulse.Controllers
         public static bool ValidateFileMimeType(IFormFile file)
         {
             string mimeType = string.Empty;
+            string fileExtension = Path.GetExtension(file.FileName);
             using (Stream stream = file.OpenReadStream())
             {
                 mimeType = GetMimeType(stream);
             }
-            var disMType = GetFileMimeType(Path.GetExtension(file.FileName));
+
+            var disMType = GetFileMimeType(fileExtension);
             if (mimeType == disMType)
                 return true;
             else
