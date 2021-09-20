@@ -3,6 +3,7 @@
 <form method="post" asp-area="Admin">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="mb-3">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label", @for = "UserName" })
         <input type="text" asp-for="UserName" class="form-control" placeholder="Enter user name" required="" autocomplete="off">

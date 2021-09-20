@@ -94,11 +94,12 @@
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label required" })
                         <div class="input-group input-group-merge">
-                            <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" autocomplete="off">
+                            <input type="password" asp-for="Password" onkeyup="return CheckPasswordStrength();" class="form-control" placeholder="Enter password" autocomplete="off">
                             <div class="input-group-text" data-password="false">
                                 <span class="password-eye"></span>
                             </div>
                         </div>
+                        <p id="strength"></p>
                         <span class="font-11 text-warning">Password must contain at least 8 characters, including UPPER, lower, symbols and numbers</span>
                         <span asp-validation-for="Password" class="invalid"></span>
                         <input type="hidden" asp-for="hdPassword" />
@@ -178,7 +179,7 @@
                 $('#hdPassword').val(encryptedpassword);
                 $('#Password').val(encryptedpassword);
             }
-
         }
+       
     </script>
 }
