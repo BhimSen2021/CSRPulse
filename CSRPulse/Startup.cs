@@ -16,6 +16,7 @@ using CSRPulse.ExportImport.Interfaces;
 using CSRPulse.ExportImport;
 using CSRPulse.IServices;
 using System.Globalization;
+using Microsoft.Net.Http.Headers;
 
 namespace CSRPulse
 {
@@ -33,6 +34,23 @@ namespace CSRPulse
             //services.AddDbContext<CSRPulseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), mig => mig.MigrationsAssembly("CSRPulse.Data")));
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
+
+            services.AddMemoryCache();
+
+            services.AddSession(option => { option.IdleTimeout = TimeSpan.FromMinutes(30); });
+
+
+            services.AddRazorPages().AddRazorRuntimeCompilation().AddViewOptions(option =>
+            {
+                option.HtmlHelperOptions.ClientValidationEnabled = true;
+            });
+
+            services.AddDNTCaptcha(options => options.UseCookieStorageProvider()
+                     .ShowThousandsSeparators(false));
+
+            services.Configure<SMTPConfig>(Configuration.GetSection("MailSettings"));
+           
+
             #region R E G I S T E R  C O M P O N E N T  F O R  D I 
 
             services.AddAutoMapper(typeof(AutoMapperServices));
@@ -98,6 +116,8 @@ namespace CSRPulse
             services.AddScoped<IEmailConfigurationServices, EmailConfigurationServices>();
             services.AddScoped<IFinancialAuditReportService, FinancialAuditReportService>();
             services.AddScoped<IFundingSourceService, FundingSourceService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+
             #region Partner Policy And Module
             services.AddScoped<IProjectRepository, ProjectRepository>();
 
@@ -107,30 +127,12 @@ namespace CSRPulse
 
             #endregion
             #endregion
-
-            services.AddSession(option =>
-                {
-                    option.IdleTimeout = TimeSpan.FromMinutes(30);
-                });
-
-        #if DEBUG
-            services.AddRazorPages().AddRazorRuntimeCompilation().AddViewOptions(option =>
-            {
-                option.HtmlHelperOptions.ClientValidationEnabled = true;
-            });
-        #endif
-
-            services.AddDNTCaptcha(options =>
-                 options.UseCookieStorageProvider()
-                     .ShowThousandsSeparators(false));
-            
-            services.Configure<SMTPConfig>(Configuration.GetSection("MailSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile("Logs/CSRPulse-{Date}.txt");                       
+            loggerFactory.AddFile("Logs/CSRPulse-{Date}.txt");
 
             if (env.IsDevelopment())
             {
@@ -140,12 +142,26 @@ namespace CSRPulse
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = (context) =>
+                {
+                    var headers = context.Context.Response.GetTypedHeaders();
+
+                    headers.CacheControl = new CacheControlHeaderValue
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromHours(24)
+                    };
+                }
+            });
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
+
 
             app.UseEndpoints(endpoints =>
             {

@@ -25,7 +25,8 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
     <script src="~/bootstrap-growl/jquery.bootstrap-growl.js"></script>
-
+    <script src="~/js/site.js"></script>
+    <script src="~/js/aes.js"></script>
     @RenderSection("scripts", required: false)
     <script>
         $(document)
@@ -38,7 +39,7 @@
     </script>
 </head>
 <body class="authentication-bg pb-0" data-layout-config='{"darkMode":false}'>
-<partial name="_LoadingPanel" />
+    <partial name="_LoadingPanel" />
     <div class="auth-fluid">
         <!--Auth fluid left content -->
         <div class="auth-fluid-form-box">
@@ -71,14 +72,14 @@
                     to put your customers at the center of everything you do. <i class="mdi mdi-format-quote-close"></i>
                 </p>
                 <p>
-                    - CSRPulse Customer login
+                    - Axis Bank CSR @ViewData["Title"]
                 </p>
             </div> <!-- end auth-user-testimonial-->
         </div>
         <!-- end Auth fluid right content -->
     </div>
-     
-   
+
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -115,18 +116,16 @@
                 allow_dismiss: false,
                 delay: 10000
             });
-    }
+        }
     else if (msgType == "success") {
-
             $.bootstrapGrowl('<div class="alert alert-success alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Success:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
                 allow_dismiss: false,
                 delay: 10000
             });
-    }
+        }
         else if (msgType == "warning") {
-
             $.bootstrapGrowl('<div class="alert alert-warning alert-dismissible fade show"> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Warning:  </strong>' + msg, {
                 align: 'center',
                 width: 'auto',
@@ -135,6 +134,9 @@
             });
         }
     }
+        function Tooltip() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        }
     </script>
 </body>
 </html>

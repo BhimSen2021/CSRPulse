@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using CSRPulse.Common;
 
 namespace CSRPulse.Services
 {
@@ -16,23 +17,81 @@ namespace CSRPulse.Services
         private readonly IMapper _mapper;
         private readonly IGenericRepository _genericRepository;
         private readonly IEmailService _emailService;
-        public AccountService(IMapper mapper, IGenericRepository genericRepository, IEmailService emailService)
+        private readonly IAccountRepository _accountRepository;
+
+        public AccountService(IMapper mapper, IGenericRepository genericRepository, IEmailService emailService, IAccountRepository accountRepository)
         {
             _mapper = mapper;
             _genericRepository = genericRepository;
             _emailService = emailService;
+            _accountRepository = accountRepository;
         }
 
         public bool AuthenticateUser(SingIn singIn, out UserDetail userDetail)
         {
+            string dbPassword = string.Empty;
+            bool userExits = false;
             userDetail = new UserDetail();
-            //SetConnectionString(null); // to reset connection.
-
-            var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName && u.Password.ToLower() == singIn.Password).Include(r => r.Role).FirstOrDefault();
-
-            if (uData == null)
+            userExits = _accountRepository.VerifyUser(singIn.UserName, out dbPassword);
+            if (!userExits)
             {
-                var uInnerData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName.ToLower() == singIn.UserName).FirstOrDefault();
+                userDetail.ErrorMessage = "notexists";
+                return false;
+            }
+            bool isMatch = Password.VerifyPassword(singIn.Password, dbPassword, Password.Password_Salt);
+
+            if (isMatch)
+            {
+                var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName == singIn.UserName).Include(r => r.Role).FirstOrDefault();
+                if (uData != null)
+                {
+                    if (uData.WrongAttemp == 0 && uData.LockDate.HasValue)
+                    {
+                        userDetail.ErrorMessage = uData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
+                        return false;
+                    }
+                    else if (uData.WrongAttemp == 0)
+                    {
+                        return false;
+                    }
+                    userDetail = _mapper.Map<UserDetail>(uData);
+
+                    userDetail.RoleId = uData.Role.RoleId;
+                    userDetail.RoleName = uData.Role.RoleName;
+
+                    var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.UserId == uData.UserId).Include(r => r.Menu).ToList();
+
+                    if (uRights != null && uRights.Count > 0)
+                    {
+                        userDetail.userMenuRights = uRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
+                        {
+                            UserId = uRigth.UserId,
+                            MenuId = uRigth.MenuId,
+                            ShowMenu = uRigth.ShowMenu,
+                            CreateRight = uRigth.CreateRight,
+                            EditRight = uRigth.EditRight,
+                            ViewRight = uRigth.ViewRight,
+                            DeleteRight = uRigth.DeleteRight,
+
+                            menu = new Menu()
+                            {
+                                ParentMenuId = uRigth.Menu.ParentMenuId,
+                                MenuId = uRigth.Menu.MenuId,
+                                Area = uRigth.Menu.Area,
+                                MenuName = uRigth.Menu.MenuName,
+                                Url = uRigth.Menu.Url == null ? uRigth.Menu.Url : uRigth.Menu.Url.ToLower(),
+                                SequenceNo = uRigth.Menu.SequenceNo,
+                            }
+
+                        }).ToList();
+                    }
+                    uData.WrongAttemp = null;
+                    _genericRepository.Update(uData);
+                }
+            }
+            else
+            {
+                var uInnerData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName == singIn.UserName).FirstOrDefault();
                 if (uInnerData != null)
                 {
                     if (uInnerData.WrongAttemp == 0 && uInnerData.LockDate.HasValue)
@@ -62,60 +121,13 @@ namespace CSRPulse.Services
                         _genericRepository.Update(uInnerData);
                     }
                 }
-                else
-                {
-                    userDetail.ErrorMessage = "notexists";
-                }
+                else { userDetail.ErrorMessage = "notexists"; }
                 return false;
             }
-            if (uData != null)
-            {
-                if (uData.WrongAttemp == 0 && uData.LockDate.HasValue)
-                {
-                    userDetail.ErrorMessage = uData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
-                    return false;
-                }
-                else if (uData.WrongAttemp == 0)
-                {
-                    return false;
-                }
-                userDetail = _mapper.Map<UserDetail>(uData);
 
-                userDetail.RoleId = uData.Role.RoleId;
-                userDetail.RoleName = uData.Role.RoleName;
-
-                var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.UserId == uData.UserId).Include(r => r.Menu).ToList();
-
-                if (uRights != null && uRights.Count > 0)
-                {
-                    userDetail.userMenuRights = uRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
-                    {
-                        UserId = uRigth.UserId,
-                        MenuId = uRigth.MenuId,
-                        ShowMenu = uRigth.ShowMenu,
-                        CreateRight = uRigth.CreateRight,
-                        EditRight = uRigth.EditRight,
-                        ViewRight = uRigth.ViewRight,
-                        DeleteRight = uRigth.DeleteRight,
-
-                        menu = new Menu()
-                        {
-                            ParentMenuId = uRigth.Menu.ParentMenuId,
-                            MenuId = uRigth.Menu.MenuId,
-                            Area = uRigth.Menu.Area,
-                            MenuName = uRigth.Menu.MenuName,
-                            Url = uRigth.Menu.Url == null ? uRigth.Menu.Url : uRigth.Menu.Url.ToLower(),
-                            SequenceNo = uRigth.Menu.SequenceNo,
-                        }
-
-                    }).ToList();
-                }
-                uData.WrongAttemp = null;
-                _genericRepository.Update(uData);
-            }
             if (userDetail.UserID > 0) { return true; }
-
             else { return false; }
+
         }
 
         public bool AuthenticateCustomer(CustomerSignIn singIn, out string outPutValue, out int? customerID, out string companyName)
@@ -211,56 +223,39 @@ namespace CSRPulse.Services
             }
         }
 
-        public bool UserExists(string username, string password)
+        public bool UserExists(string username, string emailId, string password)
         {
-            return _genericRepository.Exists<DTOModel.User>(x => x.UserName == username && (!string.IsNullOrEmpty(password) ? x.Password == password : (1 > 0)));
+            return _genericRepository.Exists<DTOModel.User>(x => (!string.IsNullOrEmpty(username) ? x.UserName == username : (1 > 0)) && (!string.IsNullOrEmpty(emailId) ? x.EmailId == emailId : (1 > 0)) && (!string.IsNullOrEmpty(password) ? x.Password == password : (1 > 0)));
         }
+
         /// <summary>
         /// To send mail regarding password forgot
         /// </summary>
         /// <param name="forgotPassword">hold mail related data</param>
         /// <param name="type"> 1 is for otp, 2 is for new password </param>
         /// <returns></returns>
-        public bool SendOTP(ForgotPassword forgotPassword, int type)
+        public async Task<bool> SendOTP(ForgotPassword forgotPassword, MailProcess mailProcess)
         {
             bool flag = false;
             try
             {
-                var custEmail = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserName == forgotPassword.UserName && x.IsActive == true).FirstOrDefault();
-                if (custEmail == null)
+                var udata = _genericRepository.GetIQueryable<DTOModel.User>(x => x.EmailId == forgotPassword.EmailId && x.IsActive == true).FirstOrDefault();
+                if (udata == null)
                 {
                     return false;
                 }
-                StringBuilder emailBody = new StringBuilder("");
-                Common.EmailMessage message = new Common.EmailMessage();
-                message.To = custEmail.EmailId;
-                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 2).FirstOrDefault();
-                if (mailSubj != null)
+
+                var mailDetail = new MailDetail()
                 {
-                    message.Subject = mailSubj.Subject;
-                    message.SubjectId = mailSubj.SubjectId;
-                }
-                else
-                    message.Subject = "CSRPulse Mail";
+                    To = udata.EmailId,
+                    OTP = forgotPassword.OTP,
+                    FullName = udata.FullName,
+                    EmailId = udata.EmailId,
+                    Password = forgotPassword.Password,
+                    UserName = udata.UserName
+                };
 
-
-                message.TemplateName = type == 1 ? "ForgotOTP" : "RecoverPassword";
-
-                message.PlaceHolders = new List<KeyValuePair<string, string>>();
-
-                if (type == 1)
-                {
-                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", forgotPassword.OTP));
-                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$custName}", custEmail.FullName));
-                }
-                else if (type == 2)
-                {
-                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$password}", forgotPassword.Password));
-                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$custName}", custEmail.FullName));
-                    message.PlaceHolders.Add(new KeyValuePair<string, string>("{$user}", custEmail.UserName));
-                }
-                _emailService.CustomerRelatedMails(message);
-                flag = true;
+                flag = await _emailService.SendMail(mailDetail, mailProcess);
             }
             catch (Exception)
             {
@@ -270,12 +265,13 @@ namespace CSRPulse.Services
             return flag;
         }
 
+
         public async Task<List<User>> GetUserAsync()
         {
             try
             {
                 var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.User>().Include(d => d.Department));
-               
+
                 return _mapper.Map<List<User>>(result);
             }
             catch (Exception)
@@ -297,33 +293,30 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<bool> UpdatePassword(string custCode, string password)
+        public async Task<bool> UpdatePassword(string emailId, string password)
         {
             bool flag;
             try
             {
-                var custData = _genericRepository.GetIQueryable<DTOModel.User>(x => x.UserName == custCode).FirstOrDefault();
-                if (custData != null)
+                var uData = _genericRepository.GetIQueryable<DTOModel.User>(x => x.EmailId == emailId).FirstOrDefault();
+                if (uData != null)
                 {
-                    custData.Password = password;
-                    _genericRepository.Update(custData);
+                    uData.Password = Password.CreatePasswordHash(password.Trim(), Password.CreateSalt(Password.Password_Salt));
+                    _genericRepository.Update(uData);
                 }
                 ForgotPassword forgotPassword = new ForgotPassword
                 {
                     Password = password,
-                    UserName = custCode
+                    EmailId = emailId
                 };
                 // 2 is for Password changed confirmation mail, it will used in send function to identity mail type.
-                flag = await Task.FromResult(SendOTP(forgotPassword, 2));
-
+                flag = await SendOTP(forgotPassword, MailProcess.ResetPassword);
             }
             catch (Exception)
             {
-
                 throw;
             }
             return flag;
-
         }
 
         public List<UserDetail> GetUserProfileAsync()
@@ -388,5 +381,46 @@ namespace CSRPulse.Services
             return true;
         }
 
+
+
+        public bool ValidatePassword(ChangePassword changePassword, out string errorMessage)
+        {
+            string dbPassword = string.Empty;
+            errorMessage = string.Empty;
+
+            if (!_accountRepository.VerifyUser(changePassword.UserName, out dbPassword))
+            {
+                errorMessage = "User details not found.";
+                return false;
+            }
+            if (Password.VerifyPassword(changePassword.OldPassword, dbPassword, Password.Password_Salt)) { return true; }
+
+            else
+            {
+                errorMessage = "Invalid old password, Please enter correct old password.";
+                return false;
+            }
+        }
+        public async Task<bool> ChangePassword(ChangePassword changePassword)
+        {
+            bool flag = false;
+            try
+            {
+                var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName == changePassword.UserName).FirstOrDefault();
+                if (uData != null)
+                {
+                    uData.Password = Password.CreatePasswordHash(changePassword.Password.Trim(), Password.CreateSalt(Password.Password_Salt));
+                    uData.UpdatedBy = changePassword.UserId;
+                    uData.UpdatedOn = DateTime.UtcNow;
+                    await _genericRepository.UpdateAsync(uData);
+                    flag = true;
+                }
+            }
+            catch (Exception)
+            {
+                flag = false;
+            }
+            return flag;
+        }
     }
 }

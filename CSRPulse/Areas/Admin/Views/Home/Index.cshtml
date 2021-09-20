@@ -1,10 +1,10 @@
-﻿@inject ICustomerService customerService
+﻿@*@inject ICustomerService customerService*@
 @inject IMaintenanceService maintenanceService
 @using System.IO;
 @{
     ViewData["Title"] = "Management Console";
-    var customerlist = await customerService.GetAllCustomerAsync();
-    var activeCustomer = customerlist.Count(x => x.IsDeleted == false);
+    //var customerlist = await customerService.GetAllCustomerAsync();
+    //var activeCustomer = customerlist.Count(x => x.IsDeleted == false);
 
     var startupPath = Directory.GetCurrentDirectory();
     var drive = startupPath.Substring(0, 1);
@@ -37,75 +37,130 @@
         <div class="card">
             <div class="card-body text-center">
                 <div class="row">
+                    @*<div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                            <p class="font-15 mb-0 fw-bold">Customers Registered</p>
+                            <a asp-area="Admin" asp-controller="Customer" asp-action="CustomerList">
+                                <p class="text-info">See more</p>
+                            </a>
+                            <div class="row">
+                                <div class="col-6 text-end m-0 t-0">
+                                    <img src="~/images/Admin/MC/cRegistred.svg" alt="" height="50" asp-append-version="true" />
+                                </div>
+                                <div class="col-6 text-dark m-0 p-0 text-start">
+                                    <p class="display-6">150</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                            <p class="font-15 mb-0 fw-bold">Active Customers</p>
+                            <p class="text-info">See more</p>
+                            <div class="row">
+                                <div class="col-6 text-end m-0 t-0">
+                                    <img src="~/images/Admin/MC/cActive.svg" alt="" height="50" asp-append-version="true" />
+                                </div>
+                                <div class="col-6 text-dark m-0 p-0 text-start">
+                                    <p class="display-6">135</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                            <p class="font-15 mb-0 fw-bold">Current Trial Subscription</p>
+                            <p class="text-info">See more</p>
+                            <div class="row">
+                                <div class="col-6 text-end m-0 t-0">
+                                    <img src="~/images/Admin/MC/subscription.svg" alt="" height="55" asp-append-version="true" />
+                                </div>
+                                <div class="col-6 text-dark m-0 p-0 text-start">
+                                    <p class="display-6">120</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                            <p class="font-15 mb-0 fw-bold">Revenue Status</p>
+                            <a asp-area="" asp-controller="Plan" asp-action="Index">
+                                <p class="text-info">See more</p>
+                            </a>
+                            <div class="row">
+                                <div class="col-6 text-end m-0 t-0">
+                                    <img src="~/images/Admin/MC/revenue.svg" alt="" height="50" asp-append-version="true" />
+                                </div>
+                                <div class="col-6 text-dark m-0 p-0 text-start">
+                                    <p class="display-6 text-wrap">25</p>
+                                </div>
+                            </div>
+                        </div>*@
+
+
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Customers Registered</p>
-                        <a asp-area="Admin" asp-controller="Customer" asp-action="CustomerList">
+                        <p class="font-15 mb-0 fw-bold">No. of Active Projects</p>
+                        <p class="text-info">See more</p>
+                        <div class="row">
+                            <div class="col-6 text-end m-0 t-0">
+                                <img src="~/images/Customer/Partner-management.png" alt="" height="44" asp-append-version="true" />
+                            </div>
+                            <div class="col-6 text-dark m-0 p-0 text-start">
+                                <p class="display-6">05</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                        <p class="font-15 mb-0 fw-bold">No. of Active Partners</p>
+                        <p class="text-info">See more</p>
+                        <div class="row">
+                            <div class="col-6 text-end m-0 t-0">
+                                <img src="~/images/Customer/Partner-management1.png" alt="" height="55" asp-append-version="true" />
+                            </div>
+                            <div class="col-6 text-dark m-0 p-0 text-start">
+                                <p class="display-6">15</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                        <p class="font-15 mb-0 fw-bold">Active Users</p>
+                        <p>  <a data-ajax="true" data-ajax-update="#qnimate" data-ajax-mode="replace" asp-controller="Dashboard" asp-action="GetActiveUser" id="addClass"> See more </a></p>
+                        <div class="row">
+                            <div class="col-6 text-end m-0 t-0">
+                                <img src="~/images/Customer/activeuser.png" alt="" height="55" asp-append-version="true" />
+                            </div>
+                            <div class="col-6 text-dark m-0 p-0 text-start">
+                                <p class="display-6">10</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                        <p class="font-15 mb-0 fw-bold">Tickets</p>
+                        <a asp-area="" asp-controller="Ticket" asp-action="Index">
                             <p class="text-info">See more</p>
                         </a>
                         <div class="row">
                             <div class="col-6 text-end m-0 t-0">
-                                <img src="~/images/Admin/MC/cRegistred.svg" alt="" height="50" asp-append-version="true" />
+                                <img src="~/images/Admin/MC/ticket.svg" alt="" height="50" asp-append-version="true" />
                             </div>
                             <div class="col-6 text-dark m-0 p-0 text-start">
-                                <p class="display-6">150</p>
+                                <p class="display-6">44</p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Active Customers</p>
-                        <p class="text-info">See more</p>
-                        <div class="row">
-                            <div class="col-6 text-end m-0 t-0">
-                                <img src="~/images/Admin/MC/cActive.svg" alt="" height="50" asp-append-version="true" />
+                    @*<div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                            <p class="font-15 mb-0 fw-bold">Our Plans</p>
+                            <a asp-area="" asp-controller="Plan" asp-action="Index">
+                                <p class="text-info">Click Here</p>
+                            </a>
+                            <div class="row">
+                                <div class="col-3"></div>
+                                <div class="col-6 m-0 t-0">
+                                    <img src="~/images/Admin/MC/plan.svg" alt="" height="50" asp-append-version="true" />
+                                </div>
+                                <div class="col-3 m-0 t-0"></div>
                             </div>
-                            <div class="col-6 text-dark m-0 p-0 text-start">
-                                <p class="display-6">135</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Current Trial Subscription</p>
-                        <p class="text-info">See more</p>
-                        <div class="row">
-                            <div class="col-6 text-end m-0 t-0">
-                                <img src="~/images/Admin/MC/subscription.svg" alt="" height="55" asp-append-version="true" />
-                            </div>
-                            <div class="col-6 text-dark m-0 p-0 text-start">
-                                <p class="display-6">120</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Revenue Status</p>
-                        <a asp-area="" asp-controller="Plan" asp-action="Index">
-                            <p class="text-info">See more</p>
-                        </a>
-                        <div class="row">
-                            <div class="col-6 text-end m-0 t-0">
-                                <img src="~/images/Admin/MC/revenue.svg" alt="" height="50" asp-append-version="true" />
-                            </div>
-                            <div class="col-6 text-dark m-0 p-0 text-start">
-                                <p class="display-6 text-wrap">25</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Our Plans</p>
-                        <a asp-area="" asp-controller="Plan" asp-action="Index">
-                            <p class="text-info">Click Here</p>
-                        </a>
-                        <div class="row">
-                            <div class="col-3"></div>
-                            <div class="col-6 m-0 t-0">
-                                <img src="~/images/Admin/MC/plan.svg" alt="" height="50" asp-append-version="true" />
-                            </div>
-                            <div class="col-3 m-0 t-0"></div>
-                        </div>
-                    </div>
+                        </div>*@
 
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Quick Email</p>
@@ -178,20 +233,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <p class="font-15 mb-0 fw-bold">Tickets</p>
-                        <a asp-area="" asp-controller="Ticket" asp-action="Index">
-                            <p class="text-info">See more</p>
-                        </a>
-                        <div class="row">
-                            <div class="col-6 text-end m-0 t-0">
-                                <img src="~/images/Admin/MC/ticket.svg" alt="" height="50" asp-append-version="true" />
-                            </div>
-                            <div class="col-6 text-dark m-0 p-0 text-start">
-                                <p class="display-6">5</p>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                         <p class="font-15 mb-0 fw-bold">Under Maintenance</p>

@@ -8,13 +8,7 @@ namespace CSRPulse.Common
     {
         Admin = 99
     }
-    public enum MailSubject
-    {
-        CustomerRegistration = 2,
-        MaintenanceNotification = 4,
-        QuickEmail = 5
-    }
-
+   
     public enum UserType
     {
         Internal = 1,
@@ -168,6 +162,15 @@ namespace CSRPulse.Common
     {
         InternalSource = 1,
         OtherSource = 2
+    }
+
+    public enum MailProcess
+    {
+        ResetPassword = 1,
+        OneTimePassword = 2,
+        Registration = 3,
+        Maintenance = 4,
+        QuickEmail = 5
     }
 
 }

@@ -32,15 +32,11 @@ namespace CSRPulse.Services
                 var result = new EmailConfiguration();
                 var emailConfigurations = await _genericRepository.GetAsync<DTOModel.EmailConfiguration>();
                 var rs = emailConfigurations.FirstOrDefault();
-                result.EmailConfigurationID = rs.EmailConfigurationId;
-                result.ToEmail = rs.ToEmail;
-                result.Bcc = rs.Bcc;
-                result.CcEmail = rs.CcEmail;
+                result.EmailConfigurationID = rs.EmailConfigurationId;              
                 result.UserName = rs.UserName;
                 result.Password = rs.Password;
                 result.Port = rs.Port;
-                result.Server = rs.Server;
-                result.Signature = rs.Signature;
+                result.Server = rs.Server;               
                 result.Sslstatus = rs.Sslstatus;
                 return result;
                 //return stateList;
@@ -51,19 +47,7 @@ namespace CSRPulse.Services
             {
                 throw;
             }
-            //try
-            //{
-            //    var emailConfigurations = await _genericRepository.GetAsync<DTOModel.EmailConfiguration>();
-            //    return _mapper.Map<Model.EmailConfiguration>(emailConfigurations);
-            //    //return view(emailConfigurations);
-            //    //return (Model.EmailConfiguration)emailConfigurations;
-
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
+            
         }
 
 
@@ -75,15 +59,11 @@ namespace CSRPulse.Services
 
                 var modelEmail = await _genericRepository.GetByIDAsync<DTOModel.EmailConfiguration>(emailConfiguration.EmailConfigurationID);
                 if (modelEmail != null)
-                {
-                    modelEmail.ToEmail = emailConfiguration.ToEmail;
-                    modelEmail.Bcc = emailConfiguration.Bcc;
-                    modelEmail.CcEmail = emailConfiguration.CcEmail;
+                {                    
                     modelEmail.UserName = emailConfiguration.UserName;
                     modelEmail.Password = emailConfiguration.Password;
                     modelEmail.Server = emailConfiguration.Server;
-                    modelEmail.Port = emailConfiguration.Port;
-                    modelEmail.Signature = emailConfiguration.Signature;
+                    modelEmail.Port = emailConfiguration.Port;                   
                     modelEmail.Sslstatus = emailConfiguration.Sslstatus;
                     modelEmail.UpdatedBy = emailConfiguration.UpdatedBy;
                     modelEmail.UpdatedOn = emailConfiguration.UpdatedOn;

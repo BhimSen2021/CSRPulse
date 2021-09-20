@@ -211,3 +211,22 @@ $(document).on("click", '.table .delete-cancel', function () {
     deletelink.show();
     return false;
 });
+
+function CheckPasswordStrength() {
+    var strength = document.getElementById('strength');
+    var strongRegex = new RegExp("^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+    var mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+    var enoughRegex = new RegExp("(?=.{8,}).*", "g");
+    var pwd = document.getElementById("Password");
+    if (pwd.value.length == 0) {
+        strength.innerHTML = '';
+    } else if (false == enoughRegex.test(pwd.value)) {
+        strength.innerHTML = '<span class="d-grid mt-1 text-center badge rounded-pill bg-info">Enter more characters</span>';
+    } else if (strongRegex.test(pwd.value)) {
+        strength.innerHTML = '<span class="d-grid mt-1 text-center badge rounded-pill bg-success">Strong !</span>';
+    } else if (mediumRegex.test(pwd.value)) {
+        strength.innerHTML = '<span class="d-grid mt-1 text-center badge rounded-pill bg-warning">Medium !</span>';
+    } else {
+        strength.innerHTML = '<span class="d-grid mt-1 text-center badge rounded-pill bg-danger">Weak !</span>';
+    }
+}

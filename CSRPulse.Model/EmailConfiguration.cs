@@ -35,14 +35,7 @@ namespace CSRPulse.Model
         public string Signature { get; set; }
         [Display(Name = "Ssl status")]
         public bool Sslstatus { get; set; }
-        //public int CreatedBy { get; set; }
-        //[Column(TypeName = "datetime")]
-        //public DateTime CreatedOn { get; set; }
-        //public int? UpdatedBy { get; set; }
-        //[Column(TypeName = "datetime")]
-        //public DateTime? UpdatedOn { get; set; }
-        //public bool IsDeleted { get; set; }
-
+      
 
     }
 }

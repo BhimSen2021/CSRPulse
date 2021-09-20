@@ -9,10 +9,12 @@ namespace CSRPulse.Model
     {
         [Display(Name = "User Name"), Required(ErrorMessage = "Please Enter User Name")]
         public string UserName { get; set; }
+        public string hdUserName { get; set; }
 
         [DataType(DataType.Password), Required(ErrorMessage = "Please Enter Password")]
         public string Password { get; set; }
         [Display(Name = "Remember me")]
+        public string hdPassword { get; set; }
         public bool RememberMe { get; set; }
         public byte? WrongAttemp { get; set; }
 

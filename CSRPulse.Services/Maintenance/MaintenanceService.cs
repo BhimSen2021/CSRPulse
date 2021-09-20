@@ -79,13 +79,11 @@ namespace CSRPulse.Services
             return false;
         }
 
-        public async Task<bool> SendEmailAsync(string Message)
+        public async Task<bool> SendEmailAsync(Maintenance maintenance)
         {
             bool flag = false;
             try
             {
-                StringBuilder emailBody = new StringBuilder("");
-                Common.EmailMessage message = new Common.EmailMessage();
                 string to = string.Empty;
                 string cc = string.Empty;
                 var uData = _genericRepository.Get<DTOModel.User>(u => u.IsActive == true && u.IsDeleted == false).ToList();
@@ -104,23 +102,13 @@ namespace CSRPulse.Services
                         cc += item.Email + ";";
                     }
                 }
-                message.To = to.TrimEnd(';');
-                message.CC = cc.TrimEnd(';');
-
-                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == 4).FirstOrDefault();
-                if (mailSubj != null)
+                string Message2 = string.Empty;
+                if (maintenance.IsMaintenance)
                 {
-                    message.Subject = mailSubj.Subject;
-                    message.SubjectId = mailSubj.SubjectId;
+                    Message2 = "Axis Bank CSR maintenance start from " + string.Format("{0:hh:mm:ss tt}", maintenance.StartDateTime) + " to " + string.Format("{0:hh:mm:ss tt}", maintenance.EndDateTime);
                 }
-                else
-                    message.Subject = "CSRPulse Mail";
-
-                message.PlaceHolders = new List<KeyValuePair<string, string>>();
-                message.TemplateName = "Maintenance";
-                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$message}", Message));
-                flag = await _emailService.CustomerRelatedMails(message);
-
+                var mailDetail = new MailDetail() { Message = maintenance.Message, Message2 = Message2, To = to.TrimEnd(';'), CC = cc.TrimEnd(';') };
+                flag = await _emailService.SendMail(mailDetail, Common.MailProcess.Maintenance);
             }
             catch (Exception)
             {

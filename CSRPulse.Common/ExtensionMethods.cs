@@ -254,6 +254,43 @@ namespace CSRPulse.Common
             return str;
         }
 
+
+        public static string GenerateOTP()
+        {
+            string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string small_alphabets = "abcdefghijklmnopqrstuvwxyz";
+            string numbers = "1234567890";
+
+            string characters = numbers;
+            characters += alphabets + numbers + small_alphabets;
+
+            int length = 6;
+            string otp = string.Empty;
+            for (int i = 0; i < length; i++)
+            {
+                string character = string.Empty;
+                do
+                {
+                    int index = new Random().Next(0, characters.Length);
+                    character = characters.ToCharArray()[index].ToString();
+                } while (otp.IndexOf(character) != -1);
+                otp += character;
+            }
+            return otp;
+        }
+
+        public static string GeneratePassword(int passwordLength)
+        {
+            string _allowedChars = "abcdefghijklmnopqrstuvwxyz@#$&ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            Random randNum = new Random();
+            char[] chars = new char[passwordLength];           
+            for (int i = 0; i < passwordLength; i++)
+            {
+                chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
+            }
+            return new string(chars);
+        }
+
         public static string ReportStatus(int status, DateTime startDate)
         {
             switch (status)
@@ -273,6 +310,13 @@ namespace CSRPulse.Common
             }
         }
 
+        public static string MakeDisplayEmail(string emailAddress)
+        {
+            if (string.IsNullOrEmpty(emailAddress))
+                return emailAddress;
+            else            
+               return emailAddress.Replace(".", "[dot]").Replace("@","[at]");            
+        }
         
 
     }

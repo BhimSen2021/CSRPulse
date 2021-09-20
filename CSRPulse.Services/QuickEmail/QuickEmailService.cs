@@ -25,8 +25,8 @@ namespace CSRPulse.Services
             bool flag = false;
             try
             {
-                StringBuilder emailBody = new StringBuilder("");
-                Common.EmailMessage message = new Common.EmailMessage();
+                //StringBuilder emailBody = new StringBuilder("");
+                //Common.EmailMessage message = new Common.EmailMessage();
                 string to = string.Empty;
                 string bcc = string.Empty;
 
@@ -40,25 +40,29 @@ namespace CSRPulse.Services
                     for (int i = 0; i < quickEmail.BccEmails.Length; i++)
                         bcc += Convert.ToString(quickEmail.BccEmails[i]) + ";";
                 }
-                message.To = to.TrimEnd(';');
-                message.Bcc = bcc.TrimEnd(';');
+                //message.To = to.TrimEnd(';');
+                //message.Bcc = bcc.TrimEnd(';');
 
-                var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == (int)Common.MailSubject.QuickEmail).FirstOrDefault();
+                //var mailSubj = _genericRepository.Get<DTOModel.MailSubject>(x => x.MailProcessId == (int)Common.MailSubject.QuickEmail).FirstOrDefault();
 
-                message.Subject = quickEmail.Subject;
-                if (mailSubj != null)
-                {
+                //message.Subject = quickEmail.Subject;
+                //if (mailSubj != null)
+                //{
 
-                    message.SubjectId = mailSubj.SubjectId;
-                }
-                else
-                    message.Subject = "CSRPulse- QuickEmail Notification";
+                //    message.SubjectId = mailSubj.SubjectId;
+                //}
+                //else
+                //    message.Subject = "CSRPulse- QuickEmail Notification";
 
-                message.PlaceHolders = new List<KeyValuePair<string, string>>();
-                message.TemplateName = "QuickEmail";
-                message.PlaceHolders.Add(new KeyValuePair<string, string>("{$message}", quickEmail.Message));
-                flag = await _emailService.CustomerRelatedMails(message);
-              
+                //message.PlaceHolders = new List<KeyValuePair<string, string>>();
+                //message.TemplateName = "QuickEmail";
+                //message.PlaceHolders.Add(new KeyValuePair<string, string>("{$message}", quickEmail.Message));
+
+                var mailDetail = new MailDetail() { Subject = quickEmail.Subject, Message = quickEmail.Message, To = to.TrimEnd(';'), Bcc = bcc.TrimEnd(';') };
+                flag = await _emailService.SendMail(mailDetail, Common.MailProcess.Maintenance);
+
+                // flag = await _emailService.PrepareTemplate(message);
+
             }
             catch (Exception)
             {

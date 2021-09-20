@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using CSRPulse.Data.Data;
-using CSRPulse.Model;
+﻿using CSRPulse.Model;
 using CSRPulse.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
@@ -19,12 +14,13 @@ namespace CSRPulse.Controllers
 
         public EmailConfigurationController(IEmailConfigurationServices emailconfigServices)
         {
-            _emailconfigServices = emailconfigServices;          
+            _emailconfigServices = emailconfigServices;
         }
         public async Task<IActionResult> Index()
         {
-           var result =await _emailconfigServices.GetEmailConfigAsync();
+            var result = await _emailconfigServices.GetEmailConfigAsync();
             return View(result);
+
         }
         public async Task<IActionResult> Edit()
         {
@@ -35,7 +31,7 @@ namespace CSRPulse.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
         }
@@ -51,18 +47,14 @@ namespace CSRPulse.Controllers
                     email.UpdatedBy = userDetail.CreatedBy;
                     email.UpdatedOn = DateTime.Now;
                     var result = await _emailconfigServices.UpdateEmailConfig(email);
-                    if (email.IsExist)
-                    {
-                        ModelState.AddModelError("", "Email already exists");
-                    }
-                    else if (result)
+                    if (result)
                     {
                         TempData["Message"] = "Email Configuration Updated Successfully.";
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        TempData["Error"] = "UoM Updation Failed.";
+                        TempData["Error"] = "Email Configuration Updation Failed.";
                     }
                 }
                 return View(email);

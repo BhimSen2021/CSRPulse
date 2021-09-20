@@ -10,9 +10,8 @@
     <Content Remove="Areas\Customer\Views\_ViewImports.cshtml" />
     <Content Remove="Areas\Customer\Views\_ViewStart.cshtml" />
     <Content Remove="wwwroot\Templates\EmailTemplate\CustomerRegs.html" />
-    <Content Remove="wwwroot\Templates\EmailTemplate\ForgotOTP.html" />
     <Content Remove="wwwroot\Templates\EmailTemplate\QuickEmail.html" />
-    <Content Remove="wwwroot\Templates\EmailTemplate\RecoverPassword.html" />
+    <Content Remove="wwwroot\Templates\EmailTemplate\ResetPassword.html" />
     <Content Remove="wwwroot\Templates\Maintenance.html" />
   </ItemGroup>
 
@@ -40,6 +39,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="Logs\" />
     <Folder Include="wwwroot\assets\documents\Project\" />
     <Folder Include="wwwroot\documents\Partner\" />
     <Folder Include="wwwroot\documents\Project\" />
@@ -55,8 +55,7 @@
     <None Include="Areas\Customer\Views\_ViewStart.cshtml" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\Templates\EmailTemplate\QuickEmail.html" />
-    <None Include="wwwroot\Templates\EmailTemplate\RecoverPassword.html" />
-    <None Include="wwwroot\Templates\EmailTemplate\ForgotOTP.html" />
+    <None Include="wwwroot\Templates\EmailTemplate\ResetPassword.html" />
     <None Include="wwwroot\Templates\EmailTemplate\CustomerRegs.html" />
     <None Include="wwwroot\Templates\EmailTemplate\CustomerOTP.html" />
     <None Include="wwwroot\Templates\EmailTemplate\Maintenance.html" />

@@ -94,10 +94,12 @@
                     </div>
                     <div class="form-group mb-3">
                         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "form-label required" })
-                        <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter user name (max 50 characters)" autocomplete="off" disabled>
+                        <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter user name (max 50 characters)" autocomplete="off" readonly>
                         <span asp-validation-for="UserName" class="invalid"></span>
+                        <input type="hidden" asp-for="Password" value="@Model.Password" />
+                        <input type="hidden" asp-for="ConfirmPassword" value="@Model.ConfirmPassword" />
                     </div>
-                    <div class="mb-3">
+                    @*<div class="mb-3">
                         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "form-label required" })
                         <div class="input-group input-group-merge">
                             <input type="password" asp-for="Password" value="@Model.Password" class="form-control" placeholder="Enter password" autocomplete="off">
@@ -117,7 +119,7 @@
                             </div>
                         </div>
                         <span asp-validation-for="ConfirmPassword" class="invalid"></span>
-                    </div>
+                    </div>*@
                     <div class="mb-2 text-end">
                         <a asp-area="Admin" asp-controller="Registration" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
                         <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>

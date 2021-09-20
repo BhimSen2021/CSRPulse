@@ -301,6 +301,7 @@ namespace CSRPulse.Controllers
                         var isFormulas = CheckFormulaInExcelFile(sPhysicalPath);
                         if (isFormulas)
                         {
+                            DeleteFile(sPhysicalPath);
                             blockImpModel.NoOfErrors = 1;
                             blockImpModel.Message = "File contains formula or arithmetic operators that is not allowed in system.";
                             return Json(new { status = "success", htmlData = ConvertViewToString("_BlockImportGridView", blockImpModel, true) });

@@ -8,6 +8,7 @@ using AutoMapper;
 using DTOModel = CSRPulse.Data.Models;
 using System.Linq;
 using CSRPulse.Model;
+using CSRPulse.Common;
 
 namespace CSRPulse.Services
 {
@@ -145,7 +146,7 @@ namespace CSRPulse.Services
                 message.TemplateName = "CustomerOTP";
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", OTP));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$company}", companyName));
-                _emailService.CustomerRelatedMails(message);
+               // _emailService.PrepareTemplate(message);
                 flag = true;
             }
             catch (Exception)
@@ -181,7 +182,7 @@ namespace CSRPulse.Services
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$emailId}", customer.Email));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$user}", customer.CustomerCode));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$password}", password));
-                _emailService.CustomerRelatedMails(message);
+               // _emailService.PrepareTemplate(message);
                 flag = true;
             }
             catch (Exception)
@@ -209,7 +210,7 @@ namespace CSRPulse.Services
                     var user = new DTOModel.User()
                     {
                         RoleId = signUp.RoleId,
-                        UserTypeId = 1, // For Internal User
+                        UserTypeId = (int)Common.UserType.Internal,
                         UserName = signUp.UserName,
                         FullName = signUp.FullName,
                         EmailId = signUp.EmailId,
@@ -224,7 +225,7 @@ namespace CSRPulse.Services
                         CreatedOn = signUp.CreatedOn
                     };
 
-                    await _genericRepository.InsertAsync(user);                   
+                    await _genericRepository.InsertAsync(user);
 
                     transaction.Commit();
                     return user.UserId;
@@ -263,7 +264,7 @@ namespace CSRPulse.Services
                     {
                         UserID = uData.UserId,
                         UserName = uData.UserName,
-                        FullName  = uData.FullName,
+                        FullName = uData.FullName,
                         ImageName = uData.ImageName,
                         EmailId = uData.EmailId,
                         MobileNo = uData.MobileNo,
@@ -290,21 +291,21 @@ namespace CSRPulse.Services
         public async Task<bool> UpdateUser(Model.SignUp signUp)
         {
             try
-            {                
+            {
                 var dData = await _genericRepository.GetByIDAsync<DTOModel.User>(signUp.UserID);
                 if (dData != null)
                 {
 
                     dData.FullName = signUp.FullName;
                     dData.ImageName = signUp.ImageName;
-                    dData.Password = signUp.Password;                   
+                    dData.Password = signUp.Password;
                     dData.EmailId = signUp.EmailId;
                     dData.MobileNo = signUp.MobileNo;
                     dData.Password = signUp.Password;
                     dData.RoleId = signUp.RoleId;
                     dData.DepartmentId = signUp.DepartmentId;
                     dData.DesignationId = signUp.DesignationId;
-                    dData.PartnerId = signUp.PartnerId;                    
+                    dData.PartnerId = signUp.PartnerId;
                     _genericRepository.Update(dData);
                     return true;
                 }
@@ -317,6 +318,7 @@ namespace CSRPulse.Services
             }
         }
 
+       
         #endregion
     }
 }
