@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+
 using CSRPulse.Common;
 
 

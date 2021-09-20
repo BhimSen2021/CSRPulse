@@ -14,7 +14,7 @@ namespace CSRPulse.Common
         public static string AuditorFilePath { get { return @"documents\auditor\"; } }
         public static string PartnerDocumentPath { get { return @"documents\PartnerDocument\"; } }
 
-        public static string AuditorFilePath { get { return @"documents\auditor\"; } }
+      
         public static string EmailTemplatePath { get { return @"wwwroot\Templates\EmailTemplate\{0}.html"; } }
 
 
