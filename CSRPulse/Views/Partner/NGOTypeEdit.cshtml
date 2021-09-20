@@ -3,6 +3,7 @@
 @inject CSRPulse.Services.IPartnerService _service
 @{
     var result = await _service.GetPartnerDocumentAsync(Model.PartnerId);
+ 
 }
 
 @{
@@ -186,9 +187,12 @@
         </h2>
         <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
             <div class="accordion-body bg-white">
-                @{ await Html.RenderPartialAsync("_NGOPartnerDocument", result); }
+                <div id="div-ngopartnerdocment-grid">
+                    @{ await Html.RenderPartialAsync("_NGOPartnerDocument", Model); }
+                </div>
+                
             </div>
-        </div>
+            </div>
     </div>
 
     <div class="accordion-item">
@@ -258,7 +262,14 @@
             commonMessage('success', 'Member Added Successfully.');
         }
     }
+    function onChartDocument(data) {
+        $("#div-ngochartdocument-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'NGO Chart Document Saved Successfully.');
+        }
 
+
+    }
     function onAgency(data) {
         debugger;
         if (data.flag == 1) {
@@ -331,7 +342,11 @@
         });
     }
 </script>
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>
 @section Scripts{
     <script>
         function CopyRegToCom(obj) {

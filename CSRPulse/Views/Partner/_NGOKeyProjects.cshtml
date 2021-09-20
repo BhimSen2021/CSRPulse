@@ -47,7 +47,7 @@
                                 </td>
 
                                 <td>
-                                    <input type="text" asp-for="@Model.NGOKeyProjects[i].GrantAmount" asp-format="{0:0.00}" class="form-control form-control-sm" maxlength="10" onkeypress="return onlyNumber(event)" autocomplete="off">
+                                    <input type="text" asp-for="@Model.NGOKeyProjects[i].GrantAmount" asp-format="{0:N}" class="form-control form-control-sm text-end" maxlength="10" onkeypress="return DecimalNumberOnly(event)" onblur="javascript:return CFormat(this.id)" autocomplete="off">
                                     <span asp-validation-for="@Model.NGOKeyProjects[i].GrantAmount" class="invalid"></span>
                                 </td>
 

@@ -1,6 +1,33 @@
-﻿@model IEnumerable<PartnerDocumentDetail>
+﻿@*@model IEnumerable<PartnerDocumentDetail>*@
+@model Partner
 @using CSRPulse.Common
-<form>
+@using System.Data;
+@{
+
+    var validationResultMsg = Model.Message;
+    var msgClass = Model.NoOfErrors > 0 ? "alert alert-danger" : "alert alert-success";
+    validationResultMsg = Model.NoOfErrors == -3 ? "Please select file." :
+        Model.NoOfErrors == -4 ? "Please select valid file." : validationResultMsg;
+    msgClass = Model.NoOfErrors == -3 ? "alert alert-danger" :
+    Model.NoOfErrors == -4 ? "alert alert-danger" : msgClass;
+
+}
+<script>
+    $('.toggle-tooltip').tooltip();
+    if(@Model.NoOfErrors==0){
+        $('#btnSave').removeClass('d-none');
+    }
+</script>
+<div id="validation-hdr" class="pull-right @msgClass" role="alert">
+    @validationResultMsg
+</div>
+
+<form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" enctype="multipart/form-data" asp-action="SavePartnerDocument" asp-controller="Partner"
+      data-ajax-success="onPartnerDocument">
+    <div class="mb-2 text-end">
+        <input type="hidden" asp-for="PartnerId" id="PartnerDocumentId" />
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SavePartnerDocument" id="btnSave"><i class="mdi mdi-file-document-edit"></i> Save</button>
+    </div>
     <div class="row">
         <div class="mb-3">
             <table class="table table-hover table-sm table-centered mb-0">
@@ -8,20 +35,65 @@
                     <tr>
                         <th>#</th>
                         <th>Document Type</th>
-                        <th width="5%">Uploaded</th>
-                        <th width="5%">Action</th>
+                        <th>Document Name</th>
+                        <th width="10%"></th>
+                        <th>Remarks</th>
+                        <th width="6%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model != null)
+                    @if (Model.PartnerDocument != null)
                     {
-                        foreach (var item in Model)
+                        for (int i = 0; i < Model.PartnerDocument.Count; i++)
                         {
                             <tr>
-                                <td><span>@(Model.ToList().IndexOf(item) +1)</span></td>
-                                <td>@item.DocumentName</td>
-                                <td class="text-center">@ExtensionMethods.BoolToYesNo(item.IsUploaded)</td>
-                                <td class="text-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here to, Upload Documents"><a id="documentId_@item.DocumentId" data-bs-toggle="modal" data-bs-target="#info-header-modal" onclick="addDocument(this)"><i class="uil-export me-2"></i></a></td>
+                                <td>
+                                    <span>@(i+1)</span>
+                                    <input type="hidden" id="ProjectDocumentId_@i" asp-for="@Model.PartnerDocument[i].PartnerDocumentId" value="@Model.PartnerDocument[i].PartnerDocumentId" />
+                                    <input type="hidden" id="PartnerId_@i" asp-for="@Model.PartnerDocument[i].PartnerId" />
+                                    <input type="hidden" id="ServerDocumentName_@i" asp-for="@Model.PartnerDocument[i].ServerDocumentName" value="@Model.PartnerDocument[i].ServerDocumentName" />
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentId" />
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].Mandatory" />
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentMaxSize" />
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentType" />
+                                </td>
+                                <td>
+                                    <a data-bs-toggle="tooltip">@Model.PartnerDocument[i].DocumentName</a>
+                                    <span class="@(Model.PartnerDocument[i].Mandatory==true?"required":"")"></span>
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentName" />
+                                </td>
+                                <td>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Partner" asp-action="DownloadPartnerDocument" asp-route-fileName="@Model.PartnerDocument[i].ServerDocumentName">@Model.PartnerDocument[i].UploadedDocumentName</a>
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].UploadedDocumentName" />
+                                </td>
+                                <td>
+                                    @if (Model.PartnerDocument[i].ServerDocumentName == null)
+                                    {
+                                        <input asp-for="@Model.PartnerDocument[i].DocumentFile" onchange="Filevalidation(this)" />
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="@Model.PartnerDocument[i].DocumentFile" disabled />
+                                    }
+                                </td>
+                                <td>
+                                    <input type="text" asp-for="@Model.PartnerDocument[i].Remark" class="form-control form-control-sm" maxlength="2000" placeholder="You can enter max 2000 characters" autocomplete="off">
+                                    <span asp-validation-for="@Model.PartnerDocument[i].Remark" class="invalid"></span>
+                                </td>
+                                <td class="text-center">
+                                    @if (Model.PartnerDocument[i].ServerDocumentName != null && Model.PartnerDocument[i].PartnerDocumentId > 0)
+                                    {
+                                        <a class="font-16 delete-link action-icon" id="delete-link_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record">
+                                            <i class="dripicons-trash text-danger" aria-hidden="true"></i>
+                                        </a>
+                                        <div class="delete-confirm text-nowrap" id="delete-confirm_@i" style="display: none">
+                                            <a class="confirm-delete text-danger" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-ngopartnerdocment-grid"
+                                               data-ajax-mode="replace" asp-action="RemovePartnerDocument" asp-route-pdId="@(Model.PartnerDocument[i].PartnerDocumentId)" asp-route-pId="@(Model.PartnerId)" asp-route-fName="@(Model.PartnerDocument[i].ServerDocumentName)" asp-controller="Partner">
+                                                Yes
+                                            </a> <text>|</text> <a class="delete-cancel text-dark" id="delete-cancel_@i" style="cursor: pointer">No</a>
+                                        </div>
+                                    }
+                                </td>
                             </tr>
                         }
                     }
@@ -31,10 +103,24 @@
     </div>
 </form>
 
-<script>
-    function addDocument(cnt) {
-        //var type = cnt.id.split('_')[0];
-        //var id = cnt.id.split('_')[1];
-        //$('.btnconfirm').attr('id', type + '_' + id);
+<script type="text/javascript">
+    function onPartnerDocument(data) {
+        $("#div-ngopartnerdocment-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'Partner Document Saved Successfully.');
+        }
+        else if (data.flag == 2) {
+            commonMessage('warning', data.msg);
+        }
+        else if (data.flag == 3) {
+            commonMessage('error', data.msg);
+        }
+        else if (data.flag == 4) {
+            commonMessage('warning', data.msg);
+        }
     }
+    $(document).ready(function () {
+        Tooltip();
+    });
+
 </script>

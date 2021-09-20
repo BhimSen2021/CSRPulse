@@ -41,6 +41,7 @@
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="wwwroot\assets\documents\Project\" />
+    <Folder Include="wwwroot\documents\Partner\" />
     <Folder Include="wwwroot\documents\Project\" />
     <Folder Include="wwwroot\TempFiles\" />
   </ItemGroup>

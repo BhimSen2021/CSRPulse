@@ -15,6 +15,7 @@
                         <th>Document Name</th>
                         <th width="10%"></th>
                         <th>Remarks</th>
+                        <th width="6%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,25 +23,47 @@
                     {
                         for (int i = 0; i < Model.NgochartDocument.Count; i++)
                         {
-                            <tr>
-                                <td>
-                                    <span>@(i+1)</span>
-                                    <input type="hidden" asp-for="@Model.NgochartDocument[i].NgochartDocumentId" />
-                                    <input type="hidden" asp-for="@Model.NgochartDocument[i].PartnerId" />                                    
-                                    <input type="hidden" asp-for="@Model.NgochartDocument[i].ServerDocumentName" />
-                                </td>
-                                <td>                                   
-                                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Partner" asp-action="DownloadDocument" asp-route-fileName="@Model.NgochartDocument[i].ServerDocumentName">@Model.NgochartDocument[i].DocumentName</a>
-                                    <input type="hidden" asp-for="@Model.NgochartDocument[i].DocumentName" />
-                                </td>
-                                <td>
-                                    <input asp-for="@Model.NgochartDocument[i].DocumentFile">
-                                </td>
-                                <td>
-                                    <input type="text" asp-for="@Model.NgochartDocument[i].Remarks" class="form-control form-control-sm" maxlength="2000" placeholder="You can enter max 2000 characters" autocomplete="off">
-                                    <span asp-validation-for="@Model.NgochartDocument[i].Remarks" class="invalid"></span>
-                                </td>
-                            </tr>
+                    <tr>
+                        <td>
+                            <span>@(i+1)</span>
+                            <input type="hidden" asp-for="@Model.NgochartDocument[i].NgochartDocumentId" />
+                            <input type="hidden" asp-for="@Model.NgochartDocument[i].PartnerId" />
+                            <input type="hidden" asp-for="@Model.NgochartDocument[i].ServerDocumentName" />
+                        </td>
+                        <td>
+                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Partner" asp-action="DownloadDocument" asp-route-fileName="@Model.NgochartDocument[i].ServerDocumentName">@Model.NgochartDocument[i].DocumentName</a>
+                            <input type="hidden" asp-for="@Model.NgochartDocument[i].DocumentName" />
+                        </td>
+                        <td>
+                            @if (Model.PartnerDocument[i].ServerDocumentName == null)
+                            {
+                                <input asp-for="@Model.NgochartDocument[i].DocumentFile">
+                            }
+                            else
+                            {
+                            <input asp-for="@Model.NgochartDocument[i].DocumentFile" disabled>
+                            }
+                        </td>
+                        <td>
+                            <input type="text" asp-for="@Model.NgochartDocument[i].Remarks" class="form-control form-control-sm" maxlength="2000" placeholder="You can enter max 2000 characters" autocomplete="off">
+                            <span asp-validation-for="@Model.NgochartDocument[i].Remarks" class="invalid"></span>
+                        </td>
+
+                        <td class="text-center">
+                            @if (Model.NgochartDocument[i].ServerDocumentName != null && Model.NgochartDocument[i].NgochartDocumentId > 0)
+                            {
+                                <a class="font-16 delete-link action-icon" id="delete-link_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record">
+                                    <i class="dripicons-trash text-danger" aria-hidden="true"></i>
+                                </a>
+                                <div class="delete-confirm text-nowrap" id="delete-confirm_@i" style="display: none">
+                                    <a class="confirm-delete text-danger" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-ngochartdocument-grid"
+                                       data-ajax-mode="replace" asp-action="RemoveDocument" asp-route-seqno="@(i)" asp-route-ngodId="@(Model.NgochartDocument[i].NgochartDocumentId)" asp-route-pId="@(Model.PartnerId)" asp-route-fName="@(Model.NgochartDocument[i].ServerDocumentName)" asp-route-partner="@Model" asp-controller="Partner">
+                                        Yes
+                                    </a> <text>|</text> <a class="delete-cancel text-dark" id="delete-cancel_@i" style="cursor: pointer">No</a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
                         }
                     }
                 </tbody>
@@ -55,9 +78,7 @@
         if (data.flag == 1) {
             commonMessage('success', 'NGO Chart Document Saved Successfully.');
         }
-        if (data.flag == 3) {
-            commonMessage('success', 'NGO Chart Document uploaded Faild.');
-        }
+        
 
     }
 </script>
