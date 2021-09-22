@@ -84,7 +84,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Uom> Uom { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRights> UserRights { get; set; }
-        public virtual DbSet<UserRoles> UserRoles { get; set; }
+        public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
         public virtual DbSet<Village> Village { get; set; }
 
@@ -1145,17 +1145,28 @@ namespace CSRPulse.Data.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRights_Menu");
 
-                entity.HasOne(d => d.User)
+                entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserRights)
-                    .HasForeignKey(d => d.UserId)
+                    .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRights_User");
+                    .HasConstraintName("FK_UserRights_Role");
             });
 
-            modelBuilder.Entity<UserRoles>(entity =>
+            modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.HasKey(e => e.UserRoleId)
-                    .HasName("PK_UserRole");
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.UserRole)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRole_Role");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserRole)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRole_User");
             });
 
             modelBuilder.Entity<UserType>(entity =>

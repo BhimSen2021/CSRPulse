@@ -13,7 +13,7 @@ namespace CSRPulse.Data.Models
     {
         [Key]
         public int UserRightId { get; set; }
-        public int UserId { get; set; }
+        public int RoleId { get; set; }
         public int MenuId { get; set; }
         public bool ShowMenu { get; set; }
         public bool CreateRight { get; set; }
@@ -30,8 +30,8 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(MenuId))]
         [InverseProperty("UserRights")]
         public virtual Menu Menu { get; set; }
-        [ForeignKey(nameof(UserId))]
+        [ForeignKey(nameof(RoleId))]
         [InverseProperty("UserRights")]
-        public virtual User User { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

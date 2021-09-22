@@ -8,7 +8,7 @@ namespace CSRPulse.Services
 {
     public interface IMenuService
     {
-       Task<List<Menu>> GetMenuByUserAsync(int userId);
-        Task<List<UserRight>> GetUserRightsByUserAsync(int userId);
+       Task<List<Menu>> GetMenuByUserAsync(int roleId);
+        Task<List<UserRight>> GetUserRightsByUserAsync(int roleId);
     }
 }

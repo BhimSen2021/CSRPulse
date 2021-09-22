@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "User List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <div class="row">
@@ -24,7 +25,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-end">
-                    <a asp-area="Admin" asp-controller="Registration" asp-action="Create" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus-circle ms-1"></i> Create User</a>
+                    <a asp-area="Admin" asp-controller="Registration" asp-action="Create" class="btn btn-danger btn-rounded mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to add new user."><i class="mdi mdi-plus-circle ms-1"></i> Create User</a>
                 </div>
                 <table id="basic-datatable" class="table table-hover dt-responsive nowrap w-100">
                     <thead class="thead-light">
@@ -33,9 +34,8 @@
                             <th>Full Name</th>
                             <th>Department</th>
                             <th>User Name</th>
-                            <th>Email Id</th>
-                            <th>Phone No</th>
-                            <th width="5%">Is Active</th>
+                            <th width="5%">Active</th>
+                            <th width="5%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,17 +52,27 @@
                                             user.ImageName = "sample-profile.png";
                                         <img src="~/assets/images/users/@user.ImageName" asp-append-version="true" alt="Img" class="me-2 rounded-circle" />
                                         <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this user.">  @Html.ActionLink(user.FullName, "Edit", "Registration", new { userId = user.UserID })</span>
-                                       
+
                                     </td>
                                     <td>@user.DepartmentName</td>
                                     <td>@user.UserName</td>
-                                    <td>@user.EmailID</td>
-                                    <td>@user.MobileNo</td>
                                     <td>
                                         <div>
                                             <input type="checkbox" id="switch_@user.UserID" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (user.IsActive == true) { <text> checked="checked" </text> } />
                                             <label for="switch_@user.UserID" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                                         </div>
+                                    </td>
+                                    <td class="text-center text-nowrap">
+                                        <a class="action-icon @if (user.HasMultipelRole) {<text> text-success </text> }" style="cursor:pointer; " onclick="AssignRole(@user.UserID)" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to assign Role">
+                                            <i class="uil uil-users-alt"></i>
+                                        </a>
+                                        @if (user.WrongAttemp == 0 && (user.LockDate ?? DateTime.Now).AddHours(24) > DateTime.Now)
+                                        {
+                                            <a class="action-icon text-danger" style="cursor:pointer" onclick="LockUnlockUser(@user.UserID,false)" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to lock this user."> <i class="uil-padlock"></i></a>
+                                        }
+                                        else
+                                        { <a class="action-icon text-primary" style="cursor:pointer" onclick="LockUnlockUser(@user.UserID,true)" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to unlock this user."> <i class="uil-unlock"></i></a>}
+
                                     </td>
                                 </tr>
                             }
@@ -80,7 +90,9 @@
     </div>
 </div>
 <partial name="_Confirmation" />
-
+<div id="assignrole-div">
+    @await Html.PartialAsync("_AssignRole", new UserRoleModel())
+</div>
 @section Scripts{
     <script type="text/javascript">
         function openpopup(cnt) {
@@ -110,31 +122,55 @@
                 }
             });
         }
-    </script>
 
-    <script type="text/javascript">
-        function UserActiveDeActive(IsActive) {
-            var userId = IsActive.id.split('_')[1];
-            debugger;
+        function AssignRole(userId) {
             $.ajax({
-                type: 'POST',
+            type: 'GET',
+            dataType: 'JSON',
+            url: '@Url.Action("AssignRole", "Registration", new { Area="Admin"})',
+                data: { userId: userId },
+                success: function (data) {
+
+                    $("#assignrole-div").html(data.htmlData);
+                    $('#assign-role-modal').modal('show');
+            },
+            error: function (data) {
+                commonMessage('error', 'Switch Account failed.');
+            }
+        });
+        }
+
+        function onAssignRole(data) {
+            if (data.flag == 1) {
+                $('#assign-role-modal').modal('hide');
+                commonMessage('success', 'Roles assigned successfully.');
+            }
+            else {
+                commonMessage('error', 'Assign role failed!');
+            }
+        }
+        function LockUnlockUser(userId, ulock) {
+            $.ajax({
+                type: 'GET',
                 dataType: 'JSON',
-                url: '/Admin/Registration/UserActiveDeActive',
-                data: { userId: userId, IsActive: IsActive.checked },
-                success: function (responce) {
-                    if (responce) {
-                        commonMessage('success', 'User status changed successfully.');
+                url: '@Url.Action("LockUnlockUser", "Registration", new { Area="Admin"})',
+                data: { userId: userId, ulock: ulock},
+                success: function (data) {
+                    debugger;
+                    if (data.flag) {
+                        location.reload();
                     }
-
                     else {
-                        commonMessage('warning', 'User status changing failed.');
+                        commonMessage('error', 'Error occurred!');
                     }
-
                 },
-                error: function (responce) {
-                    commonMessage('error', 'User status changing failed.');
+                error: function (data) {
+                    commonMessage('error', 'Operation failed!');
                 }
             });
         }
+
     </script>
+
+
 }

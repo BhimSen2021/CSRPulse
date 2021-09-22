@@ -9,6 +9,7 @@ using DTOModel = CSRPulse.Data.Models;
 using System.Linq;
 using CSRPulse.Model;
 using CSRPulse.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSRPulse.Services
 {
@@ -18,16 +19,18 @@ namespace CSRPulse.Services
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IPrepareDBForCustomer _dBForCustomer;
+        private readonly IAccountRepository _accountRepository;
         private readonly IGenericRepository _genericRepository;
 
         //  private const string _dbPath = @"wwwroot/DB/DefaultDbScript.sql"; 
 
-        public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer)
+        public RegistrationService(IGenericRepository generic, IMapper mapper, IEmailService emailService, IPrepareDBForCustomer dBForCustomer, IAccountRepository accountRepository)
         {
             _genericRepository = generic;
             _mapper = mapper;
             _emailService = emailService;
             _dBForCustomer = dBForCustomer;
+            _accountRepository = accountRepository;
         }
         public async Task<bool> CustomerExists(Model.Customer customer)
         {
@@ -146,7 +149,7 @@ namespace CSRPulse.Services
                 message.TemplateName = "CustomerOTP";
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$otp}", OTP));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$company}", companyName));
-               // _emailService.PrepareTemplate(message);
+                // _emailService.PrepareTemplate(message);
                 flag = true;
             }
             catch (Exception)
@@ -182,7 +185,7 @@ namespace CSRPulse.Services
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$emailId}", customer.Email));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$user}", customer.CustomerCode));
                 message.PlaceHolders.Add(new KeyValuePair<string, string>("{$password}", password));
-               // _emailService.PrepareTemplate(message);
+                // _emailService.PrepareTemplate(message);
                 flag = true;
             }
             catch (Exception)
@@ -318,7 +321,98 @@ namespace CSRPulse.Services
             }
         }
 
-       
+
+        #endregion
+
+        #region Switch Account 
+        public async Task<List<Model.UserRole>> GetUserRoles(int userId)
+        {
+            var userRoles = await _genericRepository.GetIQueryable<DTOModel.UserRole>(x => x.UserId == userId).Include(r => r.Role).ToListAsync();
+            if (userRoles != null)
+            {
+                return userRoles.Select(a => new Model.UserRole()
+                {
+                    RoleId = a.RoleId,
+                    RoleName = a.Role.RoleName,
+
+                }).ToList();
+            }
+            else
+                return new List<Model.UserRole>();
+        }
+
+        public async Task<List<Model.UserRole>> GetAssignedRoles(int userId)
+        {
+            var assignedRoles = await _accountRepository.GetUserforAssignRole(userId)
+                .OrderByDescending(a => a.AssigneRole).ToListAsync();
+
+            if (assignedRoles != null)
+            {
+                return assignedRoles.Select(a => new Model.UserRole()
+                {
+                    RoleId = a.RoleId,
+                    RoleName = a.RoleName,
+                    AssigneRole = a.AssigneRole
+                }).ToList();
+            }
+            else
+                return new List<Model.UserRole>();
+        }
+
+        public async Task<bool> AssignedRoles(List<Model.UserRole> userRoles, int userId)
+        {
+            try
+            {
+                foreach (var userRole in userRoles)
+                {
+                    if (!_genericRepository.Exists<DTOModel.UserRole>(x => x.RoleId == userRole.RoleId
+                    && x.UserId == userId))
+                    {
+                        var userRoleModel = new DTOModel.UserRole()
+                        {
+                            UserId = userId,
+                            RoleId = userRole.RoleId,
+                            IsActive = true,
+                        };
+                        await _genericRepository.InsertAsync<DTOModel.UserRole>(userRoleModel);
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> LockUnlockUser(int userId, bool ulock)
+        {
+            try
+            {
+                var dData = await _genericRepository.GetByIDAsync<DTOModel.User>(userId);
+                if (dData != null)
+                {
+                    if (ulock)
+                    {
+                        dData.WrongAttemp = 0;
+                        dData.LockDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        dData.WrongAttemp = null;
+                        dData.LockDate = null;
+                    }
+                    await _genericRepository.UpdateAsync(dData);
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
     }
 }

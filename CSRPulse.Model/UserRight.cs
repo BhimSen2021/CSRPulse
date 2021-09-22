@@ -9,7 +9,7 @@ namespace CSRPulse.Model
     public class UserRight:BaseModel
     {
         
-        public int UserId { get; set; }
+        public int RoleId { get; set; }
         public int MenuId { get; set; }
         public bool ShowMenu { get; set; }
         public bool CreateRight { get; set; }

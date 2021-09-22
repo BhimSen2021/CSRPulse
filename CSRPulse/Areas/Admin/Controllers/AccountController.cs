@@ -42,6 +42,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(SingIn singIn, string returnUrl)
         {
+       
 
             _logger.LogInformation("Admin/AccountController/Login");
             try
@@ -70,7 +71,6 @@ namespace CSRPulse.Areas.Admin.Controllers
                     if (isAuthenticated)
                     {
                         HttpContext.Session.SetComplexData("User", uDetail);
-
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return LocalRedirect(returnUrl);
@@ -292,6 +292,11 @@ namespace CSRPulse.Areas.Admin.Controllers
                 return RedirectToAction("Logout", "Account", new { area = "Admin" });
             }
             return View();
+        }
+
+        public IActionResult KeepAlive()
+        {
+            return Content("I am alive!");
         }
     }
 }

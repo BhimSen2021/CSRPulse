@@ -46,5 +46,6 @@ namespace CSRPulse.Model
         public IFormFile ImagePhoto { get; set; }     
 
         public bool RecordExist { get; set; }
+        public bool HasMultipelRole { get; set; } 
     }
 }

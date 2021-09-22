@@ -18,6 +18,8 @@ namespace CSRPulse.Data.Models
             ProcessSetupSecondoryRole = new HashSet<ProcessSetup>();
             ProcessSetupTertiaryRole = new HashSet<ProcessSetup>();
             User = new HashSet<User>();
+            UserRights = new HashSet<UserRights>();
+            UserRole = new HashSet<UserRole>();
         }
 
         [Key]
@@ -45,5 +47,9 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProcessSetup> ProcessSetupTertiaryRole { get; set; }
         [InverseProperty("Role")]
         public virtual ICollection<User> User { get; set; }
+        [InverseProperty("Role")]
+        public virtual ICollection<UserRights> UserRights { get; set; }
+        [InverseProperty("Role")]
+        public virtual ICollection<UserRole> UserRole { get; set; }
     }
 }

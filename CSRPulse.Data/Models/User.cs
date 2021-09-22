@@ -29,7 +29,7 @@ namespace CSRPulse.Data.Models
             Project = new HashSet<Project>();
             StateCreatedByNavigation = new HashSet<State>();
             StateUpdatedByNavigation = new HashSet<State>();
-            UserRights = new HashSet<UserRights>();
+            UserRole = new HashSet<UserRole>();
             VillageCreatedByNavigation = new HashSet<Village>();
             VillageUpdatedByNavigation = new HashSet<Village>();
         }
@@ -118,7 +118,7 @@ namespace CSRPulse.Data.Models
         [InverseProperty(nameof(State.UpdatedByNavigation))]
         public virtual ICollection<State> StateUpdatedByNavigation { get; set; }
         [InverseProperty("User")]
-        public virtual ICollection<UserRights> UserRights { get; set; }
+        public virtual ICollection<UserRole> UserRole { get; set; }
         [InverseProperty(nameof(Village.CreatedByNavigation))]
         public virtual ICollection<Village> VillageCreatedByNavigation { get; set; }
         [InverseProperty(nameof(Village.UpdatedByNavigation))]

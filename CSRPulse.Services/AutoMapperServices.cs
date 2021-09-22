@@ -44,6 +44,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.User, User>().ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId))
                 .ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Department.DepartmentName))
                 .ForMember(d => d.DepartmentId, o => o.MapFrom(s => s.Department.DepartmentId))
+                .ForMember(r => r.HasMultipelRole, o => o.MapFrom(r => r.UserRole.Count > 0 ? true : false))
                 .ReverseMap();
 
             CreateMap<DTOModel.Role, Model.Role>()
@@ -60,6 +61,10 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.FundingSource, FundingSource>().ReverseMap();
             CreateMap<DTOModel.PartnerPolicy, PartnerPolicy>().ReverseMap();
             CreateMap<DTOModel.PartnerPolicyModule, PartnerPolicyModule>().ReverseMap();
+
+            CreateMap<DTOModel.UserRole, UserRole>().ReverseMap();
+
+
             #region M A S T E R S
 
             #region Thematic Mapper
@@ -184,7 +189,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.ProjectInterventionReport, ProjectInterventionReport>().ReverseMap();
             CreateMap<DTOModel.ProjectFinancialReport, ProjectFinancialReport>().ReverseMap();
             CreateMap<DTOModel.ProjectLocation, ProjectLocation>().ReverseMap();
-            
+
             CreateMap<DTOModel.ProjectLocationDetail, ProjectLocationDetail>()
             .ForMember(d => d.StateName, o => o.MapFrom(s => s.State.StateName))
             .ForMember(d => d.DistrictName, o => o.MapFrom(s => s.District.DistrictName))
@@ -192,7 +197,7 @@ namespace CSRPulse.Services
 
             CreateMap<ProjectLocationDetail, DTOModel.ProjectLocationDetail>();
 
-            CreateMap<DTOModel.ProjectDocument, ProjectDocument >().ReverseMap();
+            CreateMap<DTOModel.ProjectDocument, ProjectDocument>().ReverseMap();
             CreateMap<DTOModel.ProjectCommunication, ProjectCommunication>().ReverseMap();
             #endregion
 
