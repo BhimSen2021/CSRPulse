@@ -155,6 +155,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.NgofundingPartner, NGOFundingPartner>()
             .ForMember(d => d.FundingAgency, o => o.MapFrom(s => s.FundingAgency.AgencyName));
             CreateMap<NGOFundingPartner, DTOModel.NgofundingPartner>();
+            CreateMap<DTOModel.PartnerDocument, PartnerDocument>().ReverseMap();
 
             CreateMap<DTOModel.ProcessDocument, ProcessDocument>().ReverseMap();
 

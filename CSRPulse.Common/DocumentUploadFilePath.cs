@@ -11,8 +11,10 @@ namespace CSRPulse.Common
         public static string TemplatesLocationFilePath { get { return @"Templates\location\"; } }
         public static string UserProfileImagePath { get { return @"assets\images\users\"; } }
         public static string PartnerFilePath { get { return @"documents\Partner\"; } }
-
         public static string AuditorFilePath { get { return @"documents\auditor\"; } }
+        public static string PartnerDocumentPath { get { return @"documents\PartnerDocument\"; } }
+
+      
         public static string EmailTemplatePath { get { return @"wwwroot\Templates\EmailTemplate\{0}.html"; } }
 
 

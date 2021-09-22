@@ -101,13 +101,15 @@ namespace CSRPulse.Model
 
         [Display(Name = "Organization Chart specifying supervisory, admin, project related, advisors, consultants")]
         public List<NGOChartDocument> NgochartDocument { get; set; }
-
         public List<NGOMember> Ngomember { get; set; }
-
+        public List<PartnerDocument> PartnerDocument { get; set; }
         public List<NGOFundingPartner> NgofundingPartner { get; set; }
         [Display(Name = "Organization Details")]
         public List<PartnerPolicyModule> PartnerPolicyModule { get; set; }
         public List<PartnerPolicy> PartnerPolicy { get; set; }
+        public int? NoOfErrors { get; set; }
+        public string Message { get; set; }
+        public List<PartnerPolicyDetails> PartnerPolicyDetails { get; set; }
 
     }
 

@@ -42,7 +42,7 @@
                                         <span asp-validation-for="@Model.NgocorpusGrantFund[i].YearId" class="invalid"></span>
                                     </td>
                                     <td>
-                                        <input type="text" asp-for="@Model.NgocorpusGrantFund[i].FundsAmount" asp-format="{0:0.00}" class="form-control form-control-sm" maxlength="10" onkeypress="return onlyNumber(event)" autocomplete="off">
+                                        <input type="text" asp-for="@Model.NgocorpusGrantFund[i].FundsAmount" asp-format="{0:N}" class="form-control form-control-sm text-end" maxlength="10" onkeypress="return DecimalNumberOnly(event)" autocomplete="off" onblur="javascript:return CFormat(this.id)">
                                         <span asp-validation-for="@Model.NgocorpusGrantFund[i].FundsAmount" class="invalid"></span>
                                     </td>
                                 </tr>

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
+using CSRPulse.Common;
+
+
 namespace CSRPulse.Services
 {
     public class PartnerService : BaseService, IPartnerService
@@ -412,23 +415,27 @@ namespace CSRPulse.Services
             }
         }
 
-        public async Task<List<PartnerDocumentDetail>> GetPartnerDocumentAsync(int partnerId)
+        public async Task<List<PartnerDocument>> GetPartnerDocumentAsync(int partnerId)
         {
             try
             {
                 var result = await _partnerRepository.GetDocuments(partnerId).OrderBy(s => s.DocumentId).ToListAsync();
                 if (result != null)
                 {
-                    return result.Select(a => new PartnerDocumentDetail()
+                    return result.Select(a => new PartnerDocument()
                     {
-                        PartnetId = a.PartnetId,
+                        PartnerId = a.PartnerId,
                         DocumentId = a.DocumentId,
                         DocumentName = a.DocumentName,
+                        UploadedDocumentName=a.UploadedDocumentName,
+                        ServerDocumentName=a.ServerDocumentName,
+                        PartnerDocumentId=a.PartnerDocumentId,
+                        Remark=a.Remark,
                         IsUploaded = a.IsUploaded
                     }).ToList();
                 }
                 else
-                    return new List<PartnerDocumentDetail>();
+                    return new List<PartnerDocument>();
             }
             catch (Exception)
             {
@@ -473,6 +480,109 @@ namespace CSRPulse.Services
             {
                 throw;
             }
+        }
+
+        public bool DeleteDocument(int ngocharId)
+        {
+            try
+            {
+                _genericRepository.Delete<DTOModel.NgochartDocument>(ngocharId);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<NGOChartDocument>> GetDocumentList(int PartnerId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.NgochartDocument>(x => x.PartnerId == PartnerId);
+                return _mapper.Map<List<NGOChartDocument>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<PartnerDocument>> GetPartnerDocumentList(int partnerId, int processId)
+        {
+            try
+            {
+                var result = await _partnerRepository.GetPartnerDocuments(partnerId,processId).ToListAsync();
+                if (result != null)
+                {
+                    return result.Select(d => new PartnerDocument()
+                    {
+                        PartnerDocumentId = d.PartnerDocumentId,
+                        PartnerId = d.PartnerId,
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        UploadedDocumentName = d.UploadedDocumentName,
+                        ServerDocumentName = d.ServerDocumentName,
+                        Remark = d.Remark,
+                        IsUploaded = d.IsUploaded,
+                        DocumentMaxSize = d.DocumentMaxSize,
+                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                        Mandatory = d.Mandatory,
+                    }).ToList();
+                }
+                else
+                    return new List<PartnerDocument>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<PartnerDocument>> GetUpdatePartnerDocument(Partner partner)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.PartnerDocument>>(partner.PartnerDocument);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.PartnerDocument>(x => x.PartnerId == partner.PartnerId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.PartnerDocument>(x => x.PartnerId == partner.PartnerId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.PartnerDocument>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerDocument>(x => x.PartnerId == partner.PartnerId);
+
+                return _mapper.Map<List<PartnerDocument>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeletePartnerDocument(int partnerId)
+        {
+            try
+            {
+                _genericRepository.Delete<DTOModel.PartnerDocument>(partnerId);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Task<List<PartnerDocument>> GetUpdatePartnerPolicyDetails(Partner partner)
+        {
+            throw new NotImplementedException();
         }
     }
 }
