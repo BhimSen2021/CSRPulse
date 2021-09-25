@@ -98,6 +98,8 @@ namespace CSRPulse.Services
                     getVillages.LocationType = (int)village.LocationType;
                     getVillages.UpdatedBy = village.UpdatedBy;
                     getVillages.UpdatedOn = village.UpdatedOn;
+                    getVillages.UpdatedRid = village.UpdatedRid;
+                    getVillages.UpdatedRname = village.UpdatedRname;
                     _genericRepository.Update(getVillages);
                     return true;
                 }
@@ -627,7 +629,7 @@ namespace CSRPulse.Services
                 throw ex;
             }
         }
-        public bool ImportVillageData(List<Model.VillageImport> villageData)
+        public bool ImportVillageData(List<Model.VillageImport> villageData, int createdBy, int createdRId, string createdRName)
         {
             try
             {
@@ -637,7 +639,9 @@ namespace CSRPulse.Services
                 table.Columns.Add("BlockId", typeof(int));
                 table.Columns.Add("VillageCode", typeof(string));
                 table.Columns.Add("VillageName", typeof(string));
-
+                table.Columns.Add("CreatedBy", typeof(int));
+                table.Columns.Add("CreatedRid", typeof(int));
+                table.Columns.Add("CreatedRname", typeof(string));
 
                 foreach (var item in villageData)
                 {
@@ -647,6 +651,9 @@ namespace CSRPulse.Services
                     row["BlockId"] = Convert.ToInt32(item.BlockId);
                     row["VillageCode"] = Convert.ToString(item.VillageCode);
                     row["VillageName"] = Convert.ToString(item.VillageName);
+                    row["CreatedBy"] = createdBy;
+                    row["CreatedRid"] = createdRId;
+                    row["CreatedRname"] = createdRName;
                     table.Rows.Add(row);
                 }
                 bool res = _villageImport.ImportVillageData(table);

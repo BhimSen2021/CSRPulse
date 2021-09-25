@@ -86,6 +86,8 @@ namespace CSRPulse.Services
                     getPartnerPolicies.IsImplementedSince = partnerPolicy.IsImplementedSince;
                     getPartnerPolicies.UpdatedBy = partnerPolicy.UpdatedBy;
                     getPartnerPolicies.UpdatedOn = partnerPolicy.UpdatedOn;
+                    getPartnerPolicies.UpdatedRid = partnerPolicy.UpdatedRid;
+                    getPartnerPolicies.UpdatedRname = partnerPolicy.UpdatedRname;
                     _genericRepository.Update(getPartnerPolicies);
                     return true;
                 }

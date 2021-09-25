@@ -10,14 +10,15 @@
     });
 });
 
-$('#ThemeId').change(function () {
-    let ThemeId = $('#ThemeId').val();
-    if (ThemeId != '') {
-        BindSubTheme(ThemeId);
-    }
-});
+//$('#ThemeId').change(function () {
+//    let ThemeId = $('#ThemeId').val();
+//    if (ThemeId != '') {
+//        BindSubTheme(ThemeId);
+//    }
+//});
 
-function BindSubTheme(themeId) {
+function BindSubTheme() {
+    let themeId = $('#ThemeId').val();
     $.ajax({
         type: 'GET',
         dataType: 'JSON',

@@ -66,7 +66,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("SubThemeController/Create");
                 if (ModelState.IsValid)
                 {
-                    subTheme.CreatedBy = userDetail.CreatedBy;
+                    subTheme.CreatedBy = userDetail.UserID;
+                    subTheme.CreatedRid = userDetail.RoleId;
+                    subTheme.CreatedRname = userDetail.RoleName;
                     var result = await _subThemeService.CreateSubThemeAsync(subTheme);
                     if (result.IsExist)
                     {
@@ -112,6 +114,8 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     subTheme.UpdatedBy = userDetail.CreatedBy;
+                    subTheme.UpdatedRid = userDetail.RoleId;
+                    subTheme.UpdatedRname = userDetail.RoleName;
                     subTheme.UpdatedOn = DateTime.Now;
                     var result = await _subThemeService.UpdateSubThemeAsync(subTheme);
                     if (subTheme.IsExist)

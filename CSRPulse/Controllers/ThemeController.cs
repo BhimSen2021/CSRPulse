@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class ThemeController : BaseController<ThemeController>
     {
         private readonly IThemeService _themeService;
@@ -53,7 +54,6 @@ namespace CSRPulse.Controllers
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Create(Theme theme)
         {
             try
@@ -61,7 +61,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("ThemeController/Create");
                 if (ModelState.IsValid)
                 {
-                    theme.CreatedBy = userDetail.CreatedBy;
+                    theme.CreatedBy = userDetail.UserID;
+                    theme.CreatedRid = userDetail.RoleId;
+                    theme.CreatedRname = userDetail.RoleName;
                     var result = await _themeService.CreateThemeAsync(theme);
                     if (result.IsExist)
                     {
@@ -97,7 +99,6 @@ namespace CSRPulse.Controllers
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Edit(Theme theme)
         {
             try
@@ -105,7 +106,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("ThemeController/Edit");
                 if (ModelState.IsValid)
                 {
-                    theme.UpdatedBy = userDetail.CreatedBy;
+                    theme.UpdatedBy = userDetail.UserID;
+                    theme.UpdatedRid = userDetail.RoleId;
+                    theme.UpdatedRname = userDetail.RoleName;
                     theme.UpdatedOn = DateTime.Now;
                     var result = await _themeService.UpdateThemeAsync(theme);
                     if (theme.IsExist)

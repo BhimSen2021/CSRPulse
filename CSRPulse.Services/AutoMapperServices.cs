@@ -103,7 +103,7 @@ namespace CSRPulse.Services
             CreateMap<Plan, Plan>();
             CreateMap<UserTypeModel, DTOModel.UserType>();
             CreateMap<StartingNumber, DTOModel.StartingNumber>();
-            CreateMap<DTOModel.Department, Department>();
+            CreateMap<DTOModel.Department, Department>().ReverseMap();
 
             CreateMap<DTOModel.Process, Process>()
                 .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))

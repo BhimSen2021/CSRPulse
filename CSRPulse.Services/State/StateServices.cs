@@ -84,6 +84,8 @@ namespace CSRPulse.Services
                     getStates.StateCode = state.StateCode;
                     getStates.UpdatedBy = state.UpdatedBy;
                     getStates.UpdatedOn = state.UpdatedOn;
+                    getStates.UpdatedRid = state.UpdatedRid;
+                    getStates.UpdatedRname = state.UpdatedRname;
                     _genericRepository.Update(getStates);
                     return true;
                 }

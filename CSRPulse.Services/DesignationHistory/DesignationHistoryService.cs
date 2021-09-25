@@ -121,6 +121,10 @@ namespace CSRPulse.Services
                 if (hData != null)
                 {
                     hData.Todate = DateTime.Now;
+                    hData.UpdatedOn = DateTime.Now;
+                    hData.UpdatedBy = designationHistory.UpdatedBy;
+                    hData.UpdatedRid = designationHistory.UpdatedRid;
+                    hData.UpdatedRname = designationHistory.UpdatedRname;
                     _genericRepository.Update(hData);
                 }
                 return true;

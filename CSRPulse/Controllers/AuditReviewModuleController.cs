@@ -68,7 +68,9 @@ namespace CSRPulse.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    auditReviewModule.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    auditReviewModule.CreatedBy = userDetail.UserID;
+                    auditReviewModule.CreatedRid = userDetail.RoleId;
+                    auditReviewModule.CreatedRname = userDetail.RoleName;
 
                     if (await _auditReviewModuleServices.RecordExistAsync(auditReviewModule))
                     {
@@ -120,7 +122,9 @@ namespace CSRPulse.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    auditReviewModule.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    auditReviewModule.UpdatedBy = userDetail.UserID;
+                    auditReviewModule.UpdatedRid = userDetail.RoleId;
+                    auditReviewModule.UpdatedRname = userDetail.RoleName;
                     auditReviewModule.UpdatedOn = DateTime.Now;
                     var result = await _auditReviewModuleServices.UpdateModuleAsync(auditReviewModule);
 

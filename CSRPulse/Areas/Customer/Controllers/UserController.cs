@@ -154,7 +154,9 @@ namespace CSRPulse.Areas.Admin.Controllers
                     else
                         user.ImageName = "sample-profile.png";
 
-                    user.CreatedBy = userDetail.CreatedBy;                
+                    user.CreatedBy = userDetail.UserID;                
+                    user.CreatedRid = userDetail.RoleId;                
+                    user.CreatedRname = userDetail.RoleName;                
                     var result = _accountService.UpdateUser(user);
                     if (user.RecordExist)
                     {

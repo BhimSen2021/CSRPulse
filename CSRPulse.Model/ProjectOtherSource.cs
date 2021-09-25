@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-    public class ProjectOtherSource
+    public class ProjectOtherSource:BaseModel
     {
         [Key]
         public int ProjectOtherSourceId { get; set; }

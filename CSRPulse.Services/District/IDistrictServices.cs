@@ -16,6 +16,6 @@ namespace CSRPulse.Services
 
 
         IEnumerable<dynamic> ReadDistrictExcelData(string fileFullPath, bool isHeader, out string message, out int error, out int warning, out List<Model.DistrictImport> importDistrictSave, out List<string> missingHeaders, out List<string> columnName);
-        bool ImportDistrictData(List<Model.DistrictImport> districtData);
+        bool ImportDistrictData(List<Model.DistrictImport> districtData, int createdBy, int createdRId, string createdRName);
     }
 }

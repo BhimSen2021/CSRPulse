@@ -26,6 +26,14 @@
                     <span class="d-none d-md-block">Project Details</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a href="#pteam-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Project Team</span>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a href="#report-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
@@ -67,6 +75,18 @@
             </div>
         </div>
     </div>
+
+    <div class="tab-pane" id="pteam-b2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-3">Project Team Detail</h5>
+                <div id="div-team-detail-grid">
+                    @{await Html.RenderPartialAsync("_ProjectTeamDetail");}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="tab-pane" id="report-b2">
         <div class="card">
             <div class="card-body">

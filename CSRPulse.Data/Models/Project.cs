@@ -61,12 +61,29 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
+        [Column("CreatedRId")]
+        public int CreatedRid { get; set; }
+        [Required]
+        [Column("CreatedRName")]
+        [StringLength(256)]
+        public string CreatedRname { get; set; }
+        [Column("UpdatedRId")]
+        public int? UpdatedRid { get; set; }
+        [Column("UpdatedRName")]
+        [StringLength(256)]
+        public string UpdatedRname { get; set; }
 
+        [ForeignKey(nameof(CreatedBy))]
+        [InverseProperty(nameof(User.ProjectCreatedByNavigation))]
+        public virtual User CreatedByNavigation { get; set; }
+        [ForeignKey(nameof(CreatedRid))]
+        [InverseProperty(nameof(Role.ProjectCreatedR))]
+        public virtual Role CreatedR { get; set; }
         [ForeignKey(nameof(PartnerId))]
         [InverseProperty("Project")]
         public virtual Partner Partner { get; set; }
         [ForeignKey(nameof(ProgramManagerId))]
-        [InverseProperty(nameof(User.Project))]
+        [InverseProperty(nameof(User.ProjectProgramManager))]
         public virtual User ProgramManager { get; set; }
         [ForeignKey(nameof(SubThemeId))]
         [InverseProperty("Project")]
@@ -74,6 +91,12 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(ThemeId))]
         [InverseProperty("Project")]
         public virtual Theme Theme { get; set; }
+        [ForeignKey(nameof(UpdatedBy))]
+        [InverseProperty(nameof(User.ProjectUpdatedByNavigation))]
+        public virtual User UpdatedByNavigation { get; set; }
+        [ForeignKey(nameof(UpdatedRid))]
+        [InverseProperty(nameof(Role.ProjectUpdatedR))]
+        public virtual Role UpdatedR { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectCommunication> ProjectCommunication { get; set; }
         [InverseProperty("Project")]

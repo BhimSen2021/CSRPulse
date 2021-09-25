@@ -1,4 +1,5 @@
 ﻿using CSRPulse.Common;
+using CSRPulse.Controllers;
 using CSRPulse.Model;
 using CSRPulse.Models;
 using CSRPulse.Services;
@@ -18,7 +19,7 @@ namespace CSRPulse.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[Controller]/[action]")]
-    public class RegistrationController : CSRPulse.Controllers.BaseController<RegistrationController>
+    public class RegistrationController : BaseController<RegistrationController>
     {
         private readonly IRegistrationService _registrationService;
         private readonly IDesignationHistoryService _designationHistory;
@@ -97,6 +98,9 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                     singUp.CreatedBy = userDetail.UserID;
                     singUp.CreatedOn = DateTime.Now;
+                    singUp.CreatedRid = userDetail.RoleId;
+                    singUp.CreatedRname = userDetail.RoleName;
+
                     singUp.IsActive = true;
                     string decryptPassword = string.Empty;
                     decryptPassword = singUp.Password.Trim();
@@ -117,7 +121,9 @@ namespace CSRPulse.Areas.Admin.Controllers
                             DesignationId = singUp.DesignationId,
                             Formdate = DateTime.Now,
                             Todate = null,
-                            CreatedBy = userDetail.UserID
+                            CreatedBy = userDetail.UserID,
+                            CreatedRid = userDetail.RoleId,
+                            CreatedRname = userDetail.RoleName
                         };
                         await _designationHistory.CreateDesignation(uHistory);
 
@@ -185,6 +191,8 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                     signUp.UpdatedBy = userDetail.UserID;
                     signUp.UpdatedOn = DateTime.Now;
+                    signUp.UpdatedRid = userDetail.RoleId;
+                    signUp.UpdatedRname = userDetail.RoleName;
                     var result = await _registrationService.UpdateUser(signUp);
                     if (result)
                     {
@@ -196,9 +204,20 @@ namespace CSRPulse.Areas.Admin.Controllers
                                 DesignationId = signUp.DesignationId,
                                 Formdate = DateTime.Now,
                                 Todate = null,
-                                CreatedBy = userDetail.UserID
+                                CreatedBy = userDetail.UserID,
+                                CreatedRid = userDetail.RoleId,
+                                CreatedRname = userDetail.RoleName,
+                                UpdatedRid = userDetail.RoleId,
+                                UpdatedRname = userDetail.RoleName,
+                                UpdatedBy = userDetail.UserID,
+                                UpdatedOn = DateTime.Now
                             };
                             await _designationHistory.UpdateTodatePrevious(uHistory);
+
+                            uHistory.UpdatedRid = null;
+                            uHistory.UpdatedRname = null;
+                            uHistory.UpdatedBy = null;
+                            uHistory.UpdatedOn = null;
 
                             await _designationHistory.CreateDesignation(uHistory);
                         }
@@ -289,7 +308,12 @@ namespace CSRPulse.Areas.Admin.Controllers
             {
                 bool flag = false;
                 var roles = userRoleModel.userRoles.Where(x => x.AssigneRole == true).ToList();
-                flag = await _registrationService.AssignedRoles(roles, userRoleModel.UserId);
+                var baseModel = new BaseModel();
+                baseModel.CreatedBy = userDetail.UserID;
+                baseModel.CreatedRid = userDetail.RoleId;
+                baseModel.CreatedRname = userDetail.RoleName;
+
+                flag = await _registrationService.AssignedRoles(roles, userRoleModel.UserId, baseModel);
                 return Json(new { flag = flag });
             }
             catch (Exception ex)
@@ -344,7 +368,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                     uDetail.RoleId = userRoleModel.SelectedRole;
                     uDetail.RoleName = RoleName;
                     HttpContext.Session.SetComplexData("User", uDetail);
-                    TempData["message"] = "Account switched successfully.";
+                    TempData["message"] = "Account switched to " + RoleName + " successfully.";
                     return Json(new { flag = 1 });
                 }
                 else

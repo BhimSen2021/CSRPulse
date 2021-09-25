@@ -46,10 +46,24 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
+        [Column("CreatedRId")]
+        public int CreatedRid { get; set; }
+        [Required]
+        [Column("CreatedRName")]
+        [StringLength(256)]
+        public string CreatedRname { get; set; }
+        [Column("UpdatedRId")]
+        public int? UpdatedRid { get; set; }
+        [Column("UpdatedRName")]
+        [StringLength(256)]
+        public string UpdatedRname { get; set; }
 
         [ForeignKey(nameof(ActivityId))]
         [InverseProperty("Indicator")]
         public virtual Activity Activity { get; set; }
+        [ForeignKey(nameof(CreatedRid))]
+        [InverseProperty(nameof(Role.IndicatorCreatedR))]
+        public virtual Role CreatedR { get; set; }
         [ForeignKey(nameof(SubActivityId))]
         [InverseProperty("Indicator")]
         public virtual SubActivity SubActivity { get; set; }
@@ -62,5 +76,8 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(Uomid))]
         [InverseProperty("Indicator")]
         public virtual Uom Uom { get; set; }
+        [ForeignKey(nameof(UpdatedRid))]
+        [InverseProperty(nameof(Role.IndicatorUpdatedR))]
+        public virtual Role UpdatedR { get; set; }
     }
 }

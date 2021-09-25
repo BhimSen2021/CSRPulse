@@ -49,7 +49,7 @@ namespace CSRPulse.Controllers
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(Model.User userDetail)
+        public async Task<IActionResult> Edit(Model.User uDetail)
         {
             try
             {               
@@ -57,12 +57,17 @@ namespace CSRPulse.Controllers
                 ModelState.Remove("UserName");
                 if (ModelState.IsValid)
                 {
-                    if (userDetail.ImagePhoto != null)
+                    if (uDetail.ImagePhoto != null)
                     {
                         string folder = "assets/images/users/";
-                        userDetail.ImageName = await UploadImage(folder, userDetail.ImagePhoto);
+                        uDetail.ImageName = await UploadImage(folder, uDetail.ImagePhoto);
                     }
-                    var res = _accountService.UpdateUser(userDetail);
+                    uDetail.UpdatedBy = userDetail.UserID;
+                    uDetail.UpdatedOn = DateTime.Now;
+                    uDetail.UpdatedRid = userDetail.RoleId;
+                    uDetail.UpdatedRname = userDetail.RoleName;
+
+                    var res = _accountService.UpdateUser(uDetail);
                     var msg = res == true ? "Profile updated successfully." : "Unable to update profile.";
                     return Json(new { status=res, msg= msg });
                 }

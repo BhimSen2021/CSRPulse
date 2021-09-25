@@ -66,7 +66,10 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("SubActivityController/Create");
                 if (ModelState.IsValid)
                 {
-                    subActivity.CreatedBy = userDetail.CreatedBy;
+                    subActivity.CreatedBy = userDetail.UserID;
+                    subActivity.CreatedRid = userDetail.RoleId;
+                    subActivity.CreatedRname = userDetail.RoleName;
+                    subActivity.CreatedOn = DateTime.Now;
                     var result = await _subActivityService.CreateSubActivityAsync(subActivity);
                     if (result.IsExist)
                     {
@@ -103,6 +106,7 @@ namespace CSRPulse.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SubActivity subActivity)
         {
             try
@@ -110,7 +114,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("SubActivityController/Edit");
                 if (ModelState.IsValid)
                 {
-                    subActivity.UpdatedBy = userDetail.CreatedBy;
+                    subActivity.UpdatedBy = userDetail.UserID;
+                    subActivity.UpdatedRid = userDetail.RoleId;
+                    subActivity.UpdatedRname = userDetail.RoleName;
                     subActivity.UpdatedOn = DateTime.Now;
                     var result = await _subActivityService.UpdateSubActivityAsync(subActivity);
                     if (subActivity.IsExist)

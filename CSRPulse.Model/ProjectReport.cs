@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-   public class ProjectReport
+   public class ProjectReport:BaseModel
     {
         [Key]
         public int ProjectReportId { get; set; }

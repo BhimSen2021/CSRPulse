@@ -359,7 +359,7 @@ namespace CSRPulse.Services
                 return new List<Model.UserRole>();
         }
 
-        public async Task<bool> AssignedRoles(List<Model.UserRole> userRoles, int userId)
+        public async Task<bool> AssignedRoles(List<Model.UserRole> userRoles, int userId, BaseModel baseModel)
         {
             try
             {
@@ -373,6 +373,9 @@ namespace CSRPulse.Services
                             UserId = userId,
                             RoleId = userRole.RoleId,
                             IsActive = true,
+                            CreatedBy = baseModel.CreatedBy,
+                            CreatedRid = baseModel.CreatedRid,
+                            CreatedRname = baseModel.CreatedRname
                         };
                         await _genericRepository.InsertAsync<DTOModel.UserRole>(userRoleModel);
                     }

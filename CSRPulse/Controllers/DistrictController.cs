@@ -89,7 +89,9 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    district.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    district.CreatedBy = userDetail.UserID;
+                    district.CreatedRid = userDetail.RoleId;
+                    district.CreatedRname = userDetail.RoleName;
                     district.IsActive = true;
                     if (await _districtServices.RecordExist(district))
                     {
@@ -144,7 +146,9 @@ namespace CSRPulse.Controllers
                 BindDropdowns();
                 if (ModelState.IsValid)
                 {
-                    district.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    district.UpdatedBy = userDetail.UserID;
+                    district.UpdatedRid = userDetail.RoleId;
+                    district.UpdatedRname = userDetail.RoleName;
                     district.UpdatedOn = DateTime.Now;
                     var result = await _districtServices.UpdateDistrict(district);
                     if (district.RecordExist)
@@ -385,7 +389,8 @@ namespace CSRPulse.Controllers
             try
             {
                 var importDataList = HttpContext.Session.GetComplexData<List<DistrictImport>>("DistrictSave");
-                var result = _districtServices.ImportDistrictData(importDataList);
+
+                var result = _districtServices.ImportDistrictData(importDataList,createdBy:userDetail.UserID,createdRId:userDetail.RoleId,createdRName:userDetail.RoleName);
                 if (result)
                 {
                     HttpContext.Session.Remove("DistrictData");

@@ -105,6 +105,8 @@ namespace CSRPulse.Services
                         result.IsActive = theme.IsActive;
                         result.UpdatedOn = theme.UpdatedOn;
                         result.UpdatedBy = theme.UpdatedBy;
+                        result.UpdatedRid = theme.UpdatedRid;
+                        result.UpdatedRname = theme.UpdatedRname;
                         _genericRepository.Update(result);
                         return true;
                     }

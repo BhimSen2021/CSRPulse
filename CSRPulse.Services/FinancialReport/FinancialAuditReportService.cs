@@ -121,6 +121,8 @@ namespace CSRPulse.Services
                         result.IsActive =  financial.IsActive;
                         result.UpdatedOn = financial.UpdatedOn;
                         result.UpdatedBy = financial.UpdatedBy;
+                        result.UpdatedRid = financial.UpdatedRid;
+                        result.UpdatedRname = financial.UpdatedRname;
                         _genericRepository.Update(result);
                         return true;
                     }

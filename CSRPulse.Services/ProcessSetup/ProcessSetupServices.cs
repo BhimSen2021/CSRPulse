@@ -40,12 +40,16 @@ namespace CSRPulse.Services
                     if (oldSetup != null && oldSetup.ToList().Count > 0)
                     {
                         var hModel = _mapper.Map<List<DTOModel.ProcessSetupHistory>>(oldSetup);
+                        
                         var cdate = DateTime.Now;
                         hModel.ToList().ForEach(h =>
                         {
                             h.StartDate = h.CreatedOn;
                             h.EndDate = cdate;
                             h.CreatedOn = cdate;
+                            h.CreatedBy = processes.Select(x => x.CreatedBy).FirstOrDefault();
+                            h.CreatedRid = processes.Select(x => x.CreatedRid).FirstOrDefault();
+                            h.CreatedRname = processes.Select(x => x.CreatedRname).FirstOrDefault();
                         });
 
                         await _genericRepository.AddMultipleEntityAsync<DTOModel.ProcessSetupHistory>(hModel);
@@ -111,6 +115,8 @@ namespace CSRPulse.Services
                     model.Skip = processes.Skip;
                     model.UpdatedOn = processes.UpdatedOn;
                     model.Updatedby = processes.UpdatedBy;
+                    model.UpdatedRid = processes.UpdatedRid;
+                    model.UpdatedRname = processes.UpdatedRname;
                     _genericRepository.Update<DTOModel.ProcessSetup>(model);
                     return true;
                 }

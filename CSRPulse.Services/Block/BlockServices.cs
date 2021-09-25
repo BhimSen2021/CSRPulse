@@ -99,7 +99,9 @@ namespace CSRPulse.Services
                     getBlocks.StateId = block.StateId.Value;
                     getBlocks.DistrictId = block.DistrictId.Value;
                     getBlocks.UpdatedBy = block.UpdatedBy;
-                    getBlocks.UpdatedOn = block.UpdatedOn;
+                    getBlocks.UpdatedOn = block.UpdatedOn;                    
+                    getBlocks.UpdatedRid = block.UpdatedRid;                    
+                    getBlocks.UpdatedRname = block.UpdatedRname;                    
                     _genericRepository.Update(getBlocks);
                     return true;
                 }
@@ -597,7 +599,7 @@ namespace CSRPulse.Services
                 throw ex;
             }
         }
-        public bool ImportBlockData(List<Model.BlockImport> blockData)
+        public bool ImportBlockData(List<Model.BlockImport> blockData, int createdBy, int createdRId, string createdRName)
         {
             try
             {
@@ -606,7 +608,9 @@ namespace CSRPulse.Services
                 table.Columns.Add("DistrictId", typeof(int));
                 table.Columns.Add("BlockCode", typeof(string));
                 table.Columns.Add("BlockName", typeof(string));
-
+                table.Columns.Add("CreatedBy", typeof(int));
+                table.Columns.Add("CreatedRid", typeof(int));
+                table.Columns.Add("CreatedRname", typeof(string));
 
                 foreach (var item in blockData)
                 {
@@ -615,6 +619,9 @@ namespace CSRPulse.Services
                     row["DistrictId"] = Convert.ToString(item.DistrictId);
                     row["BlockCode"] = Convert.ToString(item.BlockCode);
                     row["BlockName"] = Convert.ToString(item.BlockName);
+                    row["CreatedBy"] = createdBy;
+                    row["CreatedRid"] = createdRId;
+                    row["CreatedRname"] = createdRName;
                     table.Rows.Add(row);
                 }
                 bool res = _blockImport.ImportBlockData(table);

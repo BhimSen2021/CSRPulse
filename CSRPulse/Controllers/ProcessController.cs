@@ -71,6 +71,10 @@ namespace CSRPulse.Controllers
                     }
                     else
                     {
+                        process.CreatedBy = userDetail.UserID;
+                        process.CreatedOn = DateTime.Now;
+                        process.CreatedRid = userDetail.RoleId;
+                        process.CreatedRname = userDetail.RoleName;
                         var result = await _processServices.CreateProcess(process);
 
                         if (result)
@@ -116,6 +120,10 @@ namespace CSRPulse.Controllers
                     }
                     else
                     {
+                        process.UpdatedBy = userDetail.UserID;
+                        process.UpdatedOn = DateTime.Now;
+                        process.UpdatedRid = userDetail.RoleId;
+                        process.UpdatedRname = userDetail.RoleName;
                         var result = await _processServices.UpdateProcess(process);
                         if (result)
                         {

@@ -17,6 +17,23 @@ namespace CSRPulse.Data.Models
         public int RoleId { get; set; }
         [Required]
         public bool? IsActive { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime CreatedOn { get; set; }
+        public int CreatedBy { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? UpdatedOn { get; set; }
+        public int? UpdatedBy { get; set; }
+        [Column("CreatedRId")]
+        public int CreatedRid { get; set; }
+        [Required]
+        [Column("CreatedRName")]
+        [StringLength(256)]
+        public string CreatedRname { get; set; }
+        [Column("UpdatedRId")]
+        public int? UpdatedRid { get; set; }
+        [Column("UpdatedRName")]
+        [StringLength(256)]
+        public string UpdatedRname { get; set; }
 
         [ForeignKey(nameof(RoleId))]
         [InverseProperty("UserRole")]

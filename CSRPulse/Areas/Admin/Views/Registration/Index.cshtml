@@ -68,10 +68,10 @@
                                         </a>
                                         @if (user.WrongAttemp == 0 && (user.LockDate ?? DateTime.Now).AddHours(24) > DateTime.Now)
                                         {
-                                            <a class="action-icon text-danger" style="cursor:pointer" onclick="LockUnlockUser(@user.UserID,false)" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to lock this user."> <i class="uil-padlock"></i></a>
+                                            <a class="action-icon text-danger" style="cursor:pointer" onclick="LockUnlockUser(@user.UserID,false)" data-bs-toggle="tooltip" data-bs-placement="top" title="This account will be unlocked by default on @((user.LockDate ?? DateTime.Now).AddHours(24).ToString("dd-MM-yyyy hh:mm:ss tt")), Click here to lock this account if you want to unlock now."> <i class="uil-padlock"></i></a>
                                         }
                                         else
-                                        { <a class="action-icon text-primary" style="cursor:pointer" onclick="LockUnlockUser(@user.UserID,true)" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to unlock this user."> <i class="uil-unlock"></i></a>}
+                                        { <a class="action-icon text-primary" style="cursor:pointer" onclick="LockUnlockUser(@user.UserID,true)" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to lock this account for 24 hours."> <i class="uil-unlock"></i></a>}
 
                                     </td>
                                 </tr>

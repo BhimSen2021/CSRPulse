@@ -63,6 +63,8 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     department.CreatedBy = userDetail.UserID;
+                    department.CreatedRid = userDetail.RoleId;
+                    department.CreatedRname = userDetail.RoleName;
                     department.IsActive = true;
                     if (await _departmentServices.RecordExist(department))
                     {
@@ -117,6 +119,8 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     department.UpdatedBy = userDetail.UserID;
+                    department.UpdatedRid = userDetail.RoleId;
+                    department.UpdatedRname = userDetail.RoleName;
                     department.UpdatedOn = DateTime.Now;
                     var result = await _departmentServices.UpdateDepartment(department);
                     if (department.RecordExist)

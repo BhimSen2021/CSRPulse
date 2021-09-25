@@ -88,7 +88,9 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    block.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    block.CreatedBy = userDetail.UserID;
+                    block.CreatedRid = userDetail.RoleId;
+                    block.CreatedRname = userDetail.RoleName;
                     block.IsActive = true;
                     if (await _blockServices.RecordExist(block))
                     {
@@ -147,7 +149,9 @@ namespace CSRPulse.Controllers
                 ViewBag.ddlDistrict = GetDistrict(block.StateId, null);
                 if (ModelState.IsValid)
                 {
-                    block.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    block.UpdatedBy = userDetail.UserID;
+                    block.UpdatedRid = userDetail.RoleId;
+                    block.UpdatedRname = userDetail.RoleName;
                     block.UpdatedOn = DateTime.Now;
                     var result = await _blockServices.UpdateBlock(block);
                     if (block.RecordExist)
@@ -419,7 +423,8 @@ namespace CSRPulse.Controllers
             try
             {
                 var importDataList = HttpContext.Session.GetComplexData<List<BlockImport>>("BlockSave");
-                var result = _blockServices.ImportBlockData(importDataList);
+
+                var result = _blockServices.ImportBlockData(importDataList, createdBy: userDetail.UserID, createdRId: userDetail.RoleId, createdRName: userDetail.RoleName);
                 if (result)
                 {
                     HttpContext.Session.Remove("BlockData");

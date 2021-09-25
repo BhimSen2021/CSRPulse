@@ -64,6 +64,8 @@ namespace CSRPulse.Controllers
                     {
                         process.UpdatedBy = userDetail.UserID;
                         process.UpdatedOn = DateTime.Now;
+                        process.UpdatedRid = userDetail.RoleId;
+                        process.UpdatedRname = userDetail.RoleName;
                         result = await _processSetupServices.UpdateProcessSetup(process);
                     }
                 }
@@ -90,6 +92,8 @@ namespace CSRPulse.Controllers
                     {
                         h.CreatedOn = CreatedOn;
                         h.CreatedBy = userDetail.UserID;
+                        h.CreatedRid = userDetail.RoleId;
+                        h.CreatedRname = userDetail.RoleName;
                     });
 
                     var result = await _processSetupServices.CreateProcessSetup(listProces);

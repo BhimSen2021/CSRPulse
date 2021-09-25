@@ -90,7 +90,9 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    village.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    village.CreatedBy = userDetail.UserID;
+                    village.CreatedRid = userDetail.RoleId;
+                    village.CreatedRname = userDetail.RoleName;
                     village.IsActive = true;
                     if (await _villageServices.RecordExist(village))
                     {
@@ -150,7 +152,9 @@ namespace CSRPulse.Controllers
                 ViewBag.ddlBlock = GetBlock(village.StateId, village.DistrictId, null);
                 if (ModelState.IsValid)
                 {
-                    village.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    village.UpdatedBy = userDetail.UserID;
+                    village.UpdatedRid = userDetail.RoleId;
+                    village.UpdatedRname = userDetail.RoleName;
                     village.UpdatedOn = DateTime.Now;
                     var result = await _villageServices.UpdateVillage(village);
                     if (village.RecordExist)
@@ -453,7 +457,7 @@ namespace CSRPulse.Controllers
             try
             {
                 var importDataList = HttpContext.Session.GetComplexData<List<VillageImport>>("VillageSave");
-                var result = _villageServices.ImportVillageData(importDataList);
+                var result = _villageServices.ImportVillageData(importDataList, createdBy: userDetail.UserID, createdRId: userDetail.RoleId, createdRName: userDetail.RoleName);
                 if (result)
                 {
                     HttpContext.Session.Remove("VillageData");

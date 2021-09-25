@@ -80,6 +80,8 @@ namespace CSRPulse.Services
                     dData.DepartmentName = department.DepartmentName;
                     dData.UpdatedBy = department.UpdatedBy;
                     dData.UpdatedOn = department.UpdatedOn;
+                    dData.UpdatedRid = department.UpdatedRid;
+                    dData.UpdatedRname = department.UpdatedRname;
                     _genericRepository.Update(dData);
                     return true;
                 }

@@ -255,7 +255,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             UserDetail userDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
             changePassword.UserId = userDetail.UserID;
             changePassword.UserName = userDetail.UserName;
-
+            
             if (!Password.ValidatePassword(changePassword.Password, out ErrorMessage))
             {
                 ModelState.AddModelError("", ErrorMessage);
@@ -266,7 +266,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             }
 
             if (ModelState.IsValid)
-            {
+            {                
                 bool res = await _accountService.ChangePassword(changePassword);
                 if (res)
                 {

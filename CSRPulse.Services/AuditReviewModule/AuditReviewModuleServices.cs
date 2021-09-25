@@ -70,6 +70,8 @@ namespace CSRPulse.Services
                     auditReviewModule.Sequence = module.Sequence;
                     auditReviewModule.UpdatedBy = module.UpdatedBy;
                     auditReviewModule.UpdatedOn = module.UpdatedOn;
+                    auditReviewModule.UpdatedRid = module.UpdatedRid;
+                    auditReviewModule.UpdatedRname = module.UpdatedRname;
                     _genericRepository.Update(auditReviewModule);
                     return true;
                 }

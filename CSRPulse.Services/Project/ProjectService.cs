@@ -73,49 +73,57 @@ namespace CSRPulse.Services
         }
         public async Task<bool> UpdateProjectAsync(Project project)
         {
-            try
+            using (var transaction = _genericRepository.BeginTransaction())
             {
-                var IsExist = _genericRepository.Exists<DTOModel.Project>(x => x.ProjectName.ToLower() == project.ProjectName.ToLower() && x.ProjectId != project.ProjectId);
-
-                project.IsExist = IsExist;
-
-                if (!IsExist)
+                try
                 {
-                    var model = _mapper.Map<DTOModel.Project>(project);
-                    await _genericRepository.UpdateAsync(model);
+                    var IsExist = _genericRepository.Exists<DTOModel.Project>(x => x.ProjectName.ToLower() == project.ProjectName.ToLower() && x.ProjectId != project.ProjectId);
 
-                    // Update project other sources
-                    var oldOS = await _genericRepository.GetAsync<DTOModel.ProjectOtherSource>(x => x.ProjectId == project.ProjectId && x.RevisionNo == project.ProjectOtherSource.Select(r => r.RevisionNo).FirstOrDefault());
-                    if (oldOS != null && oldOS.ToList().Count > 0)
-                    {
-                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectOtherSource>(oldOS);
-                        await _genericRepository.AddMultipleEntityAsync(model.ProjectOtherSource);
+                    project.IsExist = IsExist;
+
+                    if (!IsExist)
+                    {                        
+                        var model = _mapper.Map<DTOModel.Project>(project);
+
+                        _genericRepository.Update(model);
+
+                        // Update project other sources
+                        var oldOS = await _genericRepository.GetAsync<DTOModel.ProjectOtherSource>(x => x.ProjectId == project.ProjectId && x.RevisionNo == project.ProjectOtherSource.Select(r => r.RevisionNo).FirstOrDefault());
+                        if (oldOS != null && oldOS.ToList().Count > 0)
+                        {
+                            await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectOtherSource>(oldOS);
+                            await _genericRepository.AddMultipleEntityAsync(model.ProjectOtherSource);
+                        }
+                        else
+                            await _genericRepository.AddMultipleEntityAsync(model.ProjectOtherSource);
+
+                        // Update project internal sources
+                        var oldIS = await _genericRepository.GetAsync<DTOModel.ProjectInternalSource>(x => x.ProjectId == project.ProjectId && x.RevisionNo == project.ProjectInternalSource.Select(r => r.RevisionNo).FirstOrDefault());
+                        if (oldIS != null && oldIS.ToList().Count > 0)
+                        {
+                            await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectInternalSource>(oldIS);
+                            await _genericRepository.AddMultipleEntityAsync(model.ProjectInternalSource);
+                        }
+                        else
+                            await _genericRepository.AddMultipleEntityAsync(model.ProjectInternalSource);
+
+                        // Update project location
+                        var oldLocations = await _genericRepository.GetAsync<DTOModel.ProjectLocation>(x => x.ProjectId == project.ProjectId);
+                        if (oldLocations != null && oldLocations.ToList().Count > 0)
+                        {
+                            await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectLocation>(oldLocations);
+                            await _genericRepository.AddMultipleEntityAsync(model.ProjectLocation);
+                        }
+                        transaction.Commit();
+                        return true;
                     }
-
-                    // Update project internal sources
-                    var oldIS = await _genericRepository.GetAsync<DTOModel.ProjectInternalSource>(x => x.ProjectId == project.ProjectId && x.RevisionNo == project.ProjectInternalSource.Select(r => r.RevisionNo).FirstOrDefault());
-                    if (oldIS != null && oldIS.ToList().Count > 0)
-                    {
-                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectInternalSource>(oldIS);
-                        await _genericRepository.AddMultipleEntityAsync(model.ProjectInternalSource);
-                    }
-
-                    // Update project location
-                    var oldLocations = await _genericRepository.GetAsync<DTOModel.ProjectLocation>(x => x.ProjectId == project.ProjectId);
-                    if (oldLocations != null && oldLocations.ToList().Count > 0)
-                    {
-                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectLocation>(oldLocations);
-                        await _genericRepository.AddMultipleEntityAsync(model.ProjectLocation);
-                    }
-
-
-                    return true;
+                    return false;
                 }
-                return false;
-            }
-            catch (Exception)
-            {
-                throw;
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
             }
         }
 
@@ -230,6 +238,10 @@ namespace CSRPulse.Services
                         DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
                         Mandatory = d.Mandatory,
                         ServerDocumentName = d.ServerDocumentName,
+                        CreatedBy = d.CreatedBy,
+                        CreatedOn = d.CreatedOn,
+                        CreatedRid = d.CreatedRid,
+                        CreatedRname = d.CreatedRname
                     }).ToList();
                 }
                 else

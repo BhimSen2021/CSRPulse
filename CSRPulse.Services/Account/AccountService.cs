@@ -269,6 +269,7 @@ namespace CSRPulse.Services
             try
             {
                 var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.User>().Include(d => d.Department).Include(r => r.UserRole));
+                
 
                 return _mapper.Map<List<User>>(result);
             }
@@ -408,7 +409,7 @@ namespace CSRPulse.Services
                 if (uData != null)
                 {
                     uData.Password = Password.CreatePasswordHash(changePassword.Password.Trim(), Password.CreateSalt(Password.Password_Salt));
-                    uData.UpdatedBy = changePassword.UserId;
+                    uData.UpdatedBy = changePassword.UserId;                    
                     uData.UpdatedOn = DateTime.UtcNow;
                     await _genericRepository.UpdateAsync(uData);
                     flag = true;

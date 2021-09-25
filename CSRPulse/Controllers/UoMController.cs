@@ -61,7 +61,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("UoMController/Create");
                 if (ModelState.IsValid)
                 {
-                    uom.CreatedBy = userDetail.CreatedBy;
+                    uom.CreatedBy = userDetail.UserID;
+                    uom.CreatedRid = userDetail.RoleId;
+                    uom.CreatedRname = userDetail.RoleName;
                     var result = await _uOMService.CreateUOMAsync(uom);
                     if (result.IsExist)
                     {
@@ -106,6 +108,8 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     uom.UpdatedBy = userDetail.CreatedBy;
+                    uom.UpdatedRid = userDetail.RoleId;
+                    uom.UpdatedRname = userDetail.RoleName;
                     uom.UpdatedOn = DateTime.Now;
                     var result = await _uOMService.UpdateUOMAsync(uom);
                     if (uom.IsExist)
