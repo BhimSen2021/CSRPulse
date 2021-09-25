@@ -4,7 +4,7 @@
       data-ajax-success="onPartenrPolicyDetails">
     <div class="mb-2 text-end">
         <input type="hidden" asp-for="PartnerId" id="Id" />
-        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" onclick="SavePolicyDetails()" value="SavePolicy" id="btnSave"><i class="mdi mdi-file-document-edit"></i> Save</button>
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SavePolicyDetails" id="btnSave"><i class="mdi mdi-file-document-edit"></i> Save</button>
     </div>
     <div class="row">
         <div class="mb-3">
@@ -24,20 +24,23 @@
                         for (int i = 0; i < Model.PartnerPolicy.Count; i++)
                         {
                             <tr>
-                                <td>
-                                    <span>@(i + 1)</span>
+                                <td class="h5">
+                                    <span>@(i + 1).</span>
                                     <input type="hidden" asp-for="@Model.PartnerPolicy[i].PolicyId" />
+                                    <input type="hidden" id="DetailsPolicyId_@i" value="@Model.PartnerPolicy[i].PolicyId" asp-for="@Model.PartnerPolicyDetails[i].PolicyId" />
+
                                 </td>
 
                                 <td>
-                                    <label asp-for="@Model.PartnerPolicy[i].PolicyName">@Model.PartnerPolicy[i].PolicyName</label>
+                                    <label class="h5" asp-for="@Model.PartnerPolicy[i].PolicyName">@Model.PartnerPolicy[i].PolicyName</label>
 
                                 </td>
                                 <td>
                                     @if (Model.PartnerPolicy[i].IsFormallyApprovedByBoard == true)
                                     {
+
                                         <div>
-                                            <select aria-required="true" id="IsFormallyApprovedByBoard" class="form-select">
+                                            <select aria-required="true" id="IsApproved_@i" asp-for="@Model.PartnerPolicyDetails[i].IsApprovedByBoard" class="form-select">
                                                 <option disabled="" label="Select" selected="" value=""></option>
                                                 <option label="Yes" value="0"></option>
                                                 <option label="No" value="1"></option>
@@ -49,7 +52,7 @@
                                     @if (Model.PartnerPolicy[i].IsImplementedSince == true)
                                     {
                                         <div>
-                                            <input type="date" id="IsImplementedSince_" class="form-control" autocomplete="off">
+                                            <input type="date" id="IsImplementedSince_@i" asp-for="@Model.PartnerPolicyDetails[i].Impletedsince" class="form-control" autocomplete="off">
                                             <span class="invalid"></span>
                                         </div>
                                     }
@@ -58,7 +61,7 @@
                                     @if (Model.PartnerPolicy[i].IsLastUpdatedOn == true)
                                     {
                                         <div>
-                                            <input type="date" id="IsLastUpdatedOn_" class="form-control" autocomplete="off">
+                                            <input type="date" id="IsLastUpdatedOn_@i" asp-for="@Model.PartnerPolicyDetails[i].LastUpdatedOn" class="form-control" autocomplete="off">
                                             <span class="invalid"></span>
                                         </div>
                                     }
@@ -67,19 +70,22 @@
                             </tr>
                             @if (Model.PartnerPolicyModule != null)
                             {
+                                int index = 0;
                                 for (int j = 0; j < Model.PartnerPolicyModule.Count; j++)
                                 {
-                                    @if (Model.PartnerPolicy[i].PolicyId == Model.PartnerPolicyModule[j].PolicyId)
+
+                                    @if (Model.PartnerPolicyModule[j].PolicyId == Model.PartnerPolicy[i].PolicyId)
                                     {
+                                        index++;
                                         <tr>
                                             <td>
-
-                                                <input type="hidden" id="PolicyId_@j" asp-for="@Model.PartnerPolicyModule[j].PolicyId" />
+                                                <span class="mx-lg-2">@(i + 1)<text>.</text>@(index)</span>
+                                                <input type="hidden" id="PolicyId_@j" value="PolicyId" asp-for="@Model.PartnerPolicyModule[j].PolicyId" />
                                                 <input type="hidden" id="PolicyModuleId_@j" asp-for="@Model.PartnerPolicyModule[j].PolicyModuleId" />
                                             </td>
 
                                             <td>
-                                                <div style="text-align:right">
+                                                <div class="text-start">
                                                     <label asp-for="@Model.PartnerPolicyModule[j].PolicyModuleName">@Model.PartnerPolicyModule[j].PolicyModuleName</label>
                                                 </div>
 
@@ -89,12 +95,12 @@
                                                 @if (Model.PartnerPolicyModule[j].IsFormallyApprovedByBoard == true)
                                                 {
                                                     <div>
-                                                        <select aria-required="true" id="IsApproved_@j" asp-for="@Model.PartnerPolicyDetails[0].IsApproved1" class="form-select">
+                                                        <select aria-required="true" id="IsApproved_@j" asp-for="@Model.PartnerPolicyModuleDetails[j].IsApprovedByBoard" class="form-select">
                                                             <option disabled="" label="Select" selected="" value=""></option>
                                                             <option label="Yes" value="0"></option>
                                                             <option label="No" value="1"></option>
                                                         </select>
-                                                        <span asp-validation-for="@Model.PartnerPolicyModule[j].IsFormallyApprovedByBoard" class="invalid"></span>
+                                                        <span asp-validation-for="@Model.PartnerPolicyModuleDetails[j].IsApprovedByBoard" class="invalid"></span>
                                                     </div>
                                                 }
 
@@ -104,8 +110,13 @@
                                                 @if (Model.PartnerPolicyModule[j].IsImplementedSince == true)
                                                 {
                                                     <div>
-                                                        <input type="date" id="IsImplementedSince_@j" value="IsImplementedSince" asp-for="@Model.PartnerPolicyDetails[0].Impletedsince1" class="form-control" autocomplete="off">
-                                                        <span asp-validation-for="@Model.PartnerPolicyModule[j].IsImplementedSince" class="invalid"></span>
+                                                        <input type="date" id="IsImplementedSince_@j" asp-for="@Model.PartnerPolicyModuleDetails[j].Impletedsince" class="form-control" autocomplete="off">
+                                                        <span asp-validation-for="@Model.PartnerPolicyModuleDetails[j].Impletedsince" class="invalid"></span>
+
+                                                        <input type="hidden" value="partnerid" asp-for="@Model.PartnerPolicyModuleDetails[j].PartnerId" />
+                                                        <input type="hidden" id="ModulePolicyId_@j" value="@Model.PartnerPolicyModule[j].PolicyId" asp-for="@Model.PartnerPolicyModuleDetails[j].PolicyId" />
+                                                        <input type="hidden" id="ModulePolicyModuleId_@j" value="@Model.PartnerPolicyModule[j].PolicyModuleId" asp-for="@Model.PartnerPolicyModuleDetails[j].PolicyModuleId" />
+
                                                     </div>
                                                 }
                                             </td>
@@ -113,15 +124,17 @@
                                                 @if (Model.PartnerPolicyModule[j].IsLastUpdatedOn == true)
                                                 {
                                                     <div>
-                                                        <input type="date" id="IsLastUpdatedOn_@j" value="IsLastUpdatedOn" asp-for="@Model.PartnerPolicyDetails[0].LastUpdatedOn1" class="form-control" autocomplete="off">
-                                                        <span asp-validation-for="@Model.PartnerPolicyModule[j].IsLastUpdatedOn" class="invalid"></span>
+                                                        <input type="date" id="IsLastUpdatedOn_@j" asp-for="@Model.PartnerPolicyModuleDetails[j].LastUpdatedOn" class="form-control" autocomplete="off">
+                                                        <span asp-validation-for="@Model.PartnerPolicyModuleDetails[j].LastUpdatedOn" class="invalid"></span>
                                                     </div>
                                                 }
                                             </td>
                                         </tr>
-                                        }
                                     }
+                                  
+                                }
                             }
+
 
                         }
                     }
@@ -138,27 +151,9 @@
 </form>
 
 <script type="text/javascript">
-    function SavePolicyDetails() {
-        if ($("#btnSave").val() == "SavePolicy") {
-           // for (var i = 0;i<)
-            var policyDetails = {
-                PolicyId: $("#PolicyId").val, PolicyModuleId: $("#PolicyModuleId").val,
-                IsApproved: $("#IsApproved").val(), Impletedsince: $("#Impletedsince").val(), IsLastUpdatedOn: $("#IsLastUpdatedOn").val()
-            };
-            $.ajax({
-                url: 'Partner/SavePolicyDetails',
-                type: 'POST',
-                data: JSON.stringify({ policyDetails }),
-                //data: policyDetails,
-                success: function () {
-                    alert('Record saved !!!');
-                    },
-                error: function () {
-                    alert('Record not saved !!!');
-                }
-            });
-        }
-    }
+    $(document).ready(function () {
+        SaveDetails();
+    });
     function onPartenrPolicyDetails(data) {
 
         $("#div-partnerpolicymodule-grid").html(data.htmlData);

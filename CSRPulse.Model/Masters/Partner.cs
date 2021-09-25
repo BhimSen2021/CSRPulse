@@ -110,6 +110,7 @@ namespace CSRPulse.Model
         public int? NoOfErrors { get; set; }
         public string Message { get; set; }
         public List<PartnerPolicyDetails> PartnerPolicyDetails { get; set; }
+        public List<PartnerPolicyModuleDetails> PartnerPolicyModuleDetails { get; set; }
 
     }
 

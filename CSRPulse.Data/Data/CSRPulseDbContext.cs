@@ -57,7 +57,9 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<PartnerDocument> PartnerDocument { get; set; }
         public virtual DbSet<PartnerPolicy> PartnerPolicy { get; set; }
+        public virtual DbSet<PartnerPolicyDetails> PartnerPolicyDetails { get; set; }
         public virtual DbSet<PartnerPolicyModule> PartnerPolicyModule { get; set; }
+        public virtual DbSet<PartnerPolicyModuleDetails> PartnerPolicyModuleDetails { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Process> Process { get; set; }
         public virtual DbSet<ProcessDocument> ProcessDocument { get; set; }
@@ -93,9 +95,9 @@ namespace CSRPulse.Data.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
             {
                 var _Connection = configuration.GetConnectionString("DefaultConnection");
@@ -682,6 +684,13 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.PolicyName).IsUnicode(false);
             });
 
+            modelBuilder.Entity<PartnerPolicyDetails>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            });
+
             modelBuilder.Entity<PartnerPolicyModule>(entity =>
             {
                 entity.HasKey(e => e.PolicyModuleId)
@@ -692,6 +701,13 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PolicyModuleName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PartnerPolicyModuleDetails>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<Plan>(entity =>

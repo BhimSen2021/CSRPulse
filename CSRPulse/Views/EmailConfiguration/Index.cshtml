@@ -24,9 +24,6 @@
             <thead class="thead-light">
                 <tr>
                     <th>
-                    @Html.DisplayNameFor(model=>model.ToEmail)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.UserName)
                     </th>
                     <th>
@@ -34,6 +31,9 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Port)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FriendlyName)
                     </th>
                     <th></th>
                 </tr>
@@ -43,18 +43,18 @@
                 <tr>
                     <td>
                         <span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this record.">
-                            @Html.ActionLink(Model.ToEmail, "Edit", "EmailConfiguration", new { EmailConfigurationID = Model.EmailConfigurationID })
+                            @Html.ActionLink(Model.UserName, "Edit", "EmailConfiguration", new { EmailConfigurationID = Model.EmailConfigurationID })
                         </span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => modelItem.UserName)
+                        @Html.DisplayFor(modelItem => modelItem.Server)
                     </td>
                     
                     <td>
-                        @Html.DisplayFor(modelItem => modelItem.Server)
+                        @Html.DisplayFor(modelItem => modelItem.Port)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => modelItem.Port)
+                        @Html.DisplayFor(modelItem => modelItem.FriendlyName)
                     </td>
                    
                 </tr>

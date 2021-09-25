@@ -33,9 +33,10 @@ namespace CSRPulse.Services
         Task<List<PartnerDocument>> GetPartnerDocumentList(int partnerId, int processId);
         Task<List<PartnerDocument>> GetUpdatePartnerDocument(Partner partner);
         bool DeletePartnerDocument(int partnerId);
-        Task<List<PartnerDocument>> GetUpdatePartnerPolicyDetails(Partner partner);
-
-
+        Task<List<PartnerPolicyDetails>> GetUpdatePartnerPolicyDetails(Partner partner);
+        Task<List<PartnerPolicyDetails>> GetPartnerPolicyDetailsList(int PartnerId);
+        Task<List<PartnerPolicyModuleDetails>> GetUpdatePartnerPolicyModuleDetails(Partner partner);
+        Task<List<PartnerPolicyModuleDetails>> GetPartnerPolicyModuleDetailsList(int PartnerId);
 
     }
 }

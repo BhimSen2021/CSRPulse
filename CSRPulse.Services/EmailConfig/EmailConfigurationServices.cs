@@ -38,10 +38,8 @@ namespace CSRPulse.Services
                 result.Port = rs.Port;
                 result.Server = rs.Server;               
                 result.Sslstatus = rs.Sslstatus;
+                result.FriendlyName = rs.FriendlyName;
                 return result;
-                //return stateList;
-                //return _mapper.Map<EmailConfiguration>(emailConfigurations);
-                //return EmailConfigurationList;
             }
             catch (Exception)
             {
