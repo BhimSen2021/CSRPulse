@@ -98,6 +98,9 @@ namespace CSRPulse.Services
                     getDistricts.StateId = district.StateId.Value;
                     getDistricts.UpdatedBy = district.UpdatedBy;
                     getDistricts.UpdatedOn = district.UpdatedOn;
+                    getDistricts.UpdatedRid = district.UpdatedRid;
+                    getDistricts.UpdatedRname= district.UpdatedRname;
+
                     _genericRepository.Update(getDistricts);
                     return true;
                 }
@@ -563,7 +566,7 @@ namespace CSRPulse.Services
         }
         #endregion
 
-        public bool ImportDistrictData(List<Model.DistrictImport> districtData)
+        public bool ImportDistrictData(List<Model.DistrictImport> districtData, int createdBy, int createdRId, string createdRName)
         {
             try
             {
@@ -572,6 +575,9 @@ namespace CSRPulse.Services
                 table.Columns.Add("DistrictCode", typeof(string));
                 table.Columns.Add("DistrictName", typeof(string));
                 table.Columns.Add("DistrictShort", typeof(string));
+                table.Columns.Add("CreatedBy", typeof(int));
+                table.Columns.Add("CreatedRid", typeof(int));
+                table.Columns.Add("CreatedRname", typeof(string));
 
                 foreach (var item in districtData)
                 {
@@ -580,6 +586,9 @@ namespace CSRPulse.Services
                     row["DistrictCode"] = Convert.ToString(item.DistrictCode);
                     row["DistrictName"] = Convert.ToString(item.DistrictName);
                     row["DistrictShort"] = Convert.ToString(item.DistrictShort);
+                    row["CreatedBy"] = createdBy;
+                    row["CreatedRid"] = createdRId;
+                    row["CreatedRname"] = createdRName;
                     table.Rows.Add(row);
                 }
                 bool res = districtImport.ImportDistrictData(table);

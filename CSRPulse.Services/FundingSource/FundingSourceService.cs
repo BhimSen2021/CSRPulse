@@ -79,7 +79,7 @@ namespace CSRPulse.Services
                 var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.FundingSource>(x =>
                 (FundingSource.IsActiveFilter.HasValue ? x.IsActive == FundingSource.IsActiveFilter.Value : 1 > 0) 
                  && (FundingSource.FilterSourceType.HasValue ? x.SourceType == FundingSource.FilterSourceType.Value : 1 > 0)));
-                //var result = await _genericRepository.GetAsync<DTOModel.FundingSource>(x => (FundingSource.IsActiveFilter.HasValue ? x.IsActive == FundingSource.IsActiveFilter.Value : 1 > 0));
+                
                 return _mapper.Map<List<FundingSource>>(result);
             }
             catch (Exception)
@@ -107,6 +107,8 @@ namespace CSRPulse.Services
                         result.IsActive = FundingSource.IsActive;
                         result.UpdatedOn = FundingSource.UpdatedOn;
                         result.UpdatedBy = FundingSource.UpdatedBy;
+                        result.UpdatedRid = FundingSource.UpdatedRid;
+                        result.UpdatedRname = FundingSource.UpdatedRname;
                         _genericRepository.Update(result);
                         return true;
                     }

@@ -35,7 +35,30 @@ namespace CSRPulse.Data.Models
         public int? UpdatedBy { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? UpdatedOn { get; set; }
+        [Column("CreatedRId")]
+        public int CreatedRid { get; set; }
+        [Required]
+        [Column("CreatedRName")]
+        [StringLength(256)]
+        public string CreatedRname { get; set; }
+        [Column("UpdatedRId")]
+        public int? UpdatedRid { get; set; }
+        [Column("UpdatedRName")]
+        [StringLength(256)]
+        public string UpdatedRname { get; set; }
 
+        [ForeignKey(nameof(CreatedBy))]
+        [InverseProperty(nameof(User.ThemeCreatedByNavigation))]
+        public virtual User CreatedByNavigation { get; set; }
+        [ForeignKey(nameof(CreatedRid))]
+        [InverseProperty(nameof(Role.ThemeCreatedR))]
+        public virtual Role CreatedR { get; set; }
+        [ForeignKey(nameof(UpdatedBy))]
+        [InverseProperty(nameof(User.ThemeUpdatedByNavigation))]
+        public virtual User UpdatedByNavigation { get; set; }
+        [ForeignKey(nameof(UpdatedRid))]
+        [InverseProperty(nameof(Role.ThemeUpdatedR))]
+        public virtual Role UpdatedR { get; set; }
         [InverseProperty("Theme")]
         public virtual ICollection<Activity> Activity { get; set; }
         [InverseProperty("Theme")]

@@ -129,7 +129,9 @@ namespace CSRPulse.Controllers
 
                     if (ButtonType == "submit")
                     {
-                        customer.CreatedBy = 1;
+                        customer.CreatedBy = userDetail.UserID ;
+                        customer.CreatedRid = userDetail.RoleId ;
+                        customer.CreatedRname = userDetail.RoleName ;
                         string custCode;
                         int customerID = await registrationService.CustomerRegistrationAsync(customer, out custCode);
                         if (customerID > 0)
@@ -173,7 +175,9 @@ namespace CSRPulse.Controllers
                         IsSuccess = true,
                         PaymentDate = DateTime.Now,
                         PaymentMode = 1,
-                        CreatedBy = 1
+                        CreatedBy = userDetail.UserID,
+                        CreatedRid = userDetail.RoleId,
+                        CreatedRname = userDetail.RoleName
 
                     };
 
@@ -185,7 +189,9 @@ namespace CSRPulse.Controllers
                         LastActivationDate = DateTime.Now.AddMonths(1),
                         CustomerID = customer.CustomerId,
                         PlanID = 2,
-                        CreatedBy = 1
+                        CreatedBy = userDetail.UserID,
+                        CreatedRid = userDetail.RoleId,
+                        CreatedRname = userDetail.RoleName
                     };
                     string dbPath = Path.Combine(_Environment.WebRootPath, "DB/DefaultDbScript.sql");
                     var res = await registrationService.CustomerPaymentAsync(customer, dbPath);

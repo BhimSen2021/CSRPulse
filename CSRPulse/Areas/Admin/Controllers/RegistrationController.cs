@@ -1,5 +1,7 @@
 ﻿using CSRPulse.Common;
+using CSRPulse.Controllers;
 using CSRPulse.Model;
+using CSRPulse.Models;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
@@ -8,14 +10,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CSRPulse.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[Controller]/[action]")]
-    public class RegistrationController : CSRPulse.Controllers.BaseController<RegistrationController>
+    public class RegistrationController : BaseController<RegistrationController>
     {
         private readonly IRegistrationService _registrationService;
         private readonly IDesignationHistoryService _designationHistory;
@@ -66,7 +70,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             {
                 _logger.LogInformation("Admin/RegistrationController/Create");
 
-                
+
                 if (string.IsNullOrEmpty(singUp.hdConfirmPassword))
                     ModelState.AddModelError("ConfirmPassword", "Please enter confirm password.");
                 if (string.IsNullOrEmpty(singUp.hdPassword))
@@ -75,7 +79,7 @@ namespace CSRPulse.Areas.Admin.Controllers
                 singUp.Password = Password.DecryptStringAES(singUp.hdPassword);
                 singUp.ConfirmPassword = Password.DecryptStringAES(singUp.hdConfirmPassword);
                 string ErrorMessage = string.Empty;
-               
+
 
                 if (!Password.ValidatePassword(singUp.Password, out ErrorMessage))
                 {
@@ -94,6 +98,9 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                     singUp.CreatedBy = userDetail.UserID;
                     singUp.CreatedOn = DateTime.Now;
+                    singUp.CreatedRid = userDetail.RoleId;
+                    singUp.CreatedRname = userDetail.RoleName;
+
                     singUp.IsActive = true;
                     string decryptPassword = string.Empty;
                     decryptPassword = singUp.Password.Trim();
@@ -114,7 +121,9 @@ namespace CSRPulse.Areas.Admin.Controllers
                             DesignationId = singUp.DesignationId,
                             Formdate = DateTime.Now,
                             Todate = null,
-                            CreatedBy = userDetail.UserID
+                            CreatedBy = userDetail.UserID,
+                            CreatedRid = userDetail.RoleId,
+                            CreatedRname = userDetail.RoleName
                         };
                         await _designationHistory.CreateDesignation(uHistory);
 
@@ -182,6 +191,8 @@ namespace CSRPulse.Areas.Admin.Controllers
 
                     signUp.UpdatedBy = userDetail.UserID;
                     signUp.UpdatedOn = DateTime.Now;
+                    signUp.UpdatedRid = userDetail.RoleId;
+                    signUp.UpdatedRname = userDetail.RoleName;
                     var result = await _registrationService.UpdateUser(signUp);
                     if (result)
                     {
@@ -193,9 +204,20 @@ namespace CSRPulse.Areas.Admin.Controllers
                                 DesignationId = signUp.DesignationId,
                                 Formdate = DateTime.Now,
                                 Todate = null,
-                                CreatedBy = userDetail.UserID
+                                CreatedBy = userDetail.UserID,
+                                CreatedRid = userDetail.RoleId,
+                                CreatedRname = userDetail.RoleName,
+                                UpdatedRid = userDetail.RoleId,
+                                UpdatedRname = userDetail.RoleName,
+                                UpdatedBy = userDetail.UserID,
+                                UpdatedOn = DateTime.Now
                             };
                             await _designationHistory.UpdateTodatePrevious(uHistory);
+
+                            uHistory.UpdatedRid = null;
+                            uHistory.UpdatedRname = null;
+                            uHistory.UpdatedBy = null;
+                            uHistory.UpdatedOn = null;
 
                             await _designationHistory.CreateDesignation(uHistory);
                         }
@@ -256,6 +278,126 @@ namespace CSRPulse.Areas.Admin.Controllers
 
             var Partners = _ddlService.GetPartners(null);
             ViewBag.ddlPartner = new SelectList(Partners, "id", "value");
+        }
+
+        public async Task<IActionResult> AssignRole(int userId)
+        {
+            try
+            {
+                UserRoleModel userRoleModel = new UserRoleModel();
+                userRoleModel.userRoles = new List<Model.UserRole>();
+
+                var userRoles = await _registrationService.GetAssignedRoles(userId);
+                userRoleModel.SelectedRole = 0;
+                userRoleModel.UserId = userId;
+                userRoleModel.userRoles = userRoles;
+
+                return Json(new { htmlData = ConvertViewToString("_AssignRole", userRoleModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(UserRoleModel userRoleModel)
+        {
+            try
+            {
+                bool flag = false;
+                var roles = userRoleModel.userRoles.Where(x => x.AssigneRole == true).ToList();
+                var baseModel = new BaseModel();
+                baseModel.CreatedBy = userDetail.UserID;
+                baseModel.CreatedRid = userDetail.RoleId;
+                baseModel.CreatedRname = userDetail.RoleName;
+
+                flag = await _registrationService.AssignedRoles(roles, userRoleModel.UserId, baseModel);
+                return Json(new { flag = flag });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> SwitchAccount()
+        {
+            try
+            {
+                UserRoleModel userRoleModel = new UserRoleModel();
+                userRoleModel.userRoles = new List<Model.UserRole>();
+
+                var userRoles = await _registrationService.GetUserRoles(userDetail.UserID);
+                if (userRoles.Exists(x => x.RoleId == userDetail.RoleId))
+                {
+                    userRoles.Where(r => r.RoleId == userDetail.RoleId).ToList().ForEach(i => i.AssigneRole = true);
+                }
+                else
+                {
+                    userRoles.Add(new Model.UserRole()
+                    { RoleId = userDetail.RoleId, RoleName = userDetail.RoleName, AssigneRole = true });
+                }
+                userRoleModel.SelectedRole = 0;
+                userRoleModel.UserId = userDetail.UserID;
+                userRoleModel.userRoles = userRoles.OrderByDescending(x => x.AssigneRole).ToList();
+
+                return Json(new { htmlData = ConvertViewToString("_SwitchAccount", userRoleModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SwitchAccount(UserRoleModel userRoleModel)
+        {
+            try
+            {
+                var uDetail = new UserDetail();
+
+                if (HttpContext.Session.GetComplexData<UserDetail>("User") != null)
+                {
+                    var RoleName = userRoleModel.userRoles.Where(r => r.RoleId == userRoleModel.SelectedRole).Select(x => x.RoleName).FirstOrDefault();
+
+                    uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
+                    uDetail.RoleId = userRoleModel.SelectedRole;
+                    uDetail.RoleName = RoleName;
+                    HttpContext.Session.SetComplexData("User", uDetail);
+                    TempData["message"] = "Account switched to " + RoleName + " successfully.";
+                    return Json(new { flag = 1 });
+                }
+                else
+                    return Json(new { flag = 2 });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> LockUnlockUser(int userId, bool ulock)
+        {
+            bool flag = false;
+            try
+            {
+                flag = await _registrationService.LockUnlockUser(userId, ulock);
+                if (flag)
+                    TempData["message"] = "User " + (ulock == true ? "locked successfully." : "unlocked successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+            return Json(new { flag = flag });
+
         }
     }
 }

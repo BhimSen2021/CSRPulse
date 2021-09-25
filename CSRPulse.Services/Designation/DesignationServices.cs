@@ -66,6 +66,8 @@ namespace CSRPulse.Services
                     dData.DesignationName = designation.DesignationName;
                     dData.UpdatedBy = designation.UpdatedBy;
                     dData.UpdatedOn = designation.UpdatedOn;
+                    dData.UpdatedRid = designation.UpdatedRid;
+                    dData.UpdatedRname = designation.UpdatedRname;
                     _genericRepository.Update(dData);
                     return true;
                 }

@@ -72,6 +72,8 @@ namespace CSRPulse.Services
                     auditReviewParamter.IsActive = paramter.IsActive;
                     auditReviewParamter.UpdatedBy = paramter.UpdatedBy;
                     auditReviewParamter.UpdatedOn = paramter.UpdatedOn;
+                    auditReviewParamter.UpdatedRid = paramter.UpdatedRid;
+                    auditReviewParamter.UpdatedRname = paramter.UpdatedRname;
                     _genericRepository.Update(auditReviewParamter);
                     return true;
                 }

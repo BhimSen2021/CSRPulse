@@ -67,6 +67,11 @@ namespace CSRPulse.Services
 
                     dData.ProcessName = process.ProcessName;
                     dData.Document = process.Document;
+                    dData.UpdatedBy = process.UpdatedBy;
+                    dData.UpdatedOn = process.UpdatedOn;
+                    dData.UpdatedRid = process.UpdatedRid;
+                    dData.UpdatedRname = process.UpdatedRname;
+                    
 
                     _genericRepository.Update(dData);
                     return true;

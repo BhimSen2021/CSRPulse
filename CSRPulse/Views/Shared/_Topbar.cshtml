@@ -1,6 +1,12 @@
 ﻿<div class="navbar-custom">
+    @*<ul class="list-unstyled topbar-menu float-start mb-0">
+        <li class="dropdown notification-list topbar-dropdown">           
+            <a class="nav-link" href="javascript:void(0);">
+                <span id="lbltime" style="display:none;" class="mdi mdi-clock noti-icon text-danger"></span>
+            </a>
+        </li>
+    </ul>*@
     <ul class="list-unstyled topbar-menu float-end mb-0">
-       
         <li class="dropdown notification-list">
             <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <i class="dripicons-bell noti-icon"></i>
@@ -151,10 +157,10 @@
         </li>
 
         @*<li class="notification-list">
-            <a class="nav-link end-bar-toggle" href="javascript: void(0);">
-                <i class="dripicons-gear noti-icon"></i>
-            </a>
-        </li>*@
+                <a class="nav-link end-bar-toggle" href="javascript: void(0);">
+                    <i class="dripicons-gear noti-icon"></i>
+                </a>
+            </li>*@
 
         <partial name="_LoginInfo" />
 
@@ -162,5 +168,5 @@
     <button class="button-menu-mobile open-left disable-btn">
         <i class="mdi mdi-menu"></i>
     </button>
-   
+
 </div>

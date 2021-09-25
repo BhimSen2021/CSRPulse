@@ -78,7 +78,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("AuditorController/Create");
                 if (ModelState.IsValid)
                 {
-                    auditor.CreatedBy = userDetail.CreatedBy;
+                    auditor.CreatedBy = userDetail.UserID;
+                    auditor.CreatedRid = userDetail.RoleId;
+                    auditor.CreatedRname = userDetail.RoleName;
                     var result = await _auditorServices.CreateAuditorAsync(auditor);
                     if (result.IsExist)
                     {
@@ -195,8 +197,10 @@ namespace CSRPulse.Controllers
 
                         for (int i = 0; i < auditor.AuditorDocument.Count; i++)
                         {
-                            auditor.AuditorDocument[i].CreatedBy = userDetail.CreatedBy;
+                            auditor.AuditorDocument[i].CreatedBy = userDetail.UserID;
                             auditor.AuditorDocument[i].CreatedOn = auditor.UpdatedOn ?? DateTime.Now;
+                            auditor.AuditorDocument[i].CreatedRid = userDetail.RoleId;
+                            auditor.AuditorDocument[i].CreatedRname = userDetail.RoleName;
                             auditor.AuditorDocument[i].AuditorId = auditor.AuditorId;
 
                             if (auditor.AuditorDocument[i].DocumentFile != null)

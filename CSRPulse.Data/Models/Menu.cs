@@ -41,7 +41,30 @@ namespace CSRPulse.Data.Models
         [Column(TypeName = "text")]
         public string Help { get; set; }
         public bool IsDeleted { get; set; }
+        [Column("CreatedRId")]
+        public int CreatedRid { get; set; }
+        [Required]
+        [Column("CreatedRName")]
+        [StringLength(256)]
+        public string CreatedRname { get; set; }
+        [Column("UpdatedRId")]
+        public int? UpdatedRid { get; set; }
+        [Column("UpdatedRName")]
+        [StringLength(256)]
+        public string UpdatedRname { get; set; }
 
+        [ForeignKey(nameof(CreatedBy))]
+        [InverseProperty(nameof(User.MenuCreatedByNavigation))]
+        public virtual User CreatedByNavigation { get; set; }
+        [ForeignKey(nameof(CreatedRid))]
+        [InverseProperty(nameof(Role.MenuCreatedR))]
+        public virtual Role CreatedR { get; set; }
+        [ForeignKey(nameof(UpdatedBy))]
+        [InverseProperty(nameof(User.MenuUpdatedByNavigation))]
+        public virtual User UpdatedByNavigation { get; set; }
+        [ForeignKey(nameof(UpdatedRid))]
+        [InverseProperty(nameof(Role.MenuUpdatedR))]
+        public virtual Role UpdatedR { get; set; }
         [InverseProperty("Menu")]
         public virtual ICollection<UserRights> UserRights { get; set; }
     }

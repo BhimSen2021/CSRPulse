@@ -53,7 +53,7 @@
     <!-- Site Js -->
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/ajaxSetup.js" asp-append-version="true"></script>
-    
+
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "c": true}'>
     <partial name="_LoadingPanel" />
@@ -101,6 +101,10 @@
 
     @RenderSection("scripts", required: false)
 
+    @await Html.PartialAsync("_SessionExpireNotification")
+    <div id="switchaccount-div">
+        @await Html.PartialAsync("_SwitchAccount", new UserRoleModel())
+    </div>
     <script type="text/javascript">
         $(document).ready(function () {
             if ('@messageError' != "") {
@@ -172,6 +176,31 @@
 
         function Tooltip() {
             $('[data-bs-toggle="tooltip"]').tooltip();
+        }
+
+        function SwitchAccount() {
+            $.ajax({
+                type: 'GET',
+                dataType: 'JSON',
+                url: '@Url.Action("SwitchAccount", "Registration", new { Area="Admin"})',
+                data: { },
+                success: function (data) {
+                    $("#switchaccount-div").html(data.htmlData);
+                    $("#switchAccount-model").modal("show");
+                },
+                error: function (data) {
+                    commonMessage('error', 'Account Switching failed!');
+                }
+            });
+        }
+
+        function onSwitchAccount(data) {
+            if (data.flag == 1) {
+                window.location.href = "@Url.Action("Index", "Home",new { Area="Admin"})";
+            }
+            else {
+                commonMessage('error', 'Account Switching failed!');
+            }
         }
     </script>
 </body>

@@ -125,11 +125,23 @@ namespace CSRPulse.Controllers
                 ModelState.Remove("IsActive");
                 if (ModelState.IsValid)
                 {
-                    project.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    project.CreatedBy = userDetail.UserID;
+                    project.CreatedRid = userDetail.RoleId;
+                    project.CreatedRname = userDetail.RoleName;
                     project.IsActive = true;
 
                     project.ProjectOtherSource = project.ProjectOtherSource.Where(x => x.Amount > 0).ToList();
+                    project.ProjectOtherSource.ForEach(x => { 
+                        x.CreatedBy = userDetail.UserID;
+                        x.CreatedRid = userDetail.RoleId;
+                        x.CreatedRname = userDetail.RoleName;
+                    });
                     project.ProjectInternalSource = project.ProjectInternalSource.Where(x => x.Amount > 0).ToList();
+                    project.ProjectInternalSource.ForEach(x => {
+                        x.CreatedBy = userDetail.UserID;
+                        x.CreatedRid = userDetail.RoleId;
+                        x.CreatedRname = userDetail.RoleName;
+                    });
 
                     // Make project Intervention Report
                     DataTable projectIReportDt = ReportHelper.MakeProjectReport(project.ProjectId, project.StartDate ?? DateTime.UtcNow, project.EndDate ?? DateTime.UtcNow, project.ReportType);
@@ -272,17 +284,35 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     project.UpdatedBy = userDetail.UserID;
-                    project.UpdatedOn = DateTime.UtcNow;
+                    project.UpdatedRid = userDetail.RoleId;
+                    project.UpdatedRname = userDetail.RoleName;
+                    project.UpdatedOn = DateTime.Now;
 
                     project.IsActive = true;
 
-                    if (project.ProjectOtherSource != null)
+                    if (project.ProjectOtherSource != null) {
                         project.ProjectOtherSource = project.ProjectOtherSource.Where(x => x.Amount > 0).ToList();
+
+                        project.ProjectOtherSource.ForEach(x => { 
+                            x.CreatedBy = userDetail.UserID; 
+                            x.CreatedOn = DateTime.Now;
+                            x.CreatedRid = userDetail.RoleId;
+                            x.CreatedRname = userDetail.RoleName;
+                        });
+                    }
                     else
                         project.ProjectOtherSource = new List<ProjectOtherSource>();
 
-                    if (project.ProjectInternalSource != null)
+                    if (project.ProjectInternalSource != null) { 
                         project.ProjectInternalSource = project.ProjectInternalSource.Where(x => x.Amount > 0).ToList();
+
+                        project.ProjectInternalSource.ForEach(x => {
+                            x.CreatedBy = userDetail.UserID;
+                            x.CreatedOn = DateTime.Now;
+                            x.CreatedRid = userDetail.RoleId;
+                            x.CreatedRname = userDetail.RoleName;
+                        });
+                    }
                     else
                         project.ProjectInternalSource = new List<ProjectInternalSource>();
 
@@ -292,6 +322,13 @@ namespace CSRPulse.Controllers
                         if (project.ProjectLocation == null)
                             project.ProjectLocation = new List<ProjectLocation>();
                         project.ProjectLocation = MakeProjectLocation(project.hdnLocationIds);
+
+                        project.ProjectLocation.ForEach(x => {
+                            x.CreatedBy = userDetail.UserID;
+                            x.CreatedOn = DateTime.Now;
+                            x.CreatedRid = userDetail.RoleId;
+                            x.CreatedRname = userDetail.RoleName;
+                        });
 
                     }
                     else
@@ -330,6 +367,14 @@ namespace CSRPulse.Controllers
             {
                 List<ProjectLocationDetail> locationDetails = new List<ProjectLocationDetail>();
                 locationDetails = MakeProjectLocationDetail(projectId, locationIds, lLevel);
+
+                locationDetails.ForEach(x =>
+                {
+                    x.CreatedBy = userDetail.UserID;
+                    x.CreatedRid = userDetail.RoleId;
+                    x.CreatedRname = userDetail.RoleName;
+                });
+
                 var flag = await _projectService.AddLocationDetails(locationDetails, projectId);
                 var result = _projectService.GetLocationDetails(projectId, lLevel);
 
@@ -426,6 +471,9 @@ namespace CSRPulse.Controllers
                     EndDate = Convert.ToDateTime(ProjectIReportdt.Rows[i]["EndDate"]),
                     DueDate = Convert.ToDateTime(ProjectIReportdt.Rows[i]["DueDate"]),
                     Status = Convert.ToInt32(ProjectIReportdt.Rows[i]["Status"]),
+                    CreatedBy = userDetail.UserID,
+                    CreatedRid = userDetail.RoleId,
+                    CreatedRname = userDetail.RoleName                    
                 });
             }
             return qtrList;
@@ -442,7 +490,10 @@ namespace CSRPulse.Controllers
                     ReportNo = report.ReportNo,
                     YearName = report.ProjectYear,
                     ReportName = report.ReportName,
-                    YearNo = Convert.ToInt32(report.ProjectYear.Replace("Year", "", StringComparison.InvariantCultureIgnoreCase).Trim())
+                    YearNo = Convert.ToInt32(report.ProjectYear.Replace("Year", "", StringComparison.InvariantCultureIgnoreCase).Trim()),
+                    CreatedBy = userDetail.UserID,
+                    CreatedRid = userDetail.RoleId,
+                    CreatedRname = userDetail.RoleName
                 });
             }
             return reportList;
@@ -463,6 +514,9 @@ namespace CSRPulse.Controllers
                     StartDate = report.StartDate,
                     EndDate = report.EndDate,
                     Status = report.Status,
+                    CreatedBy = userDetail.UserID,
+                    CreatedRid = userDetail.RoleId,
+                    CreatedRname = userDetail.RoleName
                 });
             }
             return financialReports;
@@ -481,6 +535,9 @@ namespace CSRPulse.Controllers
                 {
                     StateId = val[0] == "" ? 0 : Convert.ToInt32(val[0]),
                     DistrictId = val[1] == "" ? 0 : Convert.ToInt32(val[1]),
+                    CreatedBy = userDetail.UserID,
+                    CreatedRid = userDetail.RoleId,
+                    CreatedRname = userDetail.RoleName
                 });
             }
 
@@ -608,6 +665,10 @@ namespace CSRPulse.Controllers
                         document.ProjectId = project.ProjectId;
                         document.DocumentId = project.ProjectDocument[i].DocumentId;
                         document.ProjectDocumentId = project.ProjectDocument[i].ProjectDocumentId;
+                        document.CreatedBy = project.ProjectDocument[i].CreatedBy;
+                        document.CreatedOn = project.ProjectDocument[i].CreatedOn;
+                        document.CreatedRid = project.ProjectDocument[i].CreatedRid;
+                        document.CreatedRname = project.ProjectDocument[i].CreatedRname;
 
                         if (project.ProjectDocument[i].DocumentFile != null)
                         {                           
@@ -616,11 +677,21 @@ namespace CSRPulse.Controllers
                             document.ServerDocumentName = await UploadDocument(filePath, project.ProjectDocument[i].DocumentFile);
                         }
                         if (project.ProjectDocument[i].ProjectDocumentId == 0)
+                        {
+                            document.CreatedBy = userDetail.UserID;
+                            document.CreatedRid = userDetail.RoleId;
+                            document.CreatedRname = userDetail.RoleName;
+                            document.CreatedOn = DateTime.Now;
                             await _projectService.SaveDocument(document);
+                        }
                         else
                         {
                             if (project.ProjectDocument[i].DocumentFile != null)
                             {
+                                document.UpdatedBy = userDetail.UserID;
+                                document.UpdatedRid = userDetail.RoleId;
+                                document.UpdatedRname = userDetail.RoleName;
+                                document.UpdatedOn = DateTime.Now;
                                 await _projectService.UpdateDocument(document);
                             }
                         }
@@ -635,6 +706,8 @@ namespace CSRPulse.Controllers
                 {
                     project.Communication.ProjectId = project.ProjectId;
                     project.Communication.CreatedBy = userDetail.UserID;
+                    project.Communication.CreatedRid = userDetail.RoleId;
+                    project.Communication.CreatedRname = userDetail.RoleName;
                     project.Communication.CreatedOn = DateTime.UtcNow;
                     project.Communication.IsActive = true;
                     await _projectService.SaveCommunication(project.Communication);

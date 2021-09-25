@@ -128,6 +128,8 @@ namespace CSRPulse.Controllers
                     docType = docType.TrimEnd(',');
                     processDocument.DocumentType = docType;
                     processDocument.CreatedBy = userDetail.UserID;
+                    processDocument.CreatedRid = userDetail.RoleId;
+                    processDocument.CreatedRname = userDetail.RoleName;
                     var res = _documentService.CreateProcessDocument(processDocument);
                     TempData["Message"] = "Process Document Added Successfully.";
                     return RedirectToAction("Index");
@@ -263,6 +265,8 @@ namespace CSRPulse.Controllers
                     docType = docType.TrimEnd(',');
                     processDocument.DocumentType = docType;
                     processDocument.UpdatedBy = userDetail.UserID;
+                    processDocument.UpdatedRid = userDetail.RoleId;
+                    processDocument.UpdatedRname = userDetail.RoleName;
                     processDocument.UpdatedOn = DateTime.Now;
                     var res = _documentService.UpdateProcessDocument(processDocument);
                     TempData["Message"] = "Process Document Updated Successfully.";

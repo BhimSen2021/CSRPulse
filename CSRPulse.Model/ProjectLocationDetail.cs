@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSRPulse.Model
 {
-    public class ProjectLocationDetail
+    public class ProjectLocationDetail:BaseModel
     {
         public int LocationId { get; set; }
         public int ProjectId { get; set; }
@@ -24,7 +24,6 @@ namespace CSRPulse.Model
         [Display(Name = "Village Name")]
         public string VillageName { get; set; }
         [Display(Name = "Location Type")]
-        public string LocationType { get; set; }
-        public bool IsActive { get; set; }
+        public string LocationType { get; set; }       
     }
 }

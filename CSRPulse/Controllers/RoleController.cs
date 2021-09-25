@@ -53,6 +53,8 @@ namespace CSRPulse.Controllers
                 {
 
                     role.CreatedBy = userDetail.CreatedBy;
+                    role.CreatedRid = userDetail.RoleId;
+                    role.CreatedRname = userDetail.RoleName;
                     role.IsActive = true;
                     var result = await _roleServices.CreateRole(role);
                     if (role.RecordExist)
@@ -73,14 +75,7 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-
-        //[HttpPost]
-        //public JsonResult UserActiveDeActive(int userId, bool IsActive)
-        //{
-        //    _logger.LogInformation("RoleController/UserActiveDeActive");
-        //    var result = _roleServices.UserActiveDeActive(userId, IsActive);
-        //    return Json(result);
-        //}
+       
         public async Task<IActionResult> Edit(int rid)
         {
             try
@@ -105,7 +100,10 @@ namespace CSRPulse.Controllers
                 ModelState.Remove("IsActive");
                 if (ModelState.IsValid)
                 {
-                    role.CreatedBy = userDetail.CreatedBy;
+                    role.UpdatedOn = DateTime.Now;
+                    role.UpdatedBy = userDetail.UserID;
+                    role.UpdatedRid = userDetail.RoleId;
+                    role.UpdatedRname = userDetail.RoleName;
                     var result =await _roleServices.UpdateRole(role);
                     if (role.RecordExist)
                     {

@@ -73,7 +73,9 @@ namespace CSRPulse.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    paramter.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    paramter.CreatedBy = userDetail.UserID;
+                    paramter.CreatedRid = userDetail.RoleId;
+                    paramter.CreatedRname = userDetail.RoleName;
 
                     if (await _reviewParamterServices.RecordExistAsync(paramter))
                     {
@@ -128,6 +130,8 @@ namespace CSRPulse.Controllers
                 {
                     paramter.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
                     paramter.UpdatedOn = DateTime.Now;
+                    paramter.UpdatedRid = userDetail.RoleId;
+                    paramter.UpdatedRname = userDetail.RoleName;
                     var result = await _reviewParamterServices.UpdateParamterAsync(paramter);
 
                     if (result)

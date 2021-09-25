@@ -68,7 +68,9 @@ namespace CSRPulse.Controllers
                 BindDropdowns();
                 if (ModelState.IsValid)
                 {
-                    financial.CreatedBy = userDetail.CreatedBy;
+                    financial.CreatedBy = userDetail.UserID;
+                    financial.CreatedRid = userDetail.RoleId;
+                    financial.CreatedRname = userDetail.RoleName;
                     var result = await _finanacServices.CreateFinancialAsync(financial);
                     if (result.IsExist)
                     {
@@ -116,7 +118,9 @@ namespace CSRPulse.Controllers
                 BindDropdowns();
                 if (ModelState.IsValid)
                 {
-                    financial.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    financial.UpdatedBy = userDetail.UserID;
+                    financial.UpdatedRid = userDetail.RoleId;
+                    financial.UpdatedRname = userDetail.RoleName;
                     financial.UpdatedOn = DateTime.Now;
                     var result = await _finanacServices.UpdateFinancialAsync(financial);
                     if (financial.IsExist)

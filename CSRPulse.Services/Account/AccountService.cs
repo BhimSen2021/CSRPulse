@@ -45,27 +45,25 @@ namespace CSRPulse.Services
                 var uData = _genericRepository.GetIQueryable<DTOModel.User>(u => u.IsDeleted == false && u.IsActive == true && u.UserName == singIn.UserName).Include(r => r.Role).FirstOrDefault();
                 if (uData != null)
                 {
-                    if (uData.WrongAttemp == 0 && uData.LockDate.HasValue)
+                    var LockDate = uData.LockDate ?? DateTime.Now;                    
+                    if (uData.WrongAttemp == 0 && LockDate.AddHours(24) > DateTime.Now)
                     {
                         userDetail.ErrorMessage = uData.LockDate.Value.AddDays(1).ToString("dd-MM-yyyy hh:mm tt");
                         return false;
                     }
-                    else if (uData.WrongAttemp == 0)
-                    {
-                        return false;
-                    }
+                    
                     userDetail = _mapper.Map<UserDetail>(uData);
 
                     userDetail.RoleId = uData.Role.RoleId;
                     userDetail.RoleName = uData.Role.RoleName;
 
-                    var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.UserId == uData.UserId).Include(r => r.Menu).ToList();
+                    var uRights = _genericRepository.GetIQueryable<DTOModel.UserRights>(u => u.RoleId == uData.RoleId).Include(r => r.Menu).ToList();
 
                     if (uRights != null && uRights.Count > 0)
                     {
                         userDetail.userMenuRights = uRights.Where(r => r.ShowMenu == true).Select(uRigth => new UserRight()
                         {
-                            UserId = uRigth.UserId,
+                            RoleId = uRigth.RoleId,
                             MenuId = uRigth.MenuId,
                             ShowMenu = uRigth.ShowMenu,
                             CreateRight = uRigth.CreateRight,
@@ -270,7 +268,8 @@ namespace CSRPulse.Services
         {
             try
             {
-                var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.User>().Include(d => d.Department));
+                var result = await Task.FromResult(_genericRepository.GetIQueryable<DTOModel.User>().Include(d => d.Department).Include(r => r.UserRole));
+                
 
                 return _mapper.Map<List<User>>(result);
             }
@@ -410,7 +409,7 @@ namespace CSRPulse.Services
                 if (uData != null)
                 {
                     uData.Password = Password.CreatePasswordHash(changePassword.Password.Trim(), Password.CreateSalt(Password.Password_Salt));
-                    uData.UpdatedBy = changePassword.UserId;
+                    uData.UpdatedBy = changePassword.UserId;                    
                     uData.UpdatedOn = DateTime.UtcNow;
                     await _genericRepository.UpdateAsync(uData);
                     flag = true;

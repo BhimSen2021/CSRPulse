@@ -24,7 +24,7 @@ namespace CSRPulse.Components
             {
                 uDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
             }
-            var uMenu = await _menuService.GetMenuByUserAsync(uDetail.UserID);
+            var uMenu = await _menuService.GetMenuByUserAsync(uDetail.RoleId);
                         
             return View("Menu",uMenu);
         }

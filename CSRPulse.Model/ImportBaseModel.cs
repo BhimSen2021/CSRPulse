@@ -9,5 +9,6 @@ namespace CSRPulse.Model
         public string error { set; get; }
         public string warning { set; get; }
         public bool isDuplicatedRow { set; get; }
+       
     }
 }

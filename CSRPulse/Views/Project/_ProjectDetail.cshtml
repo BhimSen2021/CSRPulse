@@ -5,7 +5,11 @@
         <form data-ajax="true" data-ajax-method="POST" asp-controller="Project" asp-action="Edit" data-ajax-success="OnEdit">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ProjectId" />           
+            <input type="hidden" asp-for="ProjectId" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedRid" />
+            <input type="hidden" asp-for="CreatedRname" />
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <label asp-for="PartnerId" class="form-label required"></label>
@@ -38,7 +42,7 @@
                 </div>
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <label asp-for="ThemeId" class="form-label required"></label>
-                    <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" aria-required="true" class="form-select">
+                    <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" onchange="BindSubTheme()" aria-required="true" class="form-select">
                         <option disabled="" label="Select Theme" selected="" value=""></option>
                     </select>
                     <span asp-validation-for="ThemeId" class="invalid"></span>
@@ -122,7 +126,7 @@
                             <i>Other source contribution breakup</i>
                         </div>
                         <div class="col text-end">
-                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to add new Other sources contribution breakup"  id="btnAddOS" class="btn btn-outline-info btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddOS"><i class="mdi mdi-plus"></i> Add</button>
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to add new Other sources contribution breakup" id="btnAddOS" class="btn btn-outline-info btn-sm btn-rounded" formnovalidate type="submit" name="ButtonType" value="AddOS"><i class="mdi mdi-plus"></i> Add</button>
                         </div>
                     </div>
                     <div id="div-otherSource-grid">

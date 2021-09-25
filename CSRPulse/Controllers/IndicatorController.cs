@@ -66,7 +66,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("IndicatorController/Create");
                 if (ModelState.IsValid)
                 {
-                    indicator.CreatedBy = userDetail.CreatedBy;
+                    indicator.CreatedBy = userDetail.UserID;
+                    indicator.CreatedRid = userDetail.RoleId;
+                    indicator.CreatedRname = userDetail.RoleName;
                     var result = await _indicatorService.CreateIndicatorAsync(indicator);
                     if (result.IsExist)
                     {
@@ -113,7 +115,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("IndicatorController/Edit");
                 if (ModelState.IsValid)
                 {
-                    indicator.UpdatedBy = userDetail.CreatedBy;
+                    indicator.UpdatedBy = userDetail.UserID;
+                    indicator.UpdatedRid = userDetail.RoleId;
+                    indicator.UpdatedRname = userDetail.RoleName;
                     indicator.UpdatedOn = DateTime.Now;
                     var result = await _indicatorService.UpdateIndicatorAsync(indicator);
                     if (indicator.IsExist)

@@ -67,7 +67,9 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    state.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    state.CreatedBy = userDetail.UserID;
+                    state.CreatedRid = userDetail.RoleId;
+                    state.CreatedRname = userDetail.RoleName;
                     state.IsActive = true;
                     if (await _stateServices.RecordExist(state))
                     {
@@ -121,7 +123,9 @@ namespace CSRPulse.Controllers
                 ModelState.Remove("IsActive");
                 if (ModelState.IsValid)
                 {
-                    state.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    state.UpdatedBy = userDetail.UserID;
+                    state.UpdatedRid = userDetail.RoleId;
+                    state.UpdatedRname = userDetail.RoleName;
                     state.UpdatedOn = DateTime.Now;
                     var result = await _stateServices.UpdateState(state);
                     if (state.RecordExist)

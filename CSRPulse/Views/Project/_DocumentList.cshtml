@@ -24,6 +24,10 @@
                             <input type="hidden" asp-for="@Model.ProjectDocument[i].Mandatory" />
                             <input type="hidden" asp-for="@Model.ProjectDocument[i].DocumentMaxSize" />
                             <input type="hidden" asp-for="@Model.ProjectDocument[i].DocumentType" />
+                            <input type="hidden" id="CreatedBy_@i" asp-for="@Model.ProjectDocument[i].CreatedBy" />
+                            <input type="hidden" id="CreatedOn_@i" asp-for="@Model.ProjectDocument[i].CreatedOn" />                            
+                            <input type="hidden" id="CreatedRid_@i" asp-for="@Model.ProjectDocument[i].CreatedRid" />                            
+                            <input type="hidden" id="CreatedRname_@i" asp-for="@Model.ProjectDocument[i].CreatedRname" />                            
                         </td>
                         <td>
                             @Model.ProjectDocument[i].MDocumentName

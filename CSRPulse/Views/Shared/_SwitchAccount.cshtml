@@ -1,0 +1,42 @@
+﻿@model UserRoleModel
+<form data-ajax="true" data-ajax-method="POST" method="Post" asp-action="SwitchAccount" asp-controller="Registration" asp-area="Admin" data-ajax-success="onSwitchAccount">
+    <div id="switchAccount-model" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-colored-header bg-info">
+                    <h4 class="modal-title">Switch Account</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    @if (Model != null)
+                    {
+                        if (Model.userRoles != null)
+                        {
+
+                            for (int i = 0; i < Model.userRoles.Count; i++)
+                            {
+                                <div class="form-check form-radio-success mb-2">
+                                    @if (Model.userRoles[i].AssigneRole)
+                                    {
+                                        <input class="form-check-input" asp-for="SelectedRole" value="@Model.userRoles[i].RoleId" type="radio" checked />}
+                                    else
+                                    {<input class="form-check-input" asp-for="SelectedRole" value="@Model.userRoles[i].RoleId" type="radio" />}
+
+                                    <label class="form-check-label" asp-for="@Model.userRoles[i].RoleName">@Model.userRoles[i].RoleName</label>
+                                </div>
+                                <input asp-for="@Model.userRoles[i].RoleId" type="hidden" />
+                                <input asp-for="@Model.userRoles[i].RoleName" type="hidden" />
+
+                            }
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-sm"><i class="mdi mdi-swap-horizontal me-1"> </i> Switch</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</form>

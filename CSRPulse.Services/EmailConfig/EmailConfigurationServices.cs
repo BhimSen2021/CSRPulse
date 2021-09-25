@@ -40,6 +40,9 @@ namespace CSRPulse.Services
                 result.Sslstatus = rs.Sslstatus;
                 result.FriendlyName = rs.FriendlyName;
                 return result;
+                return result;                
+                //return _mapper.Map<EmailConfiguration>(emailConfigurations);
+                //return EmailConfigurationList;
             }
             catch (Exception)
             {
@@ -65,7 +68,9 @@ namespace CSRPulse.Services
                     modelEmail.Sslstatus = emailConfiguration.Sslstatus;
                     modelEmail.UpdatedBy = emailConfiguration.UpdatedBy;
                     modelEmail.UpdatedOn = emailConfiguration.UpdatedOn;
-                    //modelEmail.Bcc = emailConfiguration.Bcc;
+                    modelEmail.UpdatedRid = emailConfiguration.UpdatedRid;
+                    modelEmail.UpdatedRname = emailConfiguration.UpdatedRname;
+                  
                     _genericRepository.Update(modelEmail);
                     return true;
                 }

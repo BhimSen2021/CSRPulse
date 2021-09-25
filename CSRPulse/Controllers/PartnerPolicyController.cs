@@ -68,7 +68,9 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    partnerPolicy.CreatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    partnerPolicy.CreatedBy = userDetail.UserID;
+                    partnerPolicy.CreatedRid = userDetail.RoleId;
+                    partnerPolicy.CreatedRname = userDetail.RoleName;
                     partnerPolicy.IsActive = true;
                     partnerPolicy.IsFormallyApprovedByBoard = true;
                     partnerPolicy.IsImplementedSince = true;
@@ -129,7 +131,9 @@ namespace CSRPulse.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    partnerPolicy.UpdatedBy = userDetail == null ? 1 : userDetail.UserID;
+                    partnerPolicy.UpdatedBy = userDetail.UserID;
+                    partnerPolicy.UpdatedRid = userDetail.RoleId;
+                    partnerPolicy.UpdatedRname = userDetail.RoleName;
                     partnerPolicy.UpdatedOn = DateTime.Now;
                     var result = await _partnerPolicyServices.UpdatePartnerPolicy(partnerPolicy);
                     if (partnerPolicy.RecordExist)

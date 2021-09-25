@@ -15,7 +15,7 @@
     <p class="text-body"><a asp-action="ForgotPassword" asp-controller="Account" class="text-body ms-1"><b>Forgot Password?</b></a></p>
 </footer>
 
-<partial name="_LogoutAlert" />
+@*<partial name="_LogoutAlert" />*@
 
 @section scripts{
     <script type="text/javascript">
@@ -52,7 +52,7 @@
             $('#hdPassword').val(encryptedpassword);
             $('#Password').val(encryptedpassword);
         }
-        
+
     </script>
 }
 

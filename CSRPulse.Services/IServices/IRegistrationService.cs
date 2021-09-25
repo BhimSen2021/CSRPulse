@@ -18,6 +18,10 @@ namespace CSRPulse.Services.IServices
         Task<SignUp> GetUserById(int userId);
         Task<bool> UpdateUser(SignUp signUp);
         bool UserActiveDeActive(int userId, bool IsActive);
+        Task<List<Model.UserRole>> GetAssignedRoles(int userId);
+        Task<List<Model.UserRole>> GetUserRoles(int userId);
+        Task<bool> AssignedRoles(List<Model.UserRole> userRoles, int userId, BaseModel baseModel);
+        Task<bool> LockUnlockUser(int userId, bool ulock);
 
     }
 }

@@ -42,6 +42,7 @@ namespace CSRPulse.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(SingIn singIn, string returnUrl)
         {
+       
 
             _logger.LogInformation("Admin/AccountController/Login");
             try
@@ -70,7 +71,6 @@ namespace CSRPulse.Areas.Admin.Controllers
                     if (isAuthenticated)
                     {
                         HttpContext.Session.SetComplexData("User", uDetail);
-
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
                             return LocalRedirect(returnUrl);
@@ -255,7 +255,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             UserDetail userDetail = HttpContext.Session.GetComplexData<UserDetail>("User");
             changePassword.UserId = userDetail.UserID;
             changePassword.UserName = userDetail.UserName;
-
+            
             if (!Password.ValidatePassword(changePassword.Password, out ErrorMessage))
             {
                 ModelState.AddModelError("", ErrorMessage);
@@ -266,7 +266,7 @@ namespace CSRPulse.Areas.Admin.Controllers
             }
 
             if (ModelState.IsValid)
-            {
+            {                
                 bool res = await _accountService.ChangePassword(changePassword);
                 if (res)
                 {
@@ -292,6 +292,11 @@ namespace CSRPulse.Areas.Admin.Controllers
                 return RedirectToAction("Logout", "Account", new { area = "Admin" });
             }
             return View();
+        }
+
+        public IActionResult KeepAlive()
+        {
+            return Content("I am alive!");
         }
     }
 }

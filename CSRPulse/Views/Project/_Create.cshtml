@@ -40,7 +40,7 @@
                         </div>
                         <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                             <label asp-for="ThemeId" class="form-label required"></label>
-                            <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" aria-required="true" class="form-select">
+                            <select asp-for="ThemeId" asp-items="@ViewBag.ddlTheme" onchange="BindSubTheme()" aria-required="true" class="form-select">
                                 <option label="Select Theme" selected="" value=""></option>
                             </select>
                             <span asp-validation-for="ThemeId" class="invalid"></span>

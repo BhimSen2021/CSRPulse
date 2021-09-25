@@ -15,6 +15,6 @@ namespace CSRPulse.Services
         bool ActiveDeActive(int id, bool IsActive);
 
         IEnumerable<dynamic> ReadBlockExcelData(string fileFullPath, bool isHeader, out string message, out int error, out int warning, out List<Model.BlockImport> importBlockSave, out List<string> missingHeaders, out List<string> columnName);
-        bool ImportBlockData(List<Model.BlockImport> blockData);
+        bool ImportBlockData(List<Model.BlockImport> blockData, int createdBy, int createdRId, string createdRName);
     }
 }

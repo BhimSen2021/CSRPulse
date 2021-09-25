@@ -17,6 +17,7 @@ using CSRPulse.ExportImport;
 using CSRPulse.IServices;
 using System.Globalization;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CSRPulse
 {
@@ -32,7 +33,12 @@ namespace CSRPulse
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<CSRPulseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), mig => mig.MigrationsAssembly("CSRPulse.Data")));
-            services.AddControllersWithViews();
+            
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
             services.AddHttpContextAccessor();
 
             services.AddMemoryCache();

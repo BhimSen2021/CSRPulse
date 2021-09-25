@@ -27,15 +27,14 @@
             </div>
 
             <!-- item-->
-            <a asp-area="" asp-controller="Profile" asp-action="Index" class="dropdown-item notify-item">
+            <a asp-area="Admin" asp-controller="Registration" asp-action="Edit" asp-route-userId="@(uData.UserID)" class="dropdown-item notify-item">
                 <i class="mdi mdi-account-circle me-1"></i>
                 <span>My Account</span>
             </a>
 
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <i class="mdi mdi-account-edit me-1"></i>
-                <span>Settings</span>
+            <a style="cursor:pointer" onClick="SwitchAccount();" class="dropdown-item notify-item">
+                <i class="mdi mdi-swap-horizontal me-1">
+                </i><span>Switch Account</span>
             </a>
 
             <!-- item-->
@@ -43,6 +42,14 @@
                 <i class="mdi mdi-lock-reset me-1"></i>
                 <span>Change Password</span>
             </a>
+
+
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <i class="mdi mdi-account-edit me-1"></i>
+                <span>Settings</span>
+            </a>
+
             <!-- item-->
             <a href="javascript:void(0);" class="dropdown-item notify-item">
                 <i class="mdi mdi-lock-outline me-1"></i>

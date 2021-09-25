@@ -103,6 +103,8 @@ namespace CSRPulse.Services
                         result.IsActive = auditor.IsActive;
                         result.UpdatedOn = auditor.UpdatedOn;
                         result.UpdatedBy = auditor.UpdatedBy;
+                        result.UpdatedRid = auditor.UpdatedRid;
+                        result.UpdatedRname = auditor.UpdatedRname;
                         _genericRepository.Update(result);
 
                     }

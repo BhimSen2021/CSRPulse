@@ -22,12 +22,12 @@ namespace CSRPulse.Services
             _genericRepository = genericRepository;
         }
 
-        public async Task<List<Menu>> GetMenuByUserAsync(int userId)
+        public async Task<List<Menu>> GetMenuByUserAsync(int roleId)
         {
             try
             {
                 List<Menu> uMenu = new List<Menu>();
-                var uRights = await _genericRepository.GetIQueryable<DTOModel.UserRights>(x => x.UserId == userId && x.ShowMenu == true).Include(d => d.Menu).ToListAsync();
+                var uRights = await _genericRepository.GetIQueryable<DTOModel.UserRights>(x => x.RoleId == roleId && x.ShowMenu == true).Include(d => d.Menu).ToListAsync();
 
                 uRights.ForEach(r =>
                 {
@@ -53,12 +53,12 @@ namespace CSRPulse.Services
 
         }
 
-        public async Task<List<UserRight>> GetUserRightsByUserAsync(int userId)
+        public async Task<List<UserRight>> GetUserRightsByUserAsync(int roleId)
         {
             try
             {
                 List<UserRight> userRigth = new List<UserRight>();
-                var uRigth = await _genericRepository.GetAsync<DTOModel.UserRights>(r => r.UserId == userId && r.ShowMenu == true);
+                var uRigth = await _genericRepository.GetAsync<DTOModel.UserRights>(r => r.RoleId == roleId && r.ShowMenu == true);
 
                 _mapper.Map<List<Model.UserRight>>(uRigth);
                 return userRigth;

@@ -64,6 +64,8 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     designation.CreatedBy = userDetail.UserID;                    
+                    designation.CreatedRid = userDetail.RoleId;                    
+                    designation.CreatedRname = userDetail.RoleName;                    
                     if (await _designationServices.RecordExist(designation))
                     {
                         ModelState.AddModelError("", "Designation already exists");
@@ -114,6 +116,8 @@ namespace CSRPulse.Controllers
                 if (ModelState.IsValid)
                 {
                     designation.UpdatedBy = userDetail.UserID;
+                    designation.UpdatedRid = userDetail.RoleId;
+                    designation.UpdatedRname = userDetail.RoleName;
                     designation.UpdatedOn = DateTime.Now;
                     var result = await _designationServices.UpdateDesignation(designation);
                     if (designation.IsExist)

@@ -77,6 +77,10 @@ namespace CSRPulse.Services
                 {
                     getRoles.RoleName = role.RoleName;
                     getRoles.RoleShortName = role.RoleShortName;
+                    getRoles.UpdatedOn = role.UpdatedOn;
+                    getRoles.UpdatedBy = role.UpdatedBy;
+                    getRoles.UpdatedRid = role.UpdatedRid;
+                    getRoles.UpdatedRname = role.UpdatedRname;
                     _genericRepository.Update(getRoles);
                     return true;
                 }

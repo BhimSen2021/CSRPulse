@@ -102,6 +102,8 @@ namespace CSRPulse.Services
                         result.IsActive = uom.IsActive;
                         result.UpdatedOn = uom.UpdatedOn;
                         result.UpdatedBy = uom.UpdatedBy;
+                        result.UpdatedRid = uom.UpdatedRid;
+                        result.UpdatedRname = uom.UpdatedRname;
                         _genericRepository.Update(result);
                         return true;
                     }

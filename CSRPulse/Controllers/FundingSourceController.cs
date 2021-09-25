@@ -76,7 +76,9 @@ namespace CSRPulse.Controllers
                 BindSourcetype();
                 if (ModelState.IsValid)
                 {
-                    FundingSource.CreatedBy = userDetail.CreatedBy;
+                    FundingSource.CreatedBy = userDetail.UserID;
+                    FundingSource.CreatedRid = userDetail.RoleId;
+                    FundingSource.CreatedRname = userDetail.RoleName;
                     var result = await _fundingSourceService.CreateFundingSourceAsync(FundingSource);
                     if (result.IsExist)
                     {
@@ -122,7 +124,9 @@ namespace CSRPulse.Controllers
                 BindSourcetype();
                 if (ModelState.IsValid)
                 {
-                    FundingSource.UpdatedBy = userDetail.CreatedBy;
+                    FundingSource.UpdatedBy = userDetail.UserID;
+                    FundingSource.UpdatedRid = userDetail.RoleId;
+                    FundingSource.UpdatedRname = userDetail.RoleName;
                     FundingSource.UpdatedOn = DateTime.Now;
                     var result = await _fundingSourceService.UpdateFundingSourceAsync(FundingSource);
                     if (FundingSource.IsExist)

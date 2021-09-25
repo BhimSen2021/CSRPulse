@@ -66,7 +66,10 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("ActivityController/Create");
                 if (ModelState.IsValid)
                 {
-                    activity.CreatedBy = userDetail.CreatedBy;
+                    activity.CreatedBy = userDetail.UserID;
+                    activity.CreatedRid = userDetail.RoleId;
+                    activity.CreatedRname = userDetail.RoleName;
+
                     var result = await _activityService.CreateActivityAsync(activity);
                     if (result.IsExist)
                     {
@@ -111,8 +114,10 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("activityController/Edit");
                 if (ModelState.IsValid)
                 {
-                    activity.UpdatedBy = userDetail.CreatedBy;
+                    activity.UpdatedBy = userDetail.UserID;
                     activity.UpdatedOn = DateTime.Now;
+                    activity.UpdatedRid = userDetail.RoleId;
+                    activity.UpdatedRname = userDetail.RoleName;
                     var result = await _activityService.UpdateActivityAsync(activity);
                     if (activity.IsExist)
                     {

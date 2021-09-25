@@ -84,7 +84,11 @@ namespace CSRPulse.Data.Repositories
                        DocumentMaxSize = m.DocumentMaxSize ?? 10,
                        DocumentType = m.DocumentType,
                        ServerDocumentName = d1.ServerDocumentName,
-                       Mandatory = m.Mandatory ?? false
+                       Mandatory = m.Mandatory ?? false,
+                       CreatedBy = m.CreatedBy,
+                       CreatedOn = m.CreatedOn,
+                       CreatedRid = m.CreatedRid,
+                       CreatedRname = m.CreatedRname
                    };
         }
         public class ProjectLocationDetail
@@ -113,6 +117,10 @@ namespace CSRPulse.Data.Repositories
             public string DocumentType { get; set; }
             public int DocumentMaxSize { get; set; }
             public bool Mandatory { get; set; }
+            public int CreatedBy { get; set; }
+            public DateTime CreatedOn { get; set; }
+            public int CreatedRid { get; set; }
+            public string CreatedRname { get; set; }
         }
     }
 }

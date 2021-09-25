@@ -44,7 +44,9 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("EmailConfigurationController/Edit");
                 if (ModelState.IsValid)
                 {
-                    email.UpdatedBy = userDetail.CreatedBy;
+                    email.UpdatedBy = userDetail.UserID;
+                    email.UpdatedRid = userDetail.RoleId;
+                    email.UpdatedRname = userDetail.RoleName;
                     email.UpdatedOn = DateTime.Now;
                     var result = await _emailconfigServices.UpdateEmailConfig(email);
                     if (result)
