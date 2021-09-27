@@ -35,14 +35,8 @@
                             <input type="hidden" asp-for="@Model.NgochartDocument[i].DocumentName" />
                         </td>
                         <td>
-                            @if (Model.PartnerDocument[i].ServerDocumentName == null)
-                            {
                                 <input asp-for="@Model.NgochartDocument[i].DocumentFile">
-                            }
-                            else
-                            {
-                            <input asp-for="@Model.NgochartDocument[i].DocumentFile" disabled>
-                            }
+                            
                         </td>
                         <td>
                             <input type="text" asp-for="@Model.NgochartDocument[i].Remarks" class="form-control form-control-sm" maxlength="2000" placeholder="You can enter max 2000 characters" autocomplete="off">

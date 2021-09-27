@@ -91,6 +91,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -107,6 +108,7 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -1466,6 +1468,28 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.PartnerPolicyDetailsCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PartnerPolicyDetails_CreatedBy");
+
+                entity.HasOne(d => d.CreatedR)
+                    .WithMany(p => p.PartnerPolicyDetailsCreatedR)
+                    .HasForeignKey(d => d.CreatedRid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PartnerPolicyDetails_CreatedRId");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.PartnerPolicyDetailsUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_PartnerPolicyDetails_UpdatedBy");
+
+                entity.HasOne(d => d.UpdatedR)
+                    .WithMany(p => p.PartnerPolicyDetailsUpdatedR)
+                    .HasForeignKey(d => d.UpdatedRid)
+                    .HasConstraintName("FK_PartnerPolicyDetails_UpdatedRId");
             });
 
             modelBuilder.Entity<PartnerPolicyModule>(entity =>
@@ -1507,6 +1531,28 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.PartnerPolicyModuleDetailsCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PartnerPolicyModuleDetails_CreatedBy");
+
+                entity.HasOne(d => d.CreatedR)
+                    .WithMany(p => p.PartnerPolicyModuleDetailsCreatedR)
+                    .HasForeignKey(d => d.CreatedRid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PartnerPolicyModuleDetails_CreatedRId");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.PartnerPolicyModuleDetailsUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_PartnerPolicyModuleDetails_UpdatedBy");
+
+                entity.HasOne(d => d.UpdatedR)
+                    .WithMany(p => p.PartnerPolicyModuleDetailsUpdatedR)
+                    .HasForeignKey(d => d.UpdatedRid)
+                    .HasConstraintName("FK_PartnerPolicyModuleDetails_UpdatedRId");
             });
 
             modelBuilder.Entity<Plan>(entity =>

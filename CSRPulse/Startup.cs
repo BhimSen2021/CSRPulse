@@ -33,12 +33,15 @@ namespace CSRPulse
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<CSRPulseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), mig => mig.MigrationsAssembly("CSRPulse.Data")));
-            
+
+            //services.AddControllersWithViews(options =>
+            //{
+            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            //});
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
-
             services.AddHttpContextAccessor();
 
             services.AddMemoryCache();

@@ -10,8 +10,6 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
-                    @* <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>*@
                     <li class="breadcrumb-item active">Partner Policy</li>
                 </ol>
             </div>
@@ -39,21 +37,20 @@
             var id = obj.id.split('_')[0];//2#last
             var varname = id.split('#')[1];
             id = id.split('#')[0];//2
-            //2#last_true
+            debugger;
             var urlval = '';
             if (varname == 'Board')
-                urlval = '/partnerpolicy/ActiveDeActiveIsFormallyApprovedByBoard';
+                urlval = '@Url.Action("ActiveDeActiveIsFormallyApprovedByBoard", "partnerpolicy")';
             else if (varname == 'Imp')
-                urlval = '/partnerpolicy/ActiveDeActiveIsImplementedSince';
+                urlval = '@Url.Action("ActiveDeActiveIsImplementedSince", "partnerpolicy")';
             else if (varname == 'Last')
-                urlval = '/partnerpolicy/ActiveDeActiveIsLastUpdatedOn';
+                urlval = '@Url.Action("ActiveDeActiveIsLastUpdatedOn", "partnerpolicy")';
             else
-                urlval = '/partnerpolicy/ActiveDeActive';
+                urlval = '@Url.Action("ActiveDeActive", "partnerpolicy")';
 
             $.ajax({
                 type: 'POST',
-                dataType: 'JSON',
-            /*url: '/partnerpolicy/ActiveDeActive',*/
+                dataType: 'JSON',           
                 url: urlval,
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {

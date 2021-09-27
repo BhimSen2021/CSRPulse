@@ -85,6 +85,8 @@ namespace CSRPulse.Controllers
                     {
                         partner.IsActive = true;
                         partner.CreatedBy = userDetail.UserID;
+                        partner.CreatedRid = userDetail.RoleId;
+                        partner.CreatedRname = userDetail.RoleName;
                         var result = await _partnerService.CreatePartner(partner);
 
                         if (result)
@@ -116,19 +118,19 @@ namespace CSRPulse.Controllers
                     BindFYYear();
                     partner.PartnerPolicy = await _partnerService.GetPartnerPolicyAsync();
                     partner.PartnerPolicyModule = await _partnerService.GetPartnerPolicyModuleAsync();
-                    
+
                     partner.PartnerDocument = await _partnerService.GetPartnerDocumentList(partner.PartnerId, (int)Common.ProcessDocument.PartnerDocument);
                     if (partner.PartnerDocument == null)
                         partner.PartnerDocument = new List<PartnerDocument>();
 
-                    partner.PartnerPolicyDetails = await _partnerService.GetPartnerPolicyDetailsList(partner.PartnerId);
-                    if (partner.PartnerPolicyDetails == null)
-                        partner.PartnerPolicyDetails = new List<PartnerPolicyDetails>();
+                    var partnerPolicyDetails = await _partnerService.GetPartnerPolicyDetailsList(partner.PartnerId);
+                    if (partnerPolicyDetails != null && partnerPolicyDetails.Count > 0)
+                        partner.PartnerPolicyDetails = partnerPolicyDetails;
 
-                    
-                    partner.PartnerPolicyModuleDetails = await _partnerService.GetPartnerPolicyModuleDetailsList(partner.PartnerId);
-                    if (partner.PartnerPolicyModuleDetails == null)
-                        partner.PartnerPolicyModuleDetails = new List<PartnerPolicyModuleDetails>();
+
+                    var partnerPolicyModuleDetails = await _partnerService.GetPartnerPolicyModuleDetailsList(partner.PartnerId);
+                    if (partnerPolicyModuleDetails != null && partnerPolicyModuleDetails.Count > 0)
+                        partner.PartnerPolicyModuleDetails = partnerPolicyModuleDetails;
 
                     return View("NGOTypeEdit", partner);
 
@@ -142,8 +144,6 @@ namespace CSRPulse.Controllers
             }
         }
 
-
-
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Edit(Partner partner)
@@ -153,6 +153,10 @@ namespace CSRPulse.Controllers
                 _logger.LogInformation("PartnerController/Edit");
                 if (ModelState.IsValid)
                 {
+                    partner.UpdatedOn = DateTime.UtcNow;
+                    partner.UpdatedBy = userDetail.UpdatedBy;
+                    partner.UpdatedRid = userDetail.RoleId;
+                    partner.UpdatedRname = userDetail.RoleName;
                     var result = await _partnerService.UpdatePartner(partner);
                     if (result)
                     {
@@ -217,7 +221,9 @@ namespace CSRPulse.Controllers
                     var listAD = partner.NgoawardDetail.Where(s => s.Award != null && s.AwardConferrer != null && s.YearOfReceiving > 0).ToList();
 
                     RevoveModelState(ModelState);
-                    if (TryValidateModel(partner.NgosaturatoryAuditorDetail))
+                    if (TryValidateModel(partner.NgoawardDetail))
+
+                        //if (TryValidateModel(partner.NgosaturatoryAuditorDetail))
                     {
                         var CreatedOn = DateTime.Now;
                         listAD.ToList().ForEach(h =>
@@ -226,6 +232,8 @@ namespace CSRPulse.Controllers
                             h.NgoawardDetailId = 0;
                             h.CreatedOn = CreatedOn;
                             h.CreatedBy = userDetail.UserID;
+                            h.CreatedRid = userDetail.RoleId;
+                            h.CreatedRname = userDetail.RoleName;
                         });
 
                         partner.NgoawardDetail = listAD;
@@ -251,7 +259,6 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-
         #endregion
 
         #region Details of the Statutory Auditor
@@ -274,6 +281,8 @@ namespace CSRPulse.Controllers
                             h.NgosaturatoryAuditorDetailId = 0;
                             h.CreatedOn = CreatedOn;
                             h.CreatedBy = userDetail.UserID;
+                            h.CreatedRid = userDetail.RoleId;
+                            h.CreatedRname = userDetail.RoleName;
                         });
 
                         partner.NgosaturatoryAuditorDetail = listAD;
@@ -324,6 +333,8 @@ namespace CSRPulse.Controllers
                             h.NgokeyProjectId = 0;
                             h.CreatedOn = CreatedOn;
                             h.CreatedBy = userDetail.UserID;
+                            h.CreatedRid = userDetail.RoleId;
+                            h.CreatedRname = userDetail.RoleName;
                         });
 
                         partner.NGOKeyProjects = listAD;
@@ -375,6 +386,8 @@ namespace CSRPulse.Controllers
                             h.FundType = (int)Common.CorpusGrantFund.CorpusFund;
                             h.CreatedOn = CreatedOn;
                             h.CreatedBy = userDetail.UserID;
+                            h.CreatedRid = userDetail.RoleId;
+                            h.CreatedRname = userDetail.RoleName;
                         });
 
                         partner.NgocorpusGrantFund = listAD;
@@ -425,6 +438,8 @@ namespace CSRPulse.Controllers
                             h.FundType = (int)Common.CorpusGrantFund.GrantInflow;
                             h.CreatedOn = CreatedOn;
                             h.CreatedBy = userDetail.UserID;
+                            h.CreatedRid = userDetail.RoleId;
+                            h.CreatedRname = userDetail.RoleName;
                         });
 
                         partner.NgocorpusGrantFund = listAD;
@@ -477,6 +492,8 @@ namespace CSRPulse.Controllers
                             h.NgoregistrationDetailId = 0;
                             h.CreatedOn = CreatedOn;
                             h.CreatedBy = userDetail.UserID;
+                            h.CreatedRid = userDetail.RoleId;
+                            h.CreatedRname = userDetail.RoleName;
                         });
 
                         partner.NgoregistrationDetail = listAD;
@@ -547,8 +564,10 @@ namespace CSRPulse.Controllers
                         {
                             listAD[i].PartnerId = partner.PartnerId;
                             listAD[i].NgochartDocumentId = 0;
-                            listAD[i].CreatedOn = partner.CreatedOn;
+                            listAD[i].CreatedOn = DateTime.UtcNow; 
                             listAD[i].CreatedBy = userDetail.UserID;
+                            listAD[i].CreatedRid = userDetail.RoleId;
+                            listAD[i].CreatedRname = userDetail.RoleName;
 
                             if (listAD[i].DocumentFile != null)
                             {
@@ -655,6 +674,8 @@ namespace CSRPulse.Controllers
                     {
                         member.CreatedOn = DateTime.UtcNow;
                         member.CreatedBy = userDetail.UserID;
+                        member.CreatedRid = userDetail.RoleId;
+                        member.CreatedRname = userDetail.RoleName;
 
                         var ngoMembers = await _partnerService.GetInsertNGOMember(member);
                         partner.Ngomember = ngoMembers;
@@ -718,6 +739,8 @@ namespace CSRPulse.Controllers
                     {
                         fundingPartner.CreatedOn = DateTime.UtcNow;
                         fundingPartner.CreatedBy = userDetail.UserID;
+                        fundingPartner.CreatedRid = userDetail.RoleId;
+                        fundingPartner.CreatedRname = userDetail.RoleName;
 
                         var ngofundingPartner = await _partnerService.GetInsertNGOFundingPartner(fundingPartner);
                         partner.NgofundingPartner = ngofundingPartner;
@@ -827,8 +850,11 @@ namespace CSRPulse.Controllers
                         {
                             listAD[i].PartnerId = partner.PartnerId;
                             listAD[i].PartnerDocumentId = 0;
-                            listAD[i].CreatedOn = partner.CreatedOn;
+                            listAD[i].CreatedOn = DateTime.UtcNow;
                             listAD[i].CreatedBy = userDetail.UserID;
+                            listAD[i].CreatedRid = userDetail.RoleId;
+                            listAD[i].CreatedRname = userDetail.RoleName;
+
 
                             if (listAD[i].DocumentFile != null)
                             {
@@ -967,8 +993,11 @@ namespace CSRPulse.Controllers
                     for (int i = 0; i < lstdetails.Count; i++)
                     {
                         lstdetails[i].PartnerId = partner.PartnerId;
-                        lstdetails[i].CreatedOn = partner.CreatedOn;
+                        lstdetails[i].CreatedOn = DateTime.UtcNow;
                         lstdetails[i].CreatedBy = userDetail.UserID;
+                        lstdetails[i].CreatedRid = userDetail.RoleId;
+                        lstdetails[i].CreatedRname = userDetail.RoleName;
+
                         pid = partner.PartnerId;
 
                     }
@@ -982,10 +1011,12 @@ namespace CSRPulse.Controllers
                         lstmoduledetails[i].PartnerId = partner.PartnerId;
                         lstmoduledetails[i].CreatedOn = partner.CreatedOn;
                         lstmoduledetails[i].CreatedBy = userDetail.UserID;
+                        lstmoduledetails[i].CreatedRid = userDetail.RoleId;
+                        lstmoduledetails[i].CreatedRname = userDetail.RoleName;
                         pid = partner.PartnerId;
 
                     }
-                    var details=await _partnerService.GetUpdatePartnerPolicyDetails(partner);
+                    var details = await _partnerService.GetUpdatePartnerPolicyDetails(partner);
                     var moduledetails = await _partnerService.GetUpdatePartnerPolicyModuleDetails(partner);
                     partner.PartnerPolicy = await _partnerService.GetPartnerPolicyAsync();
                     partner.PartnerPolicyModule = await _partnerService.GetPartnerPolicyModuleAsync();
@@ -995,7 +1026,7 @@ namespace CSRPulse.Controllers
                 //}
                 return Json(new { flag = flag, msg = "Data Save Succesfully", htmlData = ConvertViewToString("_AddPartnerPolicyModule", partner, true) });
 
-           }
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);

@@ -82,7 +82,11 @@ namespace CSRPulse.Data.Models
             PartnerDocumentCreatedByNavigation = new HashSet<PartnerDocument>();
             PartnerDocumentUpdatedByNavigation = new HashSet<PartnerDocument>();
             PartnerPolicyCreatedByNavigation = new HashSet<PartnerPolicy>();
+            PartnerPolicyDetailsCreatedByNavigation = new HashSet<PartnerPolicyDetails>();
+            PartnerPolicyDetailsUpdatedByNavigation = new HashSet<PartnerPolicyDetails>();
             PartnerPolicyModuleCreatedByNavigation = new HashSet<PartnerPolicyModule>();
+            PartnerPolicyModuleDetailsCreatedByNavigation = new HashSet<PartnerPolicyModuleDetails>();
+            PartnerPolicyModuleDetailsUpdatedByNavigation = new HashSet<PartnerPolicyModuleDetails>();
             PartnerPolicyModuleUpdatedByNavigation = new HashSet<PartnerPolicyModule>();
             PartnerPolicyUpdatedByNavigation = new HashSet<PartnerPolicy>();
             PartnerUpdatedByNavigation = new HashSet<Partner>();
@@ -346,8 +350,16 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<PartnerDocument> PartnerDocumentUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(PartnerPolicy.CreatedByNavigation))]
         public virtual ICollection<PartnerPolicy> PartnerPolicyCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(PartnerPolicyDetails.CreatedByNavigation))]
+        public virtual ICollection<PartnerPolicyDetails> PartnerPolicyDetailsCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(PartnerPolicyDetails.UpdatedByNavigation))]
+        public virtual ICollection<PartnerPolicyDetails> PartnerPolicyDetailsUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(PartnerPolicyModule.CreatedByNavigation))]
         public virtual ICollection<PartnerPolicyModule> PartnerPolicyModuleCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(PartnerPolicyModuleDetails.CreatedByNavigation))]
+        public virtual ICollection<PartnerPolicyModuleDetails> PartnerPolicyModuleDetailsCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(PartnerPolicyModuleDetails.UpdatedByNavigation))]
+        public virtual ICollection<PartnerPolicyModuleDetails> PartnerPolicyModuleDetailsUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(PartnerPolicyModule.UpdatedByNavigation))]
         public virtual ICollection<PartnerPolicyModule> PartnerPolicyModuleUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(PartnerPolicy.UpdatedByNavigation))]

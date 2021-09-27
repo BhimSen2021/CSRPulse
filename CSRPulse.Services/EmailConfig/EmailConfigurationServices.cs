@@ -40,10 +40,7 @@ namespace CSRPulse.Services
                 result.Sslstatus = rs.Sslstatus;
                 result.FriendlyName = rs.FriendlyName;
                 return result;
-                return result;                
-                //return _mapper.Map<EmailConfiguration>(emailConfigurations);
-                //return EmailConfigurationList;
-            }
+              }
             catch (Exception)
             {
                 throw;

@@ -101,13 +101,14 @@ namespace CSRPulse.Services
                     dData.RegState = partner.RegState;
                     dData.RegMobile = partner.RegMobile;
                     dData.CommAddress = partner.CommAddress;
+                    dData.RegPhone = partner.RegPhone;
                     dData.ComPin = partner.ComPin;
                     dData.ComState = partner.ComState;
                     dData.CommPhone = partner.CommPhone;
                     dData.CommMobile = partner.CommMobile;
                     dData.IsActive = partner.IsActive;
-                    dData.UpdatedBy = partner.UpdatedBy;
-                    dData.UpdatedOn = partner.UpdatedOn;
+                    //dData.UpdatedBy = partner.UpdatedBy;
+                    //dData.UpdatedOn = partner.UpdatedOn;
                     _genericRepository.Update(dData);
                     return true;
                 }
@@ -654,15 +655,6 @@ namespace CSRPulse.Services
 
         public async Task<List<PartnerPolicyModuleDetails>> GetPartnerPolicyModuleDetailsList(int PartnerId)
         {
-            //try
-            //{
-            //    var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyModuleDetails>(x => x.IsActive == true);
-            //    return _mapper.Map<List<PartnerPolicyModuleDetails>>(result);
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
             try
             {
                 var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyModuleDetails>(x => x.PartnerId == PartnerId);
