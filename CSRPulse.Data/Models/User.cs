@@ -48,10 +48,12 @@ namespace CSRPulse.Data.Models
             FundingAgencyUpdatedByNavigation = new HashSet<FundingAgency>();
             FundingSourceCreatedByNavigation = new HashSet<FundingSource>();
             FundingSourceUpdatedByNavigation = new HashSet<FundingSource>();
+            IndicatorCreatedByNavigation = new HashSet<Indicator>();
             IndicatorResponseTypeCreatedByNavigation = new HashSet<IndicatorResponseType>();
             IndicatorResponseTypeUpdatedByNavigation = new HashSet<IndicatorResponseType>();
             IndicatorTypeCreatedByNavigation = new HashSet<IndicatorType>();
             IndicatorTypeUpdatedByNavigation = new HashSet<IndicatorType>();
+            IndicatorUpdatedByNavigation = new HashSet<Indicator>();
             MailProcessCreatedByNavigation = new HashSet<MailProcess>();
             MailProcessUpdatedByNavigation = new HashSet<MailProcess>();
             MailSendStatusCreatedByNavigation = new HashSet<MailSendStatus>();
@@ -278,6 +280,8 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<FundingSource> FundingSourceCreatedByNavigation { get; set; }
         [InverseProperty(nameof(FundingSource.UpdatedByNavigation))]
         public virtual ICollection<FundingSource> FundingSourceUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(Indicator.CreatedByNavigation))]
+        public virtual ICollection<Indicator> IndicatorCreatedByNavigation { get; set; }
         [InverseProperty(nameof(IndicatorResponseType.CreatedByNavigation))]
         public virtual ICollection<IndicatorResponseType> IndicatorResponseTypeCreatedByNavigation { get; set; }
         [InverseProperty(nameof(IndicatorResponseType.UpdatedByNavigation))]
@@ -286,6 +290,8 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<IndicatorType> IndicatorTypeCreatedByNavigation { get; set; }
         [InverseProperty(nameof(IndicatorType.UpdatedByNavigation))]
         public virtual ICollection<IndicatorType> IndicatorTypeUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(Indicator.UpdatedByNavigation))]
+        public virtual ICollection<Indicator> IndicatorUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(MailProcess.CreatedByNavigation))]
         public virtual ICollection<MailProcess> MailProcessCreatedByNavigation { get; set; }
         [InverseProperty(nameof(MailProcess.UpdatedByNavigation))]

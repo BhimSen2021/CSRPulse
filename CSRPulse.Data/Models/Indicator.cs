@@ -61,6 +61,9 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(ActivityId))]
         [InverseProperty("Indicator")]
         public virtual Activity Activity { get; set; }
+        [ForeignKey(nameof(CreatedBy))]
+        [InverseProperty(nameof(User.IndicatorCreatedByNavigation))]
+        public virtual User CreatedByNavigation { get; set; }
         [ForeignKey(nameof(CreatedRid))]
         [InverseProperty(nameof(Role.IndicatorCreatedR))]
         public virtual Role CreatedR { get; set; }
@@ -76,6 +79,9 @@ namespace CSRPulse.Data.Models
         [ForeignKey(nameof(Uomid))]
         [InverseProperty("Indicator")]
         public virtual Uom Uom { get; set; }
+        [ForeignKey(nameof(UpdatedBy))]
+        [InverseProperty(nameof(User.IndicatorUpdatedByNavigation))]
+        public virtual User UpdatedByNavigation { get; set; }
         [ForeignKey(nameof(UpdatedRid))]
         [InverseProperty(nameof(Role.IndicatorUpdatedR))]
         public virtual Role UpdatedR { get; set; }

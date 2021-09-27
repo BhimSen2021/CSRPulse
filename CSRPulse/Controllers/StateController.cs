@@ -147,7 +147,7 @@ namespace CSRPulse.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public JsonResult ActiveDeActive(int id, bool isChecked)
         {
             _logger.LogInformation("StateController/ActiveDeActive");

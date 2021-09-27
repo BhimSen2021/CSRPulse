@@ -726,6 +726,12 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.ActivityId)
                     .HasConstraintName("FK_Indicator_Activity");
 
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.IndicatorCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Indicator_CreatedBy");
+
                 entity.HasOne(d => d.CreatedR)
                     .WithMany(p => p.IndicatorCreatedR)
                     .HasForeignKey(d => d.CreatedRid)
@@ -753,6 +759,11 @@ namespace CSRPulse.Data.Data
                     .HasForeignKey(d => d.Uomid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Indicator_UOM");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.IndicatorUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_Indicator_UpdatedBy");
 
                 entity.HasOne(d => d.UpdatedR)
                     .WithMany(p => p.IndicatorUpdatedR)

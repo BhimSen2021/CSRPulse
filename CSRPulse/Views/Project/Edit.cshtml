@@ -78,10 +78,9 @@
 
     <div class="tab-pane" id="pteam-b2">
         <div class="card">
-            <div class="card-body">
-                <h5 class="mb-3">Project Team Detail</h5>
-                <div id="div-team-detail-grid">
-                    @{await Html.RenderPartialAsync("_ProjectTeamDetail");}
+            <div class="card-body">                
+                <div id="div-team-grid">
+                    @{await Html.RenderPartialAsync("_ProjectTeam");}
                 </div>
             </div>
         </div>

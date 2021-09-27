@@ -38,6 +38,7 @@ namespace CSRPulse
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
+           
 
             services.AddHttpContextAccessor();
 
