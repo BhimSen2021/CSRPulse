@@ -61,6 +61,9 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.FundingSource, FundingSource>().ReverseMap();
             CreateMap<DTOModel.PartnerPolicy, PartnerPolicy>().ReverseMap();
             CreateMap<DTOModel.PartnerPolicyModule, PartnerPolicyModule>().ReverseMap();
+            CreateMap<DTOModel.PartnerPolicyDetails, PartnerPolicyDetails>().ReverseMap();
+            CreateMap<DTOModel.PartnerPolicyModuleDetails, PartnerPolicyModuleDetails>().ReverseMap();
+
 
             CreateMap<DTOModel.UserRole, UserRole>().ReverseMap();
 

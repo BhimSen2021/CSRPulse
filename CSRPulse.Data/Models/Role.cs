@@ -83,7 +83,11 @@ namespace CSRPulse.Data.Models
             PartnerDocumentCreatedR = new HashSet<PartnerDocument>();
             PartnerDocumentUpdatedR = new HashSet<PartnerDocument>();
             PartnerPolicyCreatedR = new HashSet<PartnerPolicy>();
+            PartnerPolicyDetailsCreatedR = new HashSet<PartnerPolicyDetails>();
+            PartnerPolicyDetailsUpdatedR = new HashSet<PartnerPolicyDetails>();
             PartnerPolicyModuleCreatedR = new HashSet<PartnerPolicyModule>();
+            PartnerPolicyModuleDetailsCreatedR = new HashSet<PartnerPolicyModuleDetails>();
+            PartnerPolicyModuleDetailsUpdatedR = new HashSet<PartnerPolicyModuleDetails>();
             PartnerPolicyModuleUpdatedR = new HashSet<PartnerPolicyModule>();
             PartnerPolicyUpdatedR = new HashSet<PartnerPolicy>();
             PartnerUpdatedR = new HashSet<Partner>();
@@ -326,8 +330,16 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<PartnerDocument> PartnerDocumentUpdatedR { get; set; }
         [InverseProperty(nameof(PartnerPolicy.CreatedR))]
         public virtual ICollection<PartnerPolicy> PartnerPolicyCreatedR { get; set; }
+        [InverseProperty(nameof(PartnerPolicyDetails.CreatedR))]
+        public virtual ICollection<PartnerPolicyDetails> PartnerPolicyDetailsCreatedR { get; set; }
+        [InverseProperty(nameof(PartnerPolicyDetails.UpdatedR))]
+        public virtual ICollection<PartnerPolicyDetails> PartnerPolicyDetailsUpdatedR { get; set; }
         [InverseProperty(nameof(PartnerPolicyModule.CreatedR))]
         public virtual ICollection<PartnerPolicyModule> PartnerPolicyModuleCreatedR { get; set; }
+        [InverseProperty(nameof(PartnerPolicyModuleDetails.CreatedR))]
+        public virtual ICollection<PartnerPolicyModuleDetails> PartnerPolicyModuleDetailsCreatedR { get; set; }
+        [InverseProperty(nameof(PartnerPolicyModuleDetails.UpdatedR))]
+        public virtual ICollection<PartnerPolicyModuleDetails> PartnerPolicyModuleDetailsUpdatedR { get; set; }
         [InverseProperty(nameof(PartnerPolicyModule.UpdatedR))]
         public virtual ICollection<PartnerPolicyModule> PartnerPolicyModuleUpdatedR { get; set; }
         [InverseProperty(nameof(PartnerPolicy.UpdatedR))]

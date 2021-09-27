@@ -9,20 +9,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    [Table("NGOChartDocument")]
-    public partial class NgochartDocument
+    public partial class PartnerPolicyDetails
     {
         [Key]
-        [Column("NGOChartDocumentId")]
-        public int NgochartDocumentId { get; set; }
+        public int Id { get; set; }
         public int PartnerId { get; set; }
+        public int PolicyId { get; set; }
+        public bool? IsApprovedByBoard { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? Impletedsince { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? LastUpdatedOn { get; set; }
         [Required]
-        [StringLength(250)]
-        public string DocumentName { get; set; }
-        [StringLength(250)]
-        public string ServerDocumentName { get; set; }
-        [StringLength(2000)]
-        public string Remarks { get; set; }
+        public bool? IsActive { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
@@ -42,19 +41,16 @@ namespace CSRPulse.Data.Models
         public string UpdatedRname { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
-        [InverseProperty(nameof(User.NgochartDocumentCreatedByNavigation))]
+        [InverseProperty(nameof(User.PartnerPolicyDetailsCreatedByNavigation))]
         public virtual User CreatedByNavigation { get; set; }
         [ForeignKey(nameof(CreatedRid))]
-        [InverseProperty(nameof(Role.NgochartDocumentCreatedR))]
+        [InverseProperty(nameof(Role.PartnerPolicyDetailsCreatedR))]
         public virtual Role CreatedR { get; set; }
-        [ForeignKey(nameof(PartnerId))]
-        [InverseProperty("NgochartDocument")]
-        public virtual Partner Partner { get; set; }
         [ForeignKey(nameof(UpdatedBy))]
-        [InverseProperty(nameof(User.NgochartDocumentUpdatedByNavigation))]
+        [InverseProperty(nameof(User.PartnerPolicyDetailsUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
         [ForeignKey(nameof(UpdatedRid))]
-        [InverseProperty(nameof(Role.NgochartDocumentUpdatedR))]
+        [InverseProperty(nameof(Role.PartnerPolicyDetailsUpdatedR))]
         public virtual Role UpdatedR { get; set; }
     }
 }

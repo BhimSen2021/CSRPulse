@@ -35,22 +35,6 @@
                     <div class="row">
                         <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
                             <div class="mb-3">
-                                <label asp-for="ToEmail" class="form-label required"></label>
-                                <input type="text" id="txttoemail" asp-for="ToEmail" class="form-control" maxlength="50" placeholder="Enter Email Id (max 50 characters)" autocomplete="off">
-                                <span asp-validation-for="ToEmail" class="invalid"></span>
-                            </div>
-
-                            <div class="mb-3" style="display:none">
-                                <label asp-for="Bcc"></label>
-                                <input type="text" asp-for="Bcc" class="form-control" maxlength="50" placeholder="Enter Block Name (max 50 characters)" autocomplete="off">
-                                <span asp-validation-for="Bcc" class="invalid"></span>
-                            </div>
-                            <div class="mb-3" style="display:none">
-                                <label asp-for="CcEmail" class="form-label required"></label>
-                                <input type="text" asp-for="CcEmail" class="form-control" maxlength="50" placeholder="Enter Block Name (max 50 characters)" autocomplete="off">
-                                <span asp-validation-for="CcEmail" class="invalid"></span>
-                            </div>
-                            <div class="mb-3">
                                 <label asp-for="UserName" class="form-label required"></label>
                                 <input type="text" asp-for="UserName" class="form-control" maxlength="50" placeholder="Enter UserName (max 50 characters)" autocomplete="off">
                                 <span asp-validation-for="UserName" class="invalid"></span>
@@ -69,24 +53,29 @@
                             </div>
                             <div class="mb-3">
                                 <label asp-for="Server" class="form-label required"></label>
-                                 <input type="text" asp-for="Server" class="form-control" maxlength="50" placeholder="Enter Server (max 50 characters)" autocomplete="off">
-                                    <span asp-validation-for="Server" class="invalid"></span>
-                                </div>
-                                <div class="mb-3">
-                                    <label asp-for="Port" class="form-label required"></label>
-                                    <input type="text" asp-for="Port" class="form-control" maxlength="4" placeholder="Enter Port (max 4)" autocomplete="off">
-                                    <span asp-validation-for="Port" class="invalid"></span>
-                                </div>
-                                <div class="mb-3">
-                                    <label asp-for="Signature"></label>
-                                    <input type="text" asp-for="Signature" class="form-control" maxlength="50" placeholder="Enter Signature (max 4 characters)" autocomplete="off">
-                                    <span asp-validation-for="Signature" class="invalid"></span>
-                                </div>
-                                  <div class="mb-2 text-end">
-                                    <a asp-area="" asp-controller="EmailConfiguration" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
-                                    <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
-                                </div>
+                                <input type="text" asp-for="Server" class="form-control" maxlength="50" placeholder="Enter Server (max 50 characters)" autocomplete="off">
+                                <span asp-validation-for="Server" class="invalid"></span>
                             </div>
+                            <div class="mb-3">
+                                <label asp-for="Port" class="form-label required"></label>
+                                <input type="text" asp-for="Port" class="form-control" maxlength="4" placeholder="Enter Port (max 4)" autocomplete="off">
+                                <span asp-validation-for="Port" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Sslstatus"></label>
+                                <input type="text" asp-for="Sslstatus" class="form-control" maxlength="50" placeholder="Enter Signature (max 4 characters)" autocomplete="off">
+                                <span asp-validation-for="Sslstatus" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="FriendlyName"></label>
+                                <input type="text" asp-for="FriendlyName" class="form-control" maxlength="50" placeholder="Enter Signature (max 4 characters)" autocomplete="off">
+                                <span asp-validation-for="FriendlyName" class="invalid"></span>
+                            </div>
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="EmailConfiguration" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                            </div>
+                        </div>
 
                     </div> <!-- end card -->
                 </form>

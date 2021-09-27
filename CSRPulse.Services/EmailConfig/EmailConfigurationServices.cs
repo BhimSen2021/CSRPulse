@@ -38,8 +38,9 @@ namespace CSRPulse.Services
                 result.Port = rs.Port;
                 result.Server = rs.Server;               
                 result.Sslstatus = rs.Sslstatus;
-                return result;                
-            }
+                result.FriendlyName = rs.FriendlyName;
+                return result;
+              }
             catch (Exception)
             {
                 throw;

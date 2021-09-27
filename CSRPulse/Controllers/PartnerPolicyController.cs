@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace CSRPulse.Controllers
 {
     [Route("[Controller]/[action]")]
+    [AutoValidateAntiforgeryToken]
     public class PartnerPolicyController : CSRPulse.Controllers.BaseController<PartnerPolicyController>
     {
         private readonly IPartnerPolicyService _partnerPolicyServices;

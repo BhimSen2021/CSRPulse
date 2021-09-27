@@ -101,13 +101,14 @@ namespace CSRPulse.Services
                     dData.RegState = partner.RegState;
                     dData.RegMobile = partner.RegMobile;
                     dData.CommAddress = partner.CommAddress;
+                    dData.RegPhone = partner.RegPhone;
                     dData.ComPin = partner.ComPin;
                     dData.ComState = partner.ComState;
                     dData.CommPhone = partner.CommPhone;
                     dData.CommMobile = partner.CommMobile;
                     dData.IsActive = partner.IsActive;
-                    dData.UpdatedBy = partner.UpdatedBy;
-                    dData.UpdatedOn = partner.UpdatedOn;
+                    //dData.UpdatedBy = partner.UpdatedBy;
+                    //dData.UpdatedOn = partner.UpdatedOn;
                     _genericRepository.Update(dData);
                     return true;
                 }
@@ -580,9 +581,90 @@ namespace CSRPulse.Services
             }
         }
 
-        public Task<List<PartnerDocument>> GetUpdatePartnerPolicyDetails(Partner partner)
+        public async Task<List<PartnerPolicyDetails>> GetUpdatePartnerPolicyDetails(Partner partner)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.PartnerPolicyDetails>>(partner.PartnerPolicyDetails);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.PartnerPolicyDetails>(x => x.PartnerId == partner.PartnerId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.PartnerPolicyDetails>(x => x.PartnerId == partner.PartnerId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.PartnerPolicyDetails>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyDetails>(x => x.PartnerId == partner.PartnerId);
+
+                return _mapper.Map<List<PartnerPolicyDetails>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
+
+        public async Task<List<PartnerPolicyDetails>> GetPartnerPolicyDetailsList(int PartnerId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyDetails>(x => x.PartnerId == PartnerId);
+                return _mapper.Map<List<PartnerPolicyDetails>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<PartnerPolicyModuleDetails>> GetUpdatePartnerPolicyModuleDetails(Partner partner)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.PartnerPolicyModuleDetails>>(partner.PartnerPolicyModuleDetails);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.PartnerPolicyModuleDetails>(x => x.PartnerId == partner.PartnerId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.PartnerPolicyModuleDetails>(x => x.PartnerId == partner.PartnerId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.PartnerPolicyModuleDetails>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyModuleDetails>(x => x.PartnerId == partner.PartnerId);
+
+                return _mapper.Map<List<PartnerPolicyModuleDetails>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<PartnerPolicyModuleDetails>> GetPartnerPolicyModuleDetailsList(int PartnerId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerPolicyModuleDetails>(x => x.PartnerId == PartnerId);
+                return _mapper.Map<List<PartnerPolicyModuleDetails>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }
