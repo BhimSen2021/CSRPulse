@@ -19,7 +19,8 @@ namespace CSRPulse.Data.Models
         [Required]
         [StringLength(250)]
         public string DocumentName { get; set; }
-        [StringLength(250)]
+        [Required]
+        [StringLength(256)]
         public string ServerDocumentName { get; set; }
         [StringLength(2000)]
         public string Remarks { get; set; }

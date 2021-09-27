@@ -1,5 +1,6 @@
 ﻿using CSRPulse.Common;
 using CSRPulse.Model;
+using CSRPulse.Models;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
@@ -131,13 +132,15 @@ namespace CSRPulse.Controllers
                     project.IsActive = true;
 
                     project.ProjectOtherSource = project.ProjectOtherSource.Where(x => x.Amount > 0).ToList();
-                    project.ProjectOtherSource.ForEach(x => { 
+                    project.ProjectOtherSource.ForEach(x =>
+                    {
                         x.CreatedBy = userDetail.UserID;
                         x.CreatedRid = userDetail.RoleId;
                         x.CreatedRname = userDetail.RoleName;
                     });
                     project.ProjectInternalSource = project.ProjectInternalSource.Where(x => x.Amount > 0).ToList();
-                    project.ProjectInternalSource.ForEach(x => {
+                    project.ProjectInternalSource.ForEach(x =>
+                    {
                         x.CreatedBy = userDetail.UserID;
                         x.CreatedRid = userDetail.RoleId;
                         x.CreatedRname = userDetail.RoleName;
@@ -290,11 +293,13 @@ namespace CSRPulse.Controllers
 
                     project.IsActive = true;
 
-                    if (project.ProjectOtherSource != null) {
+                    if (project.ProjectOtherSource != null)
+                    {
                         project.ProjectOtherSource = project.ProjectOtherSource.Where(x => x.Amount > 0).ToList();
 
-                        project.ProjectOtherSource.ForEach(x => { 
-                            x.CreatedBy = userDetail.UserID; 
+                        project.ProjectOtherSource.ForEach(x =>
+                        {
+                            x.CreatedBy = userDetail.UserID;
                             x.CreatedOn = DateTime.Now;
                             x.CreatedRid = userDetail.RoleId;
                             x.CreatedRname = userDetail.RoleName;
@@ -303,10 +308,12 @@ namespace CSRPulse.Controllers
                     else
                         project.ProjectOtherSource = new List<ProjectOtherSource>();
 
-                    if (project.ProjectInternalSource != null) { 
+                    if (project.ProjectInternalSource != null)
+                    {
                         project.ProjectInternalSource = project.ProjectInternalSource.Where(x => x.Amount > 0).ToList();
 
-                        project.ProjectInternalSource.ForEach(x => {
+                        project.ProjectInternalSource.ForEach(x =>
+                        {
                             x.CreatedBy = userDetail.UserID;
                             x.CreatedOn = DateTime.Now;
                             x.CreatedRid = userDetail.RoleId;
@@ -323,7 +330,8 @@ namespace CSRPulse.Controllers
                             project.ProjectLocation = new List<ProjectLocation>();
                         project.ProjectLocation = MakeProjectLocation(project.hdnLocationIds);
 
-                        project.ProjectLocation.ForEach(x => {
+                        project.ProjectLocation.ForEach(x =>
+                        {
                             x.CreatedBy = userDetail.UserID;
                             x.CreatedOn = DateTime.Now;
                             x.CreatedRid = userDetail.RoleId;
@@ -473,7 +481,7 @@ namespace CSRPulse.Controllers
                     Status = Convert.ToInt32(ProjectIReportdt.Rows[i]["Status"]),
                     CreatedBy = userDetail.UserID,
                     CreatedRid = userDetail.RoleId,
-                    CreatedRname = userDetail.RoleName                    
+                    CreatedRname = userDetail.RoleName
                 });
             }
             return qtrList;
@@ -636,7 +644,7 @@ namespace CSRPulse.Controllers
             {
                 if (ButtonType == "document")
                 {
-                    if (project.ProjectDocument.Where(x => (x.ServerDocumentName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
+                    if (project.ProjectDocument.Where(x => (x.ServerFileName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
                         return Json(new { flag = 2, type = 1, msg = "select all mandatory documents", htmlData = ConvertViewToString("_DocumentList", project, true) });
 
                     #region Check Mime Type
@@ -662,38 +670,36 @@ namespace CSRPulse.Controllers
                     for (int i = 0; i < project.ProjectDocument.Count; i++)
                     {
                         var document = new ProjectDocument();
+                        document.ProjectDocumentId = project.ProjectDocument[i].ProjectDocumentId;
                         document.ProjectId = project.ProjectId;
                         document.DocumentId = project.ProjectDocument[i].DocumentId;
-                        document.ProjectDocumentId = project.ProjectDocument[i].ProjectDocumentId;
+                        document.DocumentName = project.ProjectDocument[i].DocumentName;
+                        document.UploadFileName = project.ProjectDocument[i].UploadFileName;
+                        document.ServerFileName = project.ProjectDocument[i].ServerFileName;
+                        document.DocumentMaxSize = project.ProjectDocument[i].DocumentMaxSize;
+                        document.DocumentType = project.ProjectDocument[i].DocumentType;
+                        document.Mandatory = project.ProjectDocument[i].Mandatory;
+                        document.Remark = project.ProjectDocument[i].Remark;
+
                         document.CreatedBy = project.ProjectDocument[i].CreatedBy;
                         document.CreatedOn = project.ProjectDocument[i].CreatedOn;
                         document.CreatedRid = project.ProjectDocument[i].CreatedRid;
                         document.CreatedRname = project.ProjectDocument[i].CreatedRname;
 
                         if (project.ProjectDocument[i].DocumentFile != null)
-                        {                           
+                        {
                             var filePath = DocumentUploadFilePath.ProjectFilePath;
-                            document.DocumentName = project.ProjectDocument[i].DocumentFile.FileName;
-                            document.ServerDocumentName = await UploadDocument(filePath, project.ProjectDocument[i].DocumentFile);
+                            document.UploadFileName = project.ProjectDocument[i].DocumentFile.FileName;
+                            document.ServerFileName = await UploadDocument(filePath, project.ProjectDocument[i].DocumentFile);
                         }
-                        if (project.ProjectDocument[i].ProjectDocumentId == 0)
+
+                        if (project.ProjectDocument[i].DocumentFile != null)
                         {
-                            document.CreatedBy = userDetail.UserID;
-                            document.CreatedRid = userDetail.RoleId;
-                            document.CreatedRname = userDetail.RoleName;
-                            document.CreatedOn = DateTime.Now;
-                            await _projectService.SaveDocument(document);
-                        }
-                        else
-                        {
-                            if (project.ProjectDocument[i].DocumentFile != null)
-                            {
-                                document.UpdatedBy = userDetail.UserID;
-                                document.UpdatedRid = userDetail.RoleId;
-                                document.UpdatedRname = userDetail.RoleName;
-                                document.UpdatedOn = DateTime.Now;
-                                await _projectService.UpdateDocument(document);
-                            }
+                            document.UpdatedBy = userDetail.UserID;
+                            document.UpdatedRid = userDetail.RoleId;
+                            document.UpdatedRname = userDetail.RoleName;
+                            document.UpdatedOn = DateTime.Now;
+                            await _projectService.UpdateDocument(document);
                         }
                     }
 
@@ -780,6 +786,68 @@ namespace CSRPulse.Controllers
                 throw;
             }
 
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> AddDocument( int projectId)
+        {
+            try
+            {
+                DocumentModel documentModel = new DocumentModel();
+                documentModel.documents = new List<Document>();
+                documentModel.Id = projectId;
+                var documents = await _projectService.GetProcessDocument((int)Common.ProcessDocument.DocumentProject);
+                documentModel.documents = documents;
+
+                return Json(new { htmlData = ConvertViewToString("_AddDocument", documentModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDocument(DocumentModel model)
+        {
+            try
+            {
+                bool flag = false;
+                var documents = model.documents.Where(x => x.AssigneDocument == true).ToList();
+
+                foreach (var item in documents)
+                {
+                    var projectDocument = new ProjectDocument();
+                    projectDocument.ProjectId = model.Id;
+                    projectDocument.DocumentId = item.DocumentId;
+                    projectDocument.DocumentName = item.DocumentName;
+                    projectDocument.DocumentMaxSize = item.DocumentMaxSize;
+                    projectDocument.DocumentType = item.DocumentType;
+                    projectDocument.Mandatory = item.Mandatory;
+                    projectDocument.Remark = item.Remark;
+                    projectDocument.CreatedBy = userDetail.UserID;
+                    projectDocument.CreatedRid = userDetail.RoleId;
+                    projectDocument.CreatedRname = userDetail.RoleName;
+
+                    flag = await _projectService.AddDocument(projectDocument);
+                    if (!flag)
+                        break;
+                }
+
+                Project project = new Project();
+                project.ProjectId = model.Id;
+                project.ProjectDocument = new List<ProjectDocument>();
+                project.ProjectDocument = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
+
+                return Json(new { flag = flag, htmlData = ConvertViewToString("_DocumentList", project, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
         }
 
         #endregion

@@ -1,0 +1,36 @@
+﻿@model DocumentModel
+    <div id="add-document-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-colored-header bg-info">
+                    <h4 class="modal-title">Add Project Document</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <input asp-for="@Model.Id" type="hidden" />                  
+                    @if (Model != null)
+                    {
+                        if (Model.documents != null)
+                        {
+                            for (int i = 0; i < Model.documents.Count; i++)
+                            {
+                                <div class="form-check form-checkbox-success mb-2">
+                                    <input class="form-check-input" asp-for="@Model.documents[i].AssigneDocument" type="checkbox" />
+                                    <label class="form-check-label" asp-for="@Model.documents[i].DocumentId">@Model.documents[i].DocumentName</label>
+                                </div>
+                                <input asp-for="@Model.documents[i].DocumentId" type="hidden" />
+                                <input asp-for="@Model.documents[i].DocumentName" type="hidden" />
+                                <input asp-for="@Model.documents[i].DocumentMaxSize" type="hidden" />
+                                <input asp-for="@Model.documents[i].DocumentType" type="hidden" />
+                                <input asp-for="@Model.documents[i].Mandatory" type="hidden" />
+                                <input asp-for="@Model.documents[i].Remark" type="hidden" />
+                            }
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-sm" value="Save">Add Document</button>
+                </div>
+            </div>
+        </div>
+    </div>

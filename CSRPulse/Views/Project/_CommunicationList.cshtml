@@ -16,7 +16,7 @@
             {
                 <tr class="@(Model.ProjectCommunication[i].IsActive==false?"is-archive":"")">
                     <td>
-                        <span>@(i+1)</span>
+                        <span>@(i+1).</span>
                         <input type="hidden" asp-for="@Model.ProjectCommunication[i].ProjectCommunicationId" />
                     </td>
                     <td>

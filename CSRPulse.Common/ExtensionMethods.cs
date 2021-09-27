@@ -255,6 +255,51 @@ namespace CSRPulse.Common
         }
 
 
+        public static string GetUploadDocumentTypeIds(string str)
+        {
+            if (str.Contains(','))
+            {
+                List<string> typeIds = str.Split(',').Select(s => s.ToLower()).ToList();
+
+                var docType = string.Empty;
+                foreach (var item in typeIds)
+                {
+                    switch (item)
+                    {
+                        case "doc":
+                        case "docx":
+                            docType = docType + "1" + ',';
+                            break;
+                        case "xlsx":
+                        case "xls":
+                            docType = docType + "2" + ',';
+                            break;
+                        case "pdf":
+                            docType = docType + "3" + ',';
+                            break;
+                        case "png":
+                        case "jpg":
+                        case "jpeg":
+                        case "gif":
+                        case "bmp":
+                            docType = docType + "4" + ',';
+                            break;
+                        case "txt":
+                            docType = docType + "5" + ',';
+                            break;
+                        case "mp4":
+                            docType = docType + "6" + ',';
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                docType = docType.TrimEnd(',');
+
+                return docType;
+            }
+            return str;
+        }
         public static string GenerateOTP()
         {
             string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -283,7 +328,7 @@ namespace CSRPulse.Common
         {
             string _allowedChars = "abcdefghijklmnopqrstuvwxyz@#$&ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             Random randNum = new Random();
-            char[] chars = new char[passwordLength];           
+            char[] chars = new char[passwordLength];
             for (int i = 0; i < passwordLength; i++)
             {
                 chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
@@ -302,8 +347,8 @@ namespace CSRPulse.Common
                         else
                             return "Pending";
                     }
-                case 2:                    
-                        return "Submitted";                    
+                case 2:
+                    return "Submitted";
 
                 default:
                     return "";
@@ -314,10 +359,10 @@ namespace CSRPulse.Common
         {
             if (string.IsNullOrEmpty(emailAddress))
                 return emailAddress;
-            else            
-               return emailAddress.Replace(".", "[dot]").Replace("@","[at]");            
+            else
+                return emailAddress.Replace(".", "[dot]").Replace("@", "[at]");
         }
-        
+
 
     }
 }

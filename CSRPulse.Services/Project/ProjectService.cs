@@ -82,7 +82,7 @@ namespace CSRPulse.Services
                     project.IsExist = IsExist;
 
                     if (!IsExist)
-                    {                        
+                    {
                         var model = _mapper.Map<DTOModel.Project>(project);
 
                         _genericRepository.Update(model);
@@ -224,7 +224,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var result = await _projectRepository.GetDocuments(projectId, processId).ToListAsync();
+                var result = await _genericRepository.GetAsync<DTOModel.ProjectDocument>(x => x.ProjectId == projectId);
                 if (result != null)
                 {
                     return result.Select(d => new ProjectDocument()
@@ -233,11 +233,13 @@ namespace CSRPulse.Services
                         ProjectId = d.ProjectId,
                         DocumentId = d.DocumentId,
                         DocumentName = d.DocumentName,
-                        MDocumentName = d.MDocumentName,
-                        DocumentMaxSize = d.DocumentMaxSize,
-                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
-                        Mandatory = d.Mandatory,
-                        ServerDocumentName = d.ServerDocumentName,
+                        UploadFileName = d.UploadFileName,
+                        ServerFileName = d.ServerFileName,
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                        //DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                        DocumentType = d.DocumentType,
+                        Mandatory = d.Mandatory ?? false,
+                        Remark = d.Remark,
                         CreatedBy = d.CreatedBy,
                         CreatedOn = d.CreatedOn,
                         CreatedRid = d.CreatedRid,
@@ -252,6 +254,50 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+
+        public async Task<List<Model.Document>> GetProcessDocument(int processId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.ProcessDocument>(x => x.ProcessId == processId && x.IsActive == true);
+                if (result != null)
+                {
+                    return result.Select(d => new Model.Document()
+                    {
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                        Mandatory = d.Mandatory ?? false,
+                        Remark = d.Remark
+                    }).ToList();
+                }
+                else
+                    return new List<Model.Document>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> AddDocument(ProjectDocument projectDocument)
+        {
+            try
+            {
+                var model = _mapper.Map<DTOModel.ProjectDocument>(projectDocument);
+                if (!await _genericRepository.ExistsAsync<DTOModel.ProjectDocument>
+                      (x => x.DocumentId == projectDocument.DocumentId && x.ProjectId == projectDocument.ProjectId))
+
+                    await _genericRepository.InsertAsync<DTOModel.ProjectDocument>(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
 
         public List<ProjectLocationDetail> GetLocationDetails(int projectId, int lLevel)
         {

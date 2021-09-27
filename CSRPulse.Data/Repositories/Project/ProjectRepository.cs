@@ -83,7 +83,7 @@ namespace CSRPulse.Data.Repositories
                        MDocumentName = m.DocumentName,
                        DocumentMaxSize = m.DocumentMaxSize ?? 10,
                        DocumentType = m.DocumentType,
-                       ServerDocumentName = d1.ServerDocumentName,
+                       ServerDocumentName = d1.ServerFileName,
                        Mandatory = m.Mandatory ?? false,
                        CreatedBy = m.CreatedBy,
                        CreatedOn = m.CreatedOn,

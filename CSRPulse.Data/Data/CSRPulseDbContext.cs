@@ -91,13 +91,12 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
             {
                 var _Connection = configuration.GetConnectionString("DefaultConnection");
@@ -108,7 +107,6 @@ namespace CSRPulse.Data.Data
             else
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -1927,6 +1925,8 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Remark).IsUnicode(false);
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.ProjectDocumentCreatedByNavigation)
