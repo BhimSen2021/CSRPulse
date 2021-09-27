@@ -35,14 +35,14 @@
             $('.btnconfirm').attr('id', id + '_' + cnt.checked);
 
         }
-        function ActiveDeActive(obj) {
-          
+        function ActiveDeActive(obj) {          
             var id = obj.id.split('_')[0];
             var isChecked = obj.id.split('_')[1];           
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
                 url: '/SubTheme/ActiveDeActive',
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {

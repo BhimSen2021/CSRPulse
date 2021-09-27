@@ -65,10 +65,12 @@
     function ActiveDeActive(obj) {
         var id = obj.id.split('_')[0];
         var isChecked = obj.id.split('_')[1];
+       
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
             url: '@Url.Action("ArchiveCommunication", "Project")',
+            headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
             data: { id: id, isChecked: isChecked },
             success: function (responce) {
                 if (responce) {
@@ -79,7 +81,7 @@
                     commonMessage('warning', 'Status changing failed.');
                 }
             },
-            error: function (responce) {
+            error: function (responce) {               
                 commonMessage('error', 'Status changing failed.');
             }
         });
