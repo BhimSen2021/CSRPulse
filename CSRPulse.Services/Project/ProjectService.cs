@@ -235,7 +235,7 @@ namespace CSRPulse.Services
                         DocumentName = d.DocumentName,
                         UploadFileName = d.UploadFileName,
                         ServerFileName = d.ServerFileName,
-                        DocumentMaxSize = d.DocumentMaxSize ?? 20,                       
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
                         DocumentType = d.DocumentType,
                         Mandatory = d.Mandatory ?? false,
                         Remark = d.Remark,
@@ -279,23 +279,26 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-        public async Task<bool> AddDocument(ProjectDocument projectDocument)
+        public async Task<int> AddDocument(ProjectDocument projectDocument)
         {
             try
             {
+                int flag = 1;
                 var model = _mapper.Map<DTOModel.ProjectDocument>(projectDocument);
                 if (!await _genericRepository.ExistsAsync<DTOModel.ProjectDocument>
                       (x => x.DocumentId == projectDocument.DocumentId && x.ProjectId == projectDocument.ProjectId))
-
                     await _genericRepository.InsertAsync<DTOModel.ProjectDocument>(model);
-                return true;
+                else
+                    flag = 2;
+
+                return flag;
             }
             catch (Exception)
             {
                 throw;
             }
-
         }
+
 
 
         public List<ProjectLocationDetail> GetLocationDetails(int projectId, int lLevel)

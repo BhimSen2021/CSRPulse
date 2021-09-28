@@ -17,7 +17,7 @@ namespace CSRPulse.Services
         Task<bool> AddLocationDetails(List<ProjectLocationDetail> locationDetails, int projectId);
         Task<List<ProjectDocument>> GetDocumentList(int projectId, int processId);
         Task<List<Document>> GetProcessDocument(int processId);
-        Task<bool> AddDocument(ProjectDocument projectDocument);
+        Task<int> AddDocument(ProjectDocument projectDocument);
         Task<int> SaveDocument(ProjectDocument document);
         bool DeleteDocument(int pdId);
         Task UpdateDocument(ProjectDocument document);

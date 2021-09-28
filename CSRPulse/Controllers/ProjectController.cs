@@ -790,7 +790,7 @@ namespace CSRPulse.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> AddDocument( int projectId)
+        public async Task<IActionResult> AddDocument(int projectId)
         {
             try
             {
@@ -814,7 +814,8 @@ namespace CSRPulse.Controllers
         {
             try
             {
-                bool flag = false;
+                int flag = 0;
+                string msg = "Documents added successfully";
                 var documents = model.documents.Where(x => x.AssigneDocument == true).ToList();
 
                 foreach (var item in documents)
@@ -832,8 +833,8 @@ namespace CSRPulse.Controllers
                     projectDocument.CreatedRname = userDetail.RoleName;
 
                     flag = await _projectService.AddDocument(projectDocument);
-                    if (!flag)
-                        break;
+                    if (flag == 2)
+                        msg = "Some documents will not added due to already exits in the project documents.";
                 }
 
                 Project project = new Project();
@@ -841,7 +842,7 @@ namespace CSRPulse.Controllers
                 project.ProjectDocument = new List<ProjectDocument>();
                 project.ProjectDocument = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
 
-                return Json(new { flag = flag, htmlData = ConvertViewToString("_DocumentList", project, true) });
+                return Json(new { flag = flag, msg = msg, htmlData = ConvertViewToString("_DocumentList", project, true) });
             }
             catch (Exception ex)
             {
