@@ -27,7 +27,7 @@
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentMaxSize" />
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].Mandatory" />
                         </td>
-                        <td><a data-bs-toggle="tooltip" title="@Model.AuditorDocument[i].DocumentType">@Model.AuditorDocument[i].DocumentName</a><span class="@(Model.AuditorDocument[i].Mandatory==true?"required":"")"></span></td>
+                        <td><a data-bs-toggle="tooltip" title="@String.Format("<b>Allow document Types:</b> {0}\n <b>Maximum  Size:</b> {1}", Model.AuditorDocument[i].DocumentType,Model.AuditorDocument[i].DocumentMaxSize)">@Model.AuditorDocument[i].DocumentName</a><span class="@(Model.AuditorDocument[i].Mandatory==true?"required":"")"></span></td>
                         <td><a id="lnk_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Auditor" asp-action="DownloadDocument" asp-route-fileName="@Model.AuditorDocument[i].ServerFileName">@Model.AuditorDocument[i].UploadFileName</a></td>
                         <td>
                             @if (Model.AuditorDocument[i].ServerFileName == null)

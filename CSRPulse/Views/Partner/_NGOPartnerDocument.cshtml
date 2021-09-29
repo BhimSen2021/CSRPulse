@@ -55,7 +55,7 @@
                                     <input type="hidden" id="CreatedRname_@i" asp-for="@Model.PartnerDocument[i].CreatedRname" />
                                 </td>
                                 <td>
-                                    <a data-bs-toggle="tooltip" title="@Model.PartnerDocument[i].DocumentType">@Model.PartnerDocument[i].DocumentName</a>
+                                    <a data-bs-toggle="tooltip" title="@String.Format("<b>Allow document Types:</b> {0}\n <b>Maximum  Size:</b> {1}", Model.PartnerDocument[i].DocumentType,Model.PartnerDocument[i].DocumentMaxSize)">@Model.PartnerDocument[i].DocumentName</a>
                                     <span class="@(Model.PartnerDocument[i].Mandatory==true?"required":"")"></span>
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentName" />
                                 </td>
