@@ -41,6 +41,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 url: '/Indicator/ActiveDeActive',
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {

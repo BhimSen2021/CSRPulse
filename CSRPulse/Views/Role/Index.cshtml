@@ -110,6 +110,7 @@
                 type: 'POST',
                 dataType: 'JSON',
                 url: '/Role/RoleActiveDeActive',
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { userId: userId, IsActive: isChecked },
                 success: function (responce) {
                     if (responce) {

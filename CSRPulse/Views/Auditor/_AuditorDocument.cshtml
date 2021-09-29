@@ -18,23 +18,31 @@
                 {
                     <tr>
                         <td>
-                            <span>@(i+1)</span>
+                            <span>@(i+1).</span>
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentId" />
-                            <input type="hidden" asp-for="@Model.AuditorDocument[i].Sdname" />
-                            <input type="hidden" asp-for="@Model.AuditorDocument[i].Udname" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].ServerFileName" />
+                            <input type="hidden" asp-for="@Model.AuditorDocument[i].UploadFileName" />
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentName" />
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentType" />
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentMaxSize" />
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].Mandatory" />
                         </td>
-                        <td>@Model.AuditorDocument[i].DocumentName<span class="@(Model.AuditorDocument[i].Mandatory==true?"required":"")"></span></td>
-                        <td><a id="lnk_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Auditor" asp-action="DownloadDocument" asp-route-fileName="@Model.AuditorDocument[i].Sdname">@Model.AuditorDocument[i].Udname</a></td>
+                        <td><a data-bs-toggle="tooltip" title="@Model.AuditorDocument[i].DocumentType">@Model.AuditorDocument[i].DocumentName</a><span class="@(Model.AuditorDocument[i].Mandatory==true?"required":"")"></span></td>
+                        <td><a id="lnk_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Auditor" asp-action="DownloadDocument" asp-route-fileName="@Model.AuditorDocument[i].ServerFileName">@Model.AuditorDocument[i].UploadFileName</a></td>
                         <td>
-                            <input asp-for="@Model.AuditorDocument[i].DocumentFile" onchange="Filevalidation(this)">
+                            @if (Model.AuditorDocument[i].ServerFileName == null)
+                            {
+                                <input asp-for="@Model.AuditorDocument[i].DocumentFile" onchange="Filevalidation(this)">
+                            }
+                            else
+                            {
+                                <input asp-for="@Model.AuditorDocument[i].DocumentFile" disabled>
+
+                            }
                         </td>
                         <td><input type="text" asp-for="@Model.AuditorDocument[i].Remark" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off"></td>
                         <th>
-                            @if (Model.AuditorDocument[i].Sdname != null)
+                            @if (Model.AuditorDocument[i].ServerFileName != null)
                             {
                                 <a href="javascript:void(0);" class="action-icon" id="AuditorDocument_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear document" onclick="RemoveFile(this)"><i class="dripicons-document-delete text-danger"></i></a>
                             }
@@ -50,7 +58,7 @@
 <script type="text/javascript">
     /**/
     function RemoveFile(obj) {
-        $('#' + obj.id + '__Sdname').val('');
+        $('#' + obj.id + '__ServerFileName').val('');
         $('#' + obj.id + '__Remark').val('');
         $('#' + obj.id.replace('AuditorDocument', 'lnk')).text('');
     }

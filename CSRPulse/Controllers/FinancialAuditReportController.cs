@@ -21,6 +21,7 @@ namespace CSRPulse.Controllers
             _ddlService = dropdownBindService;
 
         }
+        [AutoValidateAntiforgeryToken]
         public IActionResult Index()
         {
             _logger.LogInformation("FinancialAuditReportController/Index");

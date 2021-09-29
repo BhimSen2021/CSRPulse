@@ -41,6 +41,7 @@
                 type: 'POST',
                 dataType: 'JSON',
                 url: '/Partner/ActiveDeActive',
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { id: id, isChecked: isChecked },
                 success: function (responce) {
                     if (responce) {

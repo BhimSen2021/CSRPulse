@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using CSRPulse.Common;
 
 namespace CSRPulse.Services
 {
@@ -139,6 +140,88 @@ namespace CSRPulse.Services
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public async Task<List<Model.Document>> GetAuditorDocument(int processId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.ProcessDocument>(x => x.ProcessId == processId && x.IsActive == true);
+                if (result != null)
+                {
+                    return result.Select(d => new Model.Document()
+                    {
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                        Mandatory = d.Mandatory ?? false,
+                        Remark = d.Remark
+                    }).ToList();
+                }
+                else
+                    return new List<Model.Document>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<AuditorDocument>> GetAuditorDocumentList(int auditorId, int processId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.AuditorDocument>(x => x.AuditorId == auditorId);
+                if (result != null)
+                {
+                    return result.Select(d => new AuditorDocument()
+                    {
+                        AuditorDocumentId = d.AuditorDocumentId,
+                        AuditorId = d.AuditorId,
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        UploadFileName = d.UploadFileName,
+                        ServerFileName = d.ServerFileName,
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                        DocumentType = d.DocumentType,
+                        Mandatory = d.Mandatory ?? false,
+                        Remark = d.Remark,
+                        CreatedBy = d.CreatedBy,
+                        CreatedOn = d.CreatedOn,
+                        CreatedRid = d.CreatedRid,
+                        CreatedRname = d.CreatedRname
+                    }).ToList();
+                }
+
+                else
+                    return new List<AuditorDocument>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<int> AddDocument(AuditorDocument auditorDocument)
+        {
+            try
+            {
+                int flag = 1;
+                var model = _mapper.Map<DTOModel.AuditorDocument>(auditorDocument);
+                if (!await _genericRepository.ExistsAsync<DTOModel.AuditorDocument>
+                      (x => x.DocumentId == auditorDocument.DocumentId && x.AuditorId == auditorDocument.AuditorId))
+
+                    await _genericRepository.InsertAsync<DTOModel.AuditorDocument>(model);
+                else
+                    flag = 2;
+
+                return flag;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

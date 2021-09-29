@@ -15,15 +15,17 @@ namespace CSRPulse.Data.Models
         public int AuditorDocumentId { get; set; }
         public int AuditorId { get; set; }
         public int DocumentId { get; set; }
-        [Required]
-        [Column("UDName")]
-        [StringLength(50)]
-        public string Udname { get; set; }
-        [Required]
-        [Column("SDName")]
-        [StringLength(50)]
-        public string Sdname { get; set; }
+        [StringLength(500)]
+        public string DocumentName { get; set; }
         [StringLength(256)]
+        public string UploadFileName { get; set; }
+        [StringLength(256)]
+        public string ServerFileName { get; set; }
+        public int? DocumentMaxSize { get; set; }
+        [StringLength(50)]
+        public string DocumentType { get; set; }
+        public bool? Mandatory { get; set; }
+        [StringLength(500)]
         public string Remark { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }

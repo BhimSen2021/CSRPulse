@@ -31,6 +31,9 @@ namespace CSRPulse.Services
         bool DeleteDocument(int ngocharId);
         Task<List<NGOChartDocument>> GetDocumentList(int PartnerId);
         Task<List<PartnerDocument>> GetPartnerDocumentList(int partnerId, int processId);
+        Task<List<Document>> GetPartnerDocument(int processId);
+
+        Task<int> AddDocument(PartnerDocument partnerDocument);
         Task<List<PartnerDocument>> GetUpdatePartnerDocument(Partner partner);
         bool DeletePartnerDocument(int partnerId);
         Task<List<PartnerPolicyDetails>> GetUpdatePartnerPolicyDetails(Partner partner);

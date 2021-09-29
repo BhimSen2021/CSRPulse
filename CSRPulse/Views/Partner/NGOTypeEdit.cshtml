@@ -235,7 +235,6 @@
                 <div id="div-partnerpolicymodule-grid">
                     @{ await Html.RenderPartialAsync("_AddPartnerPolicyModule", Model); }
                 </div>
-                @*@{ await Html.RenderPartialAsync("_AddFundingAgency", new NGOFundingPartner() { PartnerId = Model.PartnerId, AgencyType = (int)AgencyType.ForeignFundingAgencies }); }*@
             </div>
         </div>
     </div>
@@ -246,6 +245,14 @@
     </div>
 </div>
 <partial name="_Confirmation" />
+
+<form data-ajax="true" data-ajax-method="POST" method="Post" asp-action="AddDocument" asp-controller="Partner" asp-area=""
+      data-ajax-success="onAddDocument">
+    <div id="add-document-div">
+        @{await Html.RenderPartialAsync("_AddDocument", new DocumentModel()); }
+    </div>
+</form>
+
 <script>
     function onMember(data) {
         if (data.flag == 1) {
@@ -338,6 +345,33 @@
                 commonMessage('error', 'Deletion failed.');
             }
         });
+    }
+
+    function AddDocument() {
+            $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: '@Url.Action("AddDocument", "Partner", new { Area=""})',
+                data: { partnerId: @Model.PartnerId },
+                success: function (data) {
+                    $("#add-document-div").html(data.htmlData);
+                    $('#add-document-modal').modal('show');
+            },
+            error: function (data) {
+                commonMessage('error', 'Documents loading failed!');
+            }
+        });
+    }
+
+    function onAddDocument(data) {
+        if (data.flag == 1 || data.flag == 2) {
+            $("#div-ngopartnerdocment-grid").html(data.htmlData);
+            $('#add-document-modal').modal('hide');
+            commonMessage('success', data.msg);
+        }
+        else {
+            commonMessage('error', 'Document adding failed!');
+        }
     }
 </script>
 <script type="text/javascript">

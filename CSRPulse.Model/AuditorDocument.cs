@@ -12,16 +12,16 @@ namespace CSRPulse.Model
         public int AuditorDocumentId { get; set; }
         public int AuditorId { get; set; }
         public int DocumentId { get; set; }
-        [Display(Name = "Document Name")]
+        [StringLength(500), Display(Name = "Document Name")]
         public string DocumentName { get; set; }
-        [Display(Name = "Uploaded Document Name")]
-        public string Udname { get; set; }
-        public string Sdname { get; set; }
+        [StringLength(500), Display(Name = "File Name")]
+        public string UploadFileName { get; set; }
         [StringLength(256)]
-        public string Remark { get; set; }
-        public string DocumentType { get; set; }
+        public string ServerFileName { get; set; }
         public int DocumentMaxSize { get; set; }
+        public string DocumentType { get; set; }
         public bool Mandatory { get; set; }
+        public string Remark { get; set; }
         public IFormFile DocumentFile { get; set; }
     }
 }

@@ -20,20 +20,37 @@
                 {
                     @foreach (var partnerPolicyModule in Model)
                     {
-                        <tr>
-                            <td>
-                                <span>@(Model.ToList().IndexOf(partnerPolicyModule) +1)</span>
-                            </td>
+                <tr>
+                    <td>
+                        <span>@(Model.ToList().IndexOf(partnerPolicyModule) +1)</span>
+                    </td>
 
-                            <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Partner Policy Module.">  @Html.ActionLink(partnerPolicyModule.PolicyModuleName, "Edit", "PartnerPolicyModule", new { policymoduleId = partnerPolicyModule.PolicyModuleId })</span></td>
-                                                     
-                            <td>
-                                <div>
-                                    <input type="checkbox" id="switch_@partnerPolicyModule.PolicyModuleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsActive == true) { <text> checked="checked" </text> } />
-                                    <label for="switch_@partnerPolicyModule.PolicyModuleId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                </div>
-                            </td>
-                        </tr>
+                    <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this Partner Policy Module.">  @Html.ActionLink(partnerPolicyModule.PolicyModuleName, "Edit", "PartnerPolicyModule", new { policymoduleId = partnerPolicyModule.PolicyModuleId })</span></td>
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch#Board_@partnerPolicyModule.PolicyId#Board" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsFormallyApprovedByBoard == true) { <text> checked="checked" </text> } />
+                            <label for="switch#Board_@partnerPolicyModule.PolicyId#Board" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch#Imp_@partnerPolicyModule.PolicyId#Imp" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsImplementedSince == true) { <text> checked="checked" </text> } />
+                            <label for="switch#Imp_@partnerPolicyModule.PolicyId#Imp" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch#Last_@partnerPolicyModule.PolicyId#Last" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsLastUpdatedOn == true) { <text> checked="checked" </text> } />
+                            <label for="switch#Last_@partnerPolicyModule.PolicyId#Last" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch_@partnerPolicyModule.PolicyModuleId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (partnerPolicyModule.IsActive == true) { <text> checked="checked" </text> } />
+                            <label for="switch_@partnerPolicyModule.PolicyModuleId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                </tr>
                     }
                 }
                 else

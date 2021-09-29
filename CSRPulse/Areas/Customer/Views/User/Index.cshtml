@@ -114,6 +114,7 @@
                 type: 'POST',
                 dataType: 'JSON',
                 url: '/Admin/Registration/UserActiveDeActive',
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { userId: userId, IsActive: isChecked },
                 success: function (responce) {
                     if (responce) {

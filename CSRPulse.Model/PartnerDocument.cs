@@ -10,11 +10,13 @@ namespace CSRPulse.Model
     {
         public int PartnerDocumentId { get; set; }
         public int PartnerId { get; set; }
-        public string DocumentName { get; set; }
         public int DocumentId { get; set; }
-        [Display(Name = "Document Name")]
-        public string UploadedDocumentName { get; set; }
-        public string ServerDocumentName { get; set; }
+        [StringLength(500), Display(Name = "Document Name")]
+        public string DocumentName { get; set; }
+        [StringLength(500), Display(Name = "File Name")]
+        public string UploadFileName { get; set; }
+        [StringLength(256)]
+        public string ServerFileName { get; set; }
         [StringLength(256)]
         public string Remark { get; set; }
         public IFormFile DocumentFile { get; set; }

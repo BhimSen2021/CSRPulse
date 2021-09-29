@@ -89,7 +89,11 @@
                 <div class="mb-3">
                     <h5>Document List</h5>
                 </div>
-                <div id="#div-auditordocument-grid">
+                <div class="mb-6 text-end">
+                    <button class="btn btn-danger btn-sm" type="button" onclick="AddDocument()" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to assign Role"><i class="mdi mdi-plus me-1"></i>Add Document</button>
+                </div>
+
+                <div id="div-auditordocument-grid">
                     @{ await Html.RenderPartialAsync("_AuditorDocument", Model); }
                 </div>
 
@@ -103,3 +107,38 @@
         </form>
     </div> <!-- end card body-->
 </div>
+
+<form data-ajax="true" data-ajax-method="POST" method="Post" asp-action="AddDocument" asp-controller="Auditor" asp-area=""
+      data-ajax-success="onAddDocument">
+    <div id="add-document-div">
+        @{await Html.RenderPartialAsync("_AddDocument", new DocumentModel()); }
+    </div>
+</form>
+<script type="text/javascript">
+     function AddDocument() {
+            $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+                url: '@Url.Action("AddDocument", "Auditor", new { Area=""})',
+                data: { auditorId: @Model.AuditorId },
+                success: function (data) {
+                    $("#add-document-div").html(data.htmlData);
+                    $('#add-document-modal').modal('show');
+            },
+            error: function (data) {
+                commonMessage('error', 'Documents loading failed!');
+            }
+        });
+    }
+
+    function onAddDocument(data) {
+        if (data.flag == 1 || data.flag == 2) {
+            $("#div-auditordocument-grid").html(data.htmlData);
+            $('#add-document-modal').modal('hide');
+            commonMessage('success', data.msg);
+        }
+        else {
+            commonMessage('error', 'Document adding failed!');
+        }
+    }
+</script>

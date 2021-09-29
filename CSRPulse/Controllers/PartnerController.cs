@@ -1,5 +1,6 @@
 using CSRPulse.Common;
 using CSRPulse.Model;
+using CSRPulse.Models;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +31,7 @@ namespace CSRPulse.Controllers
             _webHostEnvironment = webHostEnvironment;
 
         }
+        [AutoValidateAntiforgeryToken]
         [HttpGet]
         public IActionResult Index()
         {
@@ -815,10 +817,10 @@ namespace CSRPulse.Controllers
                 int flag = 0;
                 if (ButtonType == "SavePartnerDocument")
                 {
-                    if (partner.PartnerDocument.Where(x => (x.ServerDocumentName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
+                    if (partner.PartnerDocument.Where(x => (x.ServerFileName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
                         return Json(new { flag = 2, type = 1, msg = "select all mandatory documents", htmlData = ConvertViewToString("_NGOPartnerDocument", partner, true) });
 
-                    var listAD = partner.PartnerDocument.Where(s => s.ServerDocumentName != null || s.DocumentFile != null).ToList();
+                    var listAD = partner.PartnerDocument.Where(s => s.ServerFileName != null || s.DocumentFile != null).ToList();
 
                     #region Check Mime Type
 
@@ -859,7 +861,7 @@ namespace CSRPulse.Controllers
                             if (listAD[i].DocumentFile != null)
                             {
                                 var filePath = DocumentUploadFilePath.PartnerDocumentPath;
-                                listAD[i].UploadedDocumentName = partner.PartnerDocument[i].DocumentFile.FileName;
+                                listAD[i].UploadFileName = partner.PartnerDocument[i].DocumentFile.FileName;
                                 listAD[i].DocumentId = partner.PartnerDocument[i].DocumentId;
 
                                 SDocumentName = await UploadPartnerDocument(filePath, partner.PartnerDocument[i].DocumentFile);
@@ -872,7 +874,7 @@ namespace CSRPulse.Controllers
                                 }
                                 else
                                 {
-                                    listAD[i].ServerDocumentName = SDocumentName;
+                                    listAD[i].ServerFileName = SDocumentName;
                                 }
                             }
                         }
@@ -922,7 +924,6 @@ namespace CSRPulse.Controllers
                 string fileExtension = Path.GetExtension(file.FileName);
                 if (fileExtension == ".xlsx" || fileExtension == ".xls")
                 {
-                    //fileName = fileupload;
                     fileName = Path.GetExtension(file.FileName);
                     string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
                     #region C H E C K  F O R M U L A S
@@ -960,8 +961,6 @@ namespace CSRPulse.Controllers
                     }
                 }
                 partner.PartnerDocument = await _partnerService.GetPartnerDocumentList(partner.PartnerId, (int)Common.ProcessDocument.PartnerDocument);
-
-                //partner.PartnerDocument = await _partnerService.GetPartnerDocumentAsync(pId);
                 return PartialView("_NGOPartnerDocument", partner);
             }
             catch (Exception ex)
@@ -1035,6 +1034,70 @@ namespace CSRPulse.Controllers
             }
         }
         #endregion
+
+        [HttpGet]
+        public async Task<IActionResult> AddDocument(int partnerId)
+        {
+            try
+            {
+                DocumentModel documentModel = new DocumentModel();
+                documentModel.documents = new List<Document>();
+                documentModel.Id = partnerId;
+                var documents = await _partnerService.GetPartnerDocument((int)Common.ProcessDocument.PartnerDocument);
+                documentModel.documents = documents;
+
+                return Json(new { htmlData = ConvertViewToString("_AddDocument", documentModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDocument(DocumentModel model)
+        {
+            try
+            {
+                int flag = 0;
+                string msg = "Documents added successfully";
+                Partner partner = new Partner();
+                var documents = model.documents.Where(x => x.AssigneDocument == true).ToList();
+
+                foreach (var item in documents)
+                {
+                    var partnerDocument = new PartnerDocument();
+                    partnerDocument.PartnerId = model.Id; 
+                    partnerDocument.DocumentId = item.DocumentId;
+                    partnerDocument.DocumentName = item.DocumentName;
+                    partnerDocument.DocumentMaxSize = item.DocumentMaxSize;
+                    partnerDocument.DocumentType = item.DocumentType;
+                    partnerDocument.Mandatory = item.Mandatory;
+                    partnerDocument.Remark = item.Remark;
+                    partnerDocument.CreatedBy = userDetail.UserID;
+                    partnerDocument.CreatedRid = userDetail.RoleId;
+                    partnerDocument.CreatedRname = userDetail.RoleName;
+
+                    flag = await _partnerService.AddDocument(partnerDocument);
+                    if (flag == 2)
+                        msg = "Some documents will not added due to already exits in the partner documents.";
+                }
+
+                
+                partner.PartnerId = model.Id;
+                partner.PartnerDocument = new List<PartnerDocument>();
+                partner.PartnerDocument = await _partnerService.GetPartnerDocumentList(partner.PartnerId, (int)Common.ProcessDocument.PartnerDocument);
+
+                return Json(new { flag = flag, msg = msg, htmlData = ConvertViewToString("_NGOPartnerDocument", partner, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
     }
 
 }

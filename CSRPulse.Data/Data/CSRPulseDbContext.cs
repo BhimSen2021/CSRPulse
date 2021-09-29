@@ -91,12 +91,13 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
             {
                 var _Connection = configuration.GetConnectionString("DefaultConnection");
@@ -268,10 +269,6 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Remark).IsUnicode(false);
-
-                entity.Property(e => e.Sdname).IsUnicode(false);
-
-                entity.Property(e => e.Udname).IsUnicode(false);
 
                 entity.HasOne(d => d.Auditor)
                     .WithMany(p => p.AuditorDocument)
@@ -1398,10 +1395,6 @@ namespace CSRPulse.Data.Data
                 entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Remark).IsUnicode(false);
-
-                entity.Property(e => e.ServerDocumentName).IsUnicode(false);
-
-                entity.Property(e => e.UploadedDocumentName).IsUnicode(false);
 
                 entity.HasOne(d => d.CreatedByNavigation)
                     .WithMany(p => p.PartnerDocumentCreatedByNavigation)

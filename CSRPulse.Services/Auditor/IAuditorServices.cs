@@ -11,5 +11,9 @@ namespace CSRPulse.Services
         Auditor GetAuditorById(int auditorId);
         Task<List<Auditor>> GetAuditorAsync(Auditor auditor);
         Task<bool> UpdateAuditorAsync(Auditor auditor);
+        Task<List<Document>> GetAuditorDocument(int processId);
+        Task<List<AuditorDocument>> GetAuditorDocumentList(int auditorId, int processId);
+        Task<int> AddDocument(AuditorDocument auditorDocument);
+
     }
 }

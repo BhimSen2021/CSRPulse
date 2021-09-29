@@ -1,7 +1,5 @@
-﻿@*@model IEnumerable<PartnerDocumentDetail>*@
+﻿
 @model Partner
-@using CSRPulse.Common
-@using System.Data;
 @{
 
     var validationResultMsg = Model.Message;
@@ -12,12 +10,6 @@
     Model.NoOfErrors == -4 ? "alert alert-danger" : msgClass;
 
 }
-<script>
-    $('.toggle-tooltip').tooltip();
-    if(@Model.NoOfErrors==0){
-        $('#btnSave').removeClass('d-none');
-    }
-</script>
 <div id="validation-hdr" class="pull-right @msgClass" role="alert">
     @validationResultMsg
 </div>
@@ -26,6 +18,7 @@
       data-ajax-success="onPartnerDocument">
     <div class="mb-2 text-end">
         <input type="hidden" asp-for="PartnerId" id="PartnerDocumentId" />
+        <button class="btn btn-danger btn-sm" type="button" value="AddDocument" onclick="AddDocument()" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to Add Document"><i class="mdi mdi-plus me-1"></i>Add Document</button>
         <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SavePartnerDocument" id="btnSave"><i class="mdi mdi-file-document-edit"></i> Save</button>
     </div>
     <div class="row">
@@ -34,8 +27,8 @@
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Document Type</th>
                         <th>Document Name</th>
+                        <th>File Name</th>
                         <th width="10%"></th>
                         <th>Remarks</th>
                         <th width="6%">Action</th>
@@ -48,26 +41,30 @@
                         {
                             <tr>
                                 <td>
-                                    <span>@(i+1)</span>
+                                    <span>@(i+1)<text>.</text></span>
                                     <input type="hidden" id="ProjectDocumentId_@i" asp-for="@Model.PartnerDocument[i].PartnerDocumentId" value="@Model.PartnerDocument[i].PartnerDocumentId" />
                                     <input type="hidden" id="PartnerId_@i" asp-for="@Model.PartnerDocument[i].PartnerId" />
-                                    <input type="hidden" id="ServerDocumentName_@i" asp-for="@Model.PartnerDocument[i].ServerDocumentName" value="@Model.PartnerDocument[i].ServerDocumentName" />
+                                    <input type="hidden" id="ServerDocumentName_@i" asp-for="@Model.PartnerDocument[i].ServerFileName" value="@Model.PartnerDocument[i].ServerFileName" />
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentId" />
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].Mandatory" />
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentMaxSize" />
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentType" />
+                                    <input type="hidden" id="CreatedBy_@i" asp-for="@Model.PartnerDocument[i].CreatedBy" />
+                                    <input type="hidden" id="CreatedOn_@i" asp-for="@Model.PartnerDocument[i].CreatedOn" />
+                                    <input type="hidden" id="CreatedRid_@i" asp-for="@Model.PartnerDocument[i].CreatedRid" />
+                                    <input type="hidden" id="CreatedRname_@i" asp-for="@Model.PartnerDocument[i].CreatedRname" />
                                 </td>
                                 <td>
-                                    <a data-bs-toggle="tooltip">@Model.PartnerDocument[i].DocumentName</a>
+                                    <a data-bs-toggle="tooltip" title="@Model.PartnerDocument[i].DocumentType">@Model.PartnerDocument[i].DocumentName</a>
                                     <span class="@(Model.PartnerDocument[i].Mandatory==true?"required":"")"></span>
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentName" />
                                 </td>
                                 <td>
-                                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Partner" asp-action="DownloadPartnerDocument" asp-route-fileName="@Model.PartnerDocument[i].ServerDocumentName">@Model.PartnerDocument[i].UploadedDocumentName</a>
-                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].UploadedDocumentName" />
+                                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Partner" asp-action="DownloadPartnerDocument" asp-route-fileName="@Model.PartnerDocument[i].ServerFileName">@Model.PartnerDocument[i].UploadFileName</a>
+                                    <input type="hidden" asp-for="@Model.PartnerDocument[i].UploadFileName" />
                                 </td>
                                 <td>
-                                    @if (Model.PartnerDocument[i].ServerDocumentName == null)
+                                    @if (Model.PartnerDocument[i].ServerFileName == null)
                                     {
                                         <input asp-for="@Model.PartnerDocument[i].DocumentFile" onchange="Filevalidation(this)" />
                                     }
@@ -81,14 +78,14 @@
                                     <span asp-validation-for="@Model.PartnerDocument[i].Remark" class="invalid"></span>
                                 </td>
                                 <td class="text-center">
-                                    @if (Model.PartnerDocument[i].ServerDocumentName != null && Model.PartnerDocument[i].PartnerDocumentId > 0)
+                                    @if (Model.PartnerDocument[i].ServerFileName != null && Model.PartnerDocument[i].PartnerDocumentId > 0)
                                     {
                                         <a class="font-16 delete-link action-icon" id="delete-link_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record">
                                             <i class="dripicons-trash text-danger" aria-hidden="true"></i>
                                         </a>
                                         <div class="delete-confirm text-nowrap" id="delete-confirm_@i" style="display: none">
                                             <a class="confirm-delete text-danger" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-ngopartnerdocment-grid"
-                                               data-ajax-mode="replace" asp-action="RemovePartnerDocument" asp-route-pdId="@(Model.PartnerDocument[i].PartnerDocumentId)" asp-route-pId="@(Model.PartnerId)" asp-route-fName="@(Model.PartnerDocument[i].ServerDocumentName)" asp-controller="Partner">
+                                               data-ajax-mode="replace" asp-action="RemovePartnerDocument" asp-route-pdId="@(Model.PartnerDocument[i].PartnerDocumentId)" asp-route-pId="@(Model.PartnerId)" asp-route-fName="@(Model.PartnerDocument[i].ServerFileName)" asp-controller="Partner">
                                                 Yes
                                             </a> <text>|</text> <a class="delete-cancel text-dark" id="delete-cancel_@i" style="cursor: pointer">No</a>
                                         </div>
@@ -123,4 +120,5 @@
         Tooltip();
     });
 
+     
 </script>

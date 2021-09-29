@@ -4,7 +4,7 @@
     <div class="mb-2 text-end">
         <input type="hidden" asp-for="PartnerId" id="ChartDocumentPId" />
         <button class="btn btn-danger btn-sm" type="submit" name="ButtonType" value="AddChartDocument"><i class="mdi mdi-plus"></i> Add New</button>
-        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveChartDocument"><i class="mdi mdi-file-document-edit"></i> Save</button>
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveChartDocument"><i class=" uil-weight me-1"></i> Save</button>
     </div>
     <div class="row">
         <div class="mb-3">
@@ -35,8 +35,7 @@
                             <input type="hidden" asp-for="@Model.NgochartDocument[i].DocumentName" />
                         </td>
                         <td>
-                                <input asp-for="@Model.NgochartDocument[i].DocumentFile">
-                            
+                            <input asp-for="@Model.NgochartDocument[i].DocumentFile">                            
                         </td>
                         <td>
                             <input type="text" asp-for="@Model.NgochartDocument[i].Remarks" class="form-control form-control-sm" maxlength="2000" placeholder="You can enter max 2000 characters" autocomplete="off">

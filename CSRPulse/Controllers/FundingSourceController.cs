@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace CSRPulse.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class FundingSourceController : BaseController<FundingSourceController>
     {
         private readonly IFundingSourceService _fundingSourceService;

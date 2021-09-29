@@ -22,6 +22,7 @@ using CSRPulse.Models;
 namespace CSRPulse.Controllers
 {
     [Route("[Controller]/[action]")]
+    [AutoValidateAntiforgeryToken]
     public class PartnerPolicyModuleController : CSRPulse.Controllers.BaseController<PartnerPolicyModuleController>
     {
         private readonly IPartnerPolicyModuleService _partnerPolicyModuleServices;

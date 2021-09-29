@@ -428,8 +428,8 @@ namespace CSRPulse.Services
                         PartnerId = a.PartnerId,
                         DocumentId = a.DocumentId,
                         DocumentName = a.DocumentName,
-                        UploadedDocumentName=a.UploadedDocumentName,
-                        ServerDocumentName=a.ServerDocumentName,
+                        UploadFileName=a.UploadedDocumentName,
+                        ServerFileName=a.ServerDocumentName,
                         PartnerDocumentId=a.PartnerDocumentId,
                         Remark=a.Remark,
                         IsUploaded = a.IsUploaded
@@ -513,7 +513,7 @@ namespace CSRPulse.Services
         {
             try
             {
-                var result = await _partnerRepository.GetPartnerDocuments(partnerId,processId).ToListAsync();
+                var result = await _genericRepository.GetAsync<DTOModel.PartnerDocument>(x => x.PartnerId == partnerId);
                 if (result != null)
                 {
                     return result.Select(d => new PartnerDocument()
@@ -522,15 +522,19 @@ namespace CSRPulse.Services
                         PartnerId = d.PartnerId,
                         DocumentId = d.DocumentId,
                         DocumentName = d.DocumentName,
-                        UploadedDocumentName = d.UploadedDocumentName,
-                        ServerDocumentName = d.ServerDocumentName,
+                        UploadFileName = d.UploadFileName,
+                        ServerFileName = d.ServerFileName,
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                        DocumentType = d.DocumentType,
+                        Mandatory = d.Mandatory ?? false,
                         Remark = d.Remark,
-                        IsUploaded = d.IsUploaded,
-                        DocumentMaxSize = d.DocumentMaxSize,
-                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
-                        Mandatory = d.Mandatory,
+                        CreatedBy = d.CreatedBy,
+                        CreatedOn = d.CreatedOn,
+                        CreatedRid = d.CreatedRid,
+                        CreatedRname = d.CreatedRname
                     }).ToList();
                 }
+               
                 else
                     return new List<PartnerDocument>();
             }
@@ -666,5 +670,51 @@ namespace CSRPulse.Services
             }
         }
 
+        public async Task<List<Model.Document>> GetPartnerDocument(int processId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.ProcessDocument>(x => x.ProcessId == processId && x.IsActive == true);
+                if (result != null)
+                {
+                    return result.Select(d => new Model.Document()
+                    {
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                        DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                        Mandatory = d.Mandatory ?? false,
+                        Remark = d.Remark
+                    }).ToList();
+                }
+                else
+                    return new List<Model.Document>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<int> AddDocument(PartnerDocument partnerDocument)
+        {
+            try
+            {
+                int flag = 1;
+                var model = _mapper.Map<DTOModel.PartnerDocument>(partnerDocument);
+                if (!await _genericRepository.ExistsAsync<DTOModel.PartnerDocument>
+                      (x => x.DocumentId == partnerDocument.DocumentId && x.PartnerId == partnerDocument.PartnerId))
+
+                    await _genericRepository.InsertAsync<DTOModel.PartnerDocument>(model);
+                else
+                    flag = 2;
+
+                return flag;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

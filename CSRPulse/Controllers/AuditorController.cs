@@ -1,6 +1,7 @@
 ﻿using CSRPulse.Common;
 using CSRPulse.IServices;
 using CSRPulse.Model;
+using CSRPulse.Models;
 using CSRPulse.Services;
 using CSRPulse.Services.IServices;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +32,7 @@ namespace CSRPulse.Controllers
             _webHostEnvironment = webHostEnvironment;
             _ddlService = ddlService;
         }
-
+        [AutoValidateAntiforgeryToken]
         public IActionResult Index()
         {
             _logger.LogInformation("AuditorController/Index");
@@ -110,35 +111,35 @@ namespace CSRPulse.Controllers
                 var pDocument = await _processDocument.GetProcessDocuments((int)Common.ProcessDocument.AuditAgencyOnboardingDocument);
                 var auditor = _auditorServices.GetAuditorById(auditorId);
 
-                if (pDocument != null)
-                {
-                    if (auditor.AuditorDocument == null)
-                        auditor.AuditorDocument = new List<AuditorDocument>();
+                //if (pDocument != null)
+                //{
+                //    if (auditor.AuditorDocument == null)
+                //        auditor.AuditorDocument = new List<AuditorDocument>();
 
 
-                    foreach (var d in pDocument)
-                    {
-                        if (auditor.AuditorDocument.Any(x => x.DocumentId == d.DocumentId))
-                        {
-                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentName = d.DocumentName;
-                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().Mandatory = d.Mandatory;
-                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentType = d.DocumentType;
-                            auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentMaxSize = d.DocumentMaxSize ?? 20;
-                        }
-                        else
-                        {
-                            auditor.AuditorDocument.Add(new AuditorDocument
-                            {
-                                AuditorId = auditorId,
-                                DocumentId = d.DocumentId,
-                                DocumentName = d.DocumentName,
-                                DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
-                                DocumentMaxSize = d.DocumentMaxSize ?? 20,
-                                Mandatory = d.Mandatory
-                            });
-                        }
-                    }
-                }
+                //    //foreach (var d in pDocument)
+                //    //{
+                //    //    if (auditor.AuditorDocument.Any(x => x.DocumentId == d.DocumentId))
+                //    //    {
+                //    //        auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentName = d.DocumentName;
+                //    //        auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().Mandatory = d.Mandatory;
+                //    //        auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentType = d.DocumentType;
+                //    //        auditor.AuditorDocument.Where(m => m.DocumentId == d.DocumentId).FirstOrDefault().DocumentMaxSize = d.DocumentMaxSize ?? 20;
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        auditor.AuditorDocument.Add(new AuditorDocument
+                //    //        {
+                //    //            AuditorId = auditorId,
+                //    //            DocumentId = d.DocumentId,
+                //    //            DocumentName = d.DocumentName,
+                //    //            DocumentType = ExtensionMethods.GetUploadDocumentType(d.DocumentType),
+                //    //            DocumentMaxSize = d.DocumentMaxSize ?? 20,
+                //    //            Mandatory = d.Mandatory
+                //    //        });
+                //    //    }
+                //    //}
+                //}
                 return View(auditor);
             }
             catch (Exception ex)
@@ -164,14 +165,14 @@ namespace CSRPulse.Controllers
                     if (auditor.AuditorDocument != null)
                     {
                         // Check All Mandatory Documents
-                        if (auditor.AuditorDocument.Where(x => (x.Sdname == null && x.DocumentFile == null) && x.Mandatory == true).Any())
+                        if (auditor.AuditorDocument.Where(x => (x.ServerFileName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
                         {
                             ModelState.AddModelError("", "upload all mandatory documents");
                             BindDropdowns();
                             return View(auditor);
                         }
 
-                            auditor.AuditorDocument = auditor.AuditorDocument.Where(x => x.DocumentFile != null || x.Sdname != null).ToList();
+                            auditor.AuditorDocument = auditor.AuditorDocument.Where(x => x.DocumentFile != null || x.ServerFileName != null).ToList();
 
                         #region Check Mime Type
                         StringBuilder stringBuilder = new StringBuilder();
@@ -206,8 +207,8 @@ namespace CSRPulse.Controllers
                             if (auditor.AuditorDocument[i].DocumentFile != null)
                             {
                                 string folder = DocumentUploadFilePath.AuditorFilePath;
-                                auditor.AuditorDocument[i].Udname = auditor.AuditorDocument[i].DocumentFile.FileName;
-                                auditor.AuditorDocument[i].Sdname = await UploadDocument(folder, auditor.AuditorDocument[i].DocumentFile);
+                                auditor.AuditorDocument[i].UploadFileName = auditor.AuditorDocument[i].DocumentFile.FileName;
+                                auditor.AuditorDocument[i].ServerFileName = await UploadDocument(folder, auditor.AuditorDocument[i].DocumentFile);
                             }
                         }
                     }
@@ -270,6 +271,69 @@ namespace CSRPulse.Controllers
                 return Content($"file not found.");
 
             return await DownloadFile(filepath);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddDocument(int auditorId)
+        {
+            try
+            {
+                DocumentModel documentModel = new DocumentModel();
+                documentModel.documents = new List<Document>();
+                documentModel.Id = auditorId;
+                var documents = await _auditorServices.GetAuditorDocument((int)Common.ProcessDocument.AuditAgencyOnboardingDocument);
+                documentModel.documents = documents;
+
+                return Json(new { htmlData = ConvertViewToString("_AddDocument", documentModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDocument(DocumentModel model)
+        {
+            try
+            {
+                int flag = 0;
+                string msg = "Documents added successfully";
+                Auditor auditor = new Auditor();
+                var documents = model.documents.Where(x => x.AssigneDocument == true).ToList();
+
+                foreach (var item in documents)
+                {
+                    var auditorDocument = new AuditorDocument();
+                    auditorDocument.AuditorId = model.Id;
+                    auditorDocument.DocumentId = item.DocumentId;
+                    auditorDocument.DocumentName = item.DocumentName;
+                    auditorDocument.DocumentMaxSize = item.DocumentMaxSize;
+                    auditorDocument.DocumentType = item.DocumentType;
+                    auditorDocument.Mandatory = item.Mandatory;
+                    auditorDocument.Remark = item.Remark;
+                    auditorDocument.CreatedBy = userDetail.UserID;
+                    auditorDocument.CreatedRid = userDetail.RoleId;
+                    auditorDocument.CreatedRname = userDetail.RoleName;
+
+                    flag = await _auditorServices.AddDocument(auditorDocument);
+                    if (flag == 2)
+                        msg = "Some documents will not added due to already exits in the partner documents.";
+                }
+
+
+                auditor.AuditorId = model.Id;
+                auditor.AuditorDocument = new List<AuditorDocument>();
+                auditor.AuditorDocument = await _auditorServices.GetAuditorDocumentList(auditor.AuditorId, (int)Common.ProcessDocument.AuditAgencyOnboardingDocument);
+
+                return Json(new { flag = flag, msg = msg, htmlData = ConvertViewToString("_AuditorDocument", auditor, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
         }
 
     }

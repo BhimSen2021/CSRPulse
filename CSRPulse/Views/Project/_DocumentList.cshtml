@@ -31,7 +31,7 @@
                     <td>
                         @Model.ProjectDocument[i].DocumentName
                         <span class="@(Model.ProjectDocument[i].Mandatory==true?"required":"")"></span>
-                        <input type="hidden" id="MDocumentName_@i" asp-for="@Model.ProjectDocument[i].DocumentName" />
+                        <input type="hidden" id="MDocumentName_@i" asp-for="@Model.ProjectDocument[i].DocumentName" data-bs-toggle="tooltip" title="@Model.ProjectDocument[i].DocumentType"/>
                     </td>
                     <td>
                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Project" asp-action="DownloadDocument" asp-route-fileName="@Model.ProjectDocument[i].ServerFileName">@Model.ProjectDocument[i].UploadFileName</a>
