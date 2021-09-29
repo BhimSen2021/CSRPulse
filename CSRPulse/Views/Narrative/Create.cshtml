@@ -70,25 +70,13 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label asp-for="CommentRequire" class="form-label"></label>
-                                        <input asp-for="CommentRequire" type="checkbox" id="CommentRequir_@Model.QuestionId" data-switch="info" checked="checked" />
-                                        <label for="CommentRequir_@Model.QuestionId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                        <span asp-validation-for="CommentRequire" class="invalid"></span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label asp-for="IsActive" class="form-label"></label>
-                                        <input asp-for="IsActive" type="checkbox" id="@Model.QuestionId" data-switch="success" checked="checked" />
-                                        <label for="@Model.QuestionId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
-                                        <span asp-validation-for="IsActive" class="invalid"></span>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <input asp-for="IsActive" type="checkbox" id="@Model.QuestionId" data-switch="success" checked="checked" />
+                                <label for="@Model.QuestionId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
                             </div>
+                           
                             <div class="mb-2 text-end">
                                 <a asp-area="" asp-controller="Narrative" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
                                 <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>

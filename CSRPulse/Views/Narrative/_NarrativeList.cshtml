@@ -13,7 +13,7 @@
                     <th>@Html.DisplayNameFor(m => m.QuestionType)</th>
                     <th>@Html.DisplayNameFor(m => m.OrderNo)</th>
                     <th>@Html.DisplayNameFor(m => m.ContentLimit)</th>
-                    <th width="5%">@Html.DisplayNameFor(m => m.CommentRequire)</th>
+                    @*<th width="5%">@Html.DisplayNameFor(m => m.CommentRequire)</th>*@
                     <th width="5%">@Html.DisplayNameFor(m => m.IsActive)</th>
                 </tr>
             </thead>
@@ -31,12 +31,12 @@
                     <td>@narrative.QuestionType</td>
                     <td>@narrative.OrderNo</td>
                     <td>@narrative.ContentLimit</td>                    
-                    <td>
+                    @*<td>
                         <div>
                             <input type="checkbox" id="switchCR_@narrative.QuestionId#CR" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="info" onchange="openpopup(this)" @if (narrative.CommentRequire == true) { <text> checked="checked" </text> } />
                             <label for="switchCR_@narrative.QuestionId#CR" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
                         </div>
-                    </td>
+                    </td>*@
                     <td>
                         <div>
                             <input type="checkbox" id="switch_@narrative.QuestionId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (narrative.IsActive == true) { <text> checked="checked" </text> } />
