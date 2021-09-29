@@ -10,12 +10,6 @@
     });
 });
 
-//$('#ThemeId').change(function () {
-//    let ThemeId = $('#ThemeId').val();
-//    if (ThemeId != '') {
-//        BindSubTheme(ThemeId);
-//    }
-//});
 
 function BindSubTheme() {
     let themeId = $('#ThemeId').val();
@@ -220,7 +214,7 @@ function SaveLocation(lLevel, ltype) {
             $("#AddLocationDetailModal").modal('hide');
             var projectId = $('#ProjectId').val();
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 /*dataType: 'JSON',*/
                 dataType: 'html',
                 url: '/Project/SaveLocationDetail',

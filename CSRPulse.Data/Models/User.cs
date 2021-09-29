@@ -64,6 +64,8 @@ namespace CSRPulse.Data.Models
             MaintenanceUpdatedByNavigation = new HashSet<Maintenance>();
             MenuCreatedByNavigation = new HashSet<Menu>();
             MenuUpdatedByNavigation = new HashSet<Menu>();
+            NarrativeQuestionCreatedByNavigation = new HashSet<NarrativeQuestion>();
+            NarrativeQuestionUpdatedByNavigation = new HashSet<NarrativeQuestion>();
             NgoawardDetailCreatedByNavigation = new HashSet<NgoawardDetail>();
             NgoawardDetailUpdatedByNavigation = new HashSet<NgoawardDetail>();
             NgochartDocumentCreatedByNavigation = new HashSet<NgochartDocument>();
@@ -316,6 +318,10 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<Menu> MenuCreatedByNavigation { get; set; }
         [InverseProperty(nameof(Menu.UpdatedByNavigation))]
         public virtual ICollection<Menu> MenuUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(NarrativeQuestion.CreatedByNavigation))]
+        public virtual ICollection<NarrativeQuestion> NarrativeQuestionCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(NarrativeQuestion.UpdatedByNavigation))]
+        public virtual ICollection<NarrativeQuestion> NarrativeQuestionUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(NgoawardDetail.CreatedByNavigation))]
         public virtual ICollection<NgoawardDetail> NgoawardDetailCreatedByNavigation { get; set; }
         [InverseProperty(nameof(NgoawardDetail.UpdatedByNavigation))]

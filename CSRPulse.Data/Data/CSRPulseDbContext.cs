@@ -46,6 +46,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<MailSubject> MailSubject { get; set; }
         public virtual DbSet<Maintenance> Maintenance { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<NarrativeQuestion> NarrativeQuestion { get; set; }
         public virtual DbSet<NgoawardDetail> NgoawardDetail { get; set; }
         public virtual DbSet<NgochartDocument> NgochartDocument { get; set; }
         public virtual DbSet<NgocorpusGrantFund> NgocorpusGrantFund { get; set; }
@@ -1019,6 +1020,33 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.MenuUpdatedR)
                     .HasForeignKey(d => d.UpdatedRid)
                     .HasConstraintName("FK_Menu_UpdatedRId");
+            });
+
+            modelBuilder.Entity<NarrativeQuestion>(entity =>
+            {
+                entity.Property(e => e.QuestionType).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.NarrativeQuestionCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NarrativeQuestion_CreatedBy");
+
+                entity.HasOne(d => d.CreatedR)
+                    .WithMany(p => p.NarrativeQuestionCreatedR)
+                    .HasForeignKey(d => d.CreatedRid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NarrativeQuestion_CreatedRId");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.NarrativeQuestionUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_NarrativeQuestion_UpdatedBy");
+
+                entity.HasOne(d => d.UpdatedR)
+                    .WithMany(p => p.NarrativeQuestionUpdatedR)
+                    .HasForeignKey(d => d.UpdatedRid)
+                    .HasConstraintName("FK_NarrativeQuestion_UpdatedRId");
             });
 
             modelBuilder.Entity<NgoawardDetail>(entity =>

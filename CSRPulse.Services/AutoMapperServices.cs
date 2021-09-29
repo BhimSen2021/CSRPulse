@@ -30,8 +30,8 @@ namespace CSRPulse.Services
            .ForMember(d => d.IsDeleted, o => o.MapFrom(s => s.IsDeleted))
            .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
            .ForMember(d => d.CustomerUniqueId, o => o.MapFrom(s => s.CustomerUniqueId))
-           .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId)).ReverseMap()
-           .ForAllOtherMembers(i => i.Ignore());
+           .ForMember(d => d.StateId, o => o.MapFrom(s => s.StateId))
+           .ReverseMap().ForAllOtherMembers(i => i.Ignore());
 
             CreateMap<DTOModel.CustomerPayment, CustomerPayment>().ReverseMap();
             CreateMap<DTOModel.CustomerLicenseActivation, CustomerLicenseActivation>().ReverseMap();
@@ -53,7 +53,8 @@ namespace CSRPulse.Services
                 .ForMember(d => d.RoleShortName, o => o.MapFrom(s => s.RoleShortName))
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
                 .ForMember(d => d.Seniorty, o => o.MapFrom(s => s.Seniorty))
-                .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+                .ForMember(d => d.ReportTo, o => o.MapFrom(s => s.ReportTo))
+                .ReverseMap().ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<DTOModel.Maintenance, Maintenance>().ReverseMap();
             CreateMap<DTOModel.EmailConfiguration, EmailConfiguration>().ReverseMap();
@@ -112,7 +113,8 @@ namespace CSRPulse.Services
                 .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
                 .ForMember(d => d.ProcessName, o => o.MapFrom(s => s.ProcessName))
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
-                .ForMember(d => d.FinalStatus, o => o.MapFrom(s => s.FinalStatus)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+                .ForMember(d => d.FinalStatus, o => o.MapFrom(s => s.FinalStatus))
+                .ReverseMap().ForAllOtherMembers(d => d.Ignore());
 
             CreateMap<DTOModel.Designation, Model.Designation>()
                 .ForMember(d => d.DesignationId, o => o.MapFrom(s => s.DesignationId))
@@ -121,7 +123,8 @@ namespace CSRPulse.Services
                 .ForMember(d => d.CreatedBy, o => o.MapFrom(s => s.CreatedBy))
                 .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
                 .ForMember(d => d.UpdatedBy, o => o.MapFrom(s => s.UpdatedBy))
-                .ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn)).ReverseMap().ForAllOtherMembers(d => d.Ignore());
+                .ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn))
+                .ReverseMap().ForAllOtherMembers(d => d.Ignore());
 
 
             CreateMap<DTOModel.DesignationHistory, DesignationHistory>().ReverseMap();
@@ -161,7 +164,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.PartnerDocument, PartnerDocument>().ReverseMap();
 
             CreateMap<DTOModel.ProcessDocument, ProcessDocument>().ReverseMap();
-
+            CreateMap<DTOModel.NarrativeQuestion, NarrativeQuestion>().ReverseMap();
 
             #region A u d i t
 

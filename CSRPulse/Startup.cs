@@ -128,6 +128,7 @@ namespace CSRPulse
             services.AddScoped<IFinancialAuditReportService, FinancialAuditReportService>();
             services.AddScoped<IFundingSourceService, FundingSourceService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<INarrativeService, NarrativeService>();
 
             #region Partner Policy And Module
             services.AddScoped<IProjectRepository, ProjectRepository>();

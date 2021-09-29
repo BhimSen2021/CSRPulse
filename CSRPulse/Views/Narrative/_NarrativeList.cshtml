@@ -1,0 +1,63 @@
+﻿@model IEnumerable<NarrativeQuestion>
+@using CSRPulse.Common
+<div class="card">
+    <div class="card-body">
+        <div class="text-end">
+            <a asp-controller="Narrative" asp-action="Create" class="btn btn-danger btn-sm btn-rounded mb-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, add new narrative question."><i class="mdi mdi-plus-circle me-1"></i> Add New Question</a>
+        </div>
+        <table class="basic-datatable table table-hover dt-responsive nowrap w-100">
+            <thead class="thead-light">
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(m => m.Question)</th>
+                    <th>@Html.DisplayNameFor(m => m.QuestionType)</th>
+                    <th>@Html.DisplayNameFor(m => m.OrderNo)</th>
+                    <th>@Html.DisplayNameFor(m => m.ContentLimit)</th>
+                    @*<th width="5%">@Html.DisplayNameFor(m => m.CommentRequire)</th>*@
+                    <th width="5%">@Html.DisplayNameFor(m => m.IsActive)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var narrative in Model)
+                    {
+                <tr>
+                    <td>
+                        <span>@(Model.ToList().IndexOf(narrative) +1).</span>
+                    </td>
+
+                    <td><span data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to edit this question."> @Html.ActionLink(narrative.Question, "Edit", "Narrative", new { questionId = narrative.QuestionId })</span></td>
+                    <td>@narrative.QuestionType</td>
+                    <td>@narrative.OrderNo</td>
+                    <td>@narrative.ContentLimit</td>                    
+                    @*<td>
+                        <div>
+                            <input type="checkbox" id="switchCR_@narrative.QuestionId#CR" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="info" onchange="openpopup(this)" @if (narrative.CommentRequire == true) { <text> checked="checked" </text> } />
+                            <label for="switchCR_@narrative.QuestionId#CR" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>*@
+                    <td>
+                        <div>
+                            <input type="checkbox" id="switch_@narrative.QuestionId" data-bs-toggle="modal" data-bs-target="#info-header-modal" data-switch="success" onchange="openpopup(this)" @if (narrative.IsActive == true) { <text> checked="checked" </text> } />
+                            <label for="switch_@narrative.QuestionId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                        </div>
+                    </td>
+                </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Basicdatatable();
+    });
+</script>

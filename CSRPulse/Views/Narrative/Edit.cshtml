@@ -1,0 +1,105 @@
+﻿@model CSRPulse.Model.NarrativeQuestion
+@{
+    ViewData["Title"] = "Edit Question";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item active">Narrative Question</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Question</h4>
+        </div>
+    </div>
+    <div class="col">
+        <partial name="_NoteFieldsMark" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" asp-area="" asp-controller="Narrative" asp-action="Edit">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="QuestionId" />
+                    <div class="row">
+                        <div class="col-xxl-6 col-xl-6 col-lg-8 col-md-8 col-sm-12 col-12">
+                            <div class="mb-3">
+                                <label asp-for="ProcessId" class="form-label required"></label>
+                                <select asp-for="ProcessId" asp-items="@ViewBag.ddlProcess" aria-required="true" class="form-select" disabled>
+                                    <option disabled="" label="Select Process" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="ProcessId" class="invalid"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Question" class="form-label required"></label>
+                                <input type="text" asp-for="Question" class="form-control" maxlength="500" placeholder="Enter question name (max 500 characters)" autocomplete="off">
+                                <span asp-validation-for="Question" class="invalid"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="QuestionType" class="form-label required"></label>
+                                <select asp-for="QuestionType" aria-required="true" class="form-select" onchange="onQuestionType(this.id)">
+                                    <option label="Select Question Type" selected="" value=""></option>
+                                    <option value="Text">Text</option>
+                                    <option value="Bool">Yes/No</option>
+                                    <option value="Number">Number</option>
+                                    <option value="Decimal">Decimal</option>
+                                </select>
+                                <span asp-validation-for="QuestionType" class="invalid"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label asp-for="ContentLimit" class="form-label"></label>
+                                        <input type="number" asp-for="ContentLimit" onkeypress="return onlyNumber(event)" class="form-control text-end" min="1" max="4000" maxlength="4" placeholder="Enter content limit (max 4 digits only)" autocomplete="off">
+                                        <span asp-validation-for="ContentLimit" class="invalid"></span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label asp-for="OrderNo" class="form-label"></label>
+                                        <input type="number" asp-for="OrderNo" min="1" max="50" onkeypress="return onlyNumber(event)" class="form-control text-end" maxlength="2" placeholder="Enter order number (max 2 digits only)" autocomplete="off">
+                                        <span asp-validation-for="OrderNo" class="invalid"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="IsActive" class="form-label"></label>
+                                <input asp-for="IsActive" type="checkbox" id="@Model.QuestionId" data-switch="success" checked="checked" />
+                                <label for="@Model.QuestionId" data-on-label="Yes" data-off-label="No" class="mb-0 d-block"></label>
+                                <span asp-validation-for="IsActive" class="invalid"></span>
+                            </div>                           
+                            <div class="mb-2 text-end">
+                                <a asp-area="" asp-controller="Narrative" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document m-1"></i> Save </button>
+                            </div>
+                        </div>
+
+                    </div> <!-- end card -->
+                </form>
+            </div> <!-- end card body-->
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        function onQuestionType(id) {
+            var type = $("#" + id).val();
+            var contentlimitId = id.replace('QuestionType', 'ContentLimit');
+            if (type == "Bool") {
+                $("#" + contentlimitId).val('');
+                $("#" + contentlimitId).attr('readonly', true);
+            }
+            else
+                $("#" + contentlimitId).attr('readonly', false);
+        }
+    </script>
+}

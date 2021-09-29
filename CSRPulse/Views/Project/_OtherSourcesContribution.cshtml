@@ -34,7 +34,7 @@
                                 <span asp-validation-for="@Model.ProjectOtherSource[i].SourceId" class="invalid"></span>
                             </td>
                             <td>
-                                <input type="text" asp-for="@Model.ProjectOtherSource[i].Amount" asp-format="{0:N}" class="form-control form-control-sm" onchange="checkAmountOS(this.id)" maxlength="16" onkeypress="return DecimalNumberOnly(event)" onblur="javascript:return CFormat(this.id)" autocomplete="off">
+                                <input type="text" asp-for="@Model.ProjectOtherSource[i].Amount" asp-format="{0:N}" class="form-control form-control-sm text-end" onchange="checkAmountOS(this.id)" maxlength="16" onkeypress="return DecimalNumberOnly(event)" onblur="javascript:return CFormat(this.id)" autocomplete="off">
                                 <span asp-validation-for="@Model.ProjectOtherSource[i].Amount" class="invalid"></span>
                             </td>
                             <td><label id="lblPerOS_@i">@Model.ProjectOtherSource[i].Per</label></td>
