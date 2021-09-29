@@ -20,29 +20,29 @@
                 {
                     for (int i = 0; i < Model.ProjectInternalSource.Count; i++)
                     {
-                <tr>
-                    <td>
-                        <span>@(i+1)</span>
-                        <input type="hidden" asp-for="@Model.ProjectInternalSource[i].RevisionNo" />
-                        <input type="hidden" asp-for="@Model.ProjectInternalSource[i].ProjectId" />
-                    </td>
-                    
-                    <td>
-                        <select asp-for="@Model.ProjectInternalSource[i].SourceId" asp-items="ddlInternalSource" aria-required="true" class="form-select">
-                            <option disabled="" label="Select Source Type" selected="" value=""></option>
-                        </select>
-                        <span asp-validation-for="@Model.ProjectInternalSource[i].SourceId" class="invalid"></span>
-                    </td>
-                    <td>
-                        <input type="text" asp-for="@Model.ProjectInternalSource[i].Amount" asp-format="{0:N}" class="form-control form-control-sm" maxlength="16" onchange="checkAmountIS(this.id)" onkeypress="return DecimalNumberOnly(event)" onblur="javascript:return CFormat(this.id)" autocomplete="off">
-                        <span asp-validation-for="@Model.ProjectInternalSource[i].Amount" class="invalid"></span>
-                    </td>
-                    <td><label id="lblPerIS_@i">@Model.ProjectInternalSource[i].Per</label></td>
-                    <td>
-                        <a class="font-16" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-internalSource-grid"
-                           data-ajax-mode="replace" asp-action="RemoveIS" asp-route-srNo="@(i)" asp-controller="Project"><i class="dripicons-trash text-danger"></i></a>
-                    </td>
-                </tr>
+                        <tr>
+                            <td>
+                                <span>@(i+1)</span>
+                                <input type="hidden" asp-for="@Model.ProjectInternalSource[i].RevisionNo" />
+                                <input type="hidden" asp-for="@Model.ProjectInternalSource[i].ProjectId" />
+                            </td>
+
+                            <td>
+                                <select asp-for="@Model.ProjectInternalSource[i].SourceId" asp-items="ddlInternalSource" aria-required="true" class="form-select">
+                                    <option disabled="" label="Select Source Type" selected="" value=""></option>
+                                </select>
+                                <span asp-validation-for="@Model.ProjectInternalSource[i].SourceId" class="invalid"></span>
+                            </td>
+                            <td>
+                                <input type="text" asp-for="@Model.ProjectInternalSource[i].Amount" asp-format="{0:N}" class="form-control form-control-sm text-end" maxlength="16" onchange="checkAmountIS(this.id)" onkeypress="return DecimalNumberOnly(event)" onblur="javascript:return CFormat(this.id)" autocomplete="off">
+                                <span asp-validation-for="@Model.ProjectInternalSource[i].Amount" class="invalid"></span>
+                            </td>
+                            <td><label id="lblPerIS_@i">@Model.ProjectInternalSource[i].Per</label></td>
+                            <td>
+                                <a class="font-16" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-internalSource-grid"
+                                   data-ajax-mode="replace" asp-action="RemoveIS" asp-route-srNo="@(i)" asp-controller="Project"><i class="dripicons-trash text-danger"></i></a>
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>

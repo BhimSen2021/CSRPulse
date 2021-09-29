@@ -274,6 +274,12 @@ namespace CSRPulse.Services
             return processList.ToList();
         }
 
+        public IEnumerable<SelectListModel> GetProcessByFinalStatus(int? finalStatus)
+        {
+            var dtoProcess = _genericRepository.Get<DTOModel.Process>(x => finalStatus.HasValue ? x.FinalStatus == finalStatus.Value : (1 > 0) && x.IsActive == true);
+            var processList = _mapper.Map<List<SelectListModel>>(dtoProcess);
+            return processList.ToList();
+        }
         public IEnumerable<SelectListModel> GetModule(int? moduleId)
         {
             var modules = _genericRepository.Get<DTOModel.AuditReviewModule>(x => moduleId.HasValue ? x.ModuleId == moduleId.Value : (1 > 0) && x.IsActive == true);

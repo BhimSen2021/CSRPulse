@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "Narrative";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>                    
+                    <li class="breadcrumb-item active">Narrative</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Narrative Question List</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @{await Html.RenderPartialAsync("_Filter");}
+</div>
+<div class="row" id="div-question-list"></div>
+
+<partial name="_Confirmation" />
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function openpopup(cnt) {
+            var id = cnt.id.split('_')[1];
+            $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+        }
+        function ActiveDeActive(obj) {
+            var id = obj.id.split('_')[0];
+            var isChecked = obj.id.split('_')[1];
+            var varname = id.split('#')[1];
+            id = id.split('#')[0];
+           var urlval = '';
+            if (varname == 'CR') {
+                urlval = '@Url.Action("CommentRequired", "Narrative")';
+            }
+            else {
+                 urlval = '@Url.Action("ActiveDeActive", "Narrative")';
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: urlval,
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                data: { id: id, isChecked: isChecked },
+                success: function (responce) {
+                    if (responce) {
+                        commonMessage('success', 'Status changed successfully.');
+                    }
+
+                    else {
+                        commonMessage('warning', 'Status changing failed.');
+                    }
+                },
+                error: function (responce) {
+                    commonMessage('error', 'Status changing failed.');
+                }
+            });
+        }        
+    </script>
+}
+
+
