@@ -415,5 +415,21 @@ namespace CSRPulse.Services
             }
         }
 
+        public async Task<List<ProjectNarrativeQuestion>> GetProjectNarrative(ProjectNarrativeQuestion projectNarrative)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.ProjectNarrativeQuestion>
+                    (x => x.ProjectId == projectNarrative.ProjectId
+                    && x.ProcessId == projectNarrative.ProcessId
+                    && x.IsActive == true);
+                return _mapper.Map<List<ProjectNarrativeQuestion>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

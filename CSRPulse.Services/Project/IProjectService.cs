@@ -28,5 +28,6 @@ namespace CSRPulse.Services
 
         Task<List<NarrativeQuestion>> GetNarrativeAsync(int? processId);
         Task<int> AddProjectNarrative(ProjectNarrativeQuestion projectNarrative);
+        Task<List<ProjectNarrativeQuestion>> GetProjectNarrative(ProjectNarrativeQuestion projectNarrative);
     }
 }

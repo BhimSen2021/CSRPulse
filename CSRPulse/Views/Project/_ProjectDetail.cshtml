@@ -222,12 +222,12 @@
             }
         });
     }
-    function OnProcessChange() {        
+    function OnProcessChange() {
         $.ajax({
             type: 'GET',
             dataType: 'JSON',
             url: '@Url.Action("GetNarrativeList", "Project", new { Area=""})',
-            data: { processId: $('#ProcessId').val() },
+            data: { projectId: @Model.ProjectId ,processId: $('#ProcessId').val() },
                 success: function (data) {
                     $("#narrative-grid").html(data.htmlData);
             },

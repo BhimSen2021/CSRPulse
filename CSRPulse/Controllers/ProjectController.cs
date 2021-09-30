@@ -800,6 +800,15 @@ namespace CSRPulse.Controllers
                 var documents = await _projectService.GetProcessDocument((int)Common.ProcessDocument.DocumentProject);
                 documentModel.documents = documents;
 
+                var projectDocuments = await _projectService.GetDocumentList(projectId, (int)Common.ProcessDocument.DocumentProject);
+                foreach (var projectDocument in projectDocuments)
+                {
+                    if (documentModel.documents.Any(x => x.DocumentId == projectDocument.DocumentId))
+                    {
+                        documentModel.documents.Where(x => x.DocumentId == projectDocument.DocumentId).FirstOrDefault().AssigneDocument = true;
+                    }
+                }
+
                 return Json(new { htmlData = ConvertViewToString("_AddDocument", documentModel, true) });
             }
             catch (Exception ex)
@@ -897,6 +906,18 @@ namespace CSRPulse.Controllers
                 var questions = await GetNarrative((int)ProcessName.ProjectOverviewNarrative);
                 narrativeModel.narratives = questions;
 
+                var projectNarratives = await _projectService.GetProjectNarrative(new ProjectNarrativeQuestion() { ProjectId = projectId, ProcessId = (int)Common.ProcessName.ProjectOverviewNarrative });
+
+                foreach (var projectNarrative in projectNarratives)
+                {
+                    if (narrativeModel.narratives.Any(x => x.QuestionId == projectNarrative.QuestionId))
+                    {
+                        narrativeModel.narratives
+                            .Where(x => x.QuestionId == projectNarrative.QuestionId).FirstOrDefault()
+                            .AssigneNarrative = true;
+                    }
+                }
+
                 return Json(new { htmlData = ConvertViewToString("_AddNarrativeModal", narrativeModel, true) });
             }
             catch (Exception ex)
@@ -926,7 +947,7 @@ namespace CSRPulse.Controllers
                     projectNarrative.QuestionType = narrative.QuestionType;
                     projectNarrative.ContentLimit = narrative.ContentLimit;
                     projectNarrative.OrderNo = narrative.OrderNo;
-                    projectNarrative.IsActive = narrative.IsActive;
+                    projectNarrative.IsActive = true;
                     projectNarrative.CreatedBy = userDetail.UserID;
                     projectNarrative.CreatedRid = userDetail.RoleId;
                     projectNarrative.CreatedRname = userDetail.RoleName;
@@ -951,7 +972,7 @@ namespace CSRPulse.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNarrativeList(int processId)
+        public async Task<IActionResult> GetNarrativeList(int projectId, int processId)
         {
             try
             {
@@ -959,6 +980,18 @@ namespace CSRPulse.Controllers
                 narrativeModel.narratives = new List<NarrativeQuestion>();
                 var questions = await GetNarrative(processId);
                 narrativeModel.narratives = questions;
+
+                var projectNarratives = await _projectService.GetProjectNarrative(new ProjectNarrativeQuestion() { ProjectId = projectId, ProcessId = processId });
+
+                foreach (var projectNarrative in projectNarratives)
+                {
+                    if (narrativeModel.narratives.Any(x => x.QuestionId == projectNarrative.QuestionId))
+                    {
+                        narrativeModel.narratives
+                            .Where(x => x.QuestionId == projectNarrative.QuestionId).FirstOrDefault()
+                            .AssigneNarrative = true;
+                    }
+                }
                 return Json(new { htmlData = ConvertViewToString("_NarrativeList", narrativeModel, true) });
             }
             catch (Exception ex)
