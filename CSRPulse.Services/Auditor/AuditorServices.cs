@@ -82,7 +82,7 @@ namespace CSRPulse.Services
             {
                 var IsExist = _genericRepository.Exists<DTOModel.Auditor>(x => x.AuditOrganization.ToLower() == auditor.AuditOrganization.ToLower() && x.AuditorId != auditor.AuditorId);
 
-                var auditorDocuments = _mapper.Map<List<DTOModel.AuditorDocument>>(auditor.AuditorDocument);
+                //var auditorDocuments = _mapper.Map<List<DTOModel.AuditorDocument>>(auditor.AuditorDocument);
 
                 auditor.IsExist = IsExist;
 
@@ -109,16 +109,16 @@ namespace CSRPulse.Services
                         _genericRepository.Update(result);
 
                     }
-                    var oldDocument = await _genericRepository.GetAsync<DTOModel.AuditorDocument>(x => x.AuditorId == auditor.AuditorId);
-                    if (oldDocument != null && oldDocument.ToList().Count > 0)
-                    {
-                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.AuditorDocument>(oldDocument);
-                        await _genericRepository.AddMultipleEntityAsync(auditorDocuments);
-                    }
-                    else
-                    {
-                        _genericRepository.AddMultipleEntity(auditorDocuments);
-                    }
+                    //var oldDocument = await _genericRepository.GetAsync<DTOModel.AuditorDocument>(x => x.AuditorId == auditor.AuditorId);
+                    //if (oldDocument != null && oldDocument.ToList().Count > 0)
+                    //{
+                    //    await _genericRepository.RemoveMultipleEntityAsync<DTOModel.AuditorDocument>(oldDocument);
+                    //    await _genericRepository.AddMultipleEntityAsync(auditorDocuments);
+                    //}
+                    //else
+                    //{
+                    //    _genericRepository.AddMultipleEntity(auditorDocuments);
+                    //}
                     return true;
                 }
                 return false;
@@ -218,6 +218,48 @@ namespace CSRPulse.Services
                     flag = 2;
 
                 return flag;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<AuditorDocument>> GetUpdateAuditorDocument(Auditor auditor)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.AuditorDocument>>(auditor.AuditorDocument);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.AuditorDocument>(x => x.AuditorId == auditor.AuditorId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.AuditorDocument>(x => x.AuditorId == auditor.AuditorId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.AuditorDocument>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.AuditorDocument>(x => x.AuditorId == auditor.AuditorId);
+
+                return _mapper.Map<List<AuditorDocument>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeleteAuditorDocument(int auditorId)
+        {
+            try
+            {
+                _genericRepository.Delete<DTOModel.AuditorDocument>(auditorId);
+                return true;
             }
             catch (Exception)
             {

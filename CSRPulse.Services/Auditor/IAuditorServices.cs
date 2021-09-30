@@ -14,6 +14,8 @@ namespace CSRPulse.Services
         Task<List<Document>> GetAuditorDocument(int processId);
         Task<List<AuditorDocument>> GetAuditorDocumentList(int auditorId, int processId);
         Task<int> AddDocument(AuditorDocument auditorDocument);
+        Task<List<AuditorDocument>> GetUpdateAuditorDocument(Auditor auditor);
+        bool DeleteAuditorDocument(int auditorId);
 
     }
 }

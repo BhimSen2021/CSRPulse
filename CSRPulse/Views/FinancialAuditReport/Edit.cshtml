@@ -79,10 +79,7 @@
                                 <label asp-for="AuditDate" class="form-label required"></label>
                                 @Html.EditorFor(model => model.AuditDate, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
                                 <span asp-validation-for="AuditDate" class="invalid"></span>
-                                @*<label asp-for="AuditDate" class="form-label">Audit Date</label>
-        <input type="date" asp-for="AuditDate" class="form-control" asp-format="{0:dd/MM/yyyy}" autocomplete="off">
-        <span asp-validation-for="AuditDate" class="invalid"></span>*@
-                            </div>
+                                 </div>
                             <div class="mb-3">
                                 <label asp-for="IsActive" class="form-label">Scorecard</label>
                                 <div>
@@ -95,7 +92,7 @@
 
                             <div class="mb-2 text-end">
                                 <a asp-area="" asp-controller="FinancialAuditReport" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
-                                <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="uil-weight me-1"></i> Update </button>
                             </div>
                         </div>
 

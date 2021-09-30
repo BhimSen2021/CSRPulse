@@ -15,6 +15,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CSRPulse.Common.FileHelper;
+
 
 namespace CSRPulse.Controllers
 {
@@ -151,7 +153,7 @@ namespace CSRPulse.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(Auditor auditor)
+        public async Task<IActionResult> Edit(Auditor auditor,string ButtonType)
         {
             try
             {
@@ -160,22 +162,18 @@ namespace CSRPulse.Controllers
                 {
                     auditor.UpdatedBy = userDetail.CreatedBy;
                     auditor.UpdatedOn = DateTime.Now;
-
-                    // Upload Documents
-                    if (auditor.AuditorDocument != null)
+                    string fileName = string.Empty;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    int flag = 0;
+                    if (ButtonType == "SaveAuditorDocument")
                     {
-                        // Check All Mandatory Documents
                         if (auditor.AuditorDocument.Where(x => (x.ServerFileName == null && x.DocumentFile == null) && x.Mandatory == true).Any())
-                        {
-                            ModelState.AddModelError("", "upload all mandatory documents");
-                            BindDropdowns();
-                            return View(auditor);
-                        }
+                            return Json(new { flag = 2, type = 1, msg = "select all mandatory documents", htmlData = ConvertViewToString("_AuditorDocument", auditor, true) });
 
-                            auditor.AuditorDocument = auditor.AuditorDocument.Where(x => x.DocumentFile != null || x.ServerFileName != null).ToList();
+                        var listAD = auditor.AuditorDocument.Where(s => s.ServerFileName != null || s.DocumentFile != null).ToList();
 
                         #region Check Mime Type
-                        StringBuilder stringBuilder = new StringBuilder();
+
                         for (int i = 0; i < auditor.AuditorDocument.Count; i++)
                         {
                             if (auditor.AuditorDocument[i].DocumentFile != null)
@@ -184,32 +182,66 @@ namespace CSRPulse.Controllers
                                 {
                                     stringBuilder.Append($"# {i + 1} The file format of the {auditor.AuditorDocument[i].DocumentFile.FileName} file is incorrect");
                                     stringBuilder.Append("<br>");
+                                    flag = 3;
                                 }
                             }
                         }
 
                         if (stringBuilder.ToString() != "")
                         {
-                            ModelState.AddModelError("", stringBuilder.ToString());
-                            BindDropdowns();
-                            return View(auditor);
+                            return Json(new { flag = 3, msg = stringBuilder.ToString(), htmlData = ConvertViewToString("_AuditorDocument", auditor, true) });
                         }
                         #endregion
 
-                        for (int i = 0; i < auditor.AuditorDocument.Count; i++)
+                        //RevoveModelState
+                        if (TryValidateModel(auditor.AuditorDocument))
                         {
-                            auditor.AuditorDocument[i].CreatedBy = userDetail.UserID;
-                            auditor.AuditorDocument[i].CreatedOn = auditor.UpdatedOn ?? DateTime.Now;
-                            auditor.AuditorDocument[i].CreatedRid = userDetail.RoleId;
-                            auditor.AuditorDocument[i].CreatedRname = userDetail.RoleName;
-                            auditor.AuditorDocument[i].AuditorId = auditor.AuditorId;
-
-                            if (auditor.AuditorDocument[i].DocumentFile != null)
+                            var CreatedOn = DateTime.Now;
+                            string SDocumentName = string.Empty;
+                            for (int i = 0; i < listAD.Count; i++)
                             {
-                                string folder = DocumentUploadFilePath.AuditorFilePath;
-                                auditor.AuditorDocument[i].UploadFileName = auditor.AuditorDocument[i].DocumentFile.FileName;
-                                auditor.AuditorDocument[i].ServerFileName = await UploadDocument(folder, auditor.AuditorDocument[i].DocumentFile);
+                                listAD[i].AuditorId = auditor.AuditorId;
+                                listAD[i].AuditorDocumentId = 0;
+                                listAD[i].CreatedOn = DateTime.UtcNow;
+                                listAD[i].CreatedBy = userDetail.UserID;
+                                listAD[i].CreatedRid = userDetail.RoleId;
+                                listAD[i].CreatedRname = userDetail.RoleName;
+
+
+                                if (listAD[i].DocumentFile != null)
+                                {
+                                    var filePath = DocumentUploadFilePath.AuditorFilePath;
+                                    listAD[i].UploadFileName = auditor.AuditorDocument[i].DocumentFile.FileName;
+                                    listAD[i].DocumentId = auditor.AuditorDocument[i].DocumentId;
+
+                                    SDocumentName = await UploadAuditorDocument(filePath, auditor.AuditorDocument[i].DocumentFile);
+
+                                    if (SDocumentName == "FormulaFound")
+                                    {
+                                        stringBuilder.Append($"# {i + 1} {auditor.AuditorDocument[i].DocumentFile.FileName} contains formula or arithmetic operators that is not allowed in system");
+                                        stringBuilder.Append("<br>");
+                                        flag = 4;
+                                    }
+                                    else
+                                    {
+                                        listAD[i].ServerFileName = SDocumentName;
+                                    }
+                                }
                             }
+                            if (stringBuilder.ToString() != "")
+                            {
+                                return Json(new { flag = flag, msg = stringBuilder.ToString(), htmlData = ConvertViewToString("_AuditorDocument", auditor, true) });
+
+                            }
+
+                            auditor.AuditorDocument = listAD;
+                            var Details = await _auditorServices.GetUpdateAuditorDocument(auditor);
+                            var documents = await _auditorServices.GetAuditorDocumentList(auditor.AuditorId, (int)Common.ProcessDocument.AuditAgencyOnboardingDocument);
+                            auditor.AuditorDocument = documents;
+
+                            flag = 1;
+                            return Json(new { flag = flag, msg = "Document Upload Succesfully", htmlData = ConvertViewToString("_AuditorDocument", auditor, true) });
+
                         }
                     }
 
@@ -319,7 +351,7 @@ namespace CSRPulse.Controllers
 
                     flag = await _auditorServices.AddDocument(auditorDocument);
                     if (flag == 2)
-                        msg = "Some documents will not added due to already exits in the partner documents.";
+                        msg = "Some documents will not added due to already exits in the auditor documents.";
                 }
 
 
@@ -334,6 +366,74 @@ namespace CSRPulse.Controllers
                 _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
                 throw;
             }
+        }
+        public IActionResult DownloadAuditorDocument(string fileName)
+        {
+            var filePath = DocumentUploadFilePath.AuditorFilePath;
+            var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath + fileName);
+            if (!System.IO.File.Exists(sPhysicalPath))
+                return Content($"file not found.");
+            return DownloadAnyFile(fileName, sPhysicalPath, null);
+        }
+        private async Task<string> UploadAuditorDocument(string filePath, IFormFile file)
+        {
+            try
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                var auditor = new Auditor();
+                string fileName = string.Empty;
+                if (!Directory.Exists(Path.Combine(_webHostEnvironment.WebRootPath, filePath)))
+                    Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, filePath));
+                var uploadedFilePath = Path.Combine(_webHostEnvironment.WebRootPath, filePath);
+                var fileupload = await UploadFile(uploadedFilePath, file);
+                string fileExtension = Path.GetExtension(file.FileName);
+                if (fileExtension == ".xlsx" || fileExtension == ".xls")
+                {
+                    fileName = Path.GetExtension(file.FileName);
+                    string sPhysicalPath = Path.Combine(uploadedFilePath, fileName);
+                    #region C H E C K  F O R M U L A S
+                    var isFormulas = CheckFormulaInExcelFile(sPhysicalPath);
+                    if (isFormulas)
+                    {
+                        DeleteFile(sPhysicalPath);
+                        fileupload = "FormulaFound";
+                    }
+                    #endregion
+                }
+                return fileupload;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+        public async Task<PartialViewResult> RemoveAuditorDocument(int adId, int aId, string fName)
+        {
+            try
+            {
+                var auditor = new Auditor();
+                auditor.AuditorId = aId;
+                var isDeleted = _auditorServices.DeleteAuditorDocument(adId);
+                if (isDeleted)
+                {
+                    var filePath = DocumentUploadFilePath.AuditorFilePath;
+                    var sPhysicalPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath + fName);
+                    if (System.IO.File.Exists(sPhysicalPath))
+                    {
+                        FileInfo myfile = new FileInfo(sPhysicalPath);
+                        myfile.Delete();
+                    }
+                }
+                auditor.AuditorDocument = await _auditorServices.GetAuditorDocumentList(auditor.AuditorId, (int)Common.ProcessDocument.AuditAgencyOnboardingDocument);
+                return PartialView("_AuditorDocument", auditor);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
         }
 
     }

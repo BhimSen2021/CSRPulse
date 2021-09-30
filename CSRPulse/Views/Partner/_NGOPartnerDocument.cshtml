@@ -18,8 +18,8 @@
       data-ajax-success="onPartnerDocument">
     <div class="mb-2 text-end">
         <input type="hidden" asp-for="PartnerId" id="PartnerDocumentId" />
-        <button class="btn btn-danger btn-sm" type="button" value="AddDocument" onclick="AddDocument()" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to Add Document"><i class="mdi mdi-plus me-1"></i>Add Document</button>
-        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SavePartnerDocument" id="btnSave"><i class="mdi mdi-file-document-edit"></i> Save</button>
+        <button class="btn btn-danger btn-sm" type="button" value="AddDocument" onclick="AddDocument()" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to Add new Document"><i class="mdi mdi-plus me-1"></i>Add Document</button>
+        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SavePartnerDocument" id="btnSave"><i class=" uil-weight me-1"></i> Save</button>
     </div>
     <div class="row">
         <div class="mb-3">
@@ -55,7 +55,7 @@
                                     <input type="hidden" id="CreatedRname_@i" asp-for="@Model.PartnerDocument[i].CreatedRname" />
                                 </td>
                                 <td>
-                                    <a data-bs-toggle="tooltip" title="@String.Format("<b>Allow document Types:</b> {0}\n <b>Maximum  Size:</b> {1}", Model.PartnerDocument[i].DocumentType,Model.PartnerDocument[i].DocumentMaxSize)">@Model.PartnerDocument[i].DocumentName</a>
+                                    <a data-bs-toggle="tooltip" data-bs-html="true" title="@String.Format("<b>Allow document Types:</b> {0}\n <b>Maximum  Size:</b> {1}", Model.PartnerDocument[i].DocumentType,Model.PartnerDocument[i].DocumentMaxSize)">@Model.PartnerDocument[i].DocumentName</a>
                                     <span class="@(Model.PartnerDocument[i].Mandatory==true?"required":"")"></span>
                                     <input type="hidden" asp-for="@Model.PartnerDocument[i].DocumentName" />
                                 </td>

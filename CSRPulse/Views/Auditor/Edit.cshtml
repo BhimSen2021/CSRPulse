@@ -27,7 +27,9 @@
 
 <div class="card">
     <div class="card-body">
-        <form method="post" asp-controller="Auditor" asp-action="Edit" enctype="multipart/form-data">
+        <form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" enctype="multipart/form-data" asp-action="Edit" asp-controller="Auditor"
+              data-ajax-success="onAuditorDocument">
+            @*<form method="post" asp-controller="Auditor" asp-action="Edit" enctype="multipart/form-data">*@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AuditorId" />
@@ -90,7 +92,8 @@
                     <h5>Document List</h5>
                 </div>
                 <div class="mb-6 text-end">
-                    <button class="btn btn-danger btn-sm" type="button" onclick="AddDocument()" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to assign Role"><i class="mdi mdi-plus me-1"></i>Add Document</button>
+                    <button class="btn btn-danger btn-sm" type="button" onclick="AddDocument()" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to Add New Document"><i class="mdi mdi-plus me-1"></i>Add Document</button>
+                    <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveAuditorDocument" id="btnSave"><i class=" uil-weight me-1"></i> Save</button>
                 </div>
 
                 <div id="div-auditordocument-grid">
@@ -99,7 +102,7 @@
 
                 <div class="mb-2 text-end">
                     <a asp-area="" asp-controller="Auditor" asp-action="Index" class="btn btn-light btn-sm"><i class="dripicons-reply m-1"></i> Back to list </a>
-                    <button class="btn btn-primary btn-sm" type="submit"><i class="mdi mdi-file-document-edit m-1"></i> Update </button>
+                    <button class="btn btn-primary btn-sm" type="submit"><i class=" uil-weight me-1"></i> Update </button>
                 </div>
 
 
@@ -115,6 +118,16 @@
     </div>
 </form>
 <script type="text/javascript">
+    function onAuditorDocument(data) {
+        $("#div-auditordocument-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'Auditor Document Saved Successfully.');
+        }
+        else if (data.flag == 2) {
+            commonMessage('warning', data.msg);
+        }
+       
+    }
      function AddDocument() {
             $.ajax({
             type: 'GET',

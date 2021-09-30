@@ -27,7 +27,7 @@
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].DocumentMaxSize" />
                             <input type="hidden" asp-for="@Model.AuditorDocument[i].Mandatory" />
                         </td>
-                        <td><a data-bs-toggle="tooltip" title="@String.Format("<b>Allow document Types:</b> {0}\n <b>Maximum  Size:</b> {1}", Model.AuditorDocument[i].DocumentType,Model.AuditorDocument[i].DocumentMaxSize)">@Model.AuditorDocument[i].DocumentName</a><span class="@(Model.AuditorDocument[i].Mandatory==true?"required":"")"></span></td>
+                        <td><a data-bs-toggle="tooltip" data-bs-html="true" title="@String.Format("<b>Allow document Types:</b> {0}\n <b>Maximum  Size:</b> {1}", Model.AuditorDocument[i].DocumentType,Model.AuditorDocument[i].DocumentMaxSize)">@Model.AuditorDocument[i].DocumentName</a><span class="@(Model.AuditorDocument[i].Mandatory==true?"required":"")"></span></td>
                         <td><a id="lnk_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Download document" asp-controller="Auditor" asp-action="DownloadDocument" asp-route-fileName="@Model.AuditorDocument[i].ServerFileName">@Model.AuditorDocument[i].UploadFileName</a></td>
                         <td>
                             @if (Model.AuditorDocument[i].ServerFileName == null)
@@ -42,9 +42,17 @@
                         </td>
                         <td><input type="text" asp-for="@Model.AuditorDocument[i].Remark" class="form-control form-control-sm" maxlength="256" placeholder="You can enter max 256 characters" autocomplete="off"></td>
                         <th>
-                            @if (Model.AuditorDocument[i].ServerFileName != null)
+                            @if (Model.AuditorDocument[i].ServerFileName != null && Model.AuditorDocument[i].AuditorDocumentId > 0)
                             {
-                                <a href="javascript:void(0);" class="action-icon" id="AuditorDocument_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear document" onclick="RemoveFile(this)"><i class="dripicons-document-delete text-danger"></i></a>
+                                <a class="font-16 delete-link action-icon" id="delete-link_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record">
+                                    <i class="dripicons-trash text-danger" aria-hidden="true"></i>
+                                </a>
+                                <div class="delete-confirm text-nowrap" id="delete-confirm_@i" style="display: none">
+                                    <a class="confirm-delete text-danger" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-auditordocument-grid"
+                                       data-ajax-mode="replace" asp-action="RemoveAuditorDocument" asp-route-adId="@(Model.AuditorDocument[i].AuditorDocumentId)" asp-route-aId="@(Model.AuditorId)" asp-route-fName="@(Model.AuditorDocument[i].ServerFileName)" asp-controller="Auditor">
+                                        Yes
+                                    </a> <text>|</text> <a class="delete-cancel text-dark" id="delete-cancel_@i" style="cursor: pointer">No</a>
+                                </div>
                             }
                         </th>
                     </tr>
@@ -56,10 +64,5 @@
 
 
 <script type="text/javascript">
-    /**/
-    function RemoveFile(obj) {
-        $('#' + obj.id + '__ServerFileName').val('');
-        $('#' + obj.id + '__Remark').val('');
-        $('#' + obj.id.replace('AuditorDocument', 'lnk')).text('');
-    }
+   
 </script>
