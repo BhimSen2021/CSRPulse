@@ -23,5 +23,6 @@ namespace CSRPulse.Model
         public int? OrderNo { get; set; }
         [Display(Name = "Active")]
         public bool? IsActiveFilter { get; set; }
+        public bool AssigneNarrative { get; set; }
     }
 }

@@ -882,6 +882,93 @@ namespace CSRPulse.Controllers
         }
         #endregion
 
+        #region Narrative
+        [HttpGet]
+        public async Task<IActionResult> AddNarrative(int projectId)
+        {
+            try
+            {
+                var processList = _ddlService.GetProcessByFinalStatus(99);
+                ViewBag.ddlProcess = new SelectList(processList, "id", "value");
+
+                NarrativeModel narrativeModel = new NarrativeModel();
+                narrativeModel.narratives = new List<NarrativeQuestion>();
+                narrativeModel.ProjectId = projectId;
+                var questions = await GetNarrative((int)ProcessName.ProjectOverviewNarrative);
+                narrativeModel.narratives = questions;
+
+                return Json(new { htmlData = ConvertViewToString("_AddNarrativeModal", narrativeModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddNarrative(NarrativeModel model)
+        {
+            try
+            {
+                int flag = 0;
+                string msg = "Narrative added successfully";
+                var narratives = model.narratives.Where(x => x.AssigneNarrative == true).ToList();
+
+                foreach (var narrative in narratives)
+                {
+                    var projectNarrative = new ProjectNarrativeQuestion();
+                    projectNarrative.ProjectId = model.ProjectId;
+                    projectNarrative.QuestionId = narrative.QuestionId;
+                    projectNarrative.Question = narrative.Question;
+                    projectNarrative.ProcessId = narrative.ProcessId;
+                    projectNarrative.CommentRequire = narrative.CommentRequire;
+                    projectNarrative.QuestionType = narrative.QuestionType;
+                    projectNarrative.ContentLimit = narrative.ContentLimit;
+                    projectNarrative.OrderNo = narrative.OrderNo;
+                    projectNarrative.IsActive = narrative.IsActive;
+                    projectNarrative.CreatedBy = userDetail.UserID;
+                    projectNarrative.CreatedRid = userDetail.RoleId;
+                    projectNarrative.CreatedRname = userDetail.RoleName;
+
+                    flag = await _projectService.AddProjectNarrative(projectNarrative);
+                    if (flag == 2)
+                        msg = "Some Narrative will not added due to already exits in the project Narrative.";
+                }
+
+                return Json(new { flag = flag, msg = msg });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+        [NonAction]
+        private async Task<List<NarrativeQuestion>> GetNarrative(int? processId)
+        {
+            return await _projectService.GetNarrativeAsync(processId);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNarrativeList(int processId)
+        {
+            try
+            {
+                NarrativeModel narrativeModel = new NarrativeModel();
+                narrativeModel.narratives = new List<NarrativeQuestion>();
+                var questions = await GetNarrative(processId);
+                narrativeModel.narratives = questions;
+                return Json(new { htmlData = ConvertViewToString("_NarrativeList", narrativeModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+
+        #endregion
     }
 
 }

@@ -125,6 +125,10 @@ namespace CSRPulse.Data.Models
             ProjectLocationDetailCreatedByNavigation = new HashSet<ProjectLocationDetail>();
             ProjectLocationDetailUpdatedByNavigation = new HashSet<ProjectLocationDetail>();
             ProjectLocationUpdatedByNavigation = new HashSet<ProjectLocation>();
+            ProjectNarrativeAnswerCreatedByNavigation = new HashSet<ProjectNarrativeAnswer>();
+            ProjectNarrativeAnswerUpdatedByNavigation = new HashSet<ProjectNarrativeAnswer>();
+            ProjectNarrativeQuestionCreatedByNavigation = new HashSet<ProjectNarrativeQuestion>();
+            ProjectNarrativeQuestionUpdatedByNavigation = new HashSet<ProjectNarrativeQuestion>();
             ProjectOtherSourceCreatedByNavigation = new HashSet<ProjectOtherSource>();
             ProjectOtherSourceUpdatedByNavigation = new HashSet<ProjectOtherSource>();
             ProjectProgramManager = new HashSet<Project>();
@@ -440,6 +444,14 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProjectLocationDetail> ProjectLocationDetailUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(ProjectLocation.UpdatedByNavigation))]
         public virtual ICollection<ProjectLocation> ProjectLocationUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeAnswer.CreatedByNavigation))]
+        public virtual ICollection<ProjectNarrativeAnswer> ProjectNarrativeAnswerCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeAnswer.UpdatedByNavigation))]
+        public virtual ICollection<ProjectNarrativeAnswer> ProjectNarrativeAnswerUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeQuestion.CreatedByNavigation))]
+        public virtual ICollection<ProjectNarrativeQuestion> ProjectNarrativeQuestionCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeQuestion.UpdatedByNavigation))]
+        public virtual ICollection<ProjectNarrativeQuestion> ProjectNarrativeQuestionUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(ProjectOtherSource.CreatedByNavigation))]
         public virtual ICollection<ProjectOtherSource> ProjectOtherSourceCreatedByNavigation { get; set; }
         [InverseProperty(nameof(ProjectOtherSource.UpdatedByNavigation))]

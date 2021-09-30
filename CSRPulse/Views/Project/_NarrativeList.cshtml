@@ -1,0 +1,53 @@
+﻿@model NarrativeModel
+@if (Model != null)
+{
+    if (Model.narratives != null)
+    {<table class="table table-sm table-centered mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Section/ Question</th>
+                    <th>Type</th>
+                    <th>Content Limit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.narratives.Count > 0)
+                {
+                    for (int i = 0; i < Model.narratives.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <span>@(i+1).</span>
+                                <input asp-for="@Model.narratives[i].QuestionId" type="hidden" />
+                                <input asp-for="@Model.narratives[i].Question" type="hidden" />
+                                <input asp-for="@Model.narratives[i].ProcessId" type="hidden" />
+                                <input asp-for="@Model.narratives[i].CommentRequire" type="hidden" />
+                                <input asp-for="@Model.narratives[i].QuestionType" type="hidden" />
+                                <input asp-for="@Model.narratives[i].ContentLimit" type="hidden" />
+                                <input asp-for="@Model.narratives[i].OrderNo" type="hidden" />
+                            </td>
+                            <td>
+                                <div class="form-check form-checkbox-success mb-2">
+                                    <input class="form-check-input" asp-for="@Model.narratives[i].AssigneNarrative" type="checkbox" />
+                                    <label class="form-check-label" asp-for="@Model.narratives[i].QuestionId">@Model.narratives[i].Question</label>
+                                </div>
+                            </td>
+                            <td>@Model.narratives[i].QuestionType</td>
+                            <td>@Model.narratives[i].ContentLimit</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">
+                            No Records Found
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+}

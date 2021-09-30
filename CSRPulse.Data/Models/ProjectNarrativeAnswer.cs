@@ -9,21 +9,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    [Table("NGOChartDocument")]
-    public partial class NgochartDocument
+    public partial class ProjectNarrativeAnswer
     {
         [Key]
-        [Column("NGOChartDocumentId")]
-        public int NgochartDocumentId { get; set; }
-        public int PartnerId { get; set; }
+        public int ProjectAnswerId { get; set; }
+        public int ProjectId { get; set; }
+        public int ProjectQuestionId { get; set; }
         [Required]
-        [StringLength(250)]
-        public string DocumentName { get; set; }
-        [Required]
-        [StringLength(256)]
-        public string ServerDocumentName { get; set; }
-        [StringLength(2000)]
-        public string Remarks { get; set; }
+        [StringLength(500)]
+        public string Answer { get; set; }
+        public int ProcessId { get; set; }
+        public int ReportId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
@@ -43,19 +39,22 @@ namespace CSRPulse.Data.Models
         public string UpdatedRname { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
-        [InverseProperty(nameof(User.NgochartDocumentCreatedByNavigation))]
+        [InverseProperty(nameof(User.ProjectNarrativeAnswerCreatedByNavigation))]
         public virtual User CreatedByNavigation { get; set; }
         [ForeignKey(nameof(CreatedRid))]
-        [InverseProperty(nameof(Role.NgochartDocumentCreatedR))]
+        [InverseProperty(nameof(Role.ProjectNarrativeAnswerCreatedR))]
         public virtual Role CreatedR { get; set; }
-        [ForeignKey(nameof(PartnerId))]
-        [InverseProperty("NgochartDocument")]
-        public virtual Partner Partner { get; set; }
+        [ForeignKey(nameof(ProjectId))]
+        [InverseProperty("ProjectNarrativeAnswer")]
+        public virtual Project Project { get; set; }
+        [ForeignKey(nameof(ProjectQuestionId))]
+        [InverseProperty(nameof(ProjectNarrativeQuestion.ProjectNarrativeAnswer))]
+        public virtual ProjectNarrativeQuestion ProjectQuestion { get; set; }
         [ForeignKey(nameof(UpdatedBy))]
-        [InverseProperty(nameof(User.NgochartDocumentUpdatedByNavigation))]
+        [InverseProperty(nameof(User.ProjectNarrativeAnswerUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
         [ForeignKey(nameof(UpdatedRid))]
-        [InverseProperty(nameof(Role.NgochartDocumentUpdatedR))]
+        [InverseProperty(nameof(Role.ProjectNarrativeAnswerUpdatedR))]
         public virtual Role UpdatedR { get; set; }
     }
 }

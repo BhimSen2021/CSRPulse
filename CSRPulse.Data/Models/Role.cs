@@ -126,6 +126,10 @@ namespace CSRPulse.Data.Models
             ProjectLocationDetailCreatedR = new HashSet<ProjectLocationDetail>();
             ProjectLocationDetailUpdatedR = new HashSet<ProjectLocationDetail>();
             ProjectLocationUpdatedR = new HashSet<ProjectLocation>();
+            ProjectNarrativeAnswerCreatedR = new HashSet<ProjectNarrativeAnswer>();
+            ProjectNarrativeAnswerUpdatedR = new HashSet<ProjectNarrativeAnswer>();
+            ProjectNarrativeQuestionCreatedR = new HashSet<ProjectNarrativeQuestion>();
+            ProjectNarrativeQuestionUpdatedR = new HashSet<ProjectNarrativeQuestion>();
             ProjectOtherSourceCreatedR = new HashSet<ProjectOtherSource>();
             ProjectOtherSourceUpdatedR = new HashSet<ProjectOtherSource>();
             ProjectReportCreatedR = new HashSet<ProjectReport>();
@@ -418,6 +422,14 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProjectLocationDetail> ProjectLocationDetailUpdatedR { get; set; }
         [InverseProperty(nameof(ProjectLocation.UpdatedR))]
         public virtual ICollection<ProjectLocation> ProjectLocationUpdatedR { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeAnswer.CreatedR))]
+        public virtual ICollection<ProjectNarrativeAnswer> ProjectNarrativeAnswerCreatedR { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeAnswer.UpdatedR))]
+        public virtual ICollection<ProjectNarrativeAnswer> ProjectNarrativeAnswerUpdatedR { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeQuestion.CreatedR))]
+        public virtual ICollection<ProjectNarrativeQuestion> ProjectNarrativeQuestionCreatedR { get; set; }
+        [InverseProperty(nameof(ProjectNarrativeQuestion.UpdatedR))]
+        public virtual ICollection<ProjectNarrativeQuestion> ProjectNarrativeQuestionUpdatedR { get; set; }
         [InverseProperty(nameof(ProjectOtherSource.CreatedR))]
         public virtual ICollection<ProjectOtherSource> ProjectOtherSourceCreatedR { get; set; }
         [InverseProperty(nameof(ProjectOtherSource.UpdatedR))]

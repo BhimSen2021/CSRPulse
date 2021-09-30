@@ -165,6 +165,8 @@ namespace CSRPulse.Services
 
             CreateMap<DTOModel.ProcessDocument, ProcessDocument>().ReverseMap();
             CreateMap<DTOModel.NarrativeQuestion, NarrativeQuestion>().ReverseMap();
+            CreateMap<DTOModel.ProjectNarrativeQuestion, ProjectNarrativeQuestion>().ReverseMap();
+            CreateMap<DTOModel.ProjectNarrativeAnswer, ProjectNarrativeAnswer>().ReverseMap();
 
             #region A u d i t
 

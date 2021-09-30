@@ -25,5 +25,8 @@ namespace CSRPulse.Services
         Task<int> SaveCommunication(ProjectCommunication communication);
         Task<List<ProjectCommunication>> GetCommunications(int projectId, bool? IsActive);
         bool ArchiveCommunication(int id, bool IsActive);
+
+        Task<List<NarrativeQuestion>> GetNarrativeAsync(int? processId);
+        Task<int> AddProjectNarrative(ProjectNarrativeQuestion projectNarrative);
     }
 }

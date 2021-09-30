@@ -151,6 +151,19 @@
                     </div>
                 </div>
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <div class="row">
+                        <div class="col-7">
+                            <label>Configure Narrative</label>
+                        </div>
+                        <div class="col-5 text-end">
+                            <button type="button" class="btn btn-icon btn-outline-danger btn-sm" onclick="AddNarrative()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Click here, to add narrative">
+                                <i class="mdi mdi-plus-circle me-1" aria-hidden="true"></i>Add & View Narrative
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <label asp-for="Status" class="form-label required"></label>
                     <select asp-for="Status" id="ddlStatus" asp-items="@Html.GetEnumSelectList<ProjectStatus>()" aria-required="true" class="form-select" disabled>
                     </select>
@@ -166,6 +179,12 @@
         </form>
     </div>
 </div>
+
+
+<div id="add-narrative-div">
+    @{await Html.RenderPartialAsync("_AddNarrativeModal", new NarrativeModel()); }
+</div>
+
 
 <script type="text/javascript">
     function OnEdit(data) {
@@ -187,4 +206,43 @@
         $('#lblTrustPer').text(((@Model.TrustContribution * 100) / @Model.TotalBudget).toFixed(2) + " %");
         $('#lblOtherPer').text(((@Model.OtherSource * 100) / @Model.TotalBudget).toFixed(2) + " %");
     });
+
+    function AddNarrative() {
+            $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: '@Url.Action("AddNarrative", "Project", new { Area=""})',
+                data: { projectId: @Model.ProjectId },
+                success: function (data) {
+                    $("#add-narrative-div").html(data.htmlData);
+                    $('#add-narrative-modal').modal('show');
+            },
+            error: function (data) {
+                commonMessage('error', 'Narrative loading failed!');
+            }
+        });
+    }
+    function OnProcessChange() {        
+        $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: '@Url.Action("GetNarrativeList", "Project", new { Area=""})',
+            data: { processId: $('#ProcessId').val() },
+                success: function (data) {
+                    $("#narrative-grid").html(data.htmlData);
+            },
+            error: function (data) {
+                commonMessage('error', 'Narrative loading failed!');
+            }
+        });
+    }
+
+    function onAddNarrative(data) {
+        if (data.flag == 1 || data.flag == 2) {
+            commonMessage('success', data.msg);
+        }
+        else {
+            commonMessage('error', 'Narrative adding failed!');
+        }
+    }
 </script>

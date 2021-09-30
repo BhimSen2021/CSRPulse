@@ -175,4 +175,12 @@ namespace CSRPulse.Common
         QuickEmail = 5
     }
 
+    public enum ProcessName
+    {
+        BudgetRequirement = 1,
+        DocumentsPartner = 2,
+        FinancialAuditAgencyOnboarding = 4,
+        ProjectDocument = 5,
+        ProjectOverviewNarrative = 6,
+    }
 }

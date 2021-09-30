@@ -382,6 +382,38 @@ namespace CSRPulse.Services
             }
         }
 
+        public async Task<List<NarrativeQuestion>> GetNarrativeAsync(int? processId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.NarrativeQuestion>(x => (processId.HasValue ? x.ProcessId == processId.Value : 1 > 0) && x.IsActive == true);
+                return _mapper.Map<List<NarrativeQuestion>>(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<int> AddProjectNarrative(ProjectNarrativeQuestion projectNarrative)
+        {
+            try
+            {
+                int flag = 1;
+                var model = _mapper.Map<DTOModel.ProjectNarrativeQuestion>(projectNarrative);
+                if (!await _genericRepository.ExistsAsync<DTOModel.ProjectNarrativeQuestion>
+                      (x => x.QuestionId == projectNarrative.QuestionId && x.ProjectId == projectNarrative.ProjectId))
+                    await _genericRepository.InsertAsync<DTOModel.ProjectNarrativeQuestion>(model);
+                else
+                    flag = 2;
+
+                return flag;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
     }
 }

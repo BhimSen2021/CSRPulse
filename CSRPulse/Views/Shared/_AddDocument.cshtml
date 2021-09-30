@@ -1,36 +1,68 @@
 ﻿@model DocumentModel
-    <div id="add-document-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-colored-header bg-info">
-                    <h4 class="modal-title">Add Project Document</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <input asp-for="@Model.Id" type="hidden" />                  
-                    @if (Model != null)
+<div id="add-document-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title">Add Project Document</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <input asp-for="@Model.Id" type="hidden" />
+                @if (Model != null)
+                {
+                    if (Model.documents != null)
                     {
-                        if (Model.documents != null)
-                        {
-                            for (int i = 0; i < Model.documents.Count; i++)
-                            {
-                                <div class="form-check form-checkbox-success mb-2">
-                                    <input class="form-check-input" asp-for="@Model.documents[i].AssigneDocument" type="checkbox" />
-                                    <label class="form-check-label" asp-for="@Model.documents[i].DocumentId">@Model.documents[i].DocumentName <span class="@(Model.documents[i].Mandatory==true?"required":"")"></span></label>
-                                </div>
-                                <input asp-for="@Model.documents[i].DocumentId" type="hidden" />
-                                <input asp-for="@Model.documents[i].DocumentName" type="hidden" />
-                                <input asp-for="@Model.documents[i].DocumentMaxSize" type="hidden" />
-                                <input asp-for="@Model.documents[i].DocumentType" type="hidden" />
-                                <input asp-for="@Model.documents[i].Mandatory" type="hidden" />
-                                <input asp-for="@Model.documents[i].Remark" type="hidden" />
+                        <table class="table table-sm table-centered mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Document Name</th>
+                                    <th>Document MaxSize</th>
+                                    <th>Mandatory</th>
+                                    <th>Document Types</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.documents.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span>@(i+1).</span>
+                                            <input asp-for="@Model.documents[i].DocumentId" type="hidden" />
+                                            <input asp-for="@Model.documents[i].DocumentName" type="hidden" />
+                                            <input asp-for="@Model.documents[i].DocumentMaxSize" type="hidden" />
+                                            <input asp-for="@Model.documents[i].DocumentType" type="hidden" />
+                                            <input asp-for="@Model.documents[i].Mandatory" type="hidden" />
+                                            <input asp-for="@Model.documents[i].Remark" type="hidden" />
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-checkbox-success">
+                                                <input class="form-check-input me-2" asp-for="@Model.documents[i].AssigneDocument" type="checkbox" />
+                                                <label class="form-check-label" asp-for="@Model.documents[i].DocumentId">@Model.documents[i].DocumentName <span class="@(Model.documents[i].Mandatory==true?"required":"")"></span></label>
+                                            </div>
+                                        </td>
+                                        <td>@Model.documents[i].DocumentMaxSize<span> mb</span></td>
+                                        <td>
+                                            @if (Model.documents[i].Mandatory == true)
+                                            {<div class='badge badge-danger-lighten p-1'>Yes</div>}
+                                            else
+                                            {<div class='badge badge-success-lighten p-1'>No</div>}
+                                    </td>
+                                    <td>@Model.documents[i].DocumentType</td>
+                                    <td>
+                                    </td>
+
+                                </tr>
+
                             }
-                        }
+                            </tbody>
+                        </table>
                     }
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-info btn-sm" value="Save">Add Document</button>
-                </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-info btn-sm" value="Save">Add Document</button>
             </div>
         </div>
     </div>
+</div>
