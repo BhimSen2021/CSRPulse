@@ -9,14 +9,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    public partial class NarrativeQuestion
+    public partial class ProjectNarrativeQuestion
     {
-        public NarrativeQuestion()
+        public ProjectNarrativeQuestion()
         {
-            ProjectNarrativeQuestion = new HashSet<ProjectNarrativeQuestion>();
+            ProjectNarrativeAnswer = new HashSet<ProjectNarrativeAnswer>();
         }
 
         [Key]
+        public int ProjectQuestionId { get; set; }
+        public int ProjectId { get; set; }
         public int QuestionId { get; set; }
         [Required]
         [StringLength(500)]
@@ -48,18 +50,24 @@ namespace CSRPulse.Data.Models
         public string UpdatedRname { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
-        [InverseProperty(nameof(User.NarrativeQuestionCreatedByNavigation))]
+        [InverseProperty(nameof(User.ProjectNarrativeQuestionCreatedByNavigation))]
         public virtual User CreatedByNavigation { get; set; }
         [ForeignKey(nameof(CreatedRid))]
-        [InverseProperty(nameof(Role.NarrativeQuestionCreatedR))]
+        [InverseProperty(nameof(Role.ProjectNarrativeQuestionCreatedR))]
         public virtual Role CreatedR { get; set; }
+        [ForeignKey(nameof(ProjectId))]
+        [InverseProperty("ProjectNarrativeQuestion")]
+        public virtual Project Project { get; set; }
+        [ForeignKey(nameof(QuestionId))]
+        [InverseProperty(nameof(NarrativeQuestion.ProjectNarrativeQuestion))]
+        public virtual NarrativeQuestion QuestionNavigation { get; set; }
         [ForeignKey(nameof(UpdatedBy))]
-        [InverseProperty(nameof(User.NarrativeQuestionUpdatedByNavigation))]
+        [InverseProperty(nameof(User.ProjectNarrativeQuestionUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
         [ForeignKey(nameof(UpdatedRid))]
-        [InverseProperty(nameof(Role.NarrativeQuestionUpdatedR))]
+        [InverseProperty(nameof(Role.ProjectNarrativeQuestionUpdatedR))]
         public virtual Role UpdatedR { get; set; }
-        [InverseProperty("QuestionNavigation")]
-        public virtual ICollection<ProjectNarrativeQuestion> ProjectNarrativeQuestion { get; set; }
+        [InverseProperty("ProjectQuestion")]
+        public virtual ICollection<ProjectNarrativeAnswer> ProjectNarrativeAnswer { get; set; }
     }
 }

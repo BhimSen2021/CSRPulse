@@ -1,0 +1,30 @@
+﻿@model NarrativeModel
+<form data-ajax="true" data-ajax-method="POST" method="Post" asp-action="AddNarrative" asp-controller="Project" asp-area="" data-ajax-success="onAddNarrative">
+    <div id="add-narrative-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-colored-header bg-info">
+                    <h4 class="modal-title">Assign Narrative Section/Question</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <input asp-for="@Model.ProjectId" type="hidden" />
+                    <div class="row mb-3">
+                        <label asp-for="ProcessId" class="col-2 col-form-label"> Process: </label>
+                        <div class="col-10">
+                            <select asp-for="ProcessId" asp-items="@ViewBag.ddlProcess" onchange="OnProcessChange()" aria-required="true" class="form-select form-select-sm">
+                            </select>
+                            <span asp-validation-for="ProcessId" class="invalid"></span>
+                        </div>
+                    </div>
+                    <div id="narrative-grid">
+                        @{await Html.RenderPartialAsync("_NarrativeList", Model); }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-sm" value="Save">Add Narrative</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
