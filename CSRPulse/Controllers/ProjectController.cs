@@ -936,6 +936,7 @@ namespace CSRPulse.Controllers
                 string msg = "Narrative added successfully";
                 var narratives = model.narratives.Where(x => x.AssigneNarrative == true).ToList();
 
+
                 foreach (var narrative in narratives)
                 {
                     var projectNarrative = new ProjectNarrativeQuestion();
