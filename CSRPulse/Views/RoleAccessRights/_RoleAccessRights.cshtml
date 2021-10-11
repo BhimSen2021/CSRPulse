@@ -4,23 +4,23 @@
     List<RoleAccessRights> lstWithoutChild = Model.menuChildList.Where(x => x.ParentMenuId == null && Model.menuChildList.All(y => y.ParentMenuId != x.MenuId)).ToList();
 }
 
-<table class="table table-centered table-striped dt-responsive w-100">
+<table id="scroll-vertical-datatable" class="table table-centered table-striped dt-responsive w-100">
     <thead>
         <tr>
             <th>
                 Menu Name
             </th>
-            <th>
-                View
+            <th class="text-center">
+                View Right
             </th>
-            <th>
-                Create
+            <th class="text-center">
+                Create Right
             </th>
-            <th class="text-center" style="width:60px">
-                Edit
+            <th class="text-center">
+                Edit Right
             </th>
-            <th class="text-center" style="width:60px">
-                Delete
+            <th class="text-center">
+                Delete Right
             </th>
         </tr>
     </thead>
@@ -35,10 +35,10 @@
                 var checkedDelete = ItemWithNoChild.DeleteRight == true ? "checked" : "";
                 <tr class="trAccessUpdate" attrMenuID="@ItemWithNoChild.MenuId">
                     <td> @ItemWithNoChild.MenuName</td>
-                    <td> <input type="checkbox" id="chkView_@ItemWithNoChild.MenuId" class="chkCell" @checkedView /></td>
-                    <td> <input type="checkbox" id="chkCreate_@ItemWithNoChild.MenuId" class="chkCell" @checkedCreate /></td>
-                    <td> <input type="checkbox" id="chkEdit_@ItemWithNoChild.MenuId" class="chkCell" @checkedEdit /></td>
-                    <td> <input type="checkbox" id="chkDelete_@ItemWithNoChild.MenuId" class="chkCell" @checkedDelete /></td>
+                    <td class="text-center"> <input type="checkbox" id="chkView_@ItemWithNoChild.MenuId" class="chkCell" @checkedView /></td>
+                    <td class="text-center"> <input type="checkbox" id="chkCreate_@ItemWithNoChild.MenuId" class="chkCell" @checkedCreate /></td>
+                    <td class="text-center">  <input type="checkbox" id="chkEdit_@ItemWithNoChild.MenuId" class="chkCell" @checkedEdit /></td>
+                    <td class="text-center"> <input type="checkbox" id="chkDelete_@ItemWithNoChild.MenuId" class="chkCell" @checkedDelete /></td>
                 </tr>
             }
 
@@ -57,10 +57,10 @@
                     {
                         <tr class="trAccessUpdate" attrMenuID="@childItem.MenuId">
                             <td> @childItem.MenuName</td>
-                            <td> <input type="checkbox" id="chkView_@childItem.MenuId" class="chkCell" @checkedView /></td>
-                            <td> <input type="checkbox" id="chkCreate_@childItem.MenuId" class="chkCell" @checkedCreate /></td>
-                            <td> <input type="checkbox" id="chkEdit_@childItem.MenuId" class="chkCell" @checkedEdit /></td>
-                            <td> <input type="checkbox" id="chkDelete_@childItem.MenuId" class="chkCell" @checkedDelete /></td>
+                            <td class="text-center"> <input type="checkbox" id="chkView_@childItem.MenuId" class="chkCell" @checkedView /></td>
+                            <td class="text-center"> <input type="checkbox" id="chkCreate_@childItem.MenuId" class="chkCell" @checkedCreate /></td>
+                            <td class="text-center"> <input type="checkbox" id="chkEdit_@childItem.MenuId" class="chkCell" @checkedEdit /></td>
+                            <td class="text-center"> <input type="checkbox" id="chkDelete_@childItem.MenuId" class="chkCell" @checkedDelete /></td>
                         </tr>
                     }
                 }

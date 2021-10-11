@@ -138,6 +138,12 @@ namespace CSRPulse
             services.AddScoped<IPartnerPolicyModuleService, PartnerPolicyModuleService>();
 
             #endregion
+
+            #region Role Access Rights
+            services.AddScoped<IRoleAccessRightsServices, RoleAccessRightsServices>();
+            services.AddScoped<IRoleAccessRightRepository, RoleAccessRightRepository>();
+            #endregion
+
             #endregion
         }
 

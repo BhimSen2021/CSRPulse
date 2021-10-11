@@ -14,6 +14,7 @@ $(document).ready(function () {
         "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
     });
 
+
 });
 
 function Basicdatatable() {

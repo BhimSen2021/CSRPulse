@@ -6,6 +6,7 @@ using DTOModel = CSRPulse.Data.Models;
 using CSRPulse.Model;
 using CSRPulse.Model.Admin;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace CSRPulse.Services
 {
@@ -210,6 +211,23 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.ProjectCommunication, ProjectCommunication>().ReverseMap();
             #endregion
 
+
+            #region Role Access Rights
+            CreateMap<DTOModel.Menu, RoleAccessRights>()
+           .ForMember(d => d.MenuId, o => o.MapFrom(s => s.MenuId))
+           .ForMember(d => d.MenuName, o => o.MapFrom(s => s.MenuName))
+           .ForMember(d => d.ParentMenuId, o => o.MapFrom(s => s.ParentMenuId))
+           .ForMember(c => c.ViewRight, c => c.MapFrom(m => m.UserRights.Where(v => v.MenuId == m.MenuId)
+           .FirstOrDefault().ViewRight))
+           .ForMember(c => c.EditRight, c => c.MapFrom(m => m.UserRights.Where(v => v.MenuId == m.MenuId)
+           .FirstOrDefault().EditRight))
+           .ForMember(c => c.CreateRight, c => c.MapFrom(m => m.UserRights.Where(v => v.MenuId == m.MenuId)
+           .FirstOrDefault().CreateRight))
+           .ForMember(c => c.DeleteRight, c => c.MapFrom(m => m.UserRights.Where(v => v.MenuId == m.MenuId)
+           .FirstOrDefault().DeleteRight))
+           .ReverseMap().ForAllOtherMembers(d => d.Ignore());
+
+            #endregion
             #region Email Mapper
             CreateMap<Common.EmailMessage, DTOModel.MailSendStatus>()
                 .ForMember(d => d.CustomerId, o => o.MapFrom(s => s.CustomerId))
