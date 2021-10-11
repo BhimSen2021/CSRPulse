@@ -1,1 +1,129 @@
-﻿
+﻿@*@model IEnumerable<ProjectTeamDetail>*@
+@model Project
+@using CSRPulse.Common
+
+<div class="row">
+    <h5 class="mb-3">Project Team Detail</h5>
+    <div class="mb-2 text-end">
+        <button class="btn btn-danger btn-sm" type="button" value="AddDocument" onclick="AddTeamMember()" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Click here, to add team member">
+            <i class="mdi mdi-plus me-1"></i>Add Team Member
+        </button>
+
+    </div>
+</div>
+
+<div class="mb-3">
+    <table class="basic table table-striped dt-responsive nowrap w-100">
+        <thead class="thead-light">
+            <tr>
+                <th width="5%">#</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Mobile No.</th>
+                <th>Email Id</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ProjectTeamDetail != null)
+            {
+                if (Model.ProjectTeamDetail.Where(x => x.FromDate == null).Count() > 0)
+                {
+                    int index = 0;
+                    for (int i = 0; i < Model.ProjectTeamDetail.Count; i++)
+                    {
+                        index++;
+                        @if (Model.ProjectTeamDetail[i].ToDate != null && Model.ProjectTeamDetail[i].FromDate == null)
+                        {
+                            <tr>
+                                <td><span>@(index).</span></td>
+                                <td>@Model.ProjectTeamDetail[i].FullName</td>
+                                <td>@Model.ProjectTeamDetail[i].RoleName</td>
+                                <td>@Model.ProjectTeamDetail[i].MobileNo</td>
+                                <td>@Model.ProjectTeamDetail[i].EmailId</td>
+                                <td class="text-center">
+                                    @if (Model.ProjectTeamDetail[i].ToDate != null && Model.ProjectTeamDetail[i].ProjectTeamDetailId > 0)
+                                    {
+                                        <a class="font-16 delete-link action-icon" id="delete-link_@i" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here, to delete record">
+                                            <i class="dripicons-trash text-danger" aria-hidden="true"></i>
+                                        </a>
+                                        <div class="delete-confirm text-nowrap" id="delete-confirm_@i" style="display: none">
+                                            <a class="confirm-delete text-danger" data-ajax="true" data-ajax-method="GET" data-ajax-update="#div-team-grid"
+                                               data-ajax-mode="replace" asp-action="RemoveTeamMember" asp-route-pdId="@(Model.ProjectTeamDetail[i].ProjectTeamDetailId)" asp-route-pId="@(Model.ProjectId)" asp-route-fName="@(Model.ProjectTeamDetail[i].ToDate)" asp-controller="Project">
+                                                Yes
+                                            </a> <text>|</text> <a class="delete-cancel text-dark" id="delete-cancel_@i" style="cursor: pointer">No</a>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No record found.</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mb-3">Project Team Detail History</h5>
+<div class="mb-3">
+    <table class="basic-datatable  table table-striped dt-responsive nowrap w-100">
+        <thead class="thead-light">
+            <tr>
+                <th width="5%">#</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>To Date</th>
+                <th>From Date</th>
+                <th>Mobile No.</th>
+                <th>Email Id</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ProjectTeamDetail != null)
+            {
+                if (Model.ProjectTeamDetail.Where(x => x.FromDate != null).Count() > 0)
+                {
+                    for (int j = 0; j < Model.ProjectTeamDetail.Count; j++)
+                    {
+                        @if (Model.ProjectTeamDetail[j].FromDate != null)
+                        {
+                            <tr>
+
+                                <td><span>@(j+1).</span></td>
+                                <td>@Model.ProjectTeamDetail[j].FullName</td>
+                                <td>@Model.ProjectTeamDetail[j].RoleName</td>
+                                <td>@Model.ProjectTeamDetail[j].ToDate</td>
+                                <td>@Model.ProjectTeamDetail[j].FromDate</td>
+                                <td>@Model.ProjectTeamDetail[j].MobileNo</td>
+                                <td>@Model.ProjectTeamDetail[j].EmailId</td>
+
+
+                            </tr>
+                        }
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="7">No record found/.</td></tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function openpopup(cnt) {
+        var id = cnt.id.split('_')[1];
+        $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+    }
+
+</script>

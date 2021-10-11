@@ -204,9 +204,18 @@ namespace CSRPulse.Controllers
                 var project = _projectService.GetProjectById(pid);
                 ViewBag.tvLDetails = await _projectService.GetTvLocationDetails(project.ProjectId, project.LocationLavel);
 
+
+                project.ProjectDocument = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
                 if (project.ProjectDocument == null)
                     project.ProjectDocument = new List<ProjectDocument>();
-                project.ProjectDocument = await _projectService.GetDocumentList(project.ProjectId, (int)Common.ProcessDocument.DocumentProject);
+
+                project.ProjectTeamDetail = await _projectService.Getteammemberslist(project.ProjectId, (int)Common.UserRole.Administrator);
+                if (project.ProjectTeamDetail == null)
+                    project.ProjectTeamDetail = new List<ProjectTeamDetail>();
+
+                project.ProjectOverviewModule = await _projectService.GetOverviewlist(project.ProjectId);
+                if (project.ProjectOverviewModule == null)
+                    project.ProjectOverviewModule = new List<ProjectOverviewModule>();
 
                 BindNestedDropdown(project.ThemeId);
 
@@ -368,7 +377,6 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-
         public async Task<IActionResult> SaveLocationDetail(int projectId, int lLevel, string locationIds)
         {
             try
@@ -428,7 +436,6 @@ namespace CSRPulse.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public JsonResult ActiveDeActive(int id, bool isChecked)
         {
@@ -437,7 +444,6 @@ namespace CSRPulse.Controllers
             return Json(result);
 
         }
-
         [NonAction]
         void BindDropdowns()
         {
@@ -463,7 +469,6 @@ namespace CSRPulse.Controllers
             var subThemeList = _ddlService.GetSubTheme(themeId, null);
             ViewBag.ddlSubTheme = new SelectList(subThemeList, "id", "value");
         }
-
         private List<ProjectInterventionReport> ConvertProjectIReportList(DataTable ProjectIReportdt)
         {
             List<ProjectInterventionReport> qtrList = new List<ProjectInterventionReport>();
@@ -486,7 +491,6 @@ namespace CSRPulse.Controllers
             }
             return qtrList;
         }
-
         private List<ProjectReport> MakeProjectReport(List<ProjectInterventionReport> reports)
         {
             var reportList = new List<ProjectReport>();
@@ -506,7 +510,6 @@ namespace CSRPulse.Controllers
             }
             return reportList;
         }
-
         private List<ProjectFinancialReport> MakeProjectFReport(List<ProjectInterventionReport> reports)
         {
             var financialReports = new List<ProjectFinancialReport>();
@@ -529,7 +532,6 @@ namespace CSRPulse.Controllers
             }
             return financialReports;
         }
-
         private List<ProjectLocation> MakeProjectLocation(string locationIds)
         {
             List<ProjectLocation> projectLocations = new List<ProjectLocation>();
@@ -551,7 +553,6 @@ namespace CSRPulse.Controllers
 
             return projectLocations;
         }
-
         private List<ProjectLocationDetail> MakeProjectLocationDetail(int projectId, string locationIds, int lLevel)
         {
             List<ProjectLocationDetail> projectLocations = new List<ProjectLocationDetail>();
@@ -626,7 +627,6 @@ namespace CSRPulse.Controllers
             var selectListModels = _ddlService.GetSubTheme(themeId, null).ToList();
             return Json(new SelectList(selectListModels, "id", "value"));
         }
-
 
         #region Report
         public async Task<PartialViewResult> GetReportAsync(int projectId)
@@ -1003,6 +1003,131 @@ namespace CSRPulse.Controllers
         }
 
         #endregion
+
+        #region Team Member
+        [HttpGet]
+        public async Task<IActionResult> AddTeamMember(int projectId)
+        {
+            try
+            {
+                ProjectTeamModel projectteamModel = new ProjectTeamModel();
+                projectteamModel.ProjectTeams = new List<ProjectTeam>();
+                projectteamModel.ProjectId = projectId;
+                var teamlist = await _projectService.GetTeamMemeber((int)Common.UserRole.Administrator);
+                projectteamModel.ProjectTeams = teamlist;
+                var projectTeamMember = await _projectService.Getteammemberslist(projectId, (int)Common.UserRole.Administrator);
+                foreach (var teamMember in projectTeamMember)
+                {
+                    if (projectteamModel.ProjectTeams.Any(x => (x.UserId == teamMember.UserId && x.ProjectId == teamMember.ProjectId && x.FromDate == teamMember.FromDate)))
+                    {
+                        projectteamModel.ProjectTeams
+                            .Where(x => (x.UserId == teamMember.UserId && x.ProjectId == teamMember.ProjectId)).FirstOrDefault()
+                            .AssigneTeam = true;
+                    }
+                    else
+                    {
+                        projectteamModel.ProjectTeams
+                             .Where(x => (x.UserId == teamMember.UserId && x.ProjectId == teamMember.ProjectId)).FirstOrDefault()
+                             .AssigneTeam = false;
+                    }
+                }
+
+                return Json(new { htmlData = ConvertViewToString("_ProjectTeam", projectteamModel, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddTeamMember(ProjectTeamModel model)
+        {
+            try
+            {
+                int flag = 0;
+                string msg = "Team Member added successfully";
+                var teammember = model.ProjectTeams.Where(x => x.AssigneTeam == true).ToList();
+
+                foreach (var item in teammember)
+                {
+                    var projectTeamDetail = new ProjectTeamDetail();
+                    projectTeamDetail.ProjectId = model.ProjectId;
+                    projectTeamDetail.ProjectTeamDetailId = item.ProjectTeamDetailId;
+                    projectTeamDetail.UserId = item.UserId;
+                    projectTeamDetail.RoleId = item.RoleId;
+                    projectTeamDetail.OldUserID = item.OldUserId;
+                    projectTeamDetail.DepartmentId = item.DepartmentId;
+                    projectTeamDetail.ToDate = DateTime.Now;
+                    projectTeamDetail.CreatedBy = userDetail.UserID;
+                    projectTeamDetail.CreatedRid = userDetail.RoleId;
+                    projectTeamDetail.CreatedRname = userDetail.RoleName;
+
+                    flag = await _projectService.AddTeamMember(projectTeamDetail);
+                    if (flag == 2)
+                        msg = "Some Team Member will not added due to already exits in the project Team Member.";
+                }
+
+                Project project = new Project();
+                project.ProjectId = model.ProjectId;
+                project.ProjectTeamDetail = new List<ProjectTeamDetail>();
+                project.ProjectTeamDetail = await _projectService.Getteammemberslist(project.ProjectId, (int)Common.UserRole.Administrator);
+                return Json(new { flag = flag, msg = msg, htmlData = ConvertViewToString("_ProjectTeamDetail", project, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+        }
+        public async Task<PartialViewResult> RemoveTeamMember(int pdId, int pId, string fName)
+        {
+            try
+            {
+                var project = new Project();
+                project.ProjectId = pId;
+                var isDeleted = _projectService.DeleteTeamDetail(pdId);
+                project.ProjectTeamDetail = await _projectService.Getteammemberslist(project.ProjectId, (int)Common.UserRole.Administrator);
+                return PartialView("_ProjectTeamDetail", project);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+            }
+
+        }
+        #endregion
+
+        public async Task<IActionResult> SaveOverview(Project project)
+        {
+            try
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                int flag = 0;
+                project.ProjectOverviewModule.ForEach(x =>
+                {
+                    x.CreatedBy = userDetail.CreatedBy;
+                    x.CreatedOn = DateTime.Now;
+                    x.CreatedRid = userDetail.RoleId;
+                    x.CreatedRname = userDetail.RoleName;
+                });
+                var details = await _projectService.GetUpdateProjectOverView(project);
+                project.ProjectOverviewModule = await _projectService.GetOverviewlist(project.ProjectId);
+
+
+                flag = 1;
+                return Json(new { flag = flag, msg = "Data Save Succesfully", htmlData = ConvertViewToString("_ProjectOverview", project, true) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Message-" + ex.Message + " StackTrace-" + ex.StackTrace + " DatetimeStamp-" + DateTime.Now);
+                throw;
+
+            }
+        }
+
+
     }
 
 }

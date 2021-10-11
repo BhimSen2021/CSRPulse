@@ -67,7 +67,6 @@ namespace CSRPulse.Data.Repositories
                 return level2;
             }
         }
-
         public IQueryable<ProjectDocument> GetDocuments(int projectId, int processId)
         {
             return from m in _dbContext.ProcessDocument.Where(x => x.ProcessId == processId && x.IsActive == true)
@@ -90,6 +89,62 @@ namespace CSRPulse.Data.Repositories
                        CreatedRid = m.CreatedRid,
                        CreatedRname = m.CreatedRname
                    };
+        }
+        public IQueryable<ProjectTeam> Getteammemberslist(int projectId, int roleId)
+        {
+            return from tm in _dbContext.ProjectTeamDetail.Where(x => x.ProjectId == projectId)
+                   join r in _dbContext.Role on tm.RoleId equals r.RoleId
+                   join u in _dbContext.User on tm.RoleId equals u.RoleId
+                   select new ProjectTeam
+                   {
+                       ProjectTeamDetailId = tm.ProjectTeamDetailId,
+                       ProjectId = tm.ProjectId,
+                       UserId = tm.UserId,
+                       RoleId = tm.RoleId,
+                       RoleName = r.RoleName,
+                       FullName = u.FullName,
+                       EmailID = u.EmailId,
+                       MobileNo = u.MobileNo,
+                       FromDate = tm.FromDate,
+                       ToDate = tm.ToDate
+
+                   };
+        }
+        public IQueryable<ProjectTeam> GetTeamMemeber(int roleId)
+        {
+            return from UR in _dbContext.User.Where(x => x.RoleId != roleId)
+                   join RL in _dbContext.Role on UR.RoleId equals RL.RoleId
+                   select new ProjectTeam
+                   {
+                       UserId = UR.UserId,
+                       RoleId = UR.RoleId,
+                       RoleName = RL.RoleName,
+                       FullName = UR.FullName,
+                       EmailID = UR.EmailId,
+                       MobileNo = UR.MobileNo,
+                   };
+        }
+        public IQueryable<ProjectOverviewModule> GetOverview(int projectId)
+        {
+            return (from Q in _dbContext.ProjectNarrativeQuestion.Where(x => x.ProjectId == projectId)
+                    join A in _dbContext.ProjectNarrativeAnswer.Where(u => u.ProjectId == projectId)
+                   on Q.ProjectQuestionId equals A.ProjectQuestionId into assigned
+                    from au in assigned.DefaultIfEmpty()
+                    select new ProjectOverviewModule
+                    {
+                        ProjectQuestionId = Q.ProjectQuestionId,
+                        ProjectId = Q.ProjectId,
+                        QuestionId = Q.QuestionId,
+                        Question = Q.Question,
+                        ProcessId = Q.ProcessId,
+                        CommentRequire = Q.CommentRequire,
+                        QuestionType = Q.QuestionType,
+                        ContentLimit = Q.ContentLimit,
+                        OrderNo = Q.OrderNo,
+                        Projectanswer = au.Answer,
+                        ProjectAnswerId = au.ProjectAnswerId
+                    });
+
         }
         public class ProjectLocationDetail
         {
@@ -121,6 +176,44 @@ namespace CSRPulse.Data.Repositories
             public DateTime CreatedOn { get; set; }
             public int CreatedRid { get; set; }
             public string CreatedRname { get; set; }
+        }
+        public class ProjectTeam
+        {
+            public int ProjectTeamDetailId { get; set; }
+            public int ProjectId { get; set; }
+            public int UserId { get; set; }
+            public int OldUserId { get; set; }
+            public DateTime? FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+            public string FullName { get; set; }
+            public string MobileNo { get; set; }
+            public string EmailID { get; set; }
+            public int RoleId { get; set; }
+            public string RoleName { get; set; }
+            public string DepartmentName { get; set; }
+            public int? DepartmentId { get; set; }
+            public int? DesignationId { get; set; }
+            public bool AssigneTeam { get; set; }
+            public int CreatedBy { get; set; }
+            public DateTime CreatedOn { get; set; }
+            public int CreatedRid { get; set; }
+            public string CreatedRname { get; set; }
+
+        }
+        public class ProjectOverviewModule 
+        {
+            public int ProjectQuestionId { get; set; }
+            public int ProjectId { get; set; }
+            public int QuestionId { get; set; }
+            public string Question { get; set; }
+            public int ProcessId { get; set; }
+            public bool? CommentRequire { get; set; }
+            public string QuestionType { get; set; }
+            public int? ContentLimit { get; set; }
+            public int? OrderNo { get; set; }
+            public string Projectanswer { get; set; }
+            public int ProjectAnswerId { get; set; }
+
         }
     }
 }

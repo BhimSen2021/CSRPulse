@@ -26,7 +26,12 @@
                     <span class="d-none d-md-block">Project Details</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a href="#poverview-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Project Overview</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="#pteam-b2" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
@@ -75,12 +80,21 @@
             </div>
         </div>
     </div>
+    <div class="tab-pane" id="poverview-b2">
+        <div class="card">
+            <div class="card-body">
+                <div id="div-overview-grid">
+                    @{await Html.RenderPartialAsync("_ProjectOverview", Model);}
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="tab-pane" id="pteam-b2">
         <div class="card">
-            <div class="card-body">                
+            <div class="card-body">
                 <div id="div-team-grid">
-                    @{await Html.RenderPartialAsync("_ProjectTeam");}
+                    @{await Html.RenderPartialAsync("_ProjectTeamDetail", Model);}
                 </div>
             </div>
         </div>
@@ -140,13 +154,75 @@
 <partial name="_AddLocationModal" model="Model.ProjectLocation" />
 <partial name="_AddLocationDetailModal" model="Model.ProjectLocationDetail" />
 
-
+<form data-ajax="true" data-ajax-method="POST" method="Post" asp-action="AddTeamMember" asp-controller="Project" asp-area=""
+      data-ajax-success="onAddTeamMember">
+    <div id="add-teammember-div">
+        @{await Html.RenderPartialAsync("_ProjectTeam", new ProjectTeamModel()); }
+    </div>
+</form>
 
 <script type="text/javascript">
     $(document).ready(function () {
         Basicdatatable();
         $('#lblLDLevel').text($('#LocationLavel :selected').text());
     });
+    //function openpopup(cnt) {
+    //    var id = cnt.id.split('_')[1];
+    //    $('.btnconfirm').attr('id', id + '_' + cnt.checked);
+
+    //}
+    function ActiveDeActiveTeamMember(obj) {
+        debugger;
+        var id = obj.id.split('_')[0];
+        var isChecked = obj.id.split('_')[1];
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+            url: '/Project/ActiveDeActiveTeamMember',
+            data: { id: id, isChecked: isChecked },
+            success: function (responce) {
+                if (responce) {
+                    commonMessage('success', 'Status changed successfully.');
+                }
+
+                else {
+                    commonMessage('warning', 'Status changing failed.');
+                }
+            },
+            error: function (responce) {
+                commonMessage('error', 'Status changing failed.');
+            }
+        });
+    }
+    function AddTeamMember() {
+        
+        $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: '@Url.Action("AddTeamMember", "Project", new { Area=""})',
+            data: { projectid: @Model.ProjectId },
+                success: function (data) {
+                    $("#add-teammember-div").html(data.htmlData);
+                    $('#add-teammember-modal').modal('show');
+            },
+            error: function (data) {
+                commonMessage('error', 'Documents loading failed!');
+            }
+        });
+    }
+
+    function onAddTeamMember(data) {
+        if (data.flag == 1 || data.flag == 2) {
+            $("#div-team-grid").html(data.htmlData);
+            $('#add-teammember-modal').modal('hide');
+            commonMessage('success', data.msg);
+        }
+        else {
+            commonMessage('error', 'Document adding failed!');
+        }
+    }
+    
 </script>
 @section Scripts{
     <script src="~/scripts/Project.js" asp-append-version="true"></script>
