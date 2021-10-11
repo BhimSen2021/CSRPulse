@@ -134,6 +134,8 @@ namespace CSRPulse.Data.Models
             ProjectProgramManager = new HashSet<Project>();
             ProjectReportCreatedByNavigation = new HashSet<ProjectReport>();
             ProjectReportUpdatedByNavigation = new HashSet<ProjectReport>();
+            ProjectTeamDetailCreatedByNavigation = new HashSet<ProjectTeamDetail>();
+            ProjectTeamDetailUpdatedByNavigation = new HashSet<ProjectTeamDetail>();
             ProjectUpdatedByNavigation = new HashSet<Project>();
             RoleCreatedByNavigation = new HashSet<Role>();
             RoleUpdatedByNavigation = new HashSet<Role>();
@@ -462,6 +464,10 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProjectReport> ProjectReportCreatedByNavigation { get; set; }
         [InverseProperty(nameof(ProjectReport.UpdatedByNavigation))]
         public virtual ICollection<ProjectReport> ProjectReportUpdatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProjectTeamDetail.CreatedByNavigation))]
+        public virtual ICollection<ProjectTeamDetail> ProjectTeamDetailCreatedByNavigation { get; set; }
+        [InverseProperty(nameof(ProjectTeamDetail.UpdatedByNavigation))]
+        public virtual ICollection<ProjectTeamDetail> ProjectTeamDetailUpdatedByNavigation { get; set; }
         [InverseProperty(nameof(Project.UpdatedByNavigation))]
         public virtual ICollection<Project> ProjectUpdatedByNavigation { get; set; }
         [InverseProperty("CreatedByNavigation")]

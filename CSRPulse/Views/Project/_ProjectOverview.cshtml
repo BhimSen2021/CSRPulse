@@ -1,0 +1,71 @@
+﻿@model Project
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" enctype="multipart/form-data" asp-action="SaveOverview" asp-controller="Project"
+                      data-ajax-success="onProjectOverview">
+                    <h5 class="mb-3"> <label>Project Overview</label></h5>
+
+                    <div class="mb-2 text-end">
+                        <input type="hidden" asp-for="ProjectId" id="ProjectIdForOverview" />
+                        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveOverview" id="btnSave"><i class=" uil-weight me-1"></i> Save</button>
+                    </div>
+                    <div class="row">
+                        @if (Model.ProjectOverviewModule != null)
+                        {
+                            
+                            for (int i = 0; i < Model.ProjectOverviewModule.Count; i++)
+                            {
+                                
+                        <div class="col-md-12 mb-3">
+                            
+                            @if (Model.ProjectOverviewModule[i].QuestionType == "Text")
+                            {
+                            <div>
+                                <input type="hidden" id="ProjectQuestion_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectQuestionId" />
+                                <input type="hidden" id="Process_@i" asp-for="@Model.ProjectOverviewModule[i].ProcessId" />
+                                <input type="hidden" id="Project_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectId" />
+                                <input type="hidden" id="Question_@i" asp-for="@Model.ProjectOverviewModule[i].QuestionId" />
+                                <input type="hidden" id="Order_@i" asp-for="@Model.ProjectOverviewModule[i].OrderNo" />
+                                <input type="hidden" id="questiontype_@i" asp-for="@Model.ProjectOverviewModule[i].QuestionType" />
+                                <input type="hidden" id="Answerid_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectAnswerId" />
+                                <label class="form-label" asp-for="@Model.ProjectOverviewModule[i].ProjectAnswerId">@Model.ProjectOverviewModule[i].Question</label>
+
+                                <input type="text" asp-for="@Model.ProjectOverviewModule[i].Projectanswer" class="form-control" placeholder="Enter Answer(max 4000 characters)" autocomplete="off">
+                            </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <select aria-required="true" id="Answer_@i" asp-for="@Model.ProjectOverviewModule[i].Projectanswer" class="form-select">
+                                        <option disabled="" label="Select" selected="" value=""></option>
+                                        <option label="Yes" value="0"></option>
+                                        <option label="No" value="1"></option>
+                                    </select>
+                                </div>
+                            }
+                        </div>
+
+                            }
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function onProjectOverview(data) {
+        $("#div-overview-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'Project Overview Saved Successfully.');
+        }
+        else {
+            commonMessage('warning', data.msg);
+        }
+    }
+
+
+</script>

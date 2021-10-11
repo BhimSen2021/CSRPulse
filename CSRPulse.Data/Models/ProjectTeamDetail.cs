@@ -9,16 +9,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSRPulse.Data.Models
 {
-    public partial class ProjectNarrativeAnswer
+    public partial class ProjectTeamDetail
     {
         [Key]
-        public int ProjectAnswerId { get; set; }
+        public int ProjectTeamDetailId { get; set; }
         public int ProjectId { get; set; }
-        public int ProjectQuestionId { get; set; }
-        [StringLength(500)]
-        public string Answer { get; set; }
-        public int ProcessId { get; set; }
-        public int ReportId { get; set; }
+        public int UserId { get; set; }
+        public int? OldUserId { get; set; }
+        public int RoleId { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? ToDate { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? FromDate { get; set; }
+        public bool IsActive { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
@@ -38,22 +41,19 @@ namespace CSRPulse.Data.Models
         public string UpdatedRname { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
-        [InverseProperty(nameof(User.ProjectNarrativeAnswerCreatedByNavigation))]
+        [InverseProperty(nameof(User.ProjectTeamDetailCreatedByNavigation))]
         public virtual User CreatedByNavigation { get; set; }
         [ForeignKey(nameof(CreatedRid))]
-        [InverseProperty(nameof(Role.ProjectNarrativeAnswerCreatedR))]
+        [InverseProperty(nameof(Role.ProjectTeamDetailCreatedR))]
         public virtual Role CreatedR { get; set; }
         [ForeignKey(nameof(ProjectId))]
-        [InverseProperty("ProjectNarrativeAnswer")]
+        [InverseProperty("ProjectTeamDetail")]
         public virtual Project Project { get; set; }
-        [ForeignKey(nameof(ProjectQuestionId))]
-        [InverseProperty(nameof(ProjectNarrativeQuestion.ProjectNarrativeAnswer))]
-        public virtual ProjectNarrativeQuestion ProjectQuestion { get; set; }
         [ForeignKey(nameof(UpdatedBy))]
-        [InverseProperty(nameof(User.ProjectNarrativeAnswerUpdatedByNavigation))]
+        [InverseProperty(nameof(User.ProjectTeamDetailUpdatedByNavigation))]
         public virtual User UpdatedByNavigation { get; set; }
         [ForeignKey(nameof(UpdatedRid))]
-        [InverseProperty(nameof(Role.ProjectNarrativeAnswerUpdatedR))]
+        [InverseProperty(nameof(Role.ProjectTeamDetailUpdatedR))]
         public virtual Role UpdatedR { get; set; }
     }
 }

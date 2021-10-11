@@ -24,6 +24,7 @@ namespace CSRPulse.Data.Models
             ProjectNarrativeQuestion = new HashSet<ProjectNarrativeQuestion>();
             ProjectOtherSource = new HashSet<ProjectOtherSource>();
             ProjectReport = new HashSet<ProjectReport>();
+            ProjectTeamDetail = new HashSet<ProjectTeamDetail>();
         }
 
         [Key]
@@ -121,5 +122,7 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProjectOtherSource> ProjectOtherSource { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectReport> ProjectReport { get; set; }
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectTeamDetail> ProjectTeamDetail { get; set; }
     }
 }

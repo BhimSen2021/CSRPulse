@@ -80,6 +80,7 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<ProjectNarrativeQuestion> ProjectNarrativeQuestion { get; set; }
         public virtual DbSet<ProjectOtherSource> ProjectOtherSource { get; set; }
         public virtual DbSet<ProjectReport> ProjectReport { get; set; }
+        public virtual DbSet<ProjectTeamDetail> ProjectTeamDetail { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<StartingNumber> StartingNumber { get; set; }
         public virtual DbSet<State> State { get; set; }
@@ -94,12 +95,13 @@ namespace CSRPulse.Data.Data
         public virtual DbSet<Village> Village { get; set; }
 
         public static string CustomeDataBase { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
             {
                 var _Connection = configuration.GetConnectionString("DefaultConnection");
@@ -2360,6 +2362,41 @@ namespace CSRPulse.Data.Data
                     .WithMany(p => p.ProjectReportUpdatedR)
                     .HasForeignKey(d => d.UpdatedRid)
                     .HasConstraintName("FK_ProjectReport_UpdatedRId");
+            });
+
+            modelBuilder.Entity<ProjectTeamDetail>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.CreatedOn).HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.ProjectTeamDetailCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectTeamDetail_CreatedBy");
+
+                entity.HasOne(d => d.CreatedR)
+                    .WithMany(p => p.ProjectTeamDetailCreatedR)
+                    .HasForeignKey(d => d.CreatedRid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectTeamDetail_CreatedRId");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectTeamDetail)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectTeamDetail_Project");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.ProjectTeamDetailUpdatedByNavigation)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .HasConstraintName("FK_ProjectTeamDetail_UpdatedBy");
+
+                entity.HasOne(d => d.UpdatedR)
+                    .WithMany(p => p.ProjectTeamDetailUpdatedR)
+                    .HasForeignKey(d => d.UpdatedRid)
+                    .HasConstraintName("FK_ProjectTeamDetail_UpdatedRId");
             });
 
             modelBuilder.Entity<Role>(entity =>

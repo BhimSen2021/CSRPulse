@@ -134,6 +134,8 @@ namespace CSRPulse.Data.Models
             ProjectOtherSourceUpdatedR = new HashSet<ProjectOtherSource>();
             ProjectReportCreatedR = new HashSet<ProjectReport>();
             ProjectReportUpdatedR = new HashSet<ProjectReport>();
+            ProjectTeamDetailCreatedR = new HashSet<ProjectTeamDetail>();
+            ProjectTeamDetailUpdatedR = new HashSet<ProjectTeamDetail>();
             ProjectUpdatedR = new HashSet<Project>();
             StartingNumberCreatedR = new HashSet<StartingNumber>();
             StartingNumberUpdatedR = new HashSet<StartingNumber>();
@@ -438,6 +440,10 @@ namespace CSRPulse.Data.Models
         public virtual ICollection<ProjectReport> ProjectReportCreatedR { get; set; }
         [InverseProperty(nameof(ProjectReport.UpdatedR))]
         public virtual ICollection<ProjectReport> ProjectReportUpdatedR { get; set; }
+        [InverseProperty(nameof(ProjectTeamDetail.CreatedR))]
+        public virtual ICollection<ProjectTeamDetail> ProjectTeamDetailCreatedR { get; set; }
+        [InverseProperty(nameof(ProjectTeamDetail.UpdatedR))]
+        public virtual ICollection<ProjectTeamDetail> ProjectTeamDetailUpdatedR { get; set; }
         [InverseProperty(nameof(Project.UpdatedR))]
         public virtual ICollection<Project> ProjectUpdatedR { get; set; }
         [InverseProperty(nameof(StartingNumber.CreatedR))]

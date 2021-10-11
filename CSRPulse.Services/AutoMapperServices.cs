@@ -42,6 +42,7 @@ namespace CSRPulse.Services
             CreateMap<DTOModel.UserRights, List<UserRight>>().ReverseMap();
             CreateMap<DTOModel.Menu, List<Menu>>();
 
+
             CreateMap<DTOModel.User, User>().ForMember(d => d.RoleId, o => o.MapFrom(s => s.RoleId))
                 .ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Department.DepartmentName))
                 .ForMember(d => d.DepartmentId, o => o.MapFrom(s => s.Department.DepartmentId))
@@ -209,6 +210,19 @@ namespace CSRPulse.Services
 
             CreateMap<DTOModel.ProjectDocument, ProjectDocument>().ReverseMap();
             CreateMap<DTOModel.ProjectCommunication, ProjectCommunication>().ReverseMap();
+            CreateMap<DTOModel.ProjectTeamDetail, ProjectTeamDetail>().ReverseMap();
+
+            CreateMap<DTOModel.ProjectNarrativeAnswer, ProjectOverviewModule>()
+                .ForMember(d => d.ProcessId, o => o.MapFrom(s => s.ProcessId))
+                .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.ProjectId))
+                .ForMember(d => d.ProjectQuestionId, o => o.MapFrom(s => s.ProjectQuestionId))
+                .ForMember(d => d.Projectanswer, o => o.MapFrom(s => s.Answer))
+                .ForMember(d => d.CreatedOn, o => o.MapFrom(s => s.CreatedOn))
+                .ForMember(d => d.CreatedRid, o => o.MapFrom(s => s.CreatedRname))
+                .ForMember(d => d.CreatedRname, o => o.MapFrom(s => s.CreatedRname))
+                .ReverseMap();
+
+
             #endregion
 
 
