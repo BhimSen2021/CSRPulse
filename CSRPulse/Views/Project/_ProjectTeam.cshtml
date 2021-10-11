@@ -1,6 +1,71 @@
-﻿<div class="row">
-    <h5 class="mb-3">Project Team Detail</h5>
-    <div id="div-team-detail-grid">
-        @{await Html.RenderPartialAsync("_ProjectTeamDetail");}
+﻿@model ProjectTeamModel
+<div id="add-teammember-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title">Add Team Member</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <input asp-for="@Model.ProjectId" type="hidden" />
+                @if (Model != null)
+                {
+                    if (Model.ProjectTeams != null)
+                    {
+                        <table class="table table-sm table-centered mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Role Name</th>
+                                    <th>Mobile No.</th>
+                                    <th>Email Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.ProjectTeams.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span>@(i+1).</span>
+                                            <input asp-for="@Model.ProjectTeams[i].ProjectTeamDetailId" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].FullName" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].RoleId" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].OldUserId" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].UserId" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].EmailID" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].MobileNo" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].EmailID" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].DesignationId" type="hidden" />
+                                            <input asp-for="@Model.ProjectTeams[i].DepartmentId" type="hidden" />
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-checkbox-success">
+                                                <input class="form-check-input me-2" asp-for="@Model.ProjectTeams[i].AssigneTeam" type="checkbox" />
+                                                @Model.ProjectTeams[i].FullName
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @Model.ProjectTeams[i].RoleName
+                                        </td>
+                                        <td>
+                                            @Model.ProjectTeams[i].MobileNo
+                                        </td>
+                                        <td>
+                                            @Model.ProjectTeams[i].EmailID
+                                        </td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    }
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-info btn-sm" value="Save">Add Team Member</button>
+            </div>
+        </div>
     </div>
 </div>

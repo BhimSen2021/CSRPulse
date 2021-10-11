@@ -56,5 +56,11 @@ namespace CSRPulse.Model
         public List<ProjectDocument> ProjectDocument { get; set; }
         public List<ProjectCommunication> ProjectCommunication { get; set; }
         public ProjectCommunication Communication { get; set; }
+        public List<ProjectTeamDetail> ProjectTeamDetail { get; set; }
+        public List<User> User { get; set; }
+        public List<ProjectNarrativeQuestion> ProjectNarrativeQuestion { get; set; }
+        public List<ProjectNarrativeAnswer> ProjectNarrativeAnswer { get; set; }
+        public List<ProjectOverviewModule> ProjectOverviewModule { get; set; }
+
     }
 }

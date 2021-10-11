@@ -21,13 +21,19 @@ namespace CSRPulse.Services
         Task<int> SaveDocument(ProjectDocument document);
         bool DeleteDocument(int pdId);
         Task UpdateDocument(ProjectDocument document);
-
         Task<int> SaveCommunication(ProjectCommunication communication);
         Task<List<ProjectCommunication>> GetCommunications(int projectId, bool? IsActive);
         bool ArchiveCommunication(int id, bool IsActive);
-
         Task<List<NarrativeQuestion>> GetNarrativeAsync(int? processId);
         Task<int> AddProjectNarrative(ProjectNarrativeQuestion projectNarrative);
         Task<List<ProjectNarrativeQuestion>> GetProjectNarrative(ProjectNarrativeQuestion projectNarrative);
+        Task<List<ProjectTeam>> GetTeamMemeber(int RoleId);
+        Task<int> AddTeamMember(ProjectTeamDetail projectTeamMember);
+        Task<List<ProjectTeamDetail>> Getteammemberslist(int projectId, int roleId);
+        bool DeleteTeamDetail(int partnerId);
+        Task<List<ProjectNarrativeQuestion>> GetProjectOverView(int projectId);
+        Task<List<ProjectOverviewModule>> GetOverviewlist(int projectId);
+        Task<List<ProjectNarrativeAnswer>> GetUpdateProjectOverView(Project project);
+
     }
 }

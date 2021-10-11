@@ -42,7 +42,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public async Task<List<Project>> GetProjectAsync()
         {
             try
@@ -55,7 +54,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public Project GetProjectById(int projectId)
         {
             try
@@ -126,7 +124,6 @@ namespace CSRPulse.Services
                 }
             }
         }
-
         public async Task<List<ProjectInterventionReport>> GetInterventionReportAsync(int projectId)
         {
             try
@@ -139,8 +136,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
-
         public bool ActiveDeActive(int id, bool IsActive)
         {
             try
@@ -155,7 +150,6 @@ namespace CSRPulse.Services
                 return false;
             }
         }
-
         public async Task<List<ProjectLocationDetail>> GetTvLocationDetails(int projectId, int lLevel)
         {
             try
@@ -219,7 +213,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public async Task<List<ProjectDocument>> GetDocumentList(int projectId, int processId)
         {
             try
@@ -253,7 +246,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public async Task<List<Model.Document>> GetProcessDocument(int processId)
         {
             try
@@ -298,9 +290,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
-
-
         public List<ProjectLocationDetail> GetLocationDetails(int projectId, int lLevel)
         {
             try
@@ -315,7 +304,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public async Task<int> SaveCommunication(ProjectCommunication communication)
         {
             try
@@ -328,7 +316,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public async Task<List<ProjectCommunication>> GetCommunications(int projectId, bool? IsActive)
         {
             try
@@ -342,7 +329,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public bool ArchiveCommunication(int id, bool IsActive)
         {
             try
@@ -357,7 +343,6 @@ namespace CSRPulse.Services
                 return false;
             }
         }
-
         public async Task<bool> AddLocationDetails(List<ProjectLocationDetail> locationDetails, int projectId)
         {
             try
@@ -381,7 +366,6 @@ namespace CSRPulse.Services
                 return false;
             }
         }
-
         public async Task<List<NarrativeQuestion>> GetNarrativeAsync(int? processId)
         {
             try
@@ -394,7 +378,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-
         public async Task<int> AddProjectNarrative(ProjectNarrativeQuestion projectNarrative)
         {
             try
@@ -414,7 +397,6 @@ namespace CSRPulse.Services
                 throw;
             }
         }
-       
         public async Task<List<ProjectNarrativeQuestion>> GetProjectNarrative(ProjectNarrativeQuestion projectNarrative)
         {
             try
@@ -430,6 +412,185 @@ namespace CSRPulse.Services
                 throw;
             }
         }
+        public async Task<List<ProjectTeam>> GetTeamMemeber(int RoleId)
+        {
+            try
+            {
+                var result = await _projectRepository.GetTeamMemeber(RoleId).ToListAsync();
+                if (result != null)
+                {
+                    return result.Select(d => new Model.ProjectTeam()
+                    {
+                        UserId = d.UserId,
+                        RoleId = d.RoleId,
+                        RoleName = d.RoleName,
+                        FullName = d.FullName,
+                        EmailID = d.EmailID,
+                        MobileNo = d.MobileNo,
+                        DesignationId = d.DesignationId,
+                    }).ToList();
+                }
+                else
+                    return new List<Model.ProjectTeam>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<int> AddTeamMember(ProjectTeamDetail projectTeamMember)
+        {
+            try
+            {
+                int flag = 1;
+                var model = _mapper.Map<DTOModel.ProjectTeamDetail>(projectTeamMember);
+                if (!await _genericRepository.ExistsAsync<DTOModel.ProjectTeamDetail>
+                      (x => x.UserId == projectTeamMember.UserId && x.ProjectId == projectTeamMember.ProjectId && x.FromDate == null))
+                    await _genericRepository.InsertAsync<DTOModel.ProjectTeamDetail>(model);
+                else
+                    flag = 2;
+
+                return flag;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public bool DeleteTeamDetail(int projectId)
+        {
+            try
+            {
+                var model = _genericRepository.GetByID<DTOModel.ProjectTeamDetail>(projectId);
+                model.FromDate = DateTime.Now;
+                _genericRepository.Update(model);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<ProjectTeamDetail>> Getteammemberslist(int projectId, int roleId)
+        {
+            try
+            {
+                var result = await _projectRepository.Getteammemberslist(projectId, roleId).ToListAsync();
+                if (result != null)
+                {
+                    return result.Select(l => new ProjectTeamDetail()
+                    {
+                        ProjectTeamDetailId = l.ProjectTeamDetailId,
+                        RoleId = l.RoleId,
+                        UserId = l.UserId,
+                        FullName = l.FullName,
+                        RoleName = l.RoleName,
+                        MobileNo = l.MobileNo,
+                        EmailId = l.EmailID,
+                        ToDate = l.ToDate,
+                        FromDate = l.FromDate
+                    }).ToList();
+                }
+                else
+                    return new List<ProjectTeamDetail>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<ProjectNarrativeQuestion>> GetProjectOverView(int projectId)
+        {
+            try
+            {
+                var result = await _genericRepository.GetAsync<DTOModel.ProjectNarrativeQuestion>(x => x.ProjectId == projectId);
+                if (result != null)
+                {
+                    return result.Select(d => new ProjectNarrativeQuestion()
+                    {
+                        ProjectQuestionId = d.ProjectQuestionId,
+                        ProjectId = d.ProjectId,
+                        QuestionId = d.QuestionId,
+                        Question = d.Question,
+                        ProcessId = d.ProcessId,
+                        CommentRequire = d.CommentRequire,
+                        QuestionType = d.QuestionType,
+                        ContentLimit = d.ContentLimit,
+                        OrderNo = d.OrderNo,
+                        CreatedBy = d.CreatedBy,
+                        CreatedOn = d.CreatedOn,
+                        CreatedRid = d.CreatedRid,
+                        CreatedRname = d.CreatedRname
+                    }).ToList();
+                }
+                else
+                    return new List<ProjectNarrativeQuestion>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+        public async Task<List<ProjectOverviewModule>> GetOverviewlist(int projectId)
+        {
+            try
+            {
+                var result = await _projectRepository.GetOverview(projectId).ToListAsync();
+                if (result != null)
+                {
+                    return result.Select(l => new ProjectOverviewModule()
+                    {
+                        ProjectQuestionId = l.ProjectQuestionId,
+                        ProjectId = l.ProjectId,
+                        QuestionId = l.QuestionId,
+                        Question = l.Question,
+                        ProcessId = l.ProcessId,
+                        CommentRequire = l.CommentRequire,
+                        QuestionType = l.QuestionType,
+                        ContentLimit = l.ContentLimit,
+                        OrderNo = l.OrderNo,
+                        Projectanswer = l.Projectanswer
+                    }).ToList();
+                }
+                else
+                    return new List<ProjectOverviewModule>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<ProjectNarrativeAnswer>> GetUpdateProjectOverView(Project project)
+        {
+            try
+            {
+                var model = _mapper.Map<List<DTOModel.ProjectNarrativeAnswer>>(project.ProjectOverviewModule);
+                var isExist = await _genericRepository.ExistsAsync<DTOModel.ProjectNarrativeAnswer>(x => x.ProjectId == project.ProjectId);
+                if (!isExist)
+                {
+                    await _genericRepository.AddMultipleEntityAsync(model);
+                }
+                else
+                {
+                    var oldDetails = await _genericRepository.GetAsync<DTOModel.ProjectNarrativeAnswer>(x => x.ProjectId == project.ProjectId);
+                    if (oldDetails != null && oldDetails.ToList().Count > 0)
+                    {
+                        await _genericRepository.RemoveMultipleEntityAsync<DTOModel.ProjectNarrativeAnswer>(oldDetails);
+                        await _genericRepository.AddMultipleEntityAsync(model);
+                    }
+                }
+                var result = await _genericRepository.GetAsync<DTOModel.ProjectNarrativeAnswer>(x => x.ProjectId == project.ProjectId);
+
+                return _mapper.Map<List<ProjectNarrativeAnswer>>(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
 
     }
 }
