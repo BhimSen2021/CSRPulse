@@ -5,9 +5,9 @@
 <div class="row">
     <h5 class="mb-3">Project Team Detail</h5>
     <div class="mb-2 text-end">
-        <button class="btn btn-danger btn-sm" type="button" value="AddDocument" onclick="AddTeamMember()" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Click here, to add team member">
-            <i class="mdi mdi-plus me-1"></i>Add Team Member
+        <button class="btn btn-danger btn-sm" type="button" onclick="AddTeamMember()" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Click here, to project team member">
+            <i class="mdi mdi-plus me-1"></i>Project Team Member
         </button>
 
     </div>
@@ -90,15 +90,17 @@
         <tbody>
             @if (Model.ProjectTeamDetail != null)
             {
+                int index = 0;
                 if (Model.ProjectTeamDetail.Where(x => x.FromDate != null).Count() > 0)
                 {
                     for (int j = 0; j < Model.ProjectTeamDetail.Count; j++)
                     {
                         @if (Model.ProjectTeamDetail[j].FromDate != null)
                         {
+                            index++;
                             <tr>
 
-                                <td><span>@(j+1).</span></td>
+                                <td><span>@(index).</span></td>
                                 <td>@Model.ProjectTeamDetail[j].FullName</td>
                                 <td>@Model.ProjectTeamDetail[j].RoleName</td>
                                 <td>@Model.ProjectTeamDetail[j].ToDate</td>

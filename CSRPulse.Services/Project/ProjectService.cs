@@ -425,7 +425,8 @@ namespace CSRPulse.Services
                         RoleId = d.RoleId,
                         RoleName = d.RoleName,
                         FullName = d.FullName,
-                        EmailID = d.EmailID,
+                        EmailID=ExtensionMethods.MakeDisplayEmail(d.EmailID),
+                        //EmailID = d.EmailID,
                         MobileNo = d.MobileNo,
                         DesignationId = d.DesignationId,
                     }).ToList();
@@ -486,7 +487,8 @@ namespace CSRPulse.Services
                         FullName = l.FullName,
                         RoleName = l.RoleName,
                         MobileNo = l.MobileNo,
-                        EmailId = l.EmailID,
+                        EmailId= ExtensionMethods.MakeDisplayEmail(l.EmailID),
+                    //EmailId = l.EmailID,
                         ToDate = l.ToDate,
                         FromDate = l.FromDate
                     }).ToList();
