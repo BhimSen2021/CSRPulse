@@ -10,32 +10,43 @@
 
                     <div class="mb-2 text-end">
                         <input type="hidden" asp-for="ProjectId" id="ProjectIdForOverview" />
-                        <button class="btn btn-success btn-sm" type="submit" name="ButtonType" value="SaveOverview" id="btnSave"><i class=" uil-weight me-1"></i> Save</button>
+                        <button class="btn btn-success btn-sm" type="submit" id="btnSave" title="Click here, to add Overview"><i class=" uil-weight me-1"></i> Save</button>
                     </div>
                     <div class="row">
                         @if (Model.ProjectOverviewModule != null)
                         {
-                            
                             for (int i = 0; i < Model.ProjectOverviewModule.Count; i++)
                             {
-                                
                         <div class="col-md-12 mb-3">
-                            
+                            <input type="hidden" id="ProjectQuestion_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectQuestionId" />
+                            <input type="hidden" id="Process_@i" asp-for="@Model.ProjectOverviewModule[i].ProcessId" />
+                            <input type="hidden" id="Project_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectId" />
+                            <input type="hidden" id="Question_@i" asp-for="@Model.ProjectOverviewModule[i].QuestionId" />
+                            <input type="hidden" id="Order_@i" asp-for="@Model.ProjectOverviewModule[i].OrderNo" />
+                            <input type="hidden" id="questiontype_@i" asp-for="@Model.ProjectOverviewModule[i].QuestionType" />
+                            <input type="hidden" id="Answerid_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectAnswerId" />
                             @if (Model.ProjectOverviewModule[i].QuestionType == "Text")
                             {
-                            <div>
-                                <input type="hidden" id="ProjectQuestion_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectQuestionId" />
-                                <input type="hidden" id="Process_@i" asp-for="@Model.ProjectOverviewModule[i].ProcessId" />
-                                <input type="hidden" id="Project_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectId" />
-                                <input type="hidden" id="Question_@i" asp-for="@Model.ProjectOverviewModule[i].QuestionId" />
-                                <input type="hidden" id="Order_@i" asp-for="@Model.ProjectOverviewModule[i].OrderNo" />
-                                <input type="hidden" id="questiontype_@i" asp-for="@Model.ProjectOverviewModule[i].QuestionType" />
-                                <input type="hidden" id="Answerid_@i" asp-for="@Model.ProjectOverviewModule[i].ProjectAnswerId" />
-                                <label class="form-label" asp-for="@Model.ProjectOverviewModule[i].ProjectAnswerId">@Model.ProjectOverviewModule[i].Question</label>
+                        <div class="mb-3">
+                            <!--<label class="form-label" asp-for="@Model.ProjectOverviewModule[i].ProjectAnswerId">@Model.ProjectOverviewModule[i].Question</label>-->
+                            @*<textarea asp-for="@Model.ProjectOverviewModule[i].Projectanswer" class="form-control"></textarea>*@
+                            <!--<input asp-for="@Model.ProjectOverviewModule[i].Projectanswer" type="hidden" class="form-control" />
 
-                                <input type="text" asp-for="@Model.ProjectOverviewModule[i].Projectanswer" class="form-control" placeholder="Enter Answer(max 4000 characters)" autocomplete="off">
+                            <div id="Projectanswer_@i" class="editor note-editor mb-2" style="height: 250px;">
                             </div>
+                            <span asp-validation-for="@Model.ProjectOverviewModule[i].Projectanswer" class="invalid"></span>-->
+
+
+
+                            <label asp-for="@Model.ProjectOverviewModule[i].Question" class="form-label"></label>
+                            <input asp-for="@Model.ProjectOverviewModule[i].Projectanswer" type="hidden" class="form-control" />
+
+                            <div id="editor_@i" class="editor note-editor mb-2" style="height: 250px;">
+                            </div>
+                            <span asp-validation-for="@Model.ProjectOverviewModule[i].Projectanswer" class="invalid"></span>
+                        </div>
                             }
+
                             else
                             {
                                 <div>
@@ -56,16 +67,68 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function onProjectOverview(data) {
-        $("#div-overview-grid").html(data.htmlData);
-        if (data.flag == 1) {
-            commonMessage('success', 'Project Overview Saved Successfully.');
-        }
-        else {
-            commonMessage('warning', data.msg);
-        }
-    }
+@section Scripts{
+    <script type="text/javascript">
+          var scope = new Quill('.editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        font: []
+                    }, {
+                        size: []
+                    }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{
+                        color: []
+                    }, {
+                        background: []
+                    }],
+                    [{
+                        script: "super"
+                    }, {
+                        script: "sub"
+                    }],
+                    [{
+                        header: [!1, 1, 2, 3, 4, 5, 6]
+                    }],
+                    [{
+                        list: "ordered"
+                    }, {
+                        list: "bullet"
+                    }],
+                    ["direction", {
+                        align: []
+                    }],
+
+                    ["clean"]
+                ]
+            }
+        });
+
+        // This will set `ignore` for all validation calls
+        jQuery.validator.setDefaults({
+            // This will ignore all hidden elements alongside `contenteditable` elements
+            // that have no `name` attribute
+            ignore: ":hidden, [contenteditable='true']:not([name])"
+        });
+
+        //function handleSubmit() {
+        //    document.getElementById('Scope').value = scope.root.innerHTML;
+        //    document.getElementById('ReviewInstruction').value = reviewInstruction.root.innerHTML;
+        //};
 
 
-</script>
+        function onProjectOverview(data) {
+            $("#div-overview-grid").html(data.htmlData);
+            if (data.flag == 1) {
+                commonMessage('success', 'Project Overview Saved Successfully.');
+            }
+            else {
+                commonMessage('warning', data.msg);
+            }
+        }
+
+
+    </script>
+}

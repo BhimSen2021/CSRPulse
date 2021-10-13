@@ -13,6 +13,7 @@ using static CSRPulse.Common.DataValidation;
 using System.Dynamic;
 using CSRPulse.Services.IServices;
 using CSRPulse.Model;
+using CSRPulse.Common;
 
 namespace CSRPulse.Services
 {
@@ -32,8 +33,8 @@ namespace CSRPulse.Services
                 var result = new EmailConfiguration();
                 var emailConfigurations = await _genericRepository.GetAsync<DTOModel.EmailConfiguration>();
                 var rs = emailConfigurations.FirstOrDefault();
-                result.EmailConfigurationID = rs.EmailConfigurationId;              
-                result.UserName = rs.UserName;
+                result.EmailConfigurationID = rs.EmailConfigurationId;
+                result.UserName = ExtensionMethods.MakeDisplayEmail(rs.UserName);// rs.UserName;
                 result.Password = rs.Password;
                 result.Port = rs.Port;
                 result.Server = rs.Server;               
