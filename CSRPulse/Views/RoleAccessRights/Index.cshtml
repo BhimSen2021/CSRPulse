@@ -24,7 +24,54 @@
 </div>
 
 <div class="row">
-    <div id="div-Role-AccessRights" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div id="div-role-access-rights" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 400px; overflow: auto">
 
     </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-end"><input type="button" value="Save" class="btn btn-primary btn-sm" onclick="Javascript:getCheckValues(event);" /></div>
 </div>
+
+@section Scripts{
+    <script>
+        function getCheckValues(e) {
+            var RoleId = $("#RoleId option:selected").val();
+            var result = new Array();
+            $('#tblRoleAccessRights').each(function () {
+                $(this).find('tbody tr.trAccessUpdate').each(function (rowIndex) {
+
+                    if (rowIndex >= 0) {
+                        var objRoleRights = "";
+                        var menuId = $(this).attr('attrMenuId');
+                        var chkView = $('#chkView_' + menuId).is(":checked");
+                        var chkCreate = $('#chkCreate_' + menuId).is(":checked");
+                        var chkEdit = $('#chkEdit_' + menuId).is(":checked");
+                        var chkDelete = $('#chkDelete_' + menuId).is(":checked");
+                        objRoleRights = menuId + ',' + chkView + ',' + chkCreate + ',' + chkEdit + ',' + chkDelete;
+
+                        result.push(objRoleRights);
+
+                    }
+                });
+            });
+            if (result.length == 0) {
+                commonMessage('warning', 'Please select User Access rights.');
+                e.preventDefault();
+                return false;
+            }
+            else {
+                $.ajax({
+                    type: 'GET',
+                    contentType: 'application/json',
+                    url: '@Url.Action("InsertUpdateRoleAccessRights", "RoleAccessRights")',
+                    //headers: { "requestverificationtoken": $('input[name="__requestverificationtoken"]').val() },
+                    data: { roleId: RoleId, jsonInput: JSON.stringify(result)},
+
+                    success: function (data) {
+                        if (data == '1') {
+                            commonMessage('success', 'Role Access rights updated successfully.');
+                        } else { commonMessage('warning', 'Role Access rights updation failed!');}
+                }
+            });
+        }
+    }
+    </script>
+}

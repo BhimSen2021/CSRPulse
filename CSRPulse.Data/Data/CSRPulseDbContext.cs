@@ -99,9 +99,9 @@ namespace CSRPulse.Data.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
             if (!string.IsNullOrEmpty(CustomeDataBase))
             {
                 var _Connection = configuration.GetConnectionString("DefaultConnection");

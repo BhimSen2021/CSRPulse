@@ -15,7 +15,7 @@ namespace CSRPulse.Data.Models
         public int ProjectAnswerId { get; set; }
         public int ProjectId { get; set; }
         public int ProjectQuestionId { get; set; }
-        [StringLength(500)]
+        [StringLength(4000)]
         public string Answer { get; set; }
         public int ProcessId { get; set; }
         public int ReportId { get; set; }

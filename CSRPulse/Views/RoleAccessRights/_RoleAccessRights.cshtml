@@ -4,8 +4,8 @@
     List<RoleAccessRights> lstWithoutChild = Model.menuChildList.Where(x => x.ParentMenuId == null && Model.menuChildList.All(y => y.ParentMenuId != x.MenuId)).ToList();
 }
 
-<table id="scroll-vertical-datatable" class="table table-centered table-striped dt-responsive w-100">
-    <thead>
+<table id="tblRoleAccessRights" class="table table-sm table-centered w-100">
+    <thead class="table-dark">
         <tr>
             <th>
                 Menu Name
@@ -33,7 +33,7 @@
                 var checkedCreate = ItemWithNoChild.CreateRight == true ? "checked" : "";
                 var checkedEdit = ItemWithNoChild.EditRight == true ? "checked" : "";
                 var checkedDelete = ItemWithNoChild.DeleteRight == true ? "checked" : "";
-                <tr class="trAccessUpdate" attrMenuID="@ItemWithNoChild.MenuId">
+                <tr class="trAccessUpdate" attrMenuId="@ItemWithNoChild.MenuId">
                     <td> @ItemWithNoChild.MenuName</td>
                     <td class="text-center"> <input type="checkbox" id="chkView_@ItemWithNoChild.MenuId" class="chkCell" @checkedView /></td>
                     <td class="text-center"> <input type="checkbox" id="chkCreate_@ItemWithNoChild.MenuId" class="chkCell" @checkedCreate /></td>
@@ -45,7 +45,7 @@
             foreach (var item in Model.menuParentList)
             {
                 <tr>
-                    <td colspan="5" class="text-left" style="background-color:antiquewhite"><b> @item.MenuName</b></td>
+                    <td colspan="5" class="text-left table-light"><b> @item.MenuName</b></td>
                 </tr>
                 foreach (var childItem in Model.menuChildList.Where(x => x.ParentMenuId == item.MenuId))
                 {
@@ -55,7 +55,7 @@
                     var checkedDelete = childItem.DeleteRight == true ? "checked" : "";
                     if (!Model.menuChildList.Any(x => x.ParentMenuId == childItem.MenuId))
                     {
-                        <tr class="trAccessUpdate" attrMenuID="@childItem.MenuId">
+                        <tr class="trAccessUpdate" attrMenuId="@childItem.MenuId">
                             <td> @childItem.MenuName</td>
                             <td class="text-center"> <input type="checkbox" id="chkView_@childItem.MenuId" class="chkCell" @checkedView /></td>
                             <td class="text-center"> <input type="checkbox" id="chkCreate_@childItem.MenuId" class="chkCell" @checkedCreate /></td>

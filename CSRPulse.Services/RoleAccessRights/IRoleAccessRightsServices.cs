@@ -8,5 +8,6 @@ namespace CSRPulse.Services
     {
         Task<List<RoleAccessRights>> GetMenuListAsync();
         Task<List<RoleAccessRights>> GetRoleAccessMenuListAsync(int roleId);
+        bool InsertUpdateRoleAccessRights(int roleId, List<RoleAccessRights> listUpdateRoleRights, BaseModel baseModel);
     }
 }
