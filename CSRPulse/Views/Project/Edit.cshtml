@@ -166,11 +166,7 @@
         Basicdatatable();
         $('#lblLDLevel').text($('#LocationLavel :selected').text());
     });
-    //function openpopup(cnt) {
-    //    var id = cnt.id.split('_')[1];
-    //    $('.btnconfirm').attr('id', id + '_' + cnt.checked);
-
-    //}
+   
     function ActiveDeActiveTeamMember(obj) {
         debugger;
         var id = obj.id.split('_')[0];
@@ -222,7 +218,17 @@
             commonMessage('error', 'Document adding failed!');
         }
     }
-    
+
+    function onProjectOverview(data) {
+        $("#div-overview-grid").html(data.htmlData);
+        if (data.flag == 1) {
+            commonMessage('success', 'Project Overview Saved Successfully.');
+        }
+        else {
+            commonMessage('warning', data.msg);
+        }
+    }
+    function help(obj) { alert(obj);}
 </script>
 @section Scripts{
     <script src="~/scripts/Project.js" asp-append-version="true"></script>
