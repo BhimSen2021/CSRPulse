@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Role Access Rights";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">CSRPulse</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Masters</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Role Rights</a></li>
+                    <li class="breadcrumb-item active">Role Rights</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Role Rights</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @{await Html.RenderPartialAsync("_Filter");}
+</div>
+
+<div class="row">
+    <div id="div-Role-AccessRights" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 280px; overflow: auto">
+
+    </div>
+</div>

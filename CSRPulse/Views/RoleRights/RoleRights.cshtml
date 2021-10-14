@@ -1,0 +1,71 @@
+﻿@model CSRPulse.Models.RoleAccessViewModel
+@using CSRPulse.Model;
+@{
+    List<RoleAccessRights> lstWithoutChild = Model.menuChildList.Where(x => x.ParentMenuId == null && Model.menuChildList.All(y => y.ParentMenuId != x.MenuId)).ToList();
+}
+
+<table class="table table-centered table-striped dt-responsive w-100">
+    <thead>
+        <tr>
+            <th>
+                Menu Name
+            </th>
+            <th>
+                View
+            </th>
+            <th>
+                Create
+            </th>
+            <th class="text-center" style="width:60px">
+                Edit
+            </th>
+            <th class="text-center" style="width:60px">
+                Delete
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+
+            foreach (var ItemWithNoChild in lstWithoutChild)
+            {
+                var checkedView = ItemWithNoChild.ViewRight == true ? "checked" : "";
+                var checkedCreate = ItemWithNoChild.CreateRight == true ? "checked" : "";
+                var checkedEdit = ItemWithNoChild.EditRight == true ? "checked" : "";
+                var checkedDelete = ItemWithNoChild.DeleteRight == true ? "checked" : "";
+                <tr class="trAccessUpdate" attrMenuID="@ItemWithNoChild.MenuId">
+                    <td> @ItemWithNoChild.MenuName</td>
+                    <td> <input type="checkbox" id="chkView_@ItemWithNoChild.MenuId" class="chkCell" @checkedView /></td>
+                    <td> <input type="checkbox" id="chkCreate_@ItemWithNoChild.MenuId" class="chkCell" @checkedCreate /></td>
+                    <td> <input type="checkbox" id="chkEdit_@ItemWithNoChild.MenuId" class="chkCell" @checkedEdit /></td>
+                    <td> <input type="checkbox" id="chkDelete_@ItemWithNoChild.MenuId" class="chkCell" @checkedDelete /></td>
+                </tr>
+            }
+
+            foreach (var item in Model.menuParentList)
+            {
+                <tr>
+                    <td colspan="5" class="text-left" style="background-color:antiquewhite"><b> @item.MenuName</b></td>
+                </tr>
+                foreach (var childItem in Model.menuChildList.Where(x => x.ParentMenuId == item.MenuId))
+                {
+                    var checkedView = childItem.ViewRight == true ? "checked" : "";
+                    var checkedCreate = childItem.CreateRight == true ? "checked" : "";
+                    var checkedEdit = childItem.EditRight == true ? "checked" : "";
+                    var checkedDelete = childItem.DeleteRight == true ? "checked" : "";
+                    if (!Model.menuChildList.Any(x => x.ParentMenuId == childItem.MenuId))
+                    {
+                        <tr class="trAccessUpdate" attrMenuID="@childItem.MenuId">
+                            <td> @childItem.MenuName</td>
+                            <td> <input type="checkbox" id="chkView_@childItem.MenuId" class="chkCell" @checkedView /></td>
+                            <td> <input type="checkbox" id="chkCreate_@childItem.MenuId" class="chkCell" @checkedCreate /></td>
+                            <td> <input type="checkbox" id="chkEdit_@childItem.MenuId" class="chkCell" @checkedEdit /></td>
+                            <td> <input type="checkbox" id="chkDelete_@childItem.MenuId" class="chkCell" @checkedDelete /></td>
+                        </tr>
+                    }
+                }
+            }
+        }
+
+    </tbody>
+</table>
